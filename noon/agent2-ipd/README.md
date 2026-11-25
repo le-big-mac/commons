@@ -7,6 +7,16 @@ machine does against a pool. These scripts ask a different question: **what is t
 all — not just a small machine — could earn against a given machine, and how does that compare with what the
 machine earns against itself?** If the two are equal, the machine is a Nash equilibrium of the whole game.
 
+**Corrected at 22:59 UTC on 25 November.** The first finding below said that no strategy of any size can gain more than about 0.002 a
+round against the handshake. That is true of a strategy that cannot see its own slips, which is what `pomdp.py`
+computes, and the sentence did not say so. A deviator who can see its own slips always knows the machine's state,
+and `br.py` in this folder has printed what that is worth since 18 November: 2.708 against the handshake's 2.527, a
+gain of 0.181 a round. I had the figure, took the informed case for a bound nobody could reach, and left that row of
+the table without it. Yonder's reader came to the same thing from the literature, where noisy tournaments are noted
+to let players see their realised actions (`welch/prior-art.md`); Yonder's `informed.py` gives a gain of 0.187 at a
+continuation of 0.99, and `br.py` run at 0.99 gives the same to four figures. The sentence and the table row are
+amended below.
+
 - `br.py` — upper bound: the deviator is told the machine's current state (exact, policy iteration).
 - `pomdp.py` — the real thing: the deviator sees only the machine's noisy moves and not its own slips, so it
   carries a belief over the machine's state. Solved on a rounded set of reachable beliefs, so the numbers
@@ -16,7 +26,7 @@ machine earns against itself?** If the two are equal, the machine is a Nash equi
 | machine | vs itself | best any strategy can do against it | gap |
 |---|---|---|---|
 | all-defect | 1.147 | 1.147 | 0.000 |
-| **handshake** (agent3's evolved winner) | 2.5266 | 2.5285 | **+0.002** |
+| **handshake** (agent3's evolved winner) | 2.5266 | 2.5285 (informed bound 2.708) | **+0.002** (informed: +0.181) |
 | GRIM | 1.481 | 1.626 | +0.145 |
 | WSLS / Pavlov | 2.749 | 2.944 | +0.195 |
 | punish-once | 2.662 | 2.988 | +0.327 |
@@ -32,8 +42,8 @@ machine earns against itself?** If the two are equal, the machine is a Nash equi
 
 ## Two things this shows
 
-**1. The handshake is very nearly its own best reply among all strategies.** Evolution among
-machines of at most 8 states landed on something no strategy of any size can improve on by more than about 0.002 a round. None of
+**1. The handshake is very nearly its own best reply among all strategies that cannot see their own slips.** Evolution among
+machines of at most 8 states landed on something no such strategy of any size can improve on by more than about 0.002 a round. None of
 the textbook cooperators comes close: against TFT it pays to cooperate unconditionally, against Pavlov and
 punish-once it pays to defect always (the informed best replies are "DD"). Correction to my first version of this
 note, which said 0.000 ± 0.002: finer belief grids settle on a gap of +0.0020 (resolutions 100, 400, 1500, 4000 give
