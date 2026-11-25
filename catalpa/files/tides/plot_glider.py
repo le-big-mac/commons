@@ -22,10 +22,11 @@ for y, col in ((2026, C26), (2015, C15)):
     ax.scatter([0], [G[y]], s=80, marker='D', color=col, edgecolor=SURF, linewidth=1.5, zorder=5, clip_on=False)
     ax.annotate(f'+{G[y]:.0f}', (0, G[y]), xytext=(9, 7 if y == 2015 else 0), textcoords='offset points', va='center', fontsize=9, color=INK)
     ax.annotate(f'gliders, October {y}', (p[-1, 0], p[-1, 1]), xytext=(6, 0 if y == 2015 else -2), textcoords='offset points', va='center', fontsize=9, color=INK)
-    q = prof(y, along); bx.plot(q[:, 0], q[:, 1], color=col, lw=2, zorder=3); bx.scatter(q[:, 0], q[:, 1], s=26, color=col, edgecolor=SURF, linewidth=1, zorder=4)
+    q = prof(y, along); q = q[q[:, 0] < 200]      # both years have dives out to 200 km; beyond that only 2015 does
+    bx.plot(q[:, 0], q[:, 1], color=col, lw=2, zorder=3); bx.scatter(q[:, 0], q[:, 1], s=26, color=col, edgecolor=SURF, linewidth=1, zorder=4)
     bx.annotate(f'October {y}', (q[-1, 0], q[-1, 1]), xytext=(6, 0), textcoords='offset points', va='center', fontsize=9, color=INK)
-for a, ttl, yl in ((ax, 'Height of the sea surface held up by the top 500 m, above the 2017–2025\naverage for the same place (cm). Diamonds: the San Diego tide gauge', (-4, 38)), (bx, 'Current along the coast toward the pole, averaged over\nthe top 500 m, above the 2017–2025 average (m/s)', (-0.08, 0.16))):
-    a.axhline(0, color=INK2, lw=1, zorder=2); a.set_facecolor(SURF); a.grid(True, axis='y', color=GRID, lw=1); a.set_axisbelow(True); a.set_ylim(*yl); a.set_xlim(-8, 330)
+for a, ttl, yl in ((ax, 'Height of the sea surface held up by the top 500 m, above the 2017–2025\naverage for the same place (cm). Diamonds: the San Diego tide gauge', (-4, 38)), (bx, 'Current northward along the coast, averaged over the\ntop 500 m, above the 2017–2025 average (m/s)', (-0.08, 0.16))):
+    a.axhline(0, color=INK2, lw=1, zorder=2); a.set_facecolor(SURF); a.grid(True, axis='y', color=GRID, lw=1); a.set_axisbelow(True); a.set_ylim(*yl); a.set_xlim(-8, 330 if a is ax else 215)
     for s in ('top', 'right', 'left'): a.spines[s].set_visible(False)
     a.spines['bottom'].set_color(GRID); a.tick_params(colors=INK2, length=0, labelsize=9); a.set_xlabel('distance from the coast, km', color=INK2, fontsize=9.5); a.set_title(ttl, loc='left', fontsize=10.5, color=INK, pad=8)
 fig.text(0.012, 0.012, "Spray gliders of the California Underwater Glider Network on the line off Dana Point (CalCOFI line 90), October profiles to 500 m, from the IOOS Glider DAC; NOAA gauge 9410170.", color=INK2, fontsize=8)

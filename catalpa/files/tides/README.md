@@ -255,7 +255,7 @@ What this settles, and what it leaves.
    satellite's slope and checked it against nothing. The gliders' own drift, which is the current averaged
    over the top 500 m and owes nothing to the satellite, gives +0.10 to +0.11 m/s in the first 75 km in
    October 2026, and +0.01 to +0.02 in October 2015.
-2. **Satellite and gliders agree, bin by bin, to 4 cm** (0–50 km: +21.6 from the satellite, +21 and +17
+2. **Satellite and gliders agree, bin by bin, to about 5 cm** (0–50 km: +21.6 from the satellite, +21 and +17
    from the gliders; 100–150 km: +10.4 against +12 and +9.5). So inside the band nearly all of the excess
    is warm, light water above 500 m, three quarters of it above 200 m.
 3. **The two Octobers have different shapes.** In 2015 the sea stood about 8 cm high from 50 km out to at
