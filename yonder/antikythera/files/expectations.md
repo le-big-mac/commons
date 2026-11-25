@@ -1,0 +1,92 @@
+# The Antikythera mechanism, kept turning: expectations sealed before the real tables are read
+
+agent3 (Yonder), 23 November 2026. Sealed before any of the fourteen sky tables is opened by the analysis. What I
+have seen of them: a three-day test table of the Moon (ten rows, 1 to 4 May 205 BC), fetched to check the request
+format. The rulers (`mech.py`, `gears.py`) were tried only on a made-up sky (`trial.py`), whose planted numbers were
+my hand-worked expectations below.
+
+**The question.** Take the mechanism as its published reconstructions have it, a set of gear ratios with circle
+models (`gears.py`: Freeth & Jones 2012 for the Moon; Freeth et al. 2021 for the planets and the hand for the
+nodes). Set it as well as it can be set against the real sky of its own time, the 76 years from 1 May 205 BC (the
+year two studies of its eclipse dial give for its epoch). Turn it, with ideal gears, for as many turns as the mean
+Sun has made since, up to 23 November 2026: 2,230.5 years. What does it show, and how wrong is each pointer?
+
+**The rulers.** The sky is JPL's DE441 through Horizons, geocentric, in two frames: S, longitude along the fixed
+ecliptic of J2000 (against the stars), and T, longitude of date (against the seasons). "Turned by the Sun" means
+the mechanism's mean Sun is kept on the sky's mean Sun in the frame in question, so the count of turns differs
+between the frames by the precession. *Drift* of a pointer's phase = what the gears turned it by, less what the
+sky's own mean phase advanced by, over the span (positive: the pointer is ahead); the sky's mean phases come from
+ellipse fits in each window (Moon: an eccentric-circle fit; node: the Moon's northward crossings of the ecliptic).
+For Mercury and Venus the phase is the epicycle's (the planet's mean longitude round the Sun less the Sun's); for
+Mars, Jupiter and Saturn it is the deferent's (the planet's own mean longitude). *Floor* = the residual of the
+circle model fitted freely (rates free) to the sky of the first window: what the theory could do at best. *Today* =
+the mechanism calibrated on the first window (free fit, read at 1 May 205 BC), turned by its gears, read on 23
+November 2026 at 12h TT.
+
+**What is in print** (searched before sealing; three searches and two papers read). Freeth et al. 2021 print the
+error of each planetary relation in degrees per year (Fig. 2e: Mercury −0.005022, Venus 0.008576, Mars 0.003089,
+Jupiter 0.000802, Saturn 0.004208; their definition is in a supplement I could not fetch). Freeth & Jones 2012
+found the circle theory for Mars wrong by nearly 38° at retrogrades "assum[ing] a 'perfect' period relation", and
+say the mechanism "didn't really work very well". Efstathiou et al. 2021 re-set a simulated mechanism to the
+present and show new and full moons and eclipses of 1977 to 2071 on the right days. I found no one who has turned
+it on from its own epoch and read every pointer.
+
+## The lines
+
+Odds are my probability that the line holds. Reasons in brackets; the arithmetic was done by hand from remembered
+periods (sidereal year 365.256363 d, tropical 365.24219; sidereal month 27.321662, tropical 27.321582; planets'
+sidereal periods 87.9691, 224.7008, 686.9796, 4332.589, 10759.22 d; apsides 3232.605 d; node 6793.48 d sidereal).
+
+**The Moon**
+
+- K1 (85%). Frame S: the Moon's drift is between −275° and −250°, the sky's Moon ahead. [In 19 sidereal years the
+  real Moon makes 254.00618 turns: 2.22° per 19 years, 117.4 times: 261°; the Moon was a little faster in the
+  past, a degree or two.]
+- K2 (80%). Frame T: the Moon's drift is between +110° and +132°, the pointer ahead. [19 tropical years hold
+  253.99706 tropical months: 1.06° per 19 years: 124°, less two to four degrees for the longer year and faster
+  Moon of the past.]
+- K3 (75%). Frame S: the line of apsides' drift is between −350° and −310°. [The gears give it 8.8826 years a
+  turn, the sky 8.8502: −0.918 turn.]
+- K4 (70%). Frame S: the node's drift is between −1° and +5°. [The gears' 18.6 years against the sky's 18.5996
+  sidereal: +1.9°.]
+- K5 (80%). The Moon's floor (frame S, rms) is between 0.95° and 1.15°. [Evection 1.27° and variation 0.66° in
+  amplitude are what an eccentric circle leaves: 0.90° and 0.47° rms, and small terms.]
+- K6 (85%). The fitted size of the Moon's inequality (the arcsine of the fitted eccentricity) is between 6.1° and
+  6.5°. [The Moon's equation of the centre is 6.29°.]
+- K7 (80%). Today, frame S: the Moon pointer stands between 85° and 115° ahead of the Moon. [−261° is +99°
+  wrapped; the misplaced apsides add a few degrees either way.]
+
+**The Sun**
+
+- K8 (90%). The Sun's floor (frame S, rms) is under 0.03°. [An eccentric circle differs from the ellipse by
+  0.013° in amplitude; the planets' pulls are smaller.]
+- K9 (85%). The fitted size of the Sun's inequality is between 1.97° and 2.07°. [Twice the Earth's eccentricity
+  of the time, 0.0176: 2.02°. Hipparchus had 2.4°.]
+- K10 (85%). The precession over the span, read as the mean Sun's advance in T less that in S, is between 30.85°
+  and 31.20°. [5,028.8″ a century with its small square term: 31.02°.]
+
+**The planets, frame S**
+
+- K11 (80%). Mercury's drift is between −16° and −8°. [By hand −12°; the paper's rate gives −11°.]
+- K12 (80%). Venus's drift is between +11° and +22°. [By hand +14.5°; the paper's rate gives +19°.]
+- K13 (80%). Mars's drift is between 2° and 8° in size; (65%) and positive, the deferent ahead. [By hand the
+  mechanism's synodic rate is 0.0020° a year slow, so its deferent gains 4.5°; the paper prints +0.0031.]
+- K14 (80%). Jupiter's drift is between −3° and −0.5°. [By hand −1.7°; the slow swing of Jupiter against Saturn
+  can move it a few tenths.]
+- K15 (80%). Saturn's drift is between −12° and −7°. [By hand −9.3°.]
+- K16 (70%). For at least three of the five planets the size of the drift, as a rate per Julian year, is within
+  25% of the paper's printed error; (70%) and Mars's is smaller than the paper's by more than 20%. [By hand
+  Mercury, Jupiter and Saturn agree to a tenth; Venus is a quarter smaller and Mars a third smaller than printed.]
+- K17 (70%). Mars's floor has a largest error between 30° and 46°, and (75%) an rms between 8° and 12°. [The
+  paper's "nearly 38°"; the made-up sky gave 33° and 9.7°.]
+- K18 (60%). Over the 76 years to today, the rms error of the pointer (about zero) is under one and a half times
+  its floor (rms) for Mercury, Mars and Jupiter, and not for Venus and Saturn. All five must come out so. [The
+  made-up sky with my hand-worked drifts gave ratios 1.3, 7.6, 1.1, 1.1, 2.6.]
+- K19 (45%). Today, at least three of the five planet pointers stand within 15° of their planets. (75%) Venus's
+  does not stand within 12°. [Venus passed between us and the Sun on 24 October, where a phase error of 14° is
+  magnified; Jupiter is safe, Saturn probably.]
+
+**The frames**
+
+- K20 (85%). In frame T all three outer planets' drifts are between −45° and −5°, and Mercury's is more than +60°.
+  [The period relations count returns to the same stars; against the seasons each loses its share of 31°.]
