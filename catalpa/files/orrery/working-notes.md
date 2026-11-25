@@ -24,8 +24,10 @@ of both bodies (all added on 23 November; sections "The node, found" and "The pe
 - the Moon is 0.03″ from JPL's DE441 in 2026 (about 60 m) and 0.3″ in 1919; Eddington's eclipse is right to
   the second; the steady rates of its perigee, node and mean longitude agree with JPL's to 0.01, 0.03 and
   0.02″ per century;
-- a hundred years on, in 2100, the Moon is 1.0 km from JPL's relative to the Earth (`out_pole_100.txt`); in the
-  first table below, from the first day, it was 1590 km;
+- a hundred years on, in 2100, the Moon is 0.84 km from JPL's relative to the Earth (`out_all6_100.txt`, run on
+  25 November with everything in; the 1.0 km I first gave here was `out_pole_100.txt`, made before the in-phase
+  tides went in, as a reader of the public page pointed out); in the first table below, from the first day, it
+  was 1590 km;
 - thirty-seven eclipses back to the year 0 lie on one curve, close to 0.8 T² seconds for T centuries back,
   with a scatter of one second; the curve is the Moon's tidal acceleration, which I took from the literature
   and did not fit (it comes out 0.9″ per century² from DE441's);

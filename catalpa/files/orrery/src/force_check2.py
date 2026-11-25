@@ -16,7 +16,7 @@ for name, b in (('Earth', 3), ('Moon', 4), ('Sun', 0)):
     if b == 4:
         dv = (ddt(S[4][:, 1:4]) - ddt(S[3][:, 1:4])) - (S[4][sl, 4:7] - S[3][sl, 4:7]); vr = S[4][sl, 4:7] - S[3][sl, 4:7]; print(f' {np.sqrt((dv ** 2).sum(1).mean()) / np.sqrt((vr ** 2).sum(1).mean()):.2e}')
     else: print()
-A = np.array([[float(x) for x in l.split()] for l in subprocess.run(['./orrery_acc', 'data/ic.txt', '1', '0.05', '2', '1', 'state'], env=dict(os.environ, J2='1', TIDE='195', LFIG='3', POLE='1', CASS='1', K2E='0.30', K2M='0.024', ACCIN=f'/tmp/claude-1004/acc_in_{d0}.txt'), capture_output=True, text=True, check=True).stdout.strip().split('\n')])
+A = np.array([[float(x) for x in l.split()] for l in subprocess.run(['./orrery_acc', 'data/ic.txt', '1', '0.05', '2', '1', 'state'], env=dict(os.environ, J2='1', TIDE='195', LFIG='3', POLE='1', CASS='1', K2E='0.30', K2M='0.024', ACCIN=f'/tmp/acc_in_{d0}.txt'), capture_output=True, text=True, check=True).stdout.strip().split('\n')])
 aE_m, aM_m = A[:, 1:4], A[:, 4:7]; aE_j, aM_j = ddt(S[3][:, 4:7]), ddt(S[4][:, 4:7])
 rs = (S[3][:, 1:4] - S[0][:, 1:4])[sl]; rsh = rs / np.linalg.norm(rs, axis=1)[:, None]; a0s = GMS / (rs * rs).sum(1)
 f1, f2 = 398600.435507 / (398600.435507 + 4902.800118), 4902.800118 / (398600.435507 + 4902.800118)

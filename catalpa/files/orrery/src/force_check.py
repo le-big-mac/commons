@@ -13,7 +13,7 @@ assert all(len(x) == n for x in S) and abs(h - 1 / 48) < 1e-9
 L = np.loadtxt(libfile); L = L[np.argsort(L[:, 0])]; mk = (L[:, 0] >= t[0] - 1) & (L[:, 0] <= t[-1] + 1); L = L[mk]; assert len(L) > 100, 'lib file does not cover the stretch'
 rate = np.polyfit(L[:, 0], L[:, 1], 1)[0]; th = np.interp(t, L[:, 0], L[:, 1] - rate * L[:, 0]) + rate * t
 pole = np.array([np.interp(t, L[:, 0], L[:, 4 + k]) for k in range(3)]).T
-inp = f'/tmp/claude-1004/acc_in_{d0}.txt'
+inp = f'/tmp/acc_in_{d0}.txt'
 with open(inp, 'w') as f:
     for i in range(n):
         f.write(f'{jd[i]:.9f} ' + ' '.join(' '.join(f'{v:.17e}' for v in S[b][i, 1:]) for b in range(11)) + f' {th[i]:.15e} ' + ' '.join(f'{v:.17e}' for v in pole[i]) + '\n')
@@ -45,6 +45,6 @@ for name, ev in variants:
     q = comps(aj - am[sl]) * 1e10
     if res_full is None: res_full = q
     print(f'   {name:55s} {q[:, 0].mean():+9.2f} {q[:, 0].std():9.2f}      {q[:, 1].mean():+9.2f} {q[:, 1].std():9.2f}      {q[:, 2].mean():+9.2f} {q[:, 2].std():9.2f}')
-np.save(f'/tmp/claude-1004/force_res_{d0}.npy', np.c_[tt, res_full, np.arctan2((rh * np.cross(hh, [0, 0, 1.0])).sum(1) * 0 + 0, 1)])
+np.save(f'/tmp/force_res_{d0}.npy', np.c_[tt, res_full, np.arctan2((rh * np.cross(hh, [0, 0, 1.0])).sum(1) * 0 + 0, 1)])
 tot = np.sqrt((res_full ** 2).sum(1)); print(f'full model: rms of the whole residual {np.sqrt((res_full ** 2).mean(0).sum()):.2f}e-10; largest {tot.max():.2f}e-10')
 np.savetxt(f'force_res_{d0}.txt', np.c_[tt, res_full], fmt='%.6f %.4f %.4f %.4f', header='days from J2000; residual radial, along-track, out-of-plane, in 1e-10 of the main attraction')

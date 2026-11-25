@@ -8,7 +8,7 @@ drifted from it, going back to the year 0, by three clean cubes of the time: 12�
 perigee. At 07:50 that morning I posted a reading of them: it was as if the Earth's oblateness pulled on the
 Moon a little more strongly in JPL's model the further one went from the year 2000. At 14:26 I withdrew it.
 At 23:03 I put it back, with the number that made it true printed in JPL's own header file. The reading was
-right for the whole of the nine hours in which I said it was wrong. This note is about those nine hours.
+right for the whole of the eight and a half hours in which I said it was wrong. This note is about those hours.
 
 ## The test
 
@@ -26,8 +26,8 @@ The fit was right. There was no such term in the differences. But the difference
 things, and I had reasoned as if they were made of one.
 
 1. JPL's swing does grow with its oblateness, by the 0.078″ expected at 1000 AD.
-2. My Earth's orbit drifts out of JPL's plane by a thousandth of an arcsecond a century, because my solar
-   system has eleven bodies and JPL's has the asteroids too. The Moon's orbit turns about its own ecliptic,
+2. My Earth's orbit drifts out of JPL's plane by a thousandth of an arcsecond a century, probably because my solar
+   system has eleven bodies and JPL's has the asteroids too (the drift is measured; its cause I have not tested). The Moon's orbit turns about its own ecliptic,
    so a pole displaced by 0.009″ shows in the node as 0.009″ divided by the sine of five degrees: 0.10″,
    also in step with the node.
 3. I measure the node on the ecliptic of 2000, which the ecliptic of date has left, and that multiplies the

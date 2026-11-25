@@ -4,9 +4,9 @@ AS = 206264.806247
 th0, om0 = 218.322019991, 481313.22535902         # deg, deg/cy: after three rounds started from the mean longitude 218.3164477 and sidereal mean motion 481266.48434638 (lib_ic.out, first part)
 FORCED = [365.2596, 27.554550, 205.89, 1095.18, 182.63, 411.78, 31.812, 14.7653, 173.31, 6798.4, 3232.6]   # 1095.18 d = 2F-2l, a forced term 39 days from the free period
 def run(th0, om0):
-    env = dict(os.environ, J2='1', TIDE='195', LFIG='3', LIBOUT='/tmp/claude-1004/lib_ic.txt', TH0='%.12f' % th0, OM0='%.9f' % om0)
+    env = dict(os.environ, J2='1', TIDE='195', LFIG='3', LIBOUT='/tmp/lib_ic.txt', TH0='%.12f' % th0, OM0='%.9f' % om0)
     subprocess.run(['./orrery_lfig3', 'data/ic.txt', '120', '0.05', '2', '2', 'state'], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-    a = np.loadtxt('/tmp/claude-1004/lib_ic.txt'); t = a[:, 0]; T = t / 36525
+    a = np.loadtxt('/tmp/lib_ic.txt'); t = a[:, 0]; T = t / 36525
     tau = np.unwrap((a[:, 1] - np.radians(218.3164477 + 481266.48434638 * T - 0.00188567 * T ** 2) + np.pi) % (2 * np.pi) - np.pi) * AS
     best = None
     for pf in [1056.5]:                                # free period, measured in the first round when the free term was 771 arcsec

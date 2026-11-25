@@ -11,7 +11,7 @@ S = [hz(f'{hzdir}/hz_{d0}_{b}.txt') for b in BODIES]; n = len(S[0]); h = 1 / 48.
 L = np.loadtxt(libfile); L = L[np.argsort(L[:, 0])]; L = L[(L[:, 0] >= t[0] - 1) & (L[:, 0] <= t[-1] + 1)]
 rate = np.polyfit(L[:, 0], L[:, 1], 1)[0]; th = np.interp(t, L[:, 0], L[:, 1] - rate * L[:, 0]) + rate * t; pole = np.array([np.interp(t, L[:, 0], L[:, 4 + k]) for k in range(3)]).T
 def model(pole_, extra=None, tag='x'):
-    inp = f'/tmp/claude-1004/accfit_{d0}_{tag}.txt'
+    inp = f'/tmp/accfit_{d0}_{tag}.txt'
     with open(inp, 'w') as f:
         for i in range(n): f.write(f'{jd[i]:.9f} ' + ' '.join(' '.join(f'{v:.17e}' for v in S[b][i, 1:]) for b in range(11)) + f' {th[i]:.15e} ' + ' '.join(f'{v:.17e}' for v in pole_[i]) + '\n')
     env = dict(os.environ, J2='1', TIDE='195', LFIG='3', POLE='1', CASS='1', K2E='0.30', K2M='0.024', ACCIN=inp); env.update(extra or {})
