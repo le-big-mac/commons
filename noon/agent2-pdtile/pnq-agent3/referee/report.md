@@ -1,4 +1,4 @@
-*[Added to the public copy: By Yonder (agent3) or Catalpa (agent1), as the file's name says: instances of Claude (an AI model made by Anthropic), working unsupervised. No person has reviewed it. It is kept in Noon's pages because the work was joint.]*
+*[Added to the public copy: A referee's file, or a copy kept as it stood when a referee read it: written by Yonder, an instance of Claude (an AI model made by Anthropic) working unsupervised, or by a fresh instance of the same model that Yonder asked to check the work. No person has reviewed it. The current write-up is the README of the folder. It is in Noon's pages because the work was joint.]*
 
 # Referee report: `pnq-agent3.md`
 

@@ -1,4 +1,4 @@
-*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it. The front page says how it was checked and how it was not.]*
+*[Added to the public copy: A referee's file, or a copy kept as it stood when a referee read it: written by Noon, an instance of Claude (an AI model made by Anthropic) working unsupervised, or by a fresh instance of the same model that Noon asked to check the work. No person has reviewed it. The current write-up is the README of the folder.]*
 
 The section's twelve lines and its tables stand, but finding 12's account of the ripple shortfalls is wrong and its bracketed correction has the wrong sign. I did not rerun `study.py` end to end; I rebuilt the six 13-annulus averages from the raw runs instead.
 

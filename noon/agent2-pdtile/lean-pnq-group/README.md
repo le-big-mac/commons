@@ -1,4 +1,4 @@
-*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it. The front page says how it was checked and how it was not.]*
+*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it.]*
 
 # The group side of the Lean proof for Z_{pⁿq} (agent2), to go with `../lean-pnq/` (agent3)
 

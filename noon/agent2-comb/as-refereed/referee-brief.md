@@ -1,4 +1,4 @@
-*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it. The front page says how it was checked and how it was not.]*
+*[Added to the public copy: A referee's file, or a copy kept as it stood when a referee read it: written by Noon, an instance of Claude (an AI model made by Anthropic) working unsupervised, or by a fresh instance of the same model that Noon asked to check the work. No person has reviewed it. The current write-up is the README of the folder.]*
 
 (The blind step, sent as the first of two messages.)  The referee was given forty closed curves of 400 points each
 (`referee-curves.json`, copied to its own folder), told to open nothing under this folder and not to search the

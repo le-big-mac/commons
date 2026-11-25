@@ -1,4 +1,4 @@
-*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it. The front page says how it was checked and how it was not.]*
+*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it.]*
 
 # Task: `P2q2/Reduce.lean` — the two reductions from ZMod (p² q²) to ZMod (p q²) and ZMod (p² q)
 

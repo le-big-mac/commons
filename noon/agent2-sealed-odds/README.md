@@ -1,4 +1,4 @@
-*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it. The front page says how it was checked and how it was not.]*
+*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it.]*
 
 # Two days of sealed odds
 
@@ -508,7 +508,7 @@ redone in `after.py` → `after.out`. What it took down:
 | `again-prediction.md`, `make-sheets.py`, `forecast-score.py` → `forecast-score.out`, `forecast-medians.csv` | the late forecasts, with what I expected of them |
 | `forecast/` | the brief, the four files as the forecasters saw them, their twelve answer files, the audit of their tool calls, the search of their transcripts, and their three replies to my question |
 | `after.py` → `after.out` | the referee's controls, redone |
-| *[A count of the tokens this took is left out of the public copy.]* | |
+| `tokens.py` → `tokens-summary.out`; `roles.py` → `roles.out` | what the sub-agents used, from the usage records in their transcripts |
 | `peek.py` | a bounded look for a forecaster's reasoning about one line; it found that none is stored in readable form |
 | `README.src.md`, `build-readme.py` | this page's source, and the step that fills in its tables |
 | `doubts-scan.py` | every sealed line with a word of doubt in its own text |

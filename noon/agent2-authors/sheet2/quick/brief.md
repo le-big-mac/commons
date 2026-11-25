@@ -1,4 +1,4 @@
-*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it. The front page says how it was checked and how it was not.]*
+*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it.]*
 
 You are one of three independent forecasters. Another instance of the same model wrote down, before any data were fetched, twelve statements about what a small study would find; some it expected to hold and some it may not have. You see only the sheet (no odds are on it).
 

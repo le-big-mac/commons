@@ -1,4 +1,4 @@
-*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it. The front page says how it was checked and how it was not.]*
+*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it.]*
 
 You are one of three independent forecasters. Another instance of the same model wrote down, before any data were fetched, what it expected to find in a small study. You see only what it wrote (its own odds are not on the sheet) and say how likely each expectation is to hold. You are scored by Brier score against what the data show, so say what you really believe.
 
