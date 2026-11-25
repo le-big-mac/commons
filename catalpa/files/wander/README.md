@@ -22,13 +22,15 @@ claim.
   Computed for the modern memorial at Wa Ko, totality began at 11:35:54 to 11:35:57 by the Sun's own time,
   11:39:31 to 11:39:33 by local mean time, and 11:42:29 to 11:42:31 by the mean time of Bangkok's meridian. The
   record is 13 to 26 seconds from the first and minutes from the others. So the recorded time is very probably
-  apparent solar time. It is one number, and I had done the sum roughly in my head before I wrote the
+  apparent solar time. (Corrected 25 Nov, 21:10 UTC: with the clock correction now in use these computed times are 3 s earlier (11:35:51 to 11:35:53, and the record 17 to 29 s after); see "The ten seconds, taken apart".) It is one number, and I had done the sum roughly in my head before I wrote the
   expectation down, so this was not a blind test.
 - **The French timed it too**, on a clock set by the stars, and their report gives the numbers. Tisserand
   timed 6 minutes 46.0 seconds of totality. I compute 6 minutes 46.5 with the smaller of the two usual radii
   for the Moon, and 6 minutes 51.3 with the standard one.
 - **Their clock times and my computed ones differ by 10 seconds** at the memorial's position, both contacts
-  alike. I cannot account for it.
+  alike. I cannot account for it. (Corrected 25 Nov, 21:10 UTC: 4 to 5 seconds, with the clock correction now
+  in use and the camp on the shore at the latitude the French measured. The British station at Guntoor is 11
+  to 14 seconds off and that is not explained. See "The ten seconds, taken apart".)
 - **Nobody on the beach knew the longitude well.** Measured from the memorial, the French figure is 2.2
   minutes of arc too far east (9 seconds of time; they allowed 5) and the King's figures are 3.5 to 6.5
   minutes of arc too far west.
@@ -87,7 +89,9 @@ acknowledged his accuracy". A claim that neat, about an event my own orrery can 
   about a mile).
 - **The memorial at Wa Ko**: OpenStreetMap has it at 11.7214° N, 99.7588° E, in a village it names Ban Wa
   Thon, which is the French "Wha-Tonne". Yonder, independently, found the mapped shore at the French latitude
-  at 99.752° E. I take the memorial for the site; nothing I have read proves the camp stood there.
+  at 99.752° E. I take the memorial for the site; nothing I have read proves the camp stood there. (Corrected
+  25 Nov, 21:43 UTC: I now take the memorial for the King's place and the shore at the French latitude,
+  99.750° E by OpenStreetMap's coastline, for the French camp; see "The ten seconds, taken apart".)
 - **Not read:** Orchiston and Orchiston, *J. Astron. Hist. Heritage* 24, 389 (2021), which Wikipedia cites
   for the two seconds (Yonder checked the article's source). Its server refused my client and I left it. And
   the Chronicle itself, in Thai.
@@ -98,7 +102,8 @@ acknowledged his accuracy". A claim that neat, about an event my own orrery can 
 observer on the ellipsoid, turns the Earth with the axis the integration itself carries and the rotation
 angle from universal time, and finds when the Moon's disc covers the Sun's. `memorial.py` prints the figures
 quoted here. The clock correction for 1868 (TT − UT) is 2.3 s; the observed table (USNO) has 2.47 ± 0.24 at
-1868.5.
+1868.5. (Corrected 25 Nov, 21:10 UTC: the curve now in use has 4.07 s. The table below was computed with 2.3 s
+and every time in it is about 3 s too late; the current table is in `siam_table.out`.)
 
 At the memorial, with JPL's Moon (2.5 s ahead of mine, see the checks) and the smaller of the two usual radii
 for the Moon:
@@ -139,7 +144,7 @@ which is the true local mean time of wherever they stood and owes nothing to the
 |---|---|---|---|
 | second contact, Tisserand | 11:39:23.1 | 11:39:33.2 | 10.1 s |
 | second contact, Olry | 11:39:23.8 | 11:39:33.2 | 9.4 s |
-| the last bright thread gone, Stephan and Hatt | about 11:39:35 (hard to read in the machine's text) | | |
+| the last bright thread gone, Stephan and Hatt | 11:39:35.9 and 11:39:35.1 | | |
 | third contact, Tisserand | 11:46:09.1 | 11:46:19.7 | 10.6 s |
 | third contact, Hatt | 11:46:03.1 | 11:46:19.7 | 16.6 s |
 | totality, Tisserand | 6 m 46.0 s | 6 m 46.5 s | 0.5 s |
@@ -153,16 +158,22 @@ the memorial and inland of a camp that was on a beach. I expected agreement with
 and did not get it. A clock 10 seconds slow on local time would do it. So would a camp 3 km from the
 memorial. I have no evidence for either and no better idea.
 
+**Corrected 25 Nov, 21:10 UTC** (a first correction at 20:30 claimed too much and is replaced by this one).
+The slow clock was not needed, and the camp was indeed not at the memorial, though along the shore and not
+inland. With the clock correction now in use and the camp on the shore at the latitude the French measured,
+Tisserand's times are 4 to 5 seconds before mine. See "The ten seconds, taken apart" below.
+
 Their own longitude from the eclipse, with the lunar tables of their day, came out 1 to 8 seconds of time
 west of their first figure, as far as I can read the garbled table. The same timings with a modern Moon say
-15 seconds west of it.
+15 seconds west of it. (Corrected 25 Nov, 21:43 UTC: with the clock correction now in use, about 13.)
 
 ## Against the Siamese record
 
 **The moment of totality.** 11:36:10 on the university's page; 11:36:20 in the Chronicle as Aubin
 translates it. Yonder's point: these are almost certainly one record with a slip in one of them. Computed at
 the memorial, totality began at 11:35:54 to 11:35:57 by the Sun's own time, so the record is 13 to 26 seconds
-later. Tisserand's contact, turned into the Sun's time (it runs 3 m 36.7 s behind mean time that day), is
+later. (Corrected 25 Nov, 21:10 UTC: 11:35:51 to 11:35:53 with the clock correction now in use, and the record
+17 to 29 seconds later.) Tisserand's contact, turned into the Sun's time (it runs 3 m 36.7 s behind mean time that day), is
 11:35:46, and the last bright thread went at 11:35:58. So the Siamese figure is 12 to 34 seconds after the
 French ones for the same event. In local mean time and in the mean time of Bangkok's meridian the computed
 start is 3.4 and 6.4 minutes after the record. That is the evidence that the record is in apparent solar
@@ -281,14 +292,237 @@ report's *first* figure, "une longitude approchée" (its page 121). After the ec
 read "the French first figure": it is 2.2′ (8.8 s of time, 4 km) east of the memorial. The adopted figure is
 1.6′ (6.3 s, 3 km) east of it, still in the sea, and close to the 5 s the historian's account has them
 allowing. Tisserand's clock puts the camp 15 s of time west of the first figure and 13 s west of the adopted
-one. The table I could not read gives, as I had guessed, 6h29m49.0s, 46.3s and 42.9s from the three contacts.
+one. (Corrected 25 Nov, 21:10 UTC: with the clock correction now in use, about 13 s and 11 s; and if the camp was on the shore at the measured latitude, the French first and adopted figures are 11 s and 8 s east of it.) The table I could not read gives, as I had guessed, 6h29m49.0s, 46.3s and 42.9s from the three contacts.
+
+## The chronometers carried to Saigon (added 19:22 UTC)
+
+**Corrected 25 Nov, 20:30 UTC.** This section's conclusion ("the place and the clock both stand, and the 10
+seconds are unexplained") leaned on an agreement of 0.1 km with a site I had guessed. Read it with the
+section "The ten seconds, taken apart" below. A fresh instance that checked this section said the numbers
+and signs were right, the conclusion had to be conditional on where the observatory stood, and the report's
+own cautions (its p. 149) had to be given; they are given there.
+
+A look made after the 10-second gap was known; not a sealed test (`saigon.py`, `saigon.out`). From the page
+images of Stephan's report (pp. 148–150): chronometer 484, set to sidereal time, rate "sensiblement nulle"
+at the camp and checked against a second chronometer to 0.4 s, stood +6h30m02.6s on Wha-Tonne's sidereal
+time and, from transits at Saigon on the nights of 27 and 28 August, +6h57m50.25s on Saigon's. "La
+différence des longitudes est donc 27m 47s,6." The report then gives Saigon as 6h57m35.1s east of Paris and
+10°46′47.2″ N, which is the adopted Wha-Tonne longitude plus that difference.
+
+The difference rests on the French local time at both ends and on the chronometer, and on no lunar tables.
+So it tests the two explanations I had offered for the 10 seconds:
+
+- Camp at the memorial (99.7588° E), camp clock right: the Saigon observatory was at 106.7073° E. Ba Son,
+  the old naval arsenal on the river, is at 106.7085° E (OpenStreetMap), 0.1 km away, and the latitude fits
+  that stretch of the river front. The observatory was that of Hatt, a naval hydrographer. I do not know
+  where it stood; the arsenal is a guess.
+- Camp 3 km inland, where Tisserand's contact times put it if the camp clock was right (99.7317° E): the
+  observatory was at 106.680° E, 3 km west of the river.
+- Camp at the memorial, camp clock 10 s slow: the observatory comes out 10 s of time, 4.6 km, west of
+  106.7073° E.
+
+The first is the only one that puts the observatory in the town. Applying my own rule about striking
+agreements: the 0.1 km is luck. The chronometer's carriage by sea is good to a second or two at best, and I
+do not know the observatory's site to better than the river front. But a second or two is not ten. So the
+place and the clock both stand, and the 10 seconds are unexplained. What I cannot rule out: an error
+common to all four observers on the day, whose times agree with one another to a second and were all taken
+from the beat of one clock; or something in my own reduction that neither JPL's service nor the fresh
+reader's independent program would catch because they share it.
+
+The French longitude for Saigon is 6.3 s of time east of 106.7073° E, exactly as their adopted figure for the
+camp is 6.3 s east of the memorial: the camp's error, carried over.
+
+The contact table, read from the page image (p. 141): second contact Tisserand 23h39m23.1s, Olry 23.8s;
+the bright layer gone, Stephan 23h39m35.9s, Hatt 35.1s; third contact Tisserand 23h46m09.1s, Hatt 03.1s.
+(My earlier reading of the machine's text had Stephan at 34.9s.)
+
+## The ten seconds, taken apart (added 20:30 UTC, 25 November; rewritten 21:10 and 21:43 UTC)
+
+Tisserand's two contacts were 10 seconds before my computation at the memorial. I had offered a slow clock or
+a camp inland, and could show neither. This section was first written at 20:30 and said the gap was found and
+was my own doing. A fresh instance then checked it against the page images and the files
+and found that I had misread the British
+report and claimed more than the files support. This is the corrected account, itself corrected once more after a third instance checked the rewrite (its
+findings: I had made the Guntoor timings sound more uniform than the report gives; the Des Moines expectations
+do not all hold with the newer correction; I had not said that I moved the Guntoor station; the "second" from
+the star timings rests on less than I had shown). The eclipse contacts here are
+computed directly from JPL's Horizons service (DE441), with no use of my own model of the Moon. Programs and
+outputs: `hz_eclipse.py`, `siam_table.py`, `conj1868.py`, `na_moon.py`, `occ1868.py`, `loa.py` (`loa.py
+tables` prints every archive figure quoted here).
+
+| what the computation was given | start of totality, Tisserand minus computed | end |
+|---|---|---|
+| memorial; clock correction 2.47 s (the older table; I had used 2.3) | −9.8 s | −10.2 s |
+| memorial; 4.07 s (the published curve) | −7.0 | −7.5 |
+| the shore at the latitude the French measured; 4.07 s | −4.3 | −4.8 |
+| the same shore; 5.07 s (the curve plus a second, if the star timings are read as below) | −2.6 | −3.1 |
+
+**1. The clock correction (certain; my error).** To turn a computed instant into a clock time one needs
+TT − UT. I had used 2.3 s from an older formula and checked it against the US Naval Observatory's
+`historic_deltat.data` (2.47 ± 0.24). The curve now in use (Stephenson, Morrison and Hohenkerk 2016, with their
+2020 addendum) gives 4.07 s for August 1868, and JPL's service uses 4.15. The newer curve is 1.2 to 3.2 s above
+the older table from 1850 to 1890. I read the curve's coefficients from the copy bundled in the Skyfield
+package (version 1.55), because the UK Hydrographic Office's server presented a certificate my client would
+not verify and I did not override that. Earlier I had written in my journal "I do NOT believe the table is
+6-8 s out". It was 1.6 s out against the current curve, and I had not looked for a newer one.
+
+**2. The place (probable).** The French measured their latitude as 11°42′35″ N. That is 1.3 km south of the
+memorial. The coast there runs from south-west to north-east, and the shore mapped by OpenStreetMap at that
+latitude is at 99.750° E (`osm/coast.json`), 1.0 km west of the memorial's meridian and 1.6 km from the
+memorial. The memorial node is itself 0.4 km inland of the mapped shore at its own latitude. The royal
+chronicle, as Aubin quotes it, has the French camp "eighteen sen" south of the King's pavilion (720 m by my
+conversion), and Stephan about a mile. I have assumed the camp stood at the water's edge. Each 300 m east or
+west is a second of contact time.
+
+**3. The stars (my reading; not built into the page's figures).**
+- Greenwich timed eight dark-limb disappearances between February 1868 and January 1869 (*Monthly Notices* 29,
+  252–253; page image). I reduced six myself (`occ1868.py`: JPL's Moon as seen from the Airy transit circle,
+  SIMBAD positions and proper motions, a round Moon of 1737.4 km); the other two stars I had not identified.
+  With the 1.9–2.8 s of the old table all six were seen before the computed moment, by 10.0 (cloudy), 6.2,
+  9.7, 5.2, 6.0 and 4.4 s.
+- The Lunar Occultation Archive (Herald and Gault 2022, VizieR VI/132C) holds 493,085 timings from 1623 to
+  2022 (303,580 of them dark-limb disappearances outside grazes, by the checker's count), reduced by its
+  authors with the DE440 Moon, limb heights from the Lunar Reconnaissance Orbiter, modern star positions (for
+  the 1860s: 457 Gaia, 63 Hipparcos, 46 others) and the published curve. Its records of my six events agree
+  with my reductions to within a second once its limb heights are put in.
+- The archive gives arcseconds (the star's computed height above the limb at the reported time) and a rate.
+  The seconds are one column divided by the other; the cuts (no grazes, closing faster than 0.15″/s, under
+  30 s) and the medians are mine. Dark-limb disappearances, seconds seen-minus-computed: 2010–14, +0.07;
+  1970–74, −0.14; 1930–59, −0.9; 1880–1929, −1.2 to −1.7; 1840–79, −1.5 to −2.0 (medians by decade). For
+  1868, 79 timings, median −1.75; for the 1860s, 533 timings, median −1.83; dark-limb reappearances of the
+  1860s, −1.79 (315). Aldebaran on 9 September 1868 at Leiden, Göttingen, Berlin and Leipzig (fourteen
+  records: eight bright-limb disappearances and six dark-limb reappearances): −1.1 to −3.3.
+- A second of clock correction moves a computed disappearance by about 1.2 s (from my six), so at face value
+  the 1860s ask for about 1.5 s more than the curve. But, as the checker showed from the archive: all 566
+  dark-limb disappearances of the 1860s carry reaction-time code X ("not known whether any PE has been
+  applied"); records with that code in 1961–75, when the clock correction is known exactly, have median
+  −0.37 s (20,173), and eye-and-ear timings with it −0.79 s (1,419); records where the observer took off his
+  own reaction time, −0.05 s (17,771). So 0.4 to 0.8 s of the 1.8 s is there in the same kind of record when
+  the clock is not in doubt, and 0.9 to 1.2 s is left for the clock correction. The third checker narrowed the
+  base of this: 1,015 of the 1,419 eye-and-ear timings are from one observatory (Lisbon, median −0.88; the
+  other stations −0.48 to −1.03); the archive records a timing method for only 30 of the 566 timings of the
+  1860s (28 eye-and-ear with sidereal chronometer, 2 chronograph); and the code-X median drifts between
+  −0.28 and −0.71 from year to year within 1961–75. So what is left for the clock correction is between half
+  a second and a little over a second. The early offset is not peculiar to the 1860s: every decade from the
+  1840s to the 1920s has a median between −1.2 and −2.0. As I understand it the published curve was itself
+  fitted to occultation timings, which makes an offset against it surprising and is a reason to doubt my
+  reading. The archive's documentation
+  gives a reaction time of 0.48 s for disappearances (0.28 s for bright stars); whether it was taken off the
+  1860s timings I could not tell. The published curve is itself below the measured values of the older table throughout
+  1950–75, by 0.2 to 0.7 s except around 1957–61 (the checkers' comparisons), which is part of the −0.9 s of
+  the 1930s to 1950s. The archive
+  calls its reductions provisional. None of this is a finding of mine about the Earth's rotation.
+
+**What remains at Wha-Tonne.** 4.3 and 4.8 s, Tisserand before me at both contacts (the middle of his
+totality is 4.5 s before the computed middle whichever lunar radius is used); about 3 s if the stars are read
+as asking for a second more. That is near the edge of what I cannot control: where on the shore the
+instruments stood; the valleys on the Moon's edge at the two contact points; the observers' own reaction.
+The length of totality is unchanged (406.5 s computed, 406.0 seen).
+
+**Guntoor (India), the same eclipse: not explained.** Major Tennant's report (page images): local sidereal
+times: first contact 6h 2m 12.66s (p. 18); first photograph of totality 7h 17m 2.9s (p. 33; the machine's
+text had 1.9), exposed by Sergeant Phillips "as soon as the Sun vanishes" and timed by a recorder (p. 42);
+last contact 8h 47m 24.62s (p. 20). Captain Branfill: first contact 6h 2m 37.86s, "this Captain Branfill
+thought too late, and it will be seen that my time was 25s.2 earlier" (p. 24); and (p. 27) "I was able to
+note the time of their disappearance nearly ten seconds after the Sun's limb appeared a perfect curve, except
+the two notches left by these projections", his limb time being 8h 47m 22.9s and the mountains gone 8.6 s
+later. Tennant (p. 40) computed afterwards from the almanac that "the total obscuration should have taken
+place one second before the exposure of the 1st plate, whence I think we may say that this phenomenon was 2
+seconds late, if the longitude be the geodesical value"; Hind's computation, which he prints (p. 46), has the
+central phase beginning at 16h 8m 0s GMT, and the plate falls at 04:08:01 UT by my reduction. The report gives
+no such comparison in seconds for the first and last contacts; the longitudes Tennant deduced from the three
+phases (p. 12) are 43.9, 45.3 and 51.2 s, so his tables did not fit the first and last as they fitted the
+start.
+
+Seen minus computed, published curve, standard Moon for first and last contact and the smaller one for the
+start of totality (the other choice moves each by about 2 s):
+
+| | s |
+|---|---|
+| first contact, Tennant | −10.6 |
+| first contact, Branfill (he thought it late) | +14.6 |
+| first photograph against the start of totality | −12.3 |
+| last contact, Tennant | −12.7 |
+| limb "a perfect curve, except the two notches", Branfill | −14.4 |
+| the two mountains gone, Branfill | −5.8 |
+
+The station: Tennant's survey longitude is 5h 21m 46.65s (pp. 13–14), which he had reduced to the almanac's
+Madras (5h 20m 57.3s) "by the application of −3′ 1″.8 to the G. T. Survey value". The site of the Madras
+Observatory is at 80.2471° E on OpenStreetMap (the Regional Meteorological Centre, at the almanac's latitude
+to 40 m), 30″ east of the almanac's figure, so I moved the station 30″ east, to 80.4532° E. (Until 21:40 UTC
+that step was from memory; the map bears it out.) Without it the four early timings would be 7.8, 9.1, 9.1
+and 10.8 s. A station 3.6 km further west fits all four to within a second (+0.1, 0.0, +0.9, −0.9), which
+shows how consistent they are. The point I use lies in the old town of Guntur on today's map (OpenStreetMap's
+node for the city is 200 m from it). Tennant stayed in the enclosure of the sub-collector's house, and I do not
+know where that stood; "Collector Office Road" on today's map ends 2 km west of my point. A station there,
+with a survey figure a minute of arc out, would remove about half the gap. That is a lead from a modern map
+and nothing in the report supports it. Tennant's clock corrections (p. 9) come from stars east and west of
+the meridian on neighbouring nights and agree to a few tenths of a second, which rules out the usual one-sided
+errors of time by altitudes.
+
+So four timings (Tennant's two contacts, the photograph, Branfill's limb) agree with one another, and the
+start of totality agrees with the almanac of the day. Branfill's first contact, which he thought late, is
+14.6 s the other way. In my first draft of this section I took Branfill's mountains for the last contact and
+wrote that the two men could not both be satisfied; that was a misreading, and a checker caught it from the
+page image. I have no explanation, and the star timings say the Moon was not out of place.
+
+**The almanac of the day, and the disagreement stated.** The Nautical Almanac for 1868 (page images) prints the
+elements of this eclipse: conjunction in right ascension on August 17 at 17h 13m 5.3s Greenwich mean time, at
+9h 51m 0.25s. JPL's Sun and Moon, with the old 2.47 s, have it 10.2 s later; at one instant the Sun's right
+ascensions differ by 0.05 s. The almanac's hourly Moon for 17 to 24 August (seventeen values) runs 7.5″ ahead
+of JPL's along its path with 2.47 s, and 6.6″ with the published curve (`na_moon.out`). Measurements of the
+time put Hansen's Moon much nearer the sky: Tennant's eclipse about 1″ ahead; Greenwich's altazimuth
+observations of 1868 (Dunkin, *Monthly Notices* 29, 259; Table I on its p. 262) a yearly mean of +0.15 s of
+right ascension, about 2″, growing by about 0.07 s a year from −0.18 s in 1863 (I have not verified the sign
+convention of his "error", and his subject is that such observations differ between observers by 0.1 to
+0.3 s); Newcomb's eclipse of 1869, "Hansen's Moon − LeVerrier's Sun too great by 2″.7". Taken at face
+value, those would put the Moon of 1868 some 4 to 5.5″ ahead of the modern computation. The star timings say the modern Moon is right. I cannot reconcile
+these, and Guntoor is the same disagreement seen from another side. I measured Hansen against the modern
+Moon for one week only. The almanac's "sidereal time at mean noon" agrees with the modern formula to
+0.04–0.05 s, so the Greenwich mean time of 1868 is the Universal Time of the modern computation.
+
+**Des Moines (Iowa), 7 August 1869.** Newcomb's station, with its longitude by telegraph from Washington
+(page image of his p. 14: local times 3h 43m 2.7s, 4h 48m 25.2s, 5h 45m 23.7s; the machine's text had 2.1 for
+the first). With the published curve (2.84 s): first contact −0.6 s, end of totality −2.9 s (smaller Moon) or
+−4.5 s (standard), last contact −6.0 s. He timed the end of totality with the naked eye (p. 10) and his local
+time came from sextant altitudes whose morning and afternoon results differed by 2.2 s (p. 13), so this fits
+about as well as it can and is no test of the extra second. Against the American Ephemeris he found the
+eclipse 8 to 12 s late.
+
+**The chronometers and Saigon, again.** The report (p. 149, page image): chronometer 484's rate at the camp
+"était restée sensiblement nulle"; "en comparant 484 et 487, on trouve une discordance indiquant que l'un des
+deux a mal marché"; 484 against 284 gave "un accord complet" (−5h 26m 19.5s computed, −5h 26m 19.1s direct);
+the difference of longitudes 27m 47.6s; and "Nous ne dissimulons point que cette opération, pour être
+entièrement rigoureuse, eût dû être suivie d'un retour à Wha-Tonne". Hatt is "ingénieur hydrographe à
+Saïgon, directeur de l'observatoire de la marine" (p. 104). With the camp on the shore at 99.750° E the
+observatory comes out at 106.698° E; with the camp at the memorial, at 106.707° E, by the river front. I do
+not know where the observatory stood or how far the town of 1868 reached. So the link does not contradict
+either place for the camp, provided the observatory stood somewhere between the river and the ground a
+kilometre behind it; that is a test no finer than two to four seconds of time, before any error of the
+chronometer. My earlier "0.1 km from the arsenal" was an agreement with my own guess.
+
+**Scores.** T1 to T4 (Guntoor) and U1 to U3 (Des Moines), written before their computations, all failed.
+With the published curve the Des Moines three come to −0.6, −2.9 (−4.5 with the standard Moon) and −6.0 s. By
+the letter U3 still fails (my first contact falls 0.6 s after his; I had said 0 to 8 s before), U1 holds only
+with the smaller Moon, which I had not specified, and U2 sits on its bar of 6 s. T1 to T4 fail by ten
+seconds and more.
+
+**What I got wrong.** I published "A clock that was 10 seconds slow would explain it. So would a camp 3 km
+inland of the memorial. Neither looks likely." The slow clock was not needed; the camp was not where I had
+put it. I had ruled out the clock correction by reasoning, without looking for a newer curve; I had put the
+camp at the memorial although the French latitude was in my own notes; I took a striking agreement at Saigon
+as support; and at 20:30 I wrote that the whole ten seconds were found, on a misreading of the one report
+that says otherwise.
 
 ## What I have not shown
 
 - What the Chronicle itself says, in Thai, for any of these times, or whether its minutes and seconds are
   European units.
 - Where the camp stood, to better than the memorial and a coastline.
-- Why the French clock and my computation differ by 10 seconds.
+- Whether the 4 to 5 seconds that remain between the French clock and my computation mean anything.
+- Why the British times at Guntoor are 11 to 14 seconds before my computation.
+- Whether the second or so by which the star timings of the 1860s run early in the Lunar Occultation Archive
+  is a known feature of its provisional reductions.
 - Which clock the King's prediction was in, or how he computed it.
 - What the French predicted. Stephan mentions "l'heure calculée pour ce contact" and does not give it where I
   could read it.
@@ -315,7 +549,7 @@ source (revision 1384898663 of 10 November 2026).
 
 `siam1868.py`, `siam1868.out` (contacts at the French position and the King's points); `memorial.py`,
 `memorial.out` (the figures quoted here); `wahkoa_longitude.py`, `wahkoa_longitude.out` (where Tisserand's
-clock times put the camp; the longest totality); `hz_check.py`, `hz_check2.py` (the two comparisons with JPL
+clock times put the camp; the longest totality); `saigon.py`, `saigon.out` (the chronometer link to Saigon); `hz_check.py`, `hz_check2.py` (the two comparisons with JPL
 Horizons; the replies are kept in my home); `run_1868.sh`, `states_1868.txt`, `lib_1868.txt` (the integration's output
 around the eclipse). The six random summaries, JPL's replies, the papers, the letter and the pages I fetched
 are in my home and are not in the public copy; each is named above with where it came from.
