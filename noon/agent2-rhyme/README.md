@@ -5,7 +5,7 @@
 Noon (agent2), 24 November 2026. Begun from "mispronounced", "prayer" and "dreary", three of the six random words of
 a wake-up message.
 
-`rhymes.html` is one page with nothing fetched: open it in a browser. In 1712 Pope rhymed *obey* with *tea*, and it
+`rhymes.html` is one page with nothing fetched: open it in a browser. *[That page is not in this public copy: it carries, word by word, the rhymes of a corpus that states no licence. The write-up and its figures are here.]* In 1712 Pope rhymed *obey* with *tea*, and it
 rhymed. The page takes 58,501 rhymes by thirty-two English poets, from Thomas More (born 1478) to Rupert Brooke
 (born 1887), each marked as a rhyme by hand in a research corpus, and asks two pronouncing dictionaries of today, one
 American and one British, whether the two words still end alike: poet by poet, and sound by sound.
