@@ -466,6 +466,91 @@ start of totality agrees with the almanac of the day. Branfill's first contact, 
 wrote that the two men could not both be satisfied; that was a misreading, and a checker caught it from the
 page image. I have no explanation, and the star timings say the Moon was not out of place.
 
+**Tennant's stars (added 22:30 UTC; mended 22:53 UTC after a fresh instance checked it).** A test of whether
+Guntoor's misfit is the eclipse's or the station's (`ae_moon.py`, `ae_moon.out`). Tennant found his longitude
+from the Moon against stars (pp. 12–13, page images): three timings of two occultations, 33 Ceti on 8 August
+5h 21m 48.8s (he calls its emersion "so close to the S. point of the Moon's limb as to be useless", so the
+track was near grazing), α Tauri on 12 August 53.1s (immersion) and 50.3s (emersion); and six nights of equal
+altitudes of the Moon and a star, 24 July 53.4s, 1 August 46.6s, 9 August 43.3s, 11 August 53.3s, 13 August
+47.9s, 14 August 45.5s. The same list on p. 12 gives three longitudes from the eclipse: first contact 43.9s,
+commencement of total phase 45.3s, last contact 51.2s. His own mean, by day, with the eclipse counted as one
+day, is 48.6s. My average of the nine star values is 49.1 s (sd 3.7); the survey longitude with the modern
+Madras is 48.65 s (the eclipse computations use 80.4532° E, which is 48.8 s).
+
+Which almanac? "I had prepared predictions of a considerable number of occultations from the data given in the
+American Nautical Almanac, intending to use them for the determination of longitude. Of these I was able to
+observe very few." That is the only place where the report ties an almanac to the longitude work, and it ties
+the American one, at least for the occultations. For the altitude nights it names none. He calls the values
+"uncorrected for errors of the Moon's and star's places", and a footnote says: "I am indebted to Mr. Stone
+for errors of the Moon's Tabular place during this period ... The general result would be to reduce the
+longitude some seconds." I take Stone to be Stone of Greenwich and his errors to be those of the British
+almanac's Moon; the report does not say so. For his own later computation of the eclipse (p. 40) he names
+"the Nautical Almanac data".
+
+I read both almanacs' hourly Moon on his eight nights and the eclipse day from the page images (three hours
+each; the column differences checked, and all of it checked again by the fresh instance, which found one
+digit wrong in one entry of the American one, 14 August hour 10, now 6h 25m 31.36s, +19° 15′ 39.4″) and set
+them against JPL's Moon with a clock correction of 4.1 s:
+
+| date | American Ephemeris minus JPL, along the path | British almanac (Hansen) minus JPL |
+|---|---|---|
+| 24 July | +10.6″ | +5.5″ |
+| 1 August | +5.4 | +5.3 |
+| 8 August | +3.0 | +6.8 |
+| 9 August | +3.2 | +6.8 |
+| 11 August | +2.2 | +6.3 |
+| 12 August | −0.1 | +5.8 |
+| 13 August | −1.7 | +5.4 |
+| 14 August | −1.8 | +5.3 |
+| 17 August | +6.5 | +6.1 |
+
+So Hansen's Moon is a steady 5.3 to 6.8″ ahead of the modern one for the whole month (6.1 to 7.1″ on 17 to 24
+August), and the American Ephemeris's runs from 5.0″ ahead of Hansen's to 7.2″ behind it; on Tennant's nights
+it slides one way. A longitude got with a table Moon that runs ahead comes out too large by the lead along
+the path divided by the Moon's rate (0.50 to 0.61″/s on these nights); the lead across the path matters too,
+by an amount I have not computed (the checker puts it under 1.5 s for the altitude nights and at several
+seconds for the near-grazing 33 Ceti).
+
+- **If he reduced with the British almanac:** the nine come to 38.4 s on the modern Moon (sd 4.3, so ±1.4;
+  by day 38.0). His stars and his eclipse then agree: by the almanac of the day both give the survey longitude
+  to about two seconds (stars 49.1 s; eclipse list 46.8 s; Hind's computation for 80° 27′ 15″ E fits the
+  photograph), and by the modern Moon both give a meridian 8 to 10 s to the west (stars 38.4 s; eclipse
+  40.7 s). The oddity is then in everything measured at Guntoor against the Moon.
+- **If with the American as printed:** 44.8 s (sd 7.2; by day 43.9), between the survey's figure and the
+  eclipse's. His values do not follow that table's slide (slope +0.11 ± 0.20 where 1 is expected; the scatter
+  doubles; these are one fact, not two). But, as the checker noted, in this reading the turned values are not
+  a wide cloud: they are two tight groups, 35 to 43 s up to 9 August and 48.5 to 53.3 s from 11 August, and a
+  break chosen after the fact is not evidence. And on 12 August the American table's Moon and the modern one
+  coincide (−0.1″), so the α Tauri occultation, the sharpest of the nine, would then put him at 51.9 s, three
+  seconds east of the survey longitude, and the eclipse would stand alone.
+- I tried to tell the two apart by his three eclipse longitudes, which were presumably worked out the same
+  way. The American Ephemeris has the conjunction at 12h 4m 50.4s Washington mean time (its p. 415, page
+  image), 3 to 4 s before the British almanac's. A correct reduction of his three timings would give about
+  49 s with the British elements and about 52 to 53 s with the American; his list has 43.9, 45.3 and 51.2.
+  Neither fits, so that does not decide it.
+- For Stone's corrections to "reduce the longitude some seconds" fits the British table (Hansen about 2″
+  ahead of Greenwich's sky, so about 4 s) and not the American, whose errors change sign over his nights.
+
+I think the British reading the likelier (I had written 70%; with the cut quotation restored I would say
+somewhat less) and cannot show it. The three expectations written before the test (V1 to V3 in my journal)
+assumed the American table and all failed by the letter (V1 by 0.8 s); the British reading was taken up only
+after that.
+
+Newcomb's table for Des Moines gives a second view for 1869: the American Ephemeris's predicted contacts are
+13 to 15 s before my modern ones, which by his own scale (seconds of arc per second of time in his table) is
+6 to 8″ of Moon minus Sun; he found "Peirce's ☽ − Hansen's ☉ too great by 5″.3" and "Hansen's ☽ −
+LeVerrier's ☉ too great by 2″.7"; so his sky is 0.7 to 2.7″ ahead of the modern computation, about what the
+star timings show, and Hansen's Moon minus Le Verrier's Sun was then 3.4 to 5.4″ ahead of it, against 5″ in
+August 1868. I have not checked that arithmetic beyond his two figures.
+
+Where this leaves Guntoor: if the modern Moon is right for 1868 to a few seconds, as the occultations of the
+decade, my own six, the French timings and Des Moines all say (nearly all of them fall a little before it),
+then on the British reading Guntoor's meridian by the Moon is 8 to 10 s (about 4 km) west of its survey
+longitude, and by coincidence that is the size of Hansen's error, so that everything at Guntoor agreed with
+the almanac of the day. I have no evidence for a 4 km error. If instead Hansen was nearly right in 1868,
+Guntoor and Greenwich's limb observations fit and the occultations are 8 s out, which my own six reductions do
+not allow. Not resolved.
+
 **The almanac of the day, and the disagreement stated.** The Nautical Almanac for 1868 (page images) prints the
 elements of this eclipse: conjunction in right ascension on August 17 at 17h 13m 5.3s Greenwich mean time, at
 9h 51m 0.25s. JPL's Sun and Moon, with the old 2.47 s, have it 10.2 s later; at one instant the Sun's right
@@ -477,8 +562,8 @@ right ascension, about 2″, growing by about 0.07 s a year from −0.18 s in 18
 convention of his "error", and his subject is that such observations differ between observers by 0.1 to
 0.3 s); Newcomb's eclipse of 1869, "Hansen's Moon − LeVerrier's Sun too great by 2″.7". Taken at face
 value, those would put the Moon of 1868 some 4 to 5.5″ ahead of the modern computation. The star timings say the modern Moon is right. I cannot reconcile
-these, and Guntoor is the same disagreement seen from another side. I measured Hansen against the modern
-Moon for one week only. The almanac's "sidereal time at mean noon" agrees with the modern formula to
+these, and Guntoor is the same disagreement seen from another side. I have now measured Hansen against the modern
+Moon on sixteen dates from 24 July to 24 August (see "Tennant's stars" above): 5.3 to 7.1″ ahead throughout. The almanac's "sidereal time at mean noon" agrees with the modern formula to
 0.04–0.05 s, so the Greenwich mean time of 1868 is the Universal Time of the modern computation.
 
 **Des Moines (Iowa), 7 August 1869.** Newcomb's station, with its longitude by telegraph from Washington
