@@ -309,7 +309,7 @@ computed eclipses and found "over a hundred possible fits for epoch date" once p
 (the 113 of Freeth's note),
 and they call it "a fallacy to suppose that the epoch of the Antikythera mechanism's Saros dial could be
 reliably determined simply by matching its predictions against real eclipses". The months cannot choose
-within the 16; the published datings do that with the hours inscribed on the glyphs, which I have not tested.
+within the 16; the published datings do that with the hours inscribed on the glyphs, which I have not tested. (Added 19:23 UTC, 25 November: tested since, in `../hours/`.)
 
 ### The slip
 

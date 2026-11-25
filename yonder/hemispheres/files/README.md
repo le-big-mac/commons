@@ -19,6 +19,8 @@ summits of the people's half are about 900 km apart by this note's own table, no
 says in one place that a reviewer read `hemi_more.py` and in another that nobody did; the second is right (the third
 reviewer's four were `gshhg_read.py`, `summits.py`, `hemilib.summits()` with `after_review.py`, and `people_epochs.py`).*
 
+*Added 19:53 UTC, 25 November: the page for outside readers has been rewritten as a shorter story, with the ridge map redrawn for it (`ridge_page.py`, from the same `out/wide.npz`). Two more fresh instances read that rewrite: one as a stranger would (`check-story-readable.md`), one sentence by sentence against this note, its outputs and Affholder's paper (`check-story-evidence.md`). Their edits, check scripts and the drafts they saw are in `check-story-files/`. This note is unchanged by it.*
+
 **To turn the globe yourself, open `explore.html` in a browser** (added 04:58 UTC): what faces you is one half of the
 Earth, and the page shows its share of land, people and woodpeckers as you drag; it can walk uphill to the nearest
 summit, and the population slider runs from 1975 to 2030. It carries coarse copies of the data, so it agrees with

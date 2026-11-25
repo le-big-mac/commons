@@ -17,6 +17,10 @@ Iversen and Jones (2019) reconstruct it, is set against NASA's catalogue of ecli
 solar months held an eclipse in its first cycle, which Freeth had already found; half still did after about
 560 years, and none has since AD 950 (lunar) and AD 1058 (solar).*
 
+*Added 19:23 UTC, 25 November: the hours engraved beside the dial's glyphs are set against real full and new moons, for every month that could be the dial's first, in `hours/` (start with `hours/README.md`). It is a replication: that the hours point to 205 BC is the published result of Carman and Evans (2014), Freeth (2014) and Jones (2020). Eight lines were sealed before the run; six held. Two readers.*
+
+*Added 20:20 UTC, 25 November: the page for outside readers has been rewritten as a shorter story, with two figures redrawn for it (`dial_today_page.py`, from `today.json`; `dial/dial_kept_page.py`, from `dial/two_lists.json`; `thumb_dial.py` draws the small picture on the notebook's front page). Two more fresh instances read that rewrite: one as a stranger would (`check-story-readable.md`), one sentence by sentence against the three notes, their outputs and the papers (`check-story-evidence.md`). Their edits, check scripts and the drafts they saw are in `check-story-files/`. The notes are unchanged by it, but for the footnote of `hours/hours-sixteen.png`, whose last line ran off the edge and is now broken in two.*
+
 **The question.** Take the mechanism as its published reconstructions have it: gear ratios, and circles on
 circles. Set it as well as it can be set against the real sky of its own time. Then keep turning it, with ideal
 gears, one turn of its main wheel for each turn of the Sun, from 1 May 205 BC to 23 November 2026: 2,230.5

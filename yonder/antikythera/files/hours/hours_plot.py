@@ -1,0 +1,35 @@
+"""One figure: how well the engraved hours fit real full and new moons at each of the sixteen starts the months allow.
+usage: hours_plot.py   (reads hours_run.json). One hue for the four starts that fit, grey for the rest; labels in ink."""
+import json, os
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+H = os.path.dirname(os.path.abspath(__file__))
+SURF, INK, INK2, GRID, GREY = '#fcfcfb', '#0b0b0b', '#52514e', '#e4e3df', '#8f8e88'
+BLUE = '#2a78d6'
+plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 10, 'text.color': INK, 'axes.labelcolor': INK2, 'xtick.color': INK2,
+                     'ytick.color': INK2, 'axes.edgecolor': GRID, 'axes.facecolor': SURF, 'figure.facecolor': SURF, 'savefig.facecolor': SURF,
+                     'axes.spines.top': False, 'axes.spines.right': False, 'axes.grid': True, 'grid.color': GRID, 'grid.linewidth': 0.8, 'axes.axisbelow': True})
+R = json.load(open(os.path.join(H, 'hours_run.json')))['18']['scores']
+S16 = {299: -1162, 223: -223, 205: 0, 187: 223, 183: 270, 169: 446, 165: 493, 147: 716, 129: 939, 111: 1162, 93: 1385, 89: 1432, 71: 1655, 53: 1878, 35: 2101, 17: 2324}
+fig, ax = plt.subplots(figsize=(7.6, 4.4))
+def east(l): return f'{abs(l):.0f}° {"E" if l >= 0 else "W"}'
+for bc, k in S16.items():
+    s, lon = R[str(k)]
+    fit = s < 3.0
+    ax.plot([-bc], [s], marker='o', ms=9 if fit else 7, mfc=BLUE if fit else GREY, mec=SURF, mew=1.2, ls='none', zorder=3)
+    if fit:
+        tx, ty, ha = {223: (-262, 3.75, 'center'), 205: (-248, 1.25, 'center'), 187: (-150, 3.75, 'center'), 169: (-128, 1.25, 'center')}[bc]
+        ax.annotate(f'{bc} BC\nbest longitude {east(lon)}', (-bc, s), xytext=(tx, ty), textcoords='data', ha=ha, va='center', fontsize=8.5, color=INK,
+                    arrowprops=dict(arrowstyle='-', color=GREY, lw=0.8, shrinkA=2, shrinkB=5))
+ax.axhline(5.58, color=GREY, lw=1.0, ls=(0, (4, 3)), zorder=1)
+ax.text(-308, 5.66, 'a start taken at random (median of all 3,711)', fontsize=8.5, color=INK2, ha='left', va='bottom')
+ax.set_xlim(-312, -4); ax.set_ylim(0, 7.4)
+ax.set_xticks([-300, -250, -200, -150, -100, -50]); ax.set_xticklabels(['300 BC', '250', '200', '150', '100', '50'])
+ax.set_ylabel('how far the 18 engraved hours are from\nreal full and new moons (hours, rms)')
+ax.set_xlabel('year in which the dial would start')
+ax.set_title('The sixteen starts the months allow, tried against the hours', fontsize=11, color=INK, loc='left')
+fig.text(0.125, 0.012, 'Blue: the four starts the hours fit; grey: the other twelve. Each is at its own best longitude.\nWith the hours as engraved, 205 BC is the only one of the four whose best longitude\nis in the Greek world (10° to 40° E).', fontsize=8, color=INK2)
+fig.tight_layout(rect=(0, 0.075, 1, 1))
+fig.savefig(os.path.join(H, 'hours-sixteen.png'), dpi=190)
+print('written')
