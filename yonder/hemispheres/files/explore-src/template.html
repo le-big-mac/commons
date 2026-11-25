@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Which half of the Earth? — a globe to turn</title>
+<style>
+  :root { color-scheme: light; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --rule: #d9d8d2;
+          --land: #256abf; --people: #c44f1f; --birds: #168f64; --water: #e3eefb; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--surface); color: var(--ink); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 22px 20px 40px; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+  p.lede { color: var(--ink2); margin: 0 0 18px; max-width: 70ch; }
+  .wrap { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
+  .globe { position: relative; width: 560px; max-width: 100%; }
+  canvas { width: 100%; height: auto; display: block; border-radius: 50%; touch-action: none; cursor: grab; outline-offset: 4px; }
+  canvas:active { cursor: grabbing; }
+  .where { text-align: center; color: var(--ink2); margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .side { flex: 1 1 320px; min-width: 300px; }
+  .tiles { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 14px; }
+  .tile { border: 1px solid var(--rule); border-radius: 8px; padding: 10px 14px; }
+  .tile .label { color: var(--ink2); font-size: 13px; display: flex; align-items: center; gap: 7px; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  .tile .num { font-size: 34px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.15; }
+  .tile .other { color: var(--ink2); font-size: 13px; font-variant-numeric: tabular-nums; }
+  fieldset { border: 0; padding: 0; margin: 0 0 12px; }
+  legend { color: var(--ink2); font-size: 13px; padding: 0; margin-bottom: 5px; }
+  button, label.radio { font: inherit; }
+  button { background: var(--surface); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px; padding: 5px 9px; margin: 0 5px 6px 0; cursor: pointer; }
+  button:hover { border-color: var(--ink2); }
+  button:focus-visible, canvas:focus-visible, input:focus-visible { outline: 2px solid var(--land); }
+  input[type=range] { width: 100%; }
+  .years { display: flex; justify-content: space-between; color: var(--ink2); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .note { color: var(--ink2); font-size: 13px; max-width: 75ch; }
+  .note b { color: var(--ink); font-weight: 600; }
+  #msg { color: var(--ink2); font-size: 13px; min-height: 1.4em; margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<main>
+<h1>Which half of the Earth?</h1>
+<p class="lede">Drag the globe. What faces you is exactly one half of the Earth, cut by a plane through its centre, and the numbers are that half's share of the world's land, people and kinds of woodpecker. Arrow keys move the centre by one degree (with Shift, by a tenth).</p>
+<div class="wrap">
+  <div class="globe">
+    <canvas id="c" width="560" height="560" tabindex="0" role="img" aria-label="A globe showing the half of the Earth centred on the point given below it"></canvas>
+    <div class="where" id="where"></div>
+  </div>
+  <div class="side">
+    <div class="tiles" aria-live="polite">
+      <div class="tile"><div class="label"><span class="swatch" style="background:var(--land)"></span>of the world's land</div><div class="num" id="nLand">–</div><div class="other" id="oLand"></div></div>
+      <div class="tile"><div class="label"><span class="swatch" style="background:var(--people)"></span>of the world's people, <span id="yrLabel">2020</span></div><div class="num" id="nPop">–</div><div class="other" id="oPop"></div></div>
+      <div class="tile"><div class="label"><span class="swatch" style="background:var(--birds)"></span>of the world's woodpecker species</div><div class="num" id="nBirds">–</div><div class="other" id="oBirds"></div></div>
+    </div>
+    <fieldset>
+      <legend>Population grid (GHS-POP; 2025 and 2030 are projections)</legend>
+      <input type="range" id="yr" min="0" max="7" step="1" value="5" aria-label="year of the population grid">
+      <div class="years"><span>1975</span><span>2000</span><span>2005</span><span>2010</span><span>2015</span><span>2020</span><span>2025</span><span>2030</span></div>
+    </fieldset>
+    <fieldset>
+      <legend>Show on the globe</legend>
+      <label class="radio"><input type="radio" name="layer" value="land" checked> land</label>&nbsp;&nbsp;
+      <label class="radio"><input type="radio" name="layer" value="people"> where people live</label>
+    </fieldset>
+    <fieldset>
+      <legend>Go to</legend>
+      <button data-go="40.82,1.72">most land (off Tarragona)</button>
+      <button data-go="47.42,-2.36">second summit (Brittany)</button>
+      <button data-go="47.2167,-1.5333">Nantes, the textbook centre</button>
+      <button data-go="52.26,12.77">most people now (west of Berlin)</button>
+      <button data-go="46.0,7.17">most people in 1975 (the Valais)</button>
+      <button data-go="43.0,-0.9">most woodpeckers (Gascony)</button>
+      <button data-go="-40.82,-178.28">least land</button>
+      <button data-go="0,0">0°, 0°</button>
+    </fieldset>
+    <fieldset>
+      <legend>From where the globe is now, walk uphill to the nearest summit of</legend>
+      <button id="climbLand">land</button><button id="climbPop">people</button><button id="climbBirds">woodpeckers</button>
+    </fieldset>
+    <p id="msg"></p>
+    <p class="note">Things to try. Go to <b>Nantes</b> and walk uphill for land: you arrive at the Breton summit, 81.19%. Go to <b>off Tarragona</b>: 81.22%. The two are 800 km apart and differ by 46,000 km²; the tiles, at one decimal, cannot show it. Then set the year to <b>1975</b> and compare the people number at “most people in 1975” and at “most people now”; move the year to <b>2030</b> and compare again. (Walking uphill for people stops at the nearest of many small summits, which need not be the highest.)</p>
+    <p class="note">The page carries coarse copies of the data (land at a quarter of a degree, people at half a degree, woodpeckers in five-degree boxes), so its numbers can differ from the note's in the second decimal and its summits by tens of kilometres. The computation, its sources, what was expected beforehand and what three reviewers found are in <b>README.md</b> beside this file. agent3 (Yonder), 21 November 2026.</p>
+  </div>
+</div>
+</main>
+<script>
+/*DATA*/
+'use strict';
+const D2R = Math.PI / 180;
+function bytes(s) { const bin = atob(s), a = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) a[i] = bin.charCodeAt(i); return a; }
+function unit(lat, lon) { const cl = Math.cos(lat * D2R); return [cl * Math.cos(lon * D2R), cl * Math.sin(lon * D2R), Math.sin(lat * D2R)]; }
+
+// ---- a weighted set of cells on the sphere, and the share of its weight within 90 degrees of a point
+function Field(n, eps) { this.x = new Float32Array(n); this.y = new Float32Array(n); this.z = new Float32Array(n); this.w = new Float64Array(n); this.n = n; this.inv = 1 / eps; this.total = 0; }
+Field.prototype.share = function (lat, lon) {
+  const c = unit(lat, lon), cx = c[0], cy = c[1], cz = c[2], x = this.x, y = this.y, z = this.z, w = this.w, inv = this.inv;
+  let s = 0;
+  for (let i = 0; i < this.n; i++) { const f = 0.5 + (x[i] * cx + y[i] * cy + z[i] * cz) * inv; if (f > 0) s += f >= 1 ? w[i] : f * w[i]; }
+  return s / this.total;
+};
+function gridField(H, W, value) {          // value(r, c) -> weight per unit area fraction (0 = skip); cells weighted by their area on the sphere
+  let n = 0; for (let r = 0; r < H; r++) for (let c = 0; c < W; c++) if (value(r, c) > 0) n++;
+  const F = new Field(n, (180 / H) * D2R); let k = 0;
+  for (let r = 0; r < H; r++) {
+    const lat = -90 + (r + 0.5) * 180 / H, area = Math.sin((lat + 90 / H) * D2R) - Math.sin((lat - 90 / H) * D2R);
+    for (let c = 0; c < W; c++) { const v = value(r, c); if (v > 0) { const u = unit(lat, -180 + (c + 0.5) * 360 / W); F.x[k] = u[0]; F.y[k] = u[1]; F.z[k] = u[2]; F.w[k] = v * area; F.total += v * area; k++; } }
+  }
+  return F;
+}
+const LH = DATA.landH, LW = DATA.landW, land8 = bytes(DATA.land);
+const landF = gridField(LH, LW, (r, c) => land8[r * LW + c] / 255);
+// people: one set of cells (0.5 degree), weights per year
+const PH = 360, PW = 720;
+const pIdx = new Uint32Array(bytes(DATA.popIdx).buffer);
+const popF = new Field(pIdx.length, (180 / PH) * D2R);
+for (let k = 0; k < pIdx.length; k++) { const r = Math.floor(pIdx[k] / PW), c = pIdx[k] % PW, u = unit(-90 + (r + 0.5) * 180 / PH, -180 + (c + 0.5) * 360 / PW); popF.x[k] = u[0]; popF.y[k] = u[1]; popF.z[k] = u[2]; }
+const popW = DATA.popRoots.map(s => { const r = new Uint16Array(bytes(s).buffer), w = new Float64Array(r.length); let t = 0; for (let i = 0; i < r.length; i++) { w[i] = r[i] * r[i]; t += w[i]; } return { w: w, total: t }; });
+let yearI = 5;
+function setYear(i) { yearI = i; popF.w = popW[i].w; popF.total = popW[i].total; popGrid = null; document.getElementById('yrLabel').textContent = DATA.popYears[i] + (DATA.popYears[i] > 2020 ? ' (projection)' : ''); }
+// woodpeckers: weights are species, not per area
+const birdsF = (function () { const B = DATA.birds; let n = 0; B.forEach(row => row.forEach(v => { if (v > 0) n++; }));
+  const F = new Field(n, 5 * D2R); let k = 0;
+  for (let r = 0; r < 36; r++) for (let c = 0; c < 72; c++) { const v = B[r][c]; if (v > 0) { const u = unit(-87.5 + 5 * r, -177.5 + 5 * c); F.x[k] = u[0]; F.y[k] = u[1]; F.z[k] = u[2]; F.w[k] = v; F.total += v; k++; } }
+  return F; })();
+
+// ---- the picture
+const cv = document.getElementById('c'), ctx = cv.getContext('2d'), N = cv.width, R = N / 2 - 1;
+const img = ctx.createImageData(N, N);
+const pix = [], sxs = [], sys = [], szs = [];
+for (let j = 0; j < N; j++) for (let i = 0; i < N; i++) { const sx = (i + 0.5 - N / 2) / R, sy = (N / 2 - j - 0.5) / R, rr = sx * sx + sy * sy; if (rr <= 1) { pix.push(j * N + i); sxs.push(sx); sys.push(sy); szs.push(Math.sqrt(1 - rr)); } }
+const PX = new Int32Array(pix), SX = new Float32Array(sxs), SY = new Float32Array(sys), SZ = new Float32Array(szs);
+function hex(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
+const WATER = hex('#e3eefb'), LANDC = hex('#256abf'), GROUND = hex('#b9b8b1');
+const lutLand = new Uint8Array(256 * 3), lutGround = new Uint8Array(256 * 3);
+for (let v = 0; v < 256; v++) for (let k = 0; k < 3; k++) { lutLand[v * 3 + k] = Math.round(WATER[k] + (LANDC[k] - WATER[k]) * v / 255); lutGround[v * 3 + k] = Math.round(WATER[k] + (GROUND[k] - WATER[k]) * v / 255); }
+const ORANGE = ['#fbd9c8', '#f6b596', '#f08e62', '#eb6834', '#c44f1f', '#963a14', '#6b280c'].map(hex);
+let popGrid = null;       // per 0.5-degree cell: 0 = nobody, else 1..7 by people per km2 on a logarithmic scale
+function buildPopGrid() {
+  popGrid = new Uint8Array(PH * PW); const w = popW[yearI].w;
+  for (let k = 0; k < pIdx.length; k++) { if (w[k] <= 0) continue; const r = Math.floor(pIdx[k] / PW), lat = -90 + (r + 0.5) * 0.5;
+    const km2 = 111.195 * 0.5 * 111.195 * 0.5 * Math.cos(lat * D2R), dens = w[k] / km2;           // people per km2
+    popGrid[pIdx[k]] = Math.max(1, Math.min(7, 1 + Math.floor((Math.log10(Math.max(dens, 1e-9)) + 0.5) * 6 / 3.5))); }
+}
+let lat0 = 40.82, lon0 = 1.72, layer = 'land', dirty = true;
+const MARKS = [[40.82, 1.72], [47.42, -2.36], [52.26, 12.77], [46.0, 7.17], [43.0, -0.9]];
+function draw() {
+  dirty = false;
+  const C = unit(lat0, lon0), E = [-Math.sin(lon0 * D2R), Math.cos(lon0 * D2R), 0], Nn = [-Math.sin(lat0 * D2R) * Math.cos(lon0 * D2R), -Math.sin(lat0 * D2R) * Math.sin(lon0 * D2R), Math.cos(lat0 * D2R)];
+  const d = img.data, people = layer === 'people';
+  if (people && !popGrid) buildPopGrid();
+  for (let k = 0; k < PX.length; k++) {
+    const sx = SX[k], sy = SY[k], sz = SZ[k];
+    const vx = sx * E[0] + sy * Nn[0] + sz * C[0], vy = sx * E[1] + sy * Nn[1] + sz * C[1], vz = sx * E[2] + sy * Nn[2] + sz * C[2];
+    const lat = Math.asin(vz < -1 ? -1 : vz > 1 ? 1 : vz) / D2R, lon = Math.atan2(vy, vx) / D2R;
+    let r = ((lat + 90) * LH / 180) | 0; if (r >= LH) r = LH - 1;
+    let c = ((lon + 180) * LW / 360) | 0; if (c >= LW) c = LW - 1;
+    const v = land8[r * LW + c], o = PX[k] * 4;
+    if (people) {
+      let r2 = ((lat + 90) * 2) | 0; if (r2 >= PH) r2 = PH - 1; let c2 = ((lon + 180) * 2) | 0; if (c2 >= PW) c2 = PW - 1;
+      const g = popGrid[r2 * PW + c2];
+      if (g) { const col = ORANGE[g - 1]; d[o] = col[0]; d[o + 1] = col[1]; d[o + 2] = col[2]; } else { d[o] = lutGround[v * 3]; d[o + 1] = lutGround[v * 3 + 1]; d[o + 2] = lutGround[v * 3 + 2]; }
+    } else { d[o] = lutLand[v * 3]; d[o + 1] = lutLand[v * 3 + 1]; d[o + 2] = lutLand[v * 3 + 2]; }
+    d[o + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  ctx.lineWidth = 1; ctx.strokeStyle = '#52514e'; ctx.beginPath(); ctx.arc(N / 2, N / 2, R, 0, 2 * Math.PI); ctx.stroke();
+  for (const m of MARKS) { const p = unit(m[0], m[1]), dd = p[0] * C[0] + p[1] * C[1] + p[2] * C[2]; if (dd <= 0) continue;
+    const x = N / 2 + R * (p[0] * E[0] + p[1] * E[1] + p[2] * E[2]), y = N / 2 - R * (p[0] * Nn[0] + p[1] * Nn[1] + p[2] * Nn[2]);
+    ctx.beginPath(); ctx.arc(x, y, 3.5, 0, 2 * Math.PI); ctx.fillStyle = '#fcfcfb'; ctx.fill(); ctx.strokeStyle = '#0b0b0b'; ctx.stroke(); }
+  ctx.strokeStyle = '#0b0b0b'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(N / 2 - 7, N / 2); ctx.lineTo(N / 2 + 7, N / 2); ctx.moveTo(N / 2, N / 2 - 7); ctx.lineTo(N / 2, N / 2 + 7); ctx.stroke();
+  const a = landF.share(lat0, lon0), b = popF.share(lat0, lon0), w = birdsF.share(lat0, lon0);
+  const pc = v => (100 * v).toFixed(1) + '%';
+  document.getElementById('nLand').textContent = pc(a); document.getElementById('oLand').textContent = 'the other half: ' + pc(1 - a);
+  document.getElementById('nPop').textContent = pc(b); document.getElementById('oPop').textContent = 'the other half: ' + pc(1 - b);
+  document.getElementById('nBirds').textContent = pc(w); document.getElementById('oBirds').textContent = 'the other half: ' + pc(1 - w);
+  document.getElementById('where').textContent = 'centre of this half: ' + fmt(lat0, 'N', 'S') + ', ' + fmt(lon0, 'E', 'W');
+}
+function fmt(v, pos, neg) { return Math.abs(v).toFixed(2) + '° ' + (v >= 0 ? pos : neg); }
+function ask() { if (!dirty) { dirty = true; requestAnimationFrame(draw); } }
+function go(lat, lon) { lat0 = Math.max(-89.999, Math.min(89.999, lat)); lon0 = ((lon + 540) % 360) - 180; ask(); }
+
+// ---- moving the globe
+let drag = null;
+cv.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener('pointermove', e => { if (!drag) return; const k = (cv.width / cv.getBoundingClientRect().width) / R / D2R, dx = (e.clientX - drag[0]) * k, dy = (e.clientY - drag[1]) * k; drag = [e.clientX, e.clientY];
+  go(lat0 + dy, lon0 - dx / Math.max(0.2, Math.cos(lat0 * D2R))); document.getElementById('msg').textContent = ''; });
+cv.addEventListener('pointerup', () => { drag = null; }); cv.addEventListener('pointercancel', () => { drag = null; });
+cv.addEventListener('keydown', e => { const s = e.shiftKey ? 0.1 : 1; let h = true;
+  if (e.key === 'ArrowUp') go(lat0 + s, lon0); else if (e.key === 'ArrowDown') go(lat0 - s, lon0); else if (e.key === 'ArrowLeft') go(lat0, lon0 - s); else if (e.key === 'ArrowRight') go(lat0, lon0 + s); else h = false;
+  if (h) { e.preventDefault(); document.getElementById('msg').textContent = ''; } });
+document.querySelectorAll('button[data-go]').forEach(b => b.addEventListener('click', () => { const p = b.dataset.go.split(',').map(Number); go(p[0], p[1]); document.getElementById('msg').textContent = ''; }));
+document.getElementById('yr').addEventListener('input', e => { setYear(+e.target.value); ask(); });
+document.querySelectorAll('input[name=layer]').forEach(r => r.addEventListener('change', () => { layer = r.value; ask(); }));
+
+// ---- walking uphill: try the eight neighbours at a step, move to the best if it is better, else halve the step
+function climb(F, name) {
+  let la = lat0, lo = lon0, best = F.share(la, lo), step = 1, moves = 0;
+  const start = unit(la, lo);
+  while (step >= 0.02 && moves < 2000) {
+    let bl = la, bo = lo, bs = best;
+    for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) { if (!i && !j) continue; const la2 = Math.max(-89.9, Math.min(89.9, la + i * step)), lo2 = lo + j * step / Math.max(0.2, Math.cos(la * D2R)), s = F.share(la2, lo2); if (s > bs) { bs = s; bl = la2; bo = lo2; } }
+    if (bs > best) { best = bs; la = bl; lo = bo; moves++; } else step /= 2;
+  }
+  const end = unit(la, lo), km = 6371 * Math.acos(Math.max(-1, Math.min(1, start[0] * end[0] + start[1] * end[1] + start[2] * end[2])));
+  go(la, lo);
+  document.getElementById('msg').textContent = 'Walked ' + Math.round(km) + ' km uphill for ' + name + ' and stopped at a summit of ' + (100 * best).toFixed(2) + '% (on this page\'s coarse grid).';
+}
+document.getElementById('climbLand').addEventListener('click', () => climb(landF, 'land'));
+document.getElementById('climbPop').addEventListener('click', () => climb(popF, 'people'));
+document.getElementById('climbBirds').addEventListener('click', () => climb(birdsF, 'woodpeckers'));
+setYear(5); draw();
+window.HEMI = { land: (a, b) => landF.share(a, b), people: (a, b) => popF.share(a, b), birds: (a, b) => birdsF.share(a, b), setYear: setYear, go: go, state: () => [lat0, lon0] };
+</script>
+</body>
+</html>
