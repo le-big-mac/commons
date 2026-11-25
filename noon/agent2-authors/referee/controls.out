@@ -1,0 +1,104 @@
+== A. Brier on the 21 held and the 3 failed separately (pooled); mean odds on held / failed
+  quick readers    all 0.1055  held(21) 0.1052  failed(3) 0.1073   mean odds on held 0.697  on failed 0.280
+  authors quick    all 0.0662  held(21) 0.0676  failed(3) 0.0563   mean odds on held 0.779  on failed 0.210
+  Noon             all 0.0502  held(21) 0.0492  failed(3) 0.0572   mean odds on held 0.804  on failed 0.223
+  careful readers  all 0.0229  held(21) 0.0259  failed(3) 0.0023   mean odds on held 0.868  on failed 0.047
+  author careful (sheet 1 only, 12 held) 0.0338 mean odds 0.852
+  sheet 1 only (all held): mean odds and Brier
+    quick readers    mean odds 0.667  Brier 0.1242   Brier of saying its own mean every time 0.1111
+    author quick     mean odds 0.788  Brier 0.0587   Brier of saying its own mean every time 0.0448
+    Noon             mean odds 0.791  Brier 0.0584   Brier of saying its own mean every time 0.0438
+    careful readers  mean odds 0.837  Brier 0.0387   Brier of saying its own mean every time 0.0267
+    author careful   mean odds 0.852  Brier 0.0338   Brier of saying its own mean every time 0.0220
+    constant 0.8: sheet 1 Brier 0.0400;  pooled 24: 0.1150
+    constant 0.85: sheet 1 Brier 0.0225;  pooled 24: 0.1100
+    constant 0.9: sheet 1 Brier 0.0100;  pooled 24: 0.1100
+    constant 0.95: sheet 1 Brier 0.0025;  pooled 24: 0.1150
+  sheet 2 only: held(9) / failed(3)
+    quick readers    all 0.0867 held 0.0799 failed 0.1073
+    author quick     all 0.0736 held 0.0793 failed 0.0563
+    Noon             all 0.0420 held 0.0369 failed 0.0572
+    careful readers  all 0.0071 held 0.0088 failed 0.0023
+== B. Common-rule controls (no use of outcomes)
+  B1. every number at/above .5 -> .9, below -> .1 (exact .5 stays .5): Brier and number on the right side
+    quick readers    0.0633   right side 21/24, at exactly .5: 2
+    authors quick    0.0433   right side 23/24, at exactly .5: 0
+    Noon             0.0433   right side 23/24, at exactly .5: 0
+    careful readers  0.0100   right side 24/24, at exactly .5: 0
+  B2. log-odds of each party stretched by its own k so that mean |log-odds| equals the careful readers (per sheet)
+    sheet 1: quick readers k=2.44 Brier 0.0703; author quick k=1.26 Brier 0.0449; Noon k=1.24 Brier 0.0470; careful readers k=1.00 Brier 0.0387; author careful k=0.93 Brier 0.0376
+    sheet 2: quick readers k=2.28 Brier 0.0510; author quick k=1.74 Brier 0.0547; Noon k=1.66 Brier 0.0143; careful readers k=1.00 Brier 0.0071
+    pooled: quick readers 0.0607; author quick 0.0498; Noon 0.0306; careful readers 0.0229
+  B3. each party keeps its own order within a sheet but is given the careful readers sorted numbers (rank-matching)
+    sheet 1: quick readers 0.0387; author quick 0.0387; Noon 0.0387; careful readers 0.0387; author careful 0.0387
+    sheet 2: quick readers 0.0768; author quick 0.0071; Noon 0.0071; careful readers 0.0071
+    pooled: quick readers 0.0577; author quick 0.0229; Noon 0.0229; careful readers 0.0229
+  B4. same stretch k applied to every party (pooled Brier)
+    k=0.5: quick readers 0.1568; authors quick 0.1192; Noon 0.1102; careful readers 0.0713
+    k=1: quick readers 0.1055; authors quick 0.0662; Noon 0.0502; careful readers 0.0229
+    k=1.5: quick readers 0.0799; authors quick 0.0470; Noon 0.0290; careful readers 0.0109
+    k=2: quick readers 0.0667; authors quick 0.0393; Noon 0.0218; careful readers 0.0065
+    k=3: quick readers 0.0549; authors quick 0.0347; Noon 0.0190; careful readers 0.0028
+  B5. best k in hindsight for each party (pooled) -- uses outcomes, shown only as a ceiling
+    quick readers    best k 6.00 Brier 0.0459
+    authors quick    best k 3.40 Brier 0.0345
+    Noon             best k 2.94 Brier 0.0190
+    careful readers  best k 6.00 Brier 0.0003
+== C. The author careful pass against dumb shifts of its own quick odds (sheet 1)
+  careful 0.0338; quick 0.0587; readers 0.0387; mean change +0.0633; raised on 11, lowered on 1
+  quick odds + the mean change on every statement: 0.0359
+  quick odds stretched to the careful pass mean |log-odds| (k=1.35): 0.0411
+  correlation careful vs quick 0.90; careful vs readers 0.80; quick vs readers 0.75
+  careful vs each reader: [0.0413, 0.0332, 0.0531]; better than 2 of 3
+== D. Noon worst statement
+  without A11: Noon 0.0363, readers 0.0374, author quick 0.0510, author careful 0.0325
+  each party without ITS OWN worst statement: Noon 0.0363, readers 0.0276, author quick 0.0457, author careful 0.0193, quick readers 0.1128
+  Noon closer than readers on sheet 1 without A11: 4 of 11
+== E. Quick readers against authors quick odds
+  pooled diff +0.0393 bootstrap 95% (-0.0021 to +0.0711); share of resamples <= 0: 0.0307
+  sheet 1 diff +0.0655; sheet 2 diff +0.0132
+  per-statement contributions (quick readers sq.err minus author sq.err), extremes: [('B6', -0.32), ('A12', -0.042), ('B9', -0.011), ('A10', 0.134), ('B11', 0.148), ('A9', 0.172)]
+  without B6: diff +0.0549
+  quick reader 1: sheet 1 0.1249 vs author 0.0587; sheet 2 0.1001 vs author 0.0736; closer than author on 1/12 and 2/12
+  quick reader 2: sheet 1 0.1106 vs author 0.0587; sheet 2 0.0998 vs author 0.0736; closer than author on 1/12 and 1/12
+  quick reader 3: sheet 1 0.1439 vs author 0.0587; sheet 2 0.0615 vs author 0.0736; closer than author on 2/12 and 3/12
+  sign test 21 of 24: p = 0.00028 (treats 24 statements as independent)
+  bootstrap for the other headline gaps (my seed):
+    quick readers minus careful readers: +0.0826 (+0.0551 to +0.1132)
+    authors quick minus careful readers: +0.0432 (+0.0170 to +0.0771)
+    Noon minus careful readers: +0.0273 (+0.0053 to +0.0533)
+    Noon minus authors quick: -0.0159 (-0.0490 to +0.0123)
+== F. Ranking (AUC) within sheet 2
+  quick median 0.981; author quick 1.000; Noon 1.000; careful median 1.000
+  quick readers each: 0.944, 0.981, 1.000; careful each: 1.000, 1.000, 1.000
+  pooled 24 (mixes sheets): quick readers 0.960; authors quick 1.000; Noon 1.000; careful readers 1.000
+== G. Agreement among careful readers
+  sheet 1: careful readers mean pairwise r 0.940; among held only 0.940; mean |difference| 0.043; quick readers r 0.826, mean |difference| 0.049
+  sheet 2: careful readers mean pairwise r 0.999; among held only 0.900; mean |difference| 0.009; quick readers r 0.961, mean |difference| 0.058
+== H. Time against score (minutes as typed in figure.py)
+  all 17 points: n=17 Spearman rho -0.89 (p 0.000)
+  without the quick readers (11 points): n=11 Spearman rho -0.65 (p 0.029)
+  without quick readers, sheet 1 (6 points): n=6 Spearman rho -0.66 (p 0.156)
+  without quick readers, sheet 2 (5 points): n=5 Spearman rho -0.50 (p 0.391)
+  readers only (12 points; two clusters): n=12 Spearman rho -0.94 (p 0.000)
+  careful readers only (6): n=6 Spearman rho -0.71 (p 0.111)
+  quick readers only (6): n=6 Spearman rho -0.83 (p 0.042)
+  party means in time order: 
+    quick reader    minutes  0.59 (0.37-0.80)  mean per-sheet Brier 0.1068
+    Noon            minutes  2.69 (2.68-2.70)  mean per-sheet Brier 0.0502
+    author quick    minutes  7.86 (6.95-8.77)  mean per-sheet Brier 0.0662
+    careful reader  minutes 10.20 (6.49-11.90)  mean per-sheet Brier 0.0249
+    author careful  minutes 16.92 (16.92-16.92)  mean per-sheet Brier 0.0338
+== I. Other definitions of "the readers"
+  sheet 1: careful: median-odds 0.0387, mean-odds 0.0413, median of the three scores 0.0413, mean of scores 0.0426 | quick: median-odds 0.1242, mean-odds 0.1244, median score 0.1249
+  sheet 2: careful: median-odds 0.0071, mean-odds 0.0072, median of the three scores 0.0073, mean of scores 0.0073 | quick: median-odds 0.0867, mean-odds 0.0849, median score 0.0998
+  R4 margin: Noon 0.058442 - readers median 0.038667 = 0.019775; against mean-odds 0.017140; against median score 0.017117
+== J. Noon own fourteen sealed expectations as a forecaster
+  12 resolved: held 7; Brier 0.2015; saying 0.5 every time 0.2500; saying the hold rate 0.2431
+  if these odds were stretched to the careful readers boldness (k=3): 0.1787
+== K. Quick readers numbers: how round, how hedged
+  quick readers (72 numbers)   multiples of 0.05: 0.65; mean |p-0.5| 0.206; within .5-.8: 0.76
+  careful readers (72)         multiples of 0.05: 0.29; mean |p-0.5| 0.377; within .5-.8: 0.15
+  authors quick (24)           multiples of 0.05: 0.50; mean |p-0.5| 0.289; within .5-.8: 0.33
+  Noon (24)                    multiples of 0.05: 0.29; mean |p-0.5| 0.305; within .5-.8: 0.29
+  sheet 1 mean odds: quick readers each [0.665, 0.681, 0.646]  careful each [0.826, 0.847, 0.828]

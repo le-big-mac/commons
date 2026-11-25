@@ -1,0 +1,39 @@
+The least number of codes left unnamed after j blind questions and j rounds of naming (name.c; for j = 1 to 4 over every ordered list of
+questions up to symmetry; for j = 5 the one list shown, since nothing can be less than 0). The questions are in the order they are asked:
+  m(1) = 1282   with 6654
+  m(2) = 1177   with 1234 6632
+  m(3) =  703   with 1123 1415 4366
+  m(4) =   24   with 1123 2445 3364 6562
+  m(5) =    0   with 1123 2445 2562 3356 1166
+  for j = 4: 151,235 triples, each with every fourth question. 60,223 triples were passed over because their floor was above the least found so far in
+  their part of the run: 25 to begin with (the least on a first trial of 300 triples), 24 in the part that found it. 60,100 triples have a floor above 25
+  and 991 a floor of exactly 25; 117,951,552 lists of four were tried.
+  the order matters: the same four in their 24 orders leave 24, 26, 27, ... up to 49; only the order shown leaves 24.
+The same by name2.py (numpy, from the definition, no floor): m(1) = 1282, m(2) = 1177, m(3) = 703, m(4) = 24   AGREES
+
+The scheme with those questions, written out and replayed by verify.py at the first lag where it fits, and tried one lag sooner:
+  5 questions: lag 4, 10 letters: every code is sent; at lag 3: five questions are not all blind there (the first sheet has W(3) = 9)
+  4 questions: lag 27, 32 letters: every code is sent; at lag 26: the codes left over do not fit
+  3 questions: lag 705, 709 letters: every code is sent; at lag 704: the codes left over do not fit
+  2 questions: lag 1178, 1181 letters: every code is sent; at lag 1177: the codes left over do not fit
+  1 questions: lag 1282, 1284 letters: every code is sent; at lag 1281: the codes left over do not fit
+
+W at every lag (lags 0 to 3 from the first sheet's searches; from 4 on by the formula):
+  lag 0: 5
+  lags 1 to 26: lag + 6
+  lags 27 to 704: lag + 5
+  lags 705 to 1177: lag + 4
+  lags 1178 to 1281: lag + 3
+  lags 1282 to 1293: lag + 2
+  lags 1294 and more: 1296, every code posted blind
+  lags at which the count does not rise from the lag before: 27, 705, 1178, 1282, 1295, 1296, 1297, 1298 ...
+
+F1  guessed  odds 0.45  FAILED  m(4) = 24 (sealed: 2, so that W(5) = 10); W(5) = 11
+F2  guessed  odds 0.75  FAILED  m(4) = 24 (sealed: at most 4)
+F3  worked   odds 0.70  held    m(3) = 703 (sealed: 700 to 800)
+F4  worked   odds 0.70  FAILED  m(2) = 1177 (sealed: 1180 to 1200)
+F5  worked   odds 0.90  held    m(1) = 1282 (sealed: 1282)
+F6  worked   odds 0.80  held    W(d) = d + 5 at every lag from 27 to 500: True (sealed: from m(4) + 3 up to at least 500)
+
+held 3, failed 3, of 6; my mean odds 0.717; Brier 0.2325; had I said 0.5 on every line, 0.2500
+by the sheet's own marks: marked guessed: 2 lines, 0 held, 2 failed; marked worked: 4 lines, 3 held, 1 failed

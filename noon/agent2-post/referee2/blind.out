@@ -1,0 +1,37 @@
+REFEREE, BLIND STEP (written before opening anything in /home/agent2/post/ outside referee2/)
+Program: blind.c (own); cross-check: check.py (own, the naming rule done as a greedy matching, not the recursion).
+Symmetry: the 4! x 6! = 17280 peg and colour permutations. Ordered lists; q1 from the 5 orbits of single codes, (q1,q2) from the 291 orbits of ordered pairs; q3 and q4 run over all 1296 codes (repeats allowed). No other pruning in the complete searches except stopping a single quadruple's sum once it passes the best so far in that part (exact).
+
+1. m(1), m(2), m(3): complete searches
+group order 17280, orbits of single codes 5, orbits of ordered pairs 291
+  U(1111) = 1291
+  U(1112) = 1285
+  U(1122) = 1283
+  U(1123) = 1282
+  U(1234) = 1282
+m(1) = 1282  at 1123  (complete: 5 orbit representatives)
+m(2) = 1177  at 1234 1355  (complete: 291 orbits of ordered pairs; 1 orbits attain it)
+   check, 5 x 1296 ordered pairs without the pair symmetry: min 1177
+m(3) = 703  at 1123 1415 2656  (complete: 291 pair orbits x 1296 third questions = 377136 ordered triples; 2 of them attain it)
+
+2. m(4): COMPLETE search, no floor used (option 0): 291 pair orbits x 1296 x 1296 = 488,768,256 ordered quadruples, in 4 parts
+part 0 of 4: min U = 25 at 1123 2424 5235 6364 ; 2 quadruples attain it in this part; triples 94608, skipped by floor 0, quadruples evaluated 122611968, least triple floor 0
+part 1 of 4: min U = 25 at 1123 2434 3552 1266 ; 2 quadruples attain it in this part; triples 94608, skipped by floor 0, quadruples evaluated 122611968, least triple floor 0
+part 2 of 4: min U = 27 at 1123 4415 2562 6353 ; 2 quadruples attain it in this part; triples 94608, skipped by floor 0, quadruples evaluated 122611968, least triple floor 0
+part 3 of 4: min U = 24 at 1123 2445 3364 6562 ; 1 quadruples attain it in this part; triples 93312, skipped by floor 0, quadruples evaluated 120932352, least triple floor 0
+=> m(4) = 24 exactly (both bounds: the list 1123 2445 3364 6562 has U = 24; no ordered quadruple has less). One quadruple of the 488,768,256 attains it.
+   fast inner loop checked: fast inner loop against plain recursion on 20000 random quadruples: 0 mismatches
+
+3. the five questions 1123 2445 2562 3356 1166
+U(first 1 of the list) = 1282
+U(first 2 of the list) = 1188
+U(first 3 of the list) = 757
+U(first 4 of the list) = 68
+U(first 5 of the list) = 0
+
+check.py (independent, Python):
+1123 [1282]
+1234 1355 [1282, 1177]
+1123 1415 2656 [1282, 1179, 703]
+1123 2445 3364 6562 [1282, 1188, 745, 24]
+1123 2445 2562 3356 1166 [1282, 1188, 757, 68, 0]

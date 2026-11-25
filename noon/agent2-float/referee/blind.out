@@ -1,0 +1,53 @@
+BLIND RESULTS (referee; written before opening anything in /home/agent2/float/ except brief-referee.md and expectations.md)
+Method: own closed form (inclusion-exclusion over the 2^k corners for volume and first moment along "up"), in python float,
+numpy longdouble and Decimal(60 digits); checked against convex clipping (scipy ConvexHull, 40 random directions/densities,
+worst disagreement 2.6e-12) and against 10^6 sorted lattice points (agreement ~1e-5). Own algebra for the regime where the
+water plane cuts only the four upright edges: h = cos(th) [ (1-d)/2 + tan^2(th)/(24 d) ], independent of azimuth, valid while
+tan(th) (|cos phi|+|sin phi|) <= 2d (d<=1/2). Raw logs: blindA.out .. blindE.out, blindD.out.
+
+1. SQUARE: flat is a local minimum up to d = 0.211324865405 = (3-sqrt3)/6.
+           corner up is a local minimum from d = 0.281250000000 = 9/32 (to 0.5).
+2. CUBE lowest attitude (up sorted by decreasing |component|) and h:
+   d=0.10   face up (1,0,0)                                   h = 0.450000000000
+   d=0.20   face up (1,0,0)                                   h = 0.400000000000   (corner up 0.405875144342 is also a local min)
+   d=0.215  ring of exact ties, tilt 9.037739 deg from face up, any azimuth; e.g. (0.987585, 0.157085, 0)   h = 0.392469374095
+   d=0.22   ring of exact ties, tilt 13.674945 deg; e.g. (0.971653, 0.236413, 0)                          h = 0.389838797887
+   d=0.225  ring of exact ties, tilt 16.916514 deg; e.g. (0.956730, 0.290984, 0)                          h = 0.387121202970
+   d=0.23   corner up (1,1,1)/sqrt3                           h = 0.383883773230
+   d=0.30   corner up                                         h = 0.338726466016
+   d=0.40   corner up                                         h = 0.283524548860
+   d=0.50   corner up                                         h = 0.234548546858
+3. CUBE d=0.22, least h for theta<30 deg at fixed azimuth (Decimal golden section; one local minimum in theta in each case):
+   phi= 0: theta = 13.674945404 deg   h = 0.389838798 (0.389838797887)
+   phi=15: theta = 13.674945404 deg   h = 0.389838798 (0.389838797887)
+   phi=30: theta = 13.674945404 deg   h = 0.389838798 (0.389838797887)
+   phi=45: theta = 13.674945404 deg   h = 0.389838798 (0.389838797887)
+   closed form: tan^2 theta = 12 d (1-d) - 2 = 0.0592, h = sqrt(12 d (1-d) - 1)/(12 d). Face up at 0.22: 0.39.
+4. CUBE thresholds:
+   face up is a local minimum up to d = 0.211324865405 = (3-sqrt3)/6 (same as the square).
+   corner up is a local minimum from d = 1/6 = 0.1666666667 (limit of the test radius -> 0; my algebra for the corner-tetrahedron
+       regime gives curvature (sqrt3/2)((6d)^(1/3) - 1) per rad^2, zero at exactly 1/6, and the correction above 1/6 starts at third order).
+       With a FINITE test circle the apparent threshold is later: radius 1e-2 rad -> 0.1678578; 1e-3 -> 0.1667846; 1e-4 -> 0.1666785;
+       1e-6 -> 0.16666678; 1e-8 -> 0.1666666678.  (Face-up threshold with radius 1e-2: 0.2113321; 1e-3: 0.2113249.)
+   corner up lower than face up from d = 0.224601577103 (h = 0.387699211449).
+   corner up lowest of all from d = 0.226892677778 (h = 0.386072909222). (Crossing against the ring formula alone: 0.226892677279.)
+   Between the end of the full ring (3-sqrt2)/7 = 0.226540919661 and 0.226892678 the lowest attitude is a tilted one in a diagonal
+   plane, up ~ (1,p,p) (two smaller components equal), lower than the surviving arc of ties by at most ~7e-11
+   (2.2e-11 at 0.2268, 4.5e-11 at 0.22685, 3.2e-12 at 0.2267, 6.3e-14 at 0.2266).
+5. CUBE edge up: never a local minimum for 0.020 <= d <= 0.500 (step 0.001, curvatures by Decimal second differences).
+   Curvature along the roll (1,-1,0): negative below 9/32 (about -0.0016 at 0.28), positive above.
+   Curvature towards a corner (0,0,1): positive below about 0.125, negative above, and it tends to 0 at 0.5
+   (-2.36e-4 at 0.499, -2.36e-5 at 0.4999, 0 at 0.5).
+   At exactly 0.5 the second-order term towards the corner vanishes and the third-order term decides:
+   h(tilt) - h(edge) = -|tilt|^3/48 (numerically -0.0208333 tilt^3; my algebra: E|T + eps X| with T triangular gives the same),
+   so edge up is NOT a local minimum at 0.5 either: marginal to second order, unstable at third. h(edge)=0.235702260396 vs corner 0.234548546858.
+6. CUBE, 0.23 <= d <= 0.30, local minima other than corner up:
+   (a) strict: one tilted attitude in the diagonal plane, up ~ (1,p,p): d=0.23: (0.942157, 0.237003, 0.237003), tilt 19.583 deg, h=0.384330808319;
+       d=0.235: tilt 22.829 deg, h=0.381466842297. It exists up to d = 0.237690 (tilt 27.25 deg there) and ends by a fold along the
+       diagonal plane (transverse curvature still positive), not by going over smoothly into corner up.
+   (b) non-strict: an arc of EXACT ties left over from the ring, up=(cos th, sin th cos phi, sin th sin phi) with tan^2 th = 12d(1-d)-2 and
+       cos phi + sin phi <= 2d/tan th: half-width in phi 21.82 deg at 0.23, 11.92 at 0.235, 6.36 at 0.24, 2.66 at 0.245, zero at exactly d = 1/4.
+       Interior points of the arc are weak (neutral) minima; from its ends h falls (towards (a) while (a) exists, else to corner up).
+   (c) from 1/4 on: none found (grid 0.004 in gnomonic coordinates + 70 Nelder-Mead starts at 0.25, 0.26, 0.28, 0.30); the beam-like tilted
+       attitude (1,t,0) is a saddle there (transverse curvature negative: -2.8e-3 per unit q^2 at 0.255).
+   So: strict tilted minima to 0.23769; weak (tied) ones to 0.25 exactly; nothing but corner up beyond.

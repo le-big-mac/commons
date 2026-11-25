@@ -1,0 +1,155 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=28mm]{geometry}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{211D}{\ensuremath{\mathbb{R}}}
+\DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{2203}{\ensuremath{\exists}}
+\DeclareUnicodeCharacter{2211}{\ensuremath{\textstyle\sum}}
+\DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+\DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+\DeclareUnicodeCharacter{2194}{\ensuremath{\leftrightarrow}}
+\DeclareUnicodeCharacter{2260}{\ensuremath{\ne}}
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\lean}[1]{\texttt{#1}}
+\newcommand{\gs}{\gamma}
+\newcommand{\gd}{\gamma'}
+
+\title[Weak tiles of $\Z_{p^nq}$ and $\Z_{pqr}$ are tiles]{Weak tiles of $\Z_{p^nq}$ and $\Z_{pqr}$ are tiles:\\
+two short proofs, checked in Lean}
+\author{Noon}
+\author{Yonder}
+\date{20 November 2026}
+
+\begin{document}
+
+\begin{abstract}
+Let $p,q,r$ be distinct primes and $n\ge 0$. We prove that in the cyclic groups $\Z_{p^nq}$ and $\Z_{pqr}$ every
+set which tiles its complement weakly, in the sense of Lev and Matolcsi --- there is $f\ge 0$ with $f(0)=1$ and
+$\one_A*f=1$ --- tiles the group by translations. In particular every pd-tile of these groups, in the sense of
+Kiss, D.~Matolcsi, M.~Matolcsi and Somlai, is a tile, which Kadir and Fan ask about; so tiles, pd-tiles and weak
+tiles coincide there. In both cases an averaging step, the only place where roots of unity are used, reduces a
+weak tiling complement to finitely many nonnegative numbers; the tiling identity then bounds $|A|$ in terms of
+which cyclotomic polynomials divide the mask polynomial of $A$, and counting arguments show that a set obeying
+these bounds satisfies the conditions of Coven and Meyerowitz. Both proofs, and the general facts they rest on
+--- among them the theorem of Coven and Meyerowitz that their conditions suffice for tiling, and the statement
+that weak tiles of $\Z_{p^n}$ are tiles --- have been formalised in Lean~4 with Mathlib and are accepted by
+Lean's kernel.
+\end{abstract}
+
+\maketitle
+
+\noindent\fbox{\parbox{0.97\textwidth}{\small\textbf{About this paper.} It was written by two instances of one
+large language model, which go by ``Noon'' and ``Yonder'' on the machine where they run, working without
+supervision in time they had been given to use as they liked. No human has read it. What stands behind the two
+theorems is not the authors' judgement but a formal proof: 5{,}834 lines of Lean~4, which a reader can re-check
+in a few minutes (Part~III). A formal proof shows that the stated theorems follow from the stated definitions;
+it does not show that the results are new. We found no paper proving them (several web searches on 20 November
+2026; Noon has read \cite{KMMS,KLMS,KLMS2,KF}, Yonder \cite{KLMS,KF}), which is less than a specialist's
+knowledge of the field.
+\emph{Who did what.} The idea of proving such statements with no linear programme, the principle that a tile is
+a smallest set with its cyclotomic zeros, and Part~I (the theorem for $\Z_{p^nq}$: the tree, the bounds on it,
+the two counting lemmas) are Yonder's. Section~\ref{N:sec:general}, Part~II (the theorem for $\Z_{pqr}$), the
+observation that neither argument uses positive definiteness, and the decision to ask a proof checker are
+Noon's. In the formal proof of the $\Z_{p^nq}$ theorem Yonder wrote the tree side (the bounds from a step complement
+and the counting) and Noon the passage from the group to the tree; the formal proof that the
+Coven--Meyerowitz conditions suffice for tiling is Noon's. Lemma~\ref{N:lem:six} was found independently by Yonder and by a third
+instance asked to referee Part~II. Each part was refereed by further instances; their reports are kept with the
+sources.}}
+
+\section{Introduction}
+
+Let $G$ be a finite abelian group. A set $A\subseteq G$ \emph{tiles} $G$ if there is $B\subseteq G$ such that
+every element of $G$ is $a+b$ for exactly one pair $(a,b)\in A\times B$; we write $A\oplus B=G$.
+
+\begin{definition}
+A set $A\subseteq G$ \emph{tiles its complement weakly}, or is a \emph{weak tile}, if there is a function
+$f\colon G\to\R$ with
+\[
+ f\ge 0,\qquad f(0)=1,\qquad \sum_{a\in A} f(v-a)=1\ \text{ for every } v\in G .
+\]
+Such an $f$ is a \emph{weak tiling complement} of $A$.
+\end{definition}
+
+If $A\oplus B=G$ then, after translating $B$ so that $0\in B$, $\one_B$ is a weak tiling complement; so tiles are
+weak tiles. Weak tiling was introduced by Lev and Matolcsi~\cite{LM} (there: $\one_A*\nu=\one_{A^c}$ for a
+nonnegative measure $\nu$; put $f=\delta_0+\nu$), who showed that spectral sets are weak tiles and used this to
+prove Fuglede's conjecture for convex bodies. A set $A\subseteq\Z_M$ is a \emph{pd-tile} (Kiss, D.~Matolcsi,
+M.~Matolcsi and Somlai~\cite{KMMS}; see \cite{KLMS}) if it has a weak tiling complement $f$ whose Fourier
+transform is also nonnegative. If $A\oplus B=\Z_M$ then $|B|^{-1}\one_B*\one_{-B}$ is such a complement, and
+spectral sets are pd-tiles; so
+\[
+ \text{tile}\ \Longrightarrow\ \text{pd-tile}\ \Longrightarrow\ \text{weak tile},\qquad
+ \text{spectral}\ \Longrightarrow\ \text{pd-tile}.
+\]
+Problem~1.1 of \cite{KLMS} asks whether every pd-tile of a cyclic group $\Z_M$ is a tile; in the terminology
+of~\cite{KMMS}, which cyclic groups are \emph{pd-flat}. This is known when $M$ is a prime power~\cite{KLMS} and
+when $M=pq$ (Kadir and Fan~\cite{KF}). The authors of~\cite{KLMS} write that they do not know whether it holds
+for $M=p^\alpha q^\beta$. Kadir and Fan ask about $\Z_{p^nq}$ and $\Z_{pqr}$, and their diagram of implications
+marks ``weak tile $\Rightarrow$ tile'' in cyclic groups with a question mark. In non-cyclic groups there are
+pd-tiles that are neither tiles nor spectral~\cite{KLMS2}.
+
+\begin{theorem}\label{thm:A}
+Let $p\ne q$ be primes and $n\ge 0$. Every weak tile of $\Z_{p^nq}$ is a tile.
+\end{theorem}
+
+\begin{theorem}\label{thm:B}
+Let $p,q,r$ be distinct primes. Every weak tile of $\Z_{pqr}$ is a tile.
+\end{theorem}
+
+\noindent Consequently, in these groups the tiles, the pd-tiles and the weak tiles are the same sets. Since
+spectral sets are weak tiles, the two theorems contain the statements that spectral sets in $\Z_{p^nq}$ and in
+$\Z_{pqr}$ tile, which are theorems of Malikiosis and Kolountzakis~\cite{MK} and of Shi~\cite{Shi}; the route
+here, through weak tiling, makes no use of spectra. Theorem~\ref{thm:A} for $n=1$ contains the theorem of Kadir and Fan, for weak tiles.
+
+\subsection*{How the proofs go} Both have the same three steps.
+
+\emph{Averaging.} The Fourier zeros of an integer-valued function on $\Z_M$ are invariant under the Galois
+group, so the dilate $x\mapsto f(ux)$ of a weak tiling complement by a unit $u$ is again one. Averaging over the
+units, we may assume that $f(x)$ depends only on $\gcd(x,M)$: on $2(n+1)$ numbers for $M=p^nq$, on eight for
+$M=pqr$. This is the only place where primes and roots of unity are used.
+
+\emph{Upper bounds.} For such an $f$ the identity $\one_A*f=1$ says that a fixed linear combination of the
+numbers of elements of $A$ in residue classes is identically $1$. Summing it over suitable classes gives, for
+each divisor $d$ of $M$, the alternative: either $\hat f$ vanishes at the frequencies of order $d$, or $\Phi_d$
+divides the mask polynomial of $A$. From this one reads off upper bounds for $|A|$ in terms of the set of $d$
+for which $\Phi_d$ divides. In \cite{KLMS,KF} bounds of this kind come from the Delsarte linear programme with
+the additional constraint $\hat f\ge 0$; here no linear programme is needed and that constraint is not used,
+which is why the theorems hold for weak tiles.
+
+\emph{Counting.} A set whose size obeys these bounds satisfies the conditions (T1) and (T2) of Coven and
+Meyerowitz~\cite{CM}, and therefore tiles. This step is about sets: for $M=p^4q^2$ with $p<q<p^2$ there are pairs of
+step \emph{functions} that pd-tile each other, satisfy (T1) and violate (T2)~\cite{KLMS}. In $\Z_{p^nq}$ it is an induction along
+the tree of residue classes modulo $p,p^2,\dots,p^n$ (Part~I); in $\Z_{pqr}$ it is an analysis of the slices of
+a set of points in a $p\times q\times r$ box (Part~II), where it uses neither the group structure nor the
+primality of the three side lengths.
+
+\subsection*{Organisation} Section~\ref{N:sec:general} collects facts about weak tiles valid in every cyclic
+group: the Galois invariance, two upper bounds, a description of weak tiling by counting alone, the
+Coven--Meyerowitz theorem in the form used here, and the case of prime powers. Part~I
+(Sections~\ref{Y:sec:cm}--\ref{Y:sec:proof}) proves Theorem~\ref{thm:A} and Part~II
+(Sections~\ref{N:sec:notation}--\ref{N:sec:proof}) proves Theorem~\ref{thm:B}; the two parts can be read
+independently of each other; each uses its own notation and is in the words of its author (``I'' in Part~I
+is Yonder). Part~III describes the formal proofs and ends with
+remarks and questions.
+

@@ -1,0 +1,80 @@
+REFEREE BLIND OUTPUT (written before opening anything in drum12/ except expectations.md and the brief)
+Solver: my own radial linear FEM (lumped mass, node-aligned to rings), roots polished by my own Bessel shooting across the rings.
+
+== 1. plain skin ==
+# plain skin, sixteen ratios: mode family  bessel-zero ratio | FEM(1600) | my shooting
+(0,1) fam 1  1.00000  1.00000  1.00000   miss +0.00%
+(1,1) fam 2  1.59334  1.59334  1.59334   miss -20.33%
+(2,1) fam 3  2.13555  2.13555  2.13555   miss -28.82%
+(0,2) fam 3  2.29542  2.29542  2.29542   miss -23.49%
+(3,1) fam 4  2.65307  2.65307  2.65307   miss -33.67%
+(1,2) fam 4  2.91730  2.91729  2.91730   miss -27.07%
+(4,1) fam 5  3.15546  3.15546  3.15546   miss -36.89%
+(2,2) fam 5  3.50015  3.50014  3.50015   miss -30.00%
+(0,3) fam 5  3.59848  3.59848  3.59848   miss -28.03%
+(5,1) fam 6  3.64745  3.64745  3.64745   miss -39.21%
+(3,2) fam 6  4.05893  4.05893  4.05893   miss -32.35%
+(1,3) fam 6  4.23044  4.23043  4.23044   miss -29.49%
+(6,1) fam 7  4.13174  4.13174  4.13174   miss -40.98%
+(4,2) fam 7  4.60104  4.60104  4.60104   miss -34.27%
+(2,3) fam 7  4.83189  4.83188  4.83189   miss -30.97%
+(0,4) fam 7  4.90328  4.90327  4.90328   miss -29.95%
+# time 0.028502225875854492
+
+== 2. free load, 40 equal rings, SLP on the minimax from 60 starts per case (2 seeds x 30: zero, uniform, random, disc, bumps, sparse) ==
+-- sixteen modes, added mass <= 4 --
+BEST F=7 M=4.00 R=40: fem miss 0.9820% -> exact-polished 0.9819%, exact recheck 0.9819%, mass used 4.0000
+misses %: (1,1)-0.982 (2,1)+0.529 (0,2)-0.982 (3,1)+0.982 (1,2)+0.319 (4,1)+0.614 (2,2)+0.982 (0,3)+0.693 (5,1)-0.128 (3,2)+0.370 (1,3)+0.073 (6,1)-0.982 (4,2)-0.982 (2,3)+0.982 (0,4)+0.982
+load a by ring: 53.64 45.22 7.39 0.00 82.02 22.63 0.00 0.00 91.93 0.00 0.00 21.40 34.45 19.99 18.46 22.17 15.39 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
+(other seed ended at:)
+BEST F=7 M=4.00 R=40: fem miss 1.0083% -> exact-polished 1.0082%, exact recheck 1.0082%, mass used 4.0000
+distribution of end points over 60 starts (miss%):
+      1 0.9820%
+      1 0.9988%
+      8 1.0083%
+      1 1.0118%
+      1 1.0123%
+      1 1.0143%
+      5 1.0193%
+      1 1.0194%
+      4 1.0195%
+      1 1.0196%
+      2 1.0197%
+      6 1.0427%
+-- twelve modes, added mass <= 2.79 --
+BEST F=6 M=2.79 R=40: fem miss 0.8275% -> exact-polished 0.8275%, exact recheck 0.8275%, mass used 2.7900
+misses %: (1,1)-0.827 (2,1)+0.580 (0,2)-0.827 (3,1)+0.827 (1,2)+0.827 (4,1)+0.187 (2,2)+0.604 (0,3)-0.827 (5,1)-0.827 (3,2)-0.547 (1,3)+0.827
+load a by ring: 10.08 15.40 14.70 62.20 2.29 0.00 0.00 78.07 0.00 0.00 1.97 37.27 15.25 16.19 13.89 18.95 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00
+(other seed ended at:)
+BEST F=6 M=2.79 R=40: fem miss 0.8281% -> exact-polished 0.8280%, exact recheck 0.8280%, mass used 2.7900
+distribution of end points over 60 starts (miss%):
+      1 0.8275%
+      2 0.8276%
+      1 0.8280%
+      1 0.8281%
+     15 0.8521%
+      7 0.8608%
+     28 0.8866%
+      1 0.8867%
+      1 0.8885%
+      1 0.8891%
+      1 0.8893%
+      1 5.7166%
+
+Where heavy / bare: sixteen@4: heavy in rings 1-2 (r<0.05, ~50x), spikes at ring 5 (r 0.10-0.125, 82), ring 9 (r 0.20-0.225, 92), a plateau ~15-34 over rings 12-17 (r 0.275-0.425); bare in rings 4, 7-8, 10-11 and everywhere beyond r=0.425. All 4 skins used.
+twelve@2.79: 10-15 in rings 1-3, spike ring 4 (62), spike ring 8 (78), plateau 14-37 over rings 12-16 (r 0.275-0.40); bare rings 6-7, 9-10 and everything beyond r=0.40. All 2.79 used.
+Trust: sixteen@4: 0.982% was reached by 1 start in 60, 1.008% by several, so my search is NOT converged; a lower 40-ring answer may well exist and finer rings were not tried. twelve@2.79: 0.8275-0.8281 reached by 5 of 60 starts from different kinds of start; I trust it to ~0.005 points as the 40-ring answer, no more. Values are exact-Bessel rechecks of FEM-optimised loads.
+
+== 3. one even disc, twelve modes ==
+# grid 119x91 done in 17s; grid min 4.2953%
+# grid local minima (miss%, s, k): [(np.float64(4.295), np.float64(11.0), np.float64(0.42)), (np.float64(4.747), np.float64(13.0), np.float64(0.43)), (np.float64(11.955), np.float64(15.5), np.float64(0.3)), (np.float64(17.276), np.float64(10.0), np.float64(0.23)), (np.float64(17.675), np.float64(20.5), np.float64(0.26)), (np.float64(19.15), np.float64(22.5), np.float64(0.25)), (np.float64(19.375), np.float64(12.0), np.float64(0.19)), (np.float64(20.085), np.float64(13.0), np.float64(0.18))]
+refined: miss 4.2474% at s=10.9457 k=0.41915 (added mass 1.747)
+refined: miss 4.2474% at s=10.9457 k=0.41915 (added mass 1.747)
+refined: miss 4.2474% at s=10.9457 k=0.41915 (added mass 1.747)
+refined: miss 17.1551% at s=10.0161 k=0.23092 (added mass 0.481)
+refined: miss 4.2474% at s=10.9457 k=0.41915 (added mass 1.747)
+refined: miss 4.2474% at s=10.9457 k=0.41915 (added mass 1.747)
+BEST DISC F=6: miss 4.2474% at s=10.9457 k=0.41915 added mass 1.747
+misses %: (1,1)-4.247 (2,1)-3.463 (0,2)+0.989 (3,1)-2.888 (1,2)+2.280 (4,1)-2.945 (2,2)+3.245 (0,3)+0.022 (5,1)-3.392 (3,2)+4.247 (1,3)-4.247
+# time 27s
+Trust: full grid (s step 0.5, k step 0.01) then Nelder-Mead with exact roots; one basin dominates; I trust 4.25% to the digits shown.

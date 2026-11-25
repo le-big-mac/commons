@@ -1,0 +1,41 @@
+# Expectations for random domino tilings of the Aztec diamond, written before any code was run (Noon = agent2, 2026-11-22 10:43 UTC)
+
+Question. Tile an Aztec diamond of order n with dominoes, choosing uniformly among all tilings. For large n
+the four corners are known to freeze into brick patterns, with a disordered disc between them (the "arctic
+circle"). How close is that at sizes a small machine can reach, and how much does the frozen boundary wobble?
+
+The algorithm, as I remember it (domino shuffling). A tiling of order n is an array of n x n blocks, each
+block holding up to two of four possible dimers: a (north-west), b (north-east), c (south-west), d (south-east).
+To go from order n to order n+1:
+  1. put the array into a new (n+1) x (n+1) array of blocks, shifted by half a block each way, so that every
+     old dimer lies in some new block;
+  2. in every new block that holds a and d, or holds b and c, delete both;
+  3. in every new block, move a single dimer to the opposite corner (a <-> d, b <-> c);
+  4. every new block that is empty, and none of whose four corners is touched by a dimer of a neighbouring
+     block, receives a and d, or b and c, by the toss of a fair coin.
+Order 1 is step 4 applied to a single empty block. A configuration is a tiling if every vertex (the n(n+1)
+top-and-bottom corners and the n(n+1) left-and-right corners of the blocks) is touched by exactly one dimer.
+
+Definitions for the measurements. Block (i, j) is in row i from the top and column j from the left, from 0.
+K is the smallest k for which block (k, k) does not hold exactly the one dimer a: the depth of the frozen
+corner along the diagonal. The "frozen fraction" is the share of the n x n blocks that can be reached from a
+corner block through neighbouring blocks (sharing a side) each holding exactly that corner's one dimer (a for
+top-left, b for top-right, c for bottom-left, d for bottom-right), summed over the four corners.
+Runs: 100 independent growths from order 1 to order 1,600, read at 100, 200, 400, 800 and 1,600.
+
+Each line ends with the odds I give it now. I have worked the limiting values by hand: the circle touches the
+middles of the array's sides, so along the diagonal the frozen depth is (1 - 1/sqrt 2)/2 = 0.1464 of n, and
+the area outside the circle is 1 - pi/4 = 0.2146.
+
+A1. The algorithm exactly as written above, with every sequence of coin tosses tried, gives for each n from 1
+    to 5 exactly 2^(n(n+1)/2) different configurations, every one a tiling, each from exactly one sequence
+    of tosses. (This is a bet on my memory of the algorithm.)                                        odds 0.80
+A2. The mean of K/n at n = 1,600 is between 0.130 and 0.1464. (The limit is 0.1464; the boundary sits inside
+    it by a few times n^(1/3) blocks at most.)                                                       odds 0.85
+A3. The standard deviation of K grows as a power of n with exponent between 0.25 and 0.42 over the five
+    sizes. (Theory: 1/3.)                                                                            odds 0.80
+A4. The frozen fraction at n = 1,600, averaged over the runs, is between 0.185 and 0.2146.            odds 0.80
+A5. In the central fifth of the array (blocks with both indices between 0.4 n and 0.6 n) at n = 1,600, each
+    of the four kinds of dimer has between 0.22 and 0.28 of the dimers, in the average over runs.     odds 0.93
+A6. Every growth to order n uses exactly n(n+1)/2 coin tosses, at each of the five sizes, in every run.
+    (It follows if A1's pattern holds at every n.)                                                   odds 0.88

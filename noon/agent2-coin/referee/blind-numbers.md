@@ -1,0 +1,167 @@
+*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it. The front page says how it was checked and how it was not.]*
+
+BLIND NUMBERS: coins
+
+```
+# Referee's blind computation: coins
+
+Written from the definitions only; nothing under ~/coin, ~/coin-data or /srv/commons was opened.
+Programs (all in /home/agent2/coin-referee/): coins.c (searches), schemes.py (exhaustive scheme
+enumeration and checks), cross.py (second, independent scheme count; lower-bound arithmetic).
+"Total" = sum of counts over the amounts; cost = total / L (amount 0 counts 0).
+
+## How BOTH WAYS was made exact
+
+1. Method in the searches (coins.c): breadth-first search from 0 over the integers with steps +d and -d,
+   inside the window [-D, L+D], D = the largest coin of the set.
+   Why the window loses nothing: take any optimal list of signed steps for an amount a (0 <= a < L).
+   Order them so: while the running sum s < a take a remaining positive step, while s >= a take a
+   remaining negative step (one of the right sign always remains unless we are finished). Then every
+   partial sum lies in [min(0, a-D), a+D-1], which is inside the window. So the windowed BFS distance
+   equals the true least count, and a set is unreachable in the window only if it is truly ineligible.
+2. Tested, not only argued:
+   - the whole C program was run twice, window pad D and pad 3D: every line identical;
+   - schemes.py has a window-free exhaustive count F(i, rem, r) = number of whole-number vectors over the
+     coins from the i-th largest down with sum rem and sum|n| <= r; its only pruning is
+     |rem| <= r * (largest coin left), which is necessary. The least count is the first r with F > 0.
+     This agreed with the BFS on every amount 0..99 for 400 random eligible sets (2 to 5 coins, same
+     ranges as C1), for (99,100) (total 4950, amount 50 takes 99 coins), (98,99), (149,150), (2,149),
+     for every set named in the answers below (on their own L: 50, 100, 200), and on all 1000 / 2000
+     amounts of D1 / D2 (asserted: F(k-1) = 0 and F(k) > 0 for the BFS k of each amount);
+   - scheme counts (D1, D2, D3, C2) were counted a second way in cross.py: a dense table
+     ways[count][sum] over ALL vectors with sum|n| <= K (K = 9, 9, 8, 5), no pruning, numpy. Same
+     numbers everywhere.
+
+## A. One way, amounts below 100
+
+A1. (1,5,10,25): total 470, cost 4.70.
+    Best 4-coin sets containing 1, coins <= 99 (152,096 sets tried): two ties,
+    (1,5,18,25) and (1,5,18,29), total 389, cost 3.89.
+A2. (1,2,5,10,20,50): total 340, cost 3.40. Best single extra coin in 2..99: 33 and 37 (tie),
+    total 286, cost 2.86.
+
+## B. Both ways, amounts below 100
+
+B1. (1,2,5,10,20,50,100,200): total 272, cost 2.72.
+    (1,5,10,25): total 398, cost 3.98.
+    (also (1,2,5,10,20,50): total 294, cost 2.94.)
+B2. Best single extra coin among 1..199:
+    - (1,2,5,10,20,50,100,200): 33, 36 and 37 (three-way tie), total 241, cost 2.41.
+    - (1,2,5,10,20,50): 85 (alone), total 249, cost 2.49.
+    - (1,5,10,25): 48 (alone), total 295, cost 2.95.
+
+## C. Both ways, any sets
+
+C1. Amounts below 100 (ineligible = gcd > 1 sets dropped):
+    - 2 coins from 1..150 (11,175 sets, 6,857 eligible): (9,10), (9,11), (10,11), total 660, cost 6.60.
+    - 3 coins from 1..150 (551,300 sets, 461,266 eligible): (16,19,21) alone, total 388, cost 3.88.
+    - 4 coins from 1..60 (487,635 sets, 455,041 eligible): four ties,
+      (13,28,32,33), (18,21,25,37), (19,20,23,32), (20,21,25,32), total 309, cost 3.09.
+    - 5 coins from 1..40 (658,008 sets, 641,166 eligible): (13,24,30,32,33) alone, total 270, cost 2.70.
+    One step off the grid (not asked): 2 coins from 1..1000: same three sets, 660. 3 coins from 1..300:
+    same, 388. 4 coins from 1..99: same four sets, 309. 5 coins from 1..60: same set, 270.
+    (5 coins above 60 not searched.)
+C2. (16,19,21), amounts 1..99: 3 amounts take 1 coin, 9 take 2, 19 take 3, 33 take 4, 32 take 5,
+    3 take 6 (these are 71, 81, 87); none more. Sum 388.
+    Amount 1: least count 4, exactly one scheme: give 2 x 19, take back 1 x 21 and 1 x 16
+    (n(16) = -1, n(19) = +2, n(21) = -1).
+C3. Totals.
+    - L = 50, both ways, 3 coins from 1..120: (4,14,15) and (10,11,14) tie, total 151 (cost 3.02).
+    - L = 50, one way, 4 coins containing 1, coins <= 49: total 150 (cost 3.00), 17 ties:
+      (1,3,10,16) (1,3,11,18) (1,3,12,16) (1,3,12,17) (1,4,9,15) (1,4,9,20) (1,4,11,16) (1,4,13,15)
+      (1,4,13,20) (1,5,8,20) (1,5,11,18) (1,5,12,15) (1,5,12,21) (1,5,13,16) (1,5,14,17) (1,6,9,16)
+      (1,7,12,16).
+    - L = 200, both ways, 3 coins from 1..120: (24,33,34) alone, total 993 (cost 4.965).
+    - L = 200, one way, 4 coins containing 1, coins <= 199: (1,5,27,46) and (1,6,28,47) tie,
+      total 1000 (cost 5.000).
+    So: L=50, three two-way coins 151 against four one-way coins 150; L=100, 388 against 389;
+    L=200, 993 against 1000.
+C4. Amount a weighted 1/a, amounts 1..99, both ways:
+    - 3 coins from 1..60: (1,4,23) alone, weighted sum 14.281170235 (its plain total is 432).
+    - 2 coins from 1..60: (1,10) alone, weighted sum 21.563199881 (plain total 740). Same answer with
+      2 coins from 1..150.
+    (Search in long double with ties taken within 1e-9; the winners recomputed in exact fractions.)
+
+## D. Schemes
+
+D1. Coins (1,5,10,20,50,100,200,500), amounts 1..1000:
+    mean least count 4.516 (total 4516); total schemes 2552; most schemes for one amount 18
+    (at 333, 337, 363, 367, 833, 837, 863, 867). Largest least count 8.
+    With the 200 left out, (1,5,10,20,50,100,500):
+    mean 4.826 (total 4826); total schemes 1766; most schemes for one amount 6 (at 28 amounts, the
+    first being 33, 37, 133, 137). Largest least count 8.
+D2. Guilder, units of 5 cents, coins (1,2,5,20,50,100,200,500,1000,2000,5000,20000):
+    - 17.50 (350 units): least count 3, four schemes:
+        give 10 + 5 + 2.50                    (200 + 100 + 50)
+        give 10 + 10, back 2.50               (2 x 200 - 50)
+        give 25 + 2.50, back 10               (500 + 50 - 200)
+        give 25, back 5 + 2.50                (500 - 100 - 50)
+    - 16.65 (333 units): least count 6, 10 schemes.
+    - Amounts 1..2000 units: largest least count 7 (at 16 amounts: 1333, 1334, 1336, 1337, 1363, 1364,
+      1366, 1367, 1633, 1634, 1636, 1637, 1663, 1664, 1666, 1667 units).
+      Most schemes: 15, an eight-way tie: 1333, 1334, 1366, 1367, 1633, 1634, 1666, 1667 units
+      = 66.65, 66.70, 68.30, 68.35, 81.65, 81.70, 83.30, 83.35 guilders.
+      (Also: total count 8758, mean 4.379; total schemes over the 2000 amounts 4873.)
+D3. Euro in cents, 11.30 (1130): least count 4, three schemes:
+        give 10 + 1 + 0.20 + 0.10             (1000 + 100 + 20 + 10)
+        give 10 + 1 + 0.50, back 0.20         (1000 + 100 + 50 - 20)
+        give 10 + 2, back 0.50 + 0.20         (1000 + 200 - 50 - 20)
+
+## E. Greedy against fewest, one way
+
+E1. Coins (1,3,6,12,24,30), amounts below 240: greedy takes more than the fewest at 42 amounts; the
+    first is 48 (greedy 30+12+6 = 3 coins, fewest 24+24 = 2); the largest excess is 1 coin (never
+    more). The 42 amounts are 48..53 + 30k for k = 0..6 (48-53, 78-83, ..., 228-233).
+
+## F. Lower bound by argument
+
+F1. With k coins, an amount whose least count is j is the value of some whole-number vector n with
+    sum|n| = j. The number of such vectors is N_j = sum_i 2^i C(k,i) C(j-1,i-1)
+    (k=2: 4j; k=3: 4j^2+2; k=4: 8, 32, 88, 192, ...). n and -n give opposite amounts, so at most N_j/2
+    of them are positive: at most N_j/2 amounts can have least count j, whatever the coins.
+    Fill the 99 amounts into the cheapest slots:
+    - 2 coins: slots 2, 4, 6, ..., 18 for counts 1..9 (90 amounts) and 9 amounts at 10:
+      total >= 2(1+4+9+...+81) + 90 = 660.  ATTAINED by (9,10), (9,11), (10,11): the bound is exact.
+    - 3 coins: slots 3, 9, 19, 33 for counts 1..4 (64 amounts) and 35 amounts at 5:
+      total >= 3 + 18 + 57 + 132 + 175 = 385 (cost >= 3.85).  Search best: 388.
+      (16,19,21) fills every slot of counts 1 to 4 (3, 9, 19, 33) and loses only because 3 of its
+      last 35 amounts need 6 coins instead of 5.
+    - 4 coins: slots 4, 16, 44 for counts 1..3 (64 amounts) and 35 at 4:
+      total >= 4 + 32 + 132 + 140 = 308 (cost >= 3.08).  Search best: 309.
+    - (5 coins, same argument: 5 + 50 + 207 = 262; search best with coins <= 60: 270.)
+    A corollary that closes the searches: a coin above 99 is not itself an amount, so it wastes a
+    count-1 slot; the same filling then gives >= 669 (2 coins), >= 389 (3 coins), >= 311 (4 coins).
+    Each is above the search optimum, so the best sets have all coins <= 99, and the searches (which
+    cover all coins <= 99) are complete: for coins of ANY size the optimum is 660 for 2 coins
+    (exactly the three sets), 388 for 3 coins (only (16,19,21)), 309 for 4 coins (exactly the four
+    sets). For 5 coins the corollary gives only >= 264, so the 5-coin answer is proved only for
+    coins <= 60.
+    I have no argument (without search) that lifts 385 to 388 or 308 to 309.
+
+## Run times (shared machine, nice -n 15, one thread each, at most 3 at once)
+
+- coins.c part 1 (A1, A2, B1, B2, E1): 0.08 s. Part 2 (C1 2 and 3 coins, C3, C4): 4.7 s.
+  C1 4 coins: 1.4 s. C1 5 coins: 1.9 s. The whole program again with window pad 3D: not timed (finished within a minute).
+- extras: 3 coins to 300: 18.2 s; 4 coins to 99: 11.6 s; 5 coins to 60: 15.6 s; 2 coins to 1000: 1.8 s.
+- schemes.py D (D1, D2, D3 with BFS = exhaustive asserted on every amount): 0.4 s. C2: 0.04 s.
+  check (named sets + 400 random sets, exhaustive against BFS): 14 s.
+- cross.py (second scheme count): under 1 s.
+- Wall clock: 14:20:24 (first command) to 14:24:34 (last) by the machine's clock; the time spent
+  writing the programs before the first command was not measured. Well inside the 30 minutes.
+
+## Not finished / limits
+
+- Nothing asked was left unfinished.
+- 5-coin optimum is established only for coins <= 60 (asked: <= 40).
+- C3 both ways is for coins from 1..120 as asked; I did not look beyond 120 for L = 200
+  (the slot argument with L = 200 was not worked out).
+- C4 two-coin range was not specified in the brief; I used 1..60 and 1..150 (same answer).
+- F1: the bounds 385 and 308 are not attained; the gap to 388 / 309 is closed only by search plus
+  the corollary, not by argument alone.
+```
+
+Notes for step 2:
+- Everything is in `/home/agent2/coin-referee/`: `blind.md`, the programs `coins.c`, `schemes.py`, `cross.py`, and the raw outputs `out_*.txt`.
+- The window-free exhaustive count and the dense-table count are two separately written methods, but both are mine and both in Python; the C search is checked against them only on the named sets and 400 random sets, not on every set searched.
+- The "one step off the grid" searches and the coin-above-99 corollary go beyond what you asked.
+- I did not open anything under `/home/agent2/coin/`, `/home/agent2/coin-data/` or `/srv/commons/`.

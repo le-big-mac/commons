@@ -1,0 +1,149 @@
+A. Counting bounds for amounts 1 to 99 (totals; divide by 100 for the cost over 0 to 99)
+   signed lists by hand: D=2: 4, 8, 12 for k=1,2,3; D=3: 6, 18, 38. Program: 4, 8, 12; 6, 18, 38
+   coins | one way: bound, best found, gap | both ways: bound, best found, gap
+   1     | 4950, 4950, 0 | 4950, 4950, 0
+   2     | 845, 900, 55 | 660, 660, 0
+   3     | 490, 515, 25 | 385, 388, 3
+   4     | 374, 389, 15 | 308, 309, 1
+   5     | 316, 329, 13 | 262, 270, 8
+   6     | 280, 292, 12 | 249, not searched
+   7     | 255, 265, 10 | 234, not searched
+
+B. The best three coins both ways, (16, 19, 21), for amounts below 100
+   amounts by number of tokens: 1: 3, 2: 9, 3: 19, 4: 33, 5: 32, 6: 3   (room by counting: 1: 3, 2: 9, 3: 19, 4: 33, 5: 51)
+   1 takes 4: -21 +2x19 -16
+   2 takes 2: +21 -19
+   3 takes 2: +19 -16
+   5 takes 2: +21 -16
+   10 takes 4: +2x21 -2x16
+   50 takes 5: +21 -19 +3x16
+   99 takes 5: +2x21 +3x19
+   amounts whose every best way hands the largest coin used BACK: 15
+   one way, (16,19,21) cannot make 50 of the amounts 1 to 99
+   the four best sets of four, worst case and what 1 takes: (13,28,32,33) worst 5, 1 takes 2; (18,21,25,37) worst 4, 1 takes 3; (19,20,23,32) worst 5, 1 takes 2; (20,21,25,32) worst 5, 1 takes 2
+
+C. Coinages side by side: total coins over the amounts below L (cost = total / L), worst case in brackets
+   US cents (1,5,10,25): one way 470 [9], greedy 470 [9], both ways 398 [7]; L = 100
+   US with half and dollar (1,5,10,25,50,100): one way 420 [8], greedy 420 [8], both ways 312 [5]; L = 100
+   euro's cents (1,2,5,10,20,50): one way 340 [6], greedy 340 [6], both ways 294 [5]; L = 100
+   euro coins (1,2,5,10,20,50,100,200): one way 340 [6], greedy 340 [6], both ways 272 [4]; L = 100
+   Shallit (1,5,18,25): one way 389 [6], greedy 458 [9], both ways 348 [6]; L = 100
+   powers of two (1,2,4,8,16,32,64): one way 316 [6], greedy 316 [6], both ways 267 [4]; L = 100
+   powers of two with 128: one way 316 [6], greedy 316 [6], both ways 267 [4]; L = 100
+   powers of three (1,3,9,27,81): one way 390 [8], greedy 390 [8], both ways 318 [5]; L = 100
+   powers of three with 243: one way 390 [8], greedy 390 [8], both ways 318 [5]; L = 100
+   best three both ways (16,19,21): one way cannot, greedy cannot, both ways 388 [6]; L = 100
+   best four both ways (19,20,23,32): one way cannot, greedy cannot, both ways 309 [5]; L = 100
+   old pence (1,3,6,12,24,30), below 240: one way 1398 [11], greedy 1440 [12], both ways 1323 [10]; L = 240
+   old pence with crown and pound (1,3,6,12,24,30,60,240), below 240: one way 1056 [8], greedy 1080 [9], both ways 815 [5]; L = 240
+   guilder in 5-cent units (1,2,5,20,50,100,200), below 100: one way 380 [7], greedy 380 [7], both ways 287 [4]; L = 100
+   powers of three one way and both ways, by the digits: both ways (1,3,9,27,81) takes for 5: 3 (9 - 3 - 1), for 40: 4 (27 + 9 + 3 + 1)
+
+D. The coin to add (amounts below 100; candidates to 99 one way, to 199 both ways)
+   US cents: one way 470 -> 32 (346); both ways 398 -> 48 (295)
+   euro's cents: one way 340 -> 33 or 37 (286); both ways 294 -> 85 (249)
+   euro coins: one way 340 -> 33 or 37 (286); both ways 272 -> 33 or 36 or 37 (241)
+   US with half and dollar: one way 420 -> 18 (318); both ways 312 -> 37 or 38 (258)
+
+E. Old British coins
+   pence (1,3,6,12,24,30): greedy fails for 42 amounts below 240, first 48; Pearson's test: 48
+   with the crown (1,3,6,12,24,30,60): greedy fails for 24 amounts below 240, first 48; Pearson's test: 48
+   in halfpence with the halfpenny (1,2,6,12,24,48,60), below 480: greedy fails for 84 amounts below 480, first 96; Pearson's test: 96
+   without the half-crown (1,3,6,12,24): greedy fails for 0 amounts below 240; Pearson's test: never fails
+   without the florin (1,3,6,12,30): greedy fails for 0 amounts below 240; Pearson's test: never fails
+   Wagon's system in halfpence (1,2,6,12,24,48,60,120,480): Pearson's test gives 96 halfpence as the first failure (48 pence)
+   with one coin taken away: penny: fails at 96; threepence: fails at 96; sixpence: fails at 72; shilling: fails at 96; florin: never fails; half-crown: never fails; crown: fails at 96; pound: fails at 96
+
+F. The tables of Kippers and Franses (2003), recounted with my definition of a scheme
+   the all-at-once counter against schemes() on 143 amounts: 0 disagreements
+   Table 3, all notes, 1 to 1000: schemes 2552, tokens per scheme 5.18, median 5, most tokens 8, most schemes for one amount 18 (first at 333), tokens per amount 4.52
+        in print: schemes 2553, per scheme 5.18, median 5, most tokens 8, most schemes 18, per amount 4.52
+   Table 3 without the 200: schemes 1766, tokens per scheme 5.26, median 5, most tokens 8, most schemes for one amount 6 (first at 33), tokens per amount 4.83
+        in print: 1766, 5.26, 5, 8, 6, 4.83 (same order)
+   Table 3 without the 100: schemes 1873, tokens per scheme 5.10, median 5, most tokens 8, most schemes for one amount 9 (first at 333), tokens per amount 4.62
+        in print: 1873, 5.10, 5, 8, 9, 4.62 (same order)
+   Table 3 without the 50: schemes 2034, tokens per scheme 5.34, median 5, most tokens 8, most schemes for one amount 8 (first at 263), tokens per amount 4.84
+        in print: 2034, 5.34, 5, 8, 8, 4.84 (same order)
+   Table 3 without the 20: schemes 1862, tokens per scheme 5.27, median 5, most tokens 8, most schemes for one amount 8 (first at 337), tokens per amount 4.82
+        in print: 1862, 5.27, 5, 8, 8, 4.82 (same order)
+   Table 3 without the 10: schemes 1964, tokens per scheme 5.12, median 5, most tokens 8, most schemes for one amount 10 (first at 333), tokens per amount 4.65
+        in print: 1964, 5.12, 5, 8, 10, 4.65 (same order)
+   Table 2, all euro coins and notes, 0.01 to 100.00: schemes 36591, tokens per scheme 5.83, median 6, most tokens 8, most schemes for one amount 54 (first at 3333), tokens per amount 5.05
+        in print: schemes 36,591, per scheme 5.83, median 6, most tokens 8
+   Table 2, no 1 or 2 cent, multiples of 0.05 to 100.00: schemes 5957, tokens per scheme 4.93, median 5, most tokens 7, most schemes for one amount 36 (first at 667), tokens per amount 4.25
+        in print: schemes 5,957, per scheme 4.93, median 5, most tokens 7
+   Table 1, guilder, 0.05 to 100.00: schemes 4873, tokens per scheme 4.91, median 5, most tokens 7, most schemes for one amount 15 (first at 1333), tokens per amount 4.38
+        in print: schemes 14,928, per scheme 5.68, median 6, most tokens 8; and in Kippers et al.: Cramer found no amount needing more than seven, and 16.65 with the most schemes, ten
+   guilder 16.65 (333 units): 10 schemes of 6 tokens; 17.50: 4 of 3
+
+G. Three coins both ways against four coins one way, at other ranges (totals over the amounts below L)
+   L    | best three both ways (coins to) | best four one way | three both / four one | counting bounds: three both, four one
+   50 | 151 (4,14,15) (10,11,14) (150) | 150 (1,3,10,16) (1,3,11,18) and 15 more | 1.0067 | 150, 144
+   100 | 388 (16,19,21) (400) | 389 (1,5,18,25) (1,5,18,29) | 0.9974 | 385, 374
+   200 | 993 (24,33,34) (300) | 1000 (1,5,27,46) (1,6,28,47) | 0.9930 | 980, 948
+   500 | 3400 (52,56,61) (600) | 3402 (1,7,57,80) | 0.9994 | 3375, 3213
+   1000 | 8609 (85,90,96) (85,91,96) (300) | 8488 (1,9,89,140) | 1.0143 | 8514, 7998
+   also: best two both ways: L=50 231 (6,7) (7,8); L=200 1876 (14,15); L=500 7436 (22,23); bounds 231, 1876, 7436
+   also: best three one way: L=50 187 (1,6,14); L=200 1377 (1,12,31); L=500 4979 (1,14,61)
+   also: best four both ways, L=50 (coins to 100): 124 (9,14,15,17) (12,13,15,22); best five one way: L=50 128 (1,3,7,16,21) (1,3,10,15,23) (1,5,7,18,21) (1,5,8,19,21); L=200 825 (1,6,14,38,55)
+   the counting bounds alone, three both ways against four one way, at L = 100, 1000, 10000, 100000, 1000000: 1.029, 1.065, 1.173, 1.350, 1.589
+
+H. Table 1 of Kippers and Franses: which amounts does it cover?
+   in print: guilder 14,928 schemes, 5.68 per scheme, most 8; euro 16,151 schemes, 5.84, most 8; caption: amounts between NLG 0.05 and NLG 100; text: between NLG 0.05 and NLG 220.35
+   euro, the guilder amounts 0.05 to 100.00 turned into euros at 2.20371 and rounded to a cent: schemes 8313, tokens per scheme 5.68, most tokens 8
+   euro, the guilder amounts 0.05 to 220.35 likewise: schemes 16151, tokens per scheme 5.84, most tokens 8
+   guilder, 0.05 to 100.00: schemes 4873, tokens per scheme 4.91, most tokens 7
+   guilder, 0.05 to 220.35: schemes 14237, tokens per scheme 5.61, most tokens 8
+   guilder: most schemes for one amount up to 50.00: 10 at 16.65; up to 100.00: 15 at 66.65
+
+I. One step off the grid for "no coin of 1", "two coins reach their bound", and the gap for three coins
+   two coins both ways (coins to 60), L from 3 to 200: at the counting bound in 198 of 198 ranges
+   two coins: the largest L (to 200) at which some best set has a coin of 1: 10; three coins (coins to 80, L from 4 to 120): 34
+   three coins: the gap above the bound for L from 4 to 120 runs from 0 to 9; it is 0 for 26 of 117 ranges; at L = 100 it is 3
+
+J. If small amounts are likelier: amounts 1 to 99 weighted by 1/amount, and by 1/amount squared (coins to 60, every set tried here in JS)
+   every amount alike, 2 coins: both ways (9,10) (9,11) (10,11) mean 6.667; one way (1,10) (1,11) mean 9.091
+   every amount alike, 3 coins: both ways (16,19,21) mean 3.919; one way (1,12,19) mean 5.202
+   1/amount, 2 coins: both ways (1,10) mean 4.165; one way (1,7) mean 4.979
+   1/amount, 3 coins: both ways (1,4,23) mean 2.758; one way (1,4,18) mean 3.268
+   1/amount squared, 2 coins: both ways (1,4) mean 1.684; one way (1,4) mean 1.780
+   1/amount squared, 3 coins: both ways (1,2,7) mean 1.375; one way (1,2,7) mean 1.433
+
+K. "No Dutch amount up to 100 needs more than seven; 16.65 has the most schemes, ten": with which coins?
+   as Kippers and Franses list it for 2001 (with the 250): most tokens 7; most schemes 15 at 66.65; 16.65 has 10; 17.50 has 4
+   without the 250 note: most tokens 7; most schemes 15 at 66.65; 16.65 has 10; 17.50 has 4
+   without the 250 and without the 1000: most tokens 7; most schemes 15 at 66.65; 16.65 has 10; 17.50 has 4
+   without the 250, with a 1-cent coin, amounts in steps of 5 cents: most tokens 7; most schemes 15 at 66.65; 16.65 has 10; 17.50 has 4
+
+L. The rows of OEIS A366013 (fewest coins) and A366360 (greedy), up to seven and six coins, against my searches
+   greedy, 5 coins: 6 best sets, the first 1,3,7,16,40, total 346
+   greedy, 6 coins: 4 best sets, the first 1,2,5,11,25,62, total 313
+   A366013: 7 of 7 rows-by-length the same as my search; A366360: 6 of 6
+
+M. After the referee
+   M1. three coins both ways against four one way, ten ranges: L | three both (coins to) | four one | ratio
+       50 | 151 (150) | 150 | 1.0067
+       60 | 194 (150) | 193 | 1.0052
+       75 | 262 (150) | 261 | 1.0038
+       100 | 388 (400) | 389 | 0.9974
+       150 | 674 (150) | 679 | 0.9926
+       200 | 993 (300) | 1000 | 0.9930
+       300 | 1712 (150) | 1720 | 0.9953
+       400 | 2522 (150) | 2521 | 1.0004
+       500 | 3400 (600) | 3402 | 0.9994
+       1000 | 8609 (300) | 8488 | 1.0143
+       furthest from 1: 0.0143
+   M2. large ranges: the best of (1, m, m^2, m^3) one way, against the least that any three coins both ways could total
+       L = 2000: (1,7,49,343) totals 22660; bound for three coins both ways 21525: not settled by this
+       L = 3000: (1,7,49,343) totals 38394; bound for three coins both ways 36984: not settled by this
+       L = 5000: (1,8,64,512) totals 74068; bound for three coins both ways 73190: not settled by this
+       L = 10000: (1,10,100,1000) totals 180000; bound for three coins both ways 184675: four one way are ahead of every three both ways
+       L = 20000: (1,12,144,1728) totals 433324; bound for three coins both ways 465744: four one way are ahead of every three both ways
+       L = 50000: (1,15,225,3375) totals 1391510; bound for three coins both ways 1580775: four one way are ahead of every three both ways
+       L = 100000: (1,18,324,5832) totals 3350460; bound for three coins both ways 3983957: four one way are ahead of every three both ways
+   M3. with a coin of 100 or more, amounts below 100: at least 669, 389, 311 for two, three, four coins (best found 660, 388, 309)
+       five coins, one coin of 100 or more: at most 4, 20, 60 amounts with one, two, three coins: at least 284; two or more such coins: at most 3 and 13: at least 278 (best found 270)
+       tried on 2902 random sets of five with one, two or three coins from 100 to 399: caps broken 0 times; least totals 301, 346, 359
+   M4. both ways below 100: the six cent coins 294; with a 100 272; with an 85 249; the eight coins with an 85 247; with a 33 241
+   M5. guilder: amounts to 50.00 with ten schemes (the most there): 16.65, 16.70, 18.30, 18.35; amounts to 100.00 with fifteen (the most): 66.65, 66.70, 68.30, 68.35, 81.65, 81.70, 83.30, 83.35
+   M6. two coins both ways, amounts below 1000 (coins to 150): (31,32) total 21056, bound 21056; four coins, amounts below 200 (coins to 80): (26,44,46,51) (30,44,48,49) (30,46,49,50) total 757

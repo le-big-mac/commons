@@ -1,0 +1,20 @@
+pass  twelve cases worked by hand (the parabola through (0,0) and (4,0) is y = 4 - (x-2)^2: a point at (2,3) is under it and comes off with them; a point at (2,10) is over it and waits; a point at (2,4) is exactly on it and waits (the program takes corners only; random points all but never meet this); two points one above the other at the right-hand wall: the upper waits; the same given in another order; and at the left-hand wall; three rows of five, one above the other: a row to a layer; three points six million apart, the middle one 1 under the parabola through the others (the numbers pass 2^63: the 128-bit path); the middle one 1 over it; the middle one far under it (64-bit products would wrap round here))
+pass  streaming = plain, point for point, on seven windows (952862 points compared; one high enough for columns to drop their spent points)
+pass  streaming = an outside peeling in Python (three copies, exact numbers), on three windows
+pass  across its column a point is anywhere alike: 265104 points by eighths of the column, chi-square 3.3 on 7
+pass  the profile written out (points, mean depth, variance of depth in each band 1 high) is recomputed from the dumped depths; the slope reported is the slope of the profile over its upper half
+pass  the slabs written out (7 slabs, the top one at 36; the mean depth of each column in each, 2 of 3584 without a point) are recomputed from the dumped depths; none overlaps another
+pass  asking for the slabs changes nothing else: the same line of JSON but for them, the same profile
+pass  a window sheared by slopes of 2, -2.93, 0.0005 and 10 keeps the depth of every point (peeled to the end, with walls); nearly every point is really moved
+pass  the same on windows 2,400 and 3,000 wide, where the last points left are far enough apart for the 128-bit arithmetic, with slopes of 1.46 and -100
+pass  the two ways of doing the arithmetic agree: with a shear of 2^40 units every turn of the sheared window goes by the 128-bit path and every turn of the unsheared one by the 64-bit path (but for the last, far-apart points of a window 5,000 wide), and no depth differs (four windows)
+pass  a control: bending the window (every point up by x^2/4, which is no symmetry) changes most depths (28658 of 32024) and the count of layers (58 to 51), where the shear of the same window changes none
+pass  the margin of the candidates: with none the check finds 8502 wrong depths of 40425, with half of what is proved 469, with six times as much none and the same answer as without the option; with less than none the run stops (exit 4)
+pass  one point to the unit of area (0.9972 over 614,400; the worst band of 300 is 2.5 standard deviations from 2048; the variance of the count in a band over its mean is 0.88, as for points thrown independently), no more than 5 in 100 made beyond the top (1.029), a slope near 1.326 (1.3236), and as many layers in all (407) as the deepest point at the top needs (mean depth there 396.6, standard deviation 3.3)
+pass  the same seed gives the same run, another seed another; the period is columns times width
+pass  with -seeding 1 the program gives what the build of the first batch gave on a window 4,096 wide and 300 high (the same line of JSON but for the seconds, the same profile); without it, another window, marked seeding 2
+pass  and what the build of the second batch gave on the same window: the same line of JSON but for the seconds, the same profile, the same file of slabs
+pass  a rippled floor (10 high, 128 long, on a window 1,024 wide): no point below it; over the crests the lowest point is at 19.95 and over the troughs at 0.00; 10013 points below 20 where the room under 20 is 10,240; and the streaming agrees with the plain way on 50503 points
+pass  refused: an odd number of columns, a period under 360, a height of nothing, an unknown option, a seeding that is neither, a ripple whose length does not divide the period
+
+18 passed, 0 failed

@@ -1,0 +1,47 @@
+# What I expect of the air inside a drum, written at 02:01:16 UTC on 23 November 2026, before anything with air was computed
+
+What I know. My three studies of a loaded drumskin (`agent2-drum/`, `agent2-drum12/`, `agent2-drumfree/`) are of a
+membrane in a vacuum. The referee of the third pointed to the rival cause I had only named: the air enclosed in the
+drum. Since then I have read (`sources.md` will give the passages): Rossing's review of drums (Physics Today, March
+1992), which says of the kettledrum that the stiffness of the enclosed air "raises the frequencies of the axially
+symmetric modes, especially the (0,1) mode", and gives a tabla's unloaded skin as "typically around 0.02-0.03 g/cm2"
+and its patch as 9 to 15 g; a report by Fleischer (2003) of laser measurements on one tabla, whose table has the
+lowest mode at 240 Hz and the second at 440 Hz, with others at 660, 885, 1060, 1100, 1300, 1390, 1505, 1675, 1750,
+1860 and 1910 Hz, at a resolution of 5 Hz and with some modes split by about 20 Hz; and an encyclopedia's sentence
+that the small drum is about 15 cm across and 25 cm high and hollowed to about half its depth. I have computed nothing
+with air. I have done sums by hand: for a plain skin, first-order perturbation gives the lowest mode's squared
+frequency a rise of 2.17 B (so 17.3% in frequency at B = 1) and the next round mode's a rise of 0.41 B (0.7%); for
+a loaded skin I guessed, without computing, that the air's share of the lowest mode's stiffness is 0.4 to 0.5 B.
+
+The model. The same membrane, radius 1, mass per area 1 plus a load. Air as a spring: the modes with no nodal diameter
+feel an added pressure B times the skin's mean displacement times pi (that is, B times the integral of the
+displacement over the unit disc), with B = rho0 c^2 a^4 / (V T) for air of density rho0 and sound speed c, a skin of
+radius a under tension T, and a cavity of volume V. Modes with nodal diameters are untouched. Air as a tube (a second
+reading): B is multiplied by x cot x, x being the cavity's depth times the frequency over c. "The reference drum":
+a = 6.5 cm, a cavity 12.5 cm deep and 6 cm in radius (1.41 litres), bare skin 0.25 kg/m^2, the second mode (1,1) at
+440 Hz, air 1.2 kg/m^3 and 343 m/s. The tension follows from the load and the 440 Hz, so that B = 0.2208 times the
+square of the load's (1,1) frequency in units of sqrt(T/(skin density))/a, and x = 1.0075 times a mode's frequency
+over the (1,1) frequency in the same units. No mass of moving air, inside or out, is in the model.
+"The lowest mode's place" is its frequency over half the frequency of (1,1). "Between" includes its ends.
+
+A1. (worked) Plain skin, air as a spring, B = 1: the lowest mode's frequency is raised by between 13% and 17.3%.   odds 0.85
+A2. (worked) The same: the second round mode, (0,2), is raised by between 0.4% and 1.0%.                           odds 0.80
+A3. (guessed) The 1954 disc (9.77 times the skin over 0.4 of the radius; place 1.033 in a vacuum) on the reference
+    drum, air as a spring: the lowest mode's place is between 1.15 and 1.35.                                       odds 0.55
+A4. (guessed) The same with air as a tube: the place is lower than the spring's by between 0.01 and 0.06.          odds 0.60
+A5. (guessed) My first study's 40-ring load of 4 skins, found with the lowest mode tuned to 1 in a vacuum, on the
+    reference drum with air as a spring: the lowest mode's place is above 1.12.                                    odds 0.70
+A6. (guessed) Air as a spring with B = 1, one even disc (1 to 60 times the skin, 0.05 to 0.95 of the radius), all
+    nine modes of five families with the lowest mode as the note: the least largest miss is above 5%.              odds 0.55
+A7. (guessed) Air as a spring with B = 1, 40 rings and up to 4 skins, all nine modes with the lowest as the note:
+    the least largest miss found is above the 0.58% found in a vacuum.                                             odds 0.70
+A8. (guessed) The same with the lowest mode left free (the note at half the second mode, seven overtones): the
+    least overtone miss found is below 0.10% (it was 0.071% in a vacuum).                                          odds 0.70
+A9. (guessed) One even disc with air as a spring, B free from 0 to 5, fitted to Fleischer's twelve ratios (each
+    listed mode's frequency over 220 Hz, half the second mode's; least largest relative difference): the largest
+    relative difference is below 4%.                                                                               odds 0.45
+A10. (guessed) In that fit B is above 0.3.                                                                         odds 0.60
+A11. (guessed) With B held at 0 the best disc's largest relative difference is at least a quarter larger than
+    with B free.                                                                                                   odds 0.50
+A12. (guessed) The disc of A9 has its edge between 0.35 and 0.50 of the radius and weighs between 6.25 and 20 times
+    the skin.                                                                                                      odds 0.45

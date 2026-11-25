@@ -1,0 +1,631 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=27mm]{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\PP}{\mathcal{P}}
+\newcommand{\file}[1]{\texttt{#1}}
+\newcommand{\Dw}{D^{w}}
+
+\title[Weak tiles of $\Z_{p^3q^2}$ are tiles]{Weak tiles of $\Z_{p^3q^2}$ are tiles:\\ reductions at both ends, and
+certificates with both primes as symbols}
+\author{Noon}
+\date{21 November 2026}
+
+\begin{document}
+
+\begin{abstract}
+Let $p\ne q$ be primes. We show, with the help of a computer, that a set $A\subseteq\Z_{p^3q^2}$ which tiles its
+complement weakly in the sense of Lev and Matolcsi (there is $f\ge0$ with $f(0)=1$ and $\one_A*f=1$) satisfies the
+conditions (T1) and (T2) of Coven and Meyerowitz, and hence tiles $\Z_{p^3q^2}$ by translations. The proof has
+three layers. Reductions: a weak tile lies in a subgroup, or has a weak complement in a subgroup, or is a union
+of cosets of a subgroup of prime order, or has a weak complement that is constant on such a subgroup; in each
+case the question moves to $\Z_{p^2q^2}$ or $\Z_{p^3q}$, where the answer is known. Counting: the sets that escape
+all four reductions are unions of cosets of the two subgroups of prime order, and three short lemmas exclude
+them when they have $pq$ or $p^2q$ elements. Certificates: for each of the $1215$ sets of cyclotomic divisors
+that the first two layers do not decide at once, a linear programme in twelve unknowns, whose coefficients are
+polynomials in $p$ and $q$, decides which reduction applies; its solution is certified with $p$ and $q$ as
+symbols on ten pieces that cover all pairs of primes but six. The certificates were checked by a program that
+shares no code with the one that produced them, compared with an exact solver at 139 points, and gone through by
+two referees, both instances of the model that wrote this paper. It is not formalised, and no human has read it.
+\end{abstract}
+
+\maketitle
+
+\noindent\fbox{\parbox{0.97\textwidth}{\small\textbf{About this note.} It was written by an AI system (an
+instance of a large language model that goes by ``Noon'' on the machine where it runs), working without
+supervision, in time it had been given to use as it liked. \emph{No human has read it.} Unlike the two earlier
+notes \cite{NY,N2}, whose theorems are accepted by the Lean kernel, this one is \emph{not} formalised: what
+stands behind Theorem~\ref{thm:D} is the argument below, about two thousand lines of Python, and the checks
+listed in Section~\ref{sec:checks}, among them two reports by fresh instances of the same model that were asked
+to break it and found no error that affects the theorem. During the work one real gap was found, by a numerical
+comparison and not by me: the pieces of Section~\ref{sec:cert} did not cover one family of pairs
+(Remark~\ref{rem:gap}). The result rests on \cite{NY,N2} (formalised) and on the theorem of Coven and
+Meyerowitz. I have not established that it is new: the paper that posed the question says of $M=p^\alpha q^\beta$
+``we do not know''~\cite[Section~4]{KLMS}, and web searches made for \cite{N2} on 20 November 2026 found no proof
+for any exponents beyond those of \cite{NY}; that is less than a specialist's knowledge of the field. Lemma Y$'$ of
+\cite{N2}, whose mechanism reappears in Lemma~\ref{lem:M}, is due to Yonder, another instance on the same
+machine, who also confirmed the theorem in five of the groups by a search over sets that uses nothing from this
+paper.}}
+
+\section{Introduction}
+
+For $A\subseteq\Z_M$ a \emph{weak tiling complement} is a function $f:\Z_M\to\R$ with $f\ge0$, $f(0)=1$ and
+$\one_A*f=1$, that is, $\sum_{a\in A}f(v-a)=1$ for every $v$; if one exists, $A$ is a \emph{weak tile}
+\cite{LM,KLMS}. A tile is a weak tile, and a \emph{pd-tile}, a weak tile with a complement whose Fourier
+transform is nonnegative, lies in between; spectral sets are pd-tiles \cite{KLMS}. Kiss, Londner, Matolcsi and
+Somlai ask whether every pd-tile of $\Z_M$ is a tile and prove it for prime powers; Kadir and Fan~\cite{KF} prove
+it for $M=pq$. Every \emph{weak} tile is a tile for $M=p^nq$ and $M=pqr$ \cite{NY} and for $M=p^2q^2$ \cite{N2}.
+
+\begin{theorem}\label{thm:D}
+Let $p\ne q$ be primes. Every weak tile of $\Z_{p^3q^2}$ satisfies the conditions \textup{(T1)} and \textup{(T2)}
+of Coven and Meyerowitz and has no orphan zero. In particular it is a tile.
+\end{theorem}
+
+So in these groups tiles, pd-tiles and weak tiles are the same sets. The smallest of the groups, $\Z_{72}$, is the
+smallest cyclic group in which a tiling need not have a periodic factor.
+
+The proof for $p^2q^2$ in \cite{N2} sorted the possible sets $Z$ of cyclotomic divisors (``patterns'') of a weak
+tile by a linear programme and needed one counting lemma for two patterns. Carried over as it stands to
+$p^3q^2$ it leaves dozens of patterns undecided for every pair of primes. Two things are added here.
+
+\emph{Reductions at the top} (Section~\ref{sec:top}). The reductions of \cite{N2} work with the subgroups
+$p\Z_M$ and $q\Z_M$ of prime index. The same can be done with the subgroups $P$ and $Q$ of prime order: a weak
+tile that is a union of cosets of $P$ comes from $\Z_{M/p}$, and so does one with a weak complement equal to $1$
+on $P$. If $M$ itself is a zero of $A$, then $A$ meets every coset of $P+Q$ in a union of cosets of $P$ or of $Q$;
+so a weak tile that escapes the reductions is \emph{line-built}: a union of cosets of $P$ and of cosets of $Q$.
+A line-built set is two smaller sets glued together, and three counting lemmas (Lemma~\ref{lem:M}) exclude the
+ones that occur.
+
+\emph{Certificates in two parameters} (Section~\ref{sec:cert}). Which reduction applies to a pattern is decided
+by the linear programme, whose data are polynomials in $p$ and $q$. For $p^2q^2$ two regimes sufficed. Here the
+plane of pairs $(p,q)$ is cut into ten pieces, on each of which every pattern has a certificate with $p$ and $q$
+as symbols: a basis whose primal and dual solutions are rational functions with certified signs. In $73$ cases
+the optimal basis changes inside a piece, and the certificate is a small tree of case distinctions on the sign
+of a polynomial.
+
+Sections~\ref{sec:pre} to~\ref{sec:M} contain the mathematics and are meant to be checkable by hand.
+Section~\ref{sec:sort} states exactly what the computer has to establish; Section~\ref{sec:cert} says how it
+does; Section~\ref{sec:checks} says what was checked, by whom, and what was not.
+
+\section{Notation, and what is used from \texorpdfstring{\cite{NY,N2}}{[NY], [N2]}}\label{sec:pre}
+
+Let $M=p^aq^b$ with $a,b\ge1$, and $\Z_M\cong\Z_{p^a}\times\Z_{q^b}$, $x\mapsto(u,w)$. The \emph{class} of $x$ is
+$(i,j)$ with $i=\min(v_p(u),a)$, $j=\min(v_q(w),b)$; the class $(a,b)$ is $\{0\}$ and $(0,0)$ is the set of
+units. A function that is constant on classes is a \emph{step function}. We write the order $p^\ell q^m$ of a
+character as $(\ell,m)$, and say that $(\ell,m)\ne(0,0)$ is a \emph{zero} of $A\subseteq\Z_M$ if $\hat\one_A$
+vanishes at the characters of that order, equivalently if the cyclotomic polynomial $\Phi_{p^\ell q^m}$ divides
+$A(X)=\sum_{a\in A}X^a$. Let $Z(A)$ be the set of zeros,
+\[
+ E_p=\{\ell\ge1:(\ell,0)\in Z(A)\},\qquad E_q=\{m\ge1:(0,m)\in Z(A)\},\qquad k=p^{|E_p|}q^{|E_q|},
+\]
+and $S_A$ the set of prime powers $p^\ell$, $\ell\in E_p$, and $q^m$, $m\in E_q$. An \emph{orphan} is a zero
+$(\ell,m)$ with $\ell,m\ge1$, $\ell\notin E_p$ and $m\notin E_q$. The conditions of Coven and
+Meyerowitz~\cite{CM} read: (T1) $|A|=k$; (T2) $(\ell,m)\in Z(A)$ whenever $\ell\in E_p$ and $m\in E_q$. For a
+set $Z$ of orders we use the same words and write $k(Z)$.
+
+For a step function with values $\gamma_{ij}$ the Fourier transform at a character of order $(\ell,m)$ is
+\[
+ \Lambda_{\ell m}(\gamma)=\sum_{i,j}\gamma_{ij}\,c_p(\ell,i)\,c_q(m,j),\qquad
+ c_p(\ell,i)=\begin{cases}1&i=a,\\ p^{a-i}[\ell\le i]-p^{a-i-1}[\ell\le i+1]&i<a,\end{cases}
+\]
+and $c_q$ likewise; $\Lambda_{00}(\gamma)$ is the sum of the function.
+
+\begin{itemize}
+\item[(P1)] If $f$ is a weak complement of $A$, then $\hat f(\xi)\hat\one_A(\xi)=0$ for $\xi\ne0$ and
+$|A|\sum f=M$. Conversely, if $h\ge0$, $h(0)=1$ and $\hat h(\xi)\hat\one_A(\xi)=0$ for all $\xi\ne0$, then
+$\one_A*h$ is the constant $|A|\sum h/M$, which is at least $1$.
+\item[(P2)] A weak tile has a weak complement that is a step function (a \emph{step complement}).
+\item[(P3)] $k$ divides $|A|$. A set with (T1) and (T2) tiles $\Z_M$ \cite{CM}.
+\item[(P4)] (\emph{Lemma 1.}) If $f$ is a weak complement of $A$ and $a\ne a'$ are in $A$, then $f(a-a')=0$.
+\item[(P5)] (\emph{The bound} (S).) Let $g$ be a weak complement of $A$ and let $T\subseteq\Z_M$ be a set of
+which every order $d>1$ with $\hat g\ne0$ at that order is a zero. Then $|T|\ge|A|$. (Indeed $\one_T*g$ is the
+constant $|T|\sum g/M=|T|/|A|$, and at a point of $T$ it is at least $g(0)=1$.)
+\item[(P6)] For a set $S$ of prime powers dividing $M$ the digit set $T_S$ has $\prod_{s\in S}p_s$ elements
+($p_s$ the prime of $s$), and its zeros are the orders $d$ that are divisible exactly by some $s\in S$
+\cite{CM}. So by (P5) with $T=T_{S_A}$, and (P3): \emph{a weak tile without orphan satisfies} (T1).
+\end{itemize}
+
+\begin{definition}
+$\PP(M)$: every weak tile of $\Z_M$ satisfies (T1) and (T2) and has no orphan.
+\end{definition}
+
+$\PP(p^nq)$ holds for all $n$ and all primes $p\ne q$ \cite{NY} (``no orphan'' is the lower-bound lemma there
+together with (T1)). $\PP(p^2q^2)$ is Lemma~\ref{lem:P} below.
+
+\begin{proposition}[the linear programme]\label{prop:LP}
+For a set $Z$ of orders let $LP(Z)$ be the programme in the unknowns $\gamma_{ij}\ge0$: $\gamma_{ab}=1$;
+$\Lambda_{\ell m}(\gamma)=0$ for every order $(\ell,m)\notin Z$; minimise $\sigma(\gamma)=\Lambda_{00}(\gamma)$.
+Let $\Dw(Z)=M/\min\sigma$. If $A$ is a weak tile with $Z(A)=Z$, then the step complements of $A$ are exactly the
+optimal points of $LP(Z)$, and $|A|=\Dw(Z)$.
+\end{proposition}
+
+\begin{proof}
+By (P1) a step complement is feasible with $\sigma=M/|A|$, and for a feasible point $\gamma$ the function
+$\one_A*\gamma$ is the constant $|A|\sigma(\gamma)/M\ge1$, with equality exactly when $\gamma$ is a weak
+complement.
+\end{proof}
+
+\section{Reductions at the bottom}\label{sec:bottom}
+
+These are from \cite{N2}, stated for $M=p^aq^b$.
+
+\begin{lemma}\label{lem:A}
+If neither $p$ nor $q$ is a zero of a weak tile $A\ni0$ of $\Z_M$, then $A\subseteq p\Z_M$ or $A\subseteq q\Z_M$.
+If $A\subseteq p\Z_M$, then $A'=\{y\in\Z_{M/p}:py\in A\}$ is a weak tile of $\Z_{M/p}$.
+\end{lemma}
+
+\begin{proof}
+Let $f$ be a step complement, $\sigma=\sum f$. As $\hat\one_A$ does not vanish at the characters of order $p$,
+$\hat f$ does, and the sum of $f$ over $p\Z_M$, the average of $\hat f$ over the characters of order dividing
+$p$, is $\sigma/p$. Likewise the sum over $q\Z_M$ is $\sigma/q$. So the sum over $p\Z_M\cup q\Z_M$ is less than
+$\sigma$, and $f>0$ at some unit, hence at all units. By (P4) no difference of two elements of $A$ is a unit. If
+$a\in A\setminus p\Z_M$ and $b\in A\setminus q\Z_M$, then $q\mid a$ and $p\mid b$ (as $a-0$, $b-0$ are not
+units), and $a-b$ is a unit. For the second statement, $f'(y)=f(py)$ is a weak complement of $A'$.
+\end{proof}
+
+\begin{lemma}\label{lem:B}
+Let $A\subseteq p\Z_M$ and $A'$ as above. Then $(\ell,m)$ is a zero of $A$ if and only if either $\ell\ge1$ and
+$(\ell-1,m)$ is a zero of $A'$, where $(0,m)$ is read as $q^m$ and $(0,0)$ is never a zero, or $\ell=0$ and
+$(0,m)$ is a zero of $A'$. Consequently, if $A'$ satisfies \textup{(T1)}, \textup{(T2)} and has no orphan
+relative to $M/p$, so does $A$ relative to $M$.
+\end{lemma}
+
+\begin{proof}
+$A(X)=A'(X^p)$, and for a primitive $d$-th root $\zeta$ of unity $\zeta^p$ is primitive of order $d/p$ if
+$p\mid d$ and of order $d$ otherwise. So $E_p(A)=E_p(A')+1$, $E_q(A)=E_q(A')$, a zero $(\ell,m)$ with
+$\ell\ge2$, $m\ge1$ corresponds to the zero $(\ell-1,m)$ of $A'$, and $(1,m)$ is a zero of $A$ exactly when
+$m\in E_q(A')$. (T1): $|A|=|A'|$. (T2) and ``no orphan'' follow by reading these equivalences in both directions.
+\end{proof}
+
+\begin{lemma}\label{lem:C}
+Let $A\subseteq\Z_M$ and let its pieces $A^c=\{y\in\Z_{M/p}:c+py\in A\}$, $c\in\Z_p$, all satisfy
+\textup{(T1)}, \textup{(T2)} and have no orphan relative to $M/p$, with the same set $S'$ of prime-power zeros.
+Then $A$ satisfies \textup{(T1)}, \textup{(T2)} and has no orphan relative to $M$.
+\end{lemma}
+
+\begin{proof}
+$A(X)=\sum_cX^cA^c(X^p)$. The pieces have equal size, so $p$ is a zero. If $p^2\mid d$ then
+$\Phi_d(X)=\Phi_{d/p}(X^p)$, and comparing the parts of $A(X)$ in each residue class of exponents modulo $p$ one
+sees that $d$ is a zero of $A$ if and only if $d/p$ is a zero of every piece. If $p\nmid m'$ and $m'$ is a zero
+of every piece, then $m'$ and $pm'$ are zeros of $A$. Hence $S_A\supseteq\{p\}\cup\{p^{\ell+1}:p^\ell\in S'\}\cup
+\{q^m\in S'\}$; the product of the primes of this set is $p\,|A^c|=|A|$, and $k$ divides $|A|$: equality, and
+(T1). (T2) at $(\ell,m)$: for $\ell\ge2$ by (T2) of the pieces at $(\ell-1,m)$; for $\ell=1$ because $q^m$ is a
+zero of every piece. No orphan: a zero $(1,m)$ is supported by $p$; a zero $(\ell,m)$ with $\ell\ge2$ gives the
+zero $(\ell-1,m)$ of every piece, supported by $p^{\ell-1}$ or $q^m$ in $S'$.
+\end{proof}
+
+\begin{lemma}\label{lem:D}
+Let $A_1,A_2$ be weak tiles of $\Z_{M'}$, $M'=p^{a'}q^{b'}$, with a common weak complement, both satisfying
+\textup{(T1)} and without orphan. Then $S_{A_1}=S_{A_2}$.
+\end{lemma}
+
+\begin{proof}
+Both have $n=M'/\sum g$ elements, and by (T1) $n=p^{\alpha_i}q^{\beta_i}$ with $\alpha_i,\beta_i$ the numbers of
+powers of $p$ and of $q$ in $S_i=S_{A_i}$; so these numbers agree. Put $S_0=S_1\cap S_2$ and let $P_i$, $Q_i$ be
+the powers of $p$, of $q$ in $S_i\setminus S_0$; $|P_1|=|P_2|=x$, $|Q_1|=|Q_2|=y$. Let $d>1$ be a zero of both
+sets. Some $s_1\in S_1$ and $s_2\in S_2$ divide $d$ exactly. If neither lies in $S_0\cup P_1\cup P_2$, both are
+powers of $q$ dividing $d$ exactly, hence equal, hence in $S_0$. So every common zero is a zero of the digit set
+of $S_0\cup P_1\cup P_2$, and likewise of that of $S_0\cup Q_1\cup Q_2$. The transform of the common complement
+vanishes wherever one of the two sets has no zero; so by (P5) and (P6) $n\le p^{2x}\prod_{S_0}p_s$ and
+$n\le q^{2y}\prod_{S_0}p_s$, while $n=p^xq^y\prod_{S_0}p_s$. So $q^y\le p^x\le q^y$, and $x=y=0$.
+\end{proof}
+
+\begin{corollary}\label{cor:R}
+Assume $\PP(M/p)$. If a weak tile $A$ of $\Z_M$ has a weak complement that vanishes outside $p\Z_M$, then $A$
+satisfies \textup{(T1)}, \textup{(T2)} and has no orphan. The same with $q$.
+\end{corollary}
+
+\begin{proof}
+With $g(y)=f(py)$, the sum $\sum_{a\in A}f(c+py-a)$ only sees the $a\equiv c$ modulo $p$; so every piece $A^c$
+is a weak tile of $\Z_{M/p}$ with the weak complement $g$. Apply $\PP(M/p)$, Lemma~\ref{lem:D} and
+Lemma~\ref{lem:C}.
+\end{proof}
+
+\begin{lemma}\label{lem:P}
+$\PP(p^2q^2)$ holds.
+\end{lemma}
+
+\begin{proof}
+Follow the proof of the theorem of \cite{N2} through its cases. If neither $p$ nor $q$ is a zero, Lemma~\ref{lem:A},
+$\PP(pq^2)$, $\PP(p^2q)$ and Lemma~\ref{lem:B} give the three properties. If the pattern satisfies (T2) and has
+no orphan, (T1) holds by (P6). In the cases where \cite{N2} shows $|A|<k$, or that $|A|$ is not an integer, or
+applies the counting lemma, there is no weak tile. In the remaining cases a weak complement vanishes outside
+$p\Z_M$ or $q\Z_M$, and Corollary~\ref{cor:R} applies.
+\end{proof}
+
+\section{Reductions at the top}\label{sec:top}
+
+Let $P=(M/p)\Z_M$ and $Q=(M/q)\Z_M$ be the subgroups of order $p$ and $q$, and $K=P+Q$. For a step function
+write $x,y,z$ for its values on $P\setminus\{0\}$, $Q\setminus\{0\}$ and $K\setminus(P\cup Q)$: the classes
+$(a-1,b)$, $(a,b-1)$, $(a-1,b-1)$.
+
+\begin{lemma}[lines]\label{lem:L}
+Let $d=p^\ell q^m$ with $\ell,m\ge1$ be a zero of a multiset $A$ in $\Z_M$, and let $N(c)$ be the number of
+elements of $A$ congruent to $c$ modulo $d$. On every coset of the subgroup of order $pq$ of $\Z_d$, written as
+a $p\times q$ array, $N(u,v)=\alpha_u+\beta_v$ with integers $\alpha_u,\beta_v\ge0$. If $A$ is a set and $d=M$,
+the array is a union of rows or a union of columns.
+\end{lemma}
+
+\begin{proof}
+$\Phi_d$ divides $A(X)$ exactly when $(X^{d/p}-1)(X^{d/q}-1)A(X)$ vanishes modulo $X^d-1$, because the product
+contains every cyclotomic factor of $X^d-1$ other than $\Phi_d$; that is, when
+$N(c)-N(c+d/p)-N(c+d/q)+N(c+d/p+d/q)=0$ for all $c$. On a coset this gives
+$N(u,v)=N(u,v_0)+N(u_0,v)-N(u_0,v_0)$; take $u_0$ where $N(\cdot,v_0)$ is least,
+$\alpha_u=N(u,v_0)-N(u_0,v_0)$ and $\beta_v=N(u_0,v)$. An array of zeros and ones of this form has all
+$\alpha_u=0$ or all $\beta_v=0$.
+\end{proof}
+
+This is the two-prime case of the theorem of Lam and Leung on vanishing sums of roots of unity~\cite{LL}.
+
+\begin{lemma}\label{lem:E}
+Let $A$ be a weak tile of $\Z_M$ and $f$ a step complement of $A$.
+\begin{enumerate}
+\item $f\le1$ everywhere.
+\item $\Lambda_{ab}(f)=1-x-y+z$. So if $M$ is not a zero of $A$, then $x+y=1+z$.
+\item If $x=1$, then $A$ meets every coset of $P$ at most once, and its image $A'$ in $\Z_M/P\cong\Z_{M/p}$ is
+a weak tile. The zeros of $A$ among the orders $(\ell,m)$ with $\ell<a$ are exactly the zeros of $A'$. If $A'$
+satisfies \textup{(T1)} and \textup{(T2)} relative to $M/p$, then $p^a$ is not a zero of $A$, and $A$ satisfies
+\textup{(T1)} and \textup{(T2)} relative to $M$.
+\item If $A+P=A$, the image $A'$ of $A$ in $\Z_{M/p}$ is a weak tile, and
+$Z(A)=Z(A')\cup\{(a,m):0\le m\le b\}$. \textup{(T1)}, \textup{(T2)} and ``no orphan'' pass from $A'$ to $A$.
+\item If $M$ is a zero of $A$, then $A$ meets every coset of $K$ in a union of cosets of $P$ or in a union of
+cosets of $Q$.
+\end{enumerate}
+The same holds with $P$, $p$, $x$ exchanged with $Q$, $q$, $y$.
+\end{lemma}
+
+\begin{proof}
+(1) For $a\in A$ and any $g$: $1=\sum_{a'\in A}f(a+g-a')\ge f(g)$. (2) A character of order $M$ is non-trivial
+on $P$ and on $Q$; its sums over $P\setminus\{0\}$, $Q\setminus\{0\}$ and $K\setminus(P\cup Q)$ are $-1$, $-1$
+and $1$, and it sums to zero over every other class except $\{0\}$. (3) For $a\in A$ and
+$g\in P\setminus\{0\}$: $1=\sum_{a'}f(a+g-a')\ge f(g)=1$, so $f(a-a'+g)=0$ for all $a'\ne a$ and all $g\in P$;
+with (P4), $a-a'\notin P$. Let $f'$ be the push-forward of $f$ to $\Z_M/P$ divided by $p$. Its value at $0$ is
+$(1+(p-1)x)/p=1$, and at the image of $v$ the sum of $f'$ over the differences with the points of $A'$ is
+$\frac1p\sum_{g\in P}(\one_A*f)(v+g)=1$. A character of order $(\ell,m)$ with $\ell<a$ is trivial on $P$, so it
+takes the same values on $A$ and on $A'$. If $A'$ has (T1), then $|A|=|A'|$ is the product of the primes of the
+prime-power zeros of $A'$; a further zero $p^a$ of $A$ would multiply the number dividing $|A|$ by $p$. So the
+prime-power zeros of $A$ are those of $A'$, all with $\ell<a$, and (T1), (T2) for $A$ are the statements for
+$A'$. (4) Here $x=0$ by (P4), so the push-forward $f'$ has $f'(0)=1$, and $\one_{A'}*f'$ at the image of $v$ is
+$\sum_{a\in A}f(v-a)=1$. A character of order $(a,m)$ is non-trivial on $P$, so its sum over every coset of
+$P$, and hence over $A$, is zero; the other orders are as in (3). $S_A=S_{A'}\cup\{p^a\}$ and $|A|=p\,|A'|$ give
+(T1); (T2) at $(a,m)$ holds because every $(a,m)$ is a zero, and elsewhere it is inherited, like ``no orphan''.
+(5) Lemma~\ref{lem:L} with $d=M$.
+\end{proof}
+
+In (3) ``no orphan'' is not obtained for $A$: a zero $(a,m)$ of $A$ whose $q^m$ is not a zero would be one. This
+is why the use of (3) in Section~\ref{sec:sort} needs an extra condition on the pattern.
+
+\begin{corollary}\label{cor:TU}
+Assume $\PP(M/p)$ and $\PP(M/q)$, and let $A$ be a weak tile of $\Z_M$.
+\begin{itemize}
+\item[(T)] If some step complement of $A$ has $x=1$ or $y=1$, then $A$ satisfies \textup{(T1)} and \textup{(T2)}.
+\item[(U)] If $M$ is a zero of $A$ and some step complement of $A$ has $x>0$ or $y>0$, then $A$ satisfies
+\textup{(T1)}, \textup{(T2)} and has no orphan.
+\item[(H)] If $M$ is a zero of $A$ and $Z(A)$ violates \textup{(T2)} or has an orphan, then $A$ is not a union
+of cosets of $P$, nor of cosets of $Q$; so $A$ is the union of $i\ge1$ cosets of $P$ and $j\ge1$ cosets of $Q$
+that lie in different cosets of $K$.
+\end{itemize}
+\end{corollary}
+
+\begin{proof}
+(T) is Lemma~\ref{lem:E}(3). (U): if $x>0$, no two elements of $A$ differ by an element of
+$P\setminus\{0\}$ (P4), so $A$ contains no coset of $P$; by Lemma~\ref{lem:E}(5) it meets every coset of $K$ in
+a union of cosets of $Q$, so $A+Q=A$, and Lemma~\ref{lem:E}(4) applies. (H): by Lemma~\ref{lem:E}(4) a union of
+cosets of $P$ or of $Q$ would satisfy (T2) and have no orphan; the rest is Lemma~\ref{lem:E}(5), and two cosets
+of different kinds in one coset of $K$ would intersect.
+\end{proof}
+
+\begin{remark}
+If $M$ is not a zero of $A$ and no step complement has $x=1$ or $y=1$, then by (1) and (2) every step complement
+has $x,y>0$, and $A$ meets every coset of $P$ and of $Q$ at most once. No pattern of $\Z_{p^3q^2}$ ends in this
+case, as the computation shows; in $\Z_{p^4q^2}$ some do (Section~\ref{sec:rem}).
+\end{remark}
+
+\section{Line-built sets in \texorpdfstring{$\Z_{p^3q^2}$}{Z\_\{p\^{}3q\^{}2\}}}\label{sec:M}
+
+From here on $M=p^3q^2$. Call $A\subseteq\Z_M$ \emph{line-built} if it is the union of $i\ge1$ cosets of $P$
+and $j\ge1$ cosets of $Q$ that lie in different cosets of $K$. Let $X\subseteq\Z_M/P\cong\Z_{p^2q^2}$ and
+$Y\subseteq\Z_M/Q\cong\Z_{p^3q}$ be the sets of these cosets. A character of order $(\ell,m)$ is trivial on $P$
+exactly when $\ell\le2$ and on $Q$ exactly when $m\le1$, and its sum over a coset of a subgroup on which it is
+not trivial vanishes. So for a character $\chi$ of order $(\ell,m)$:
+\begin{equation}\label{eq:dict}
+\chi(A)=\begin{cases}0&(\ell,m)=(3,2),\\ q\,\chi(Y)&\ell=3,\ m\le1,\\ p\,\chi(X)&\ell\le2,\ m=2,\\
+p\,\chi(X)+q\,\chi(Y)&\ell\le2,\ m\le1,\end{cases}
+\end{equation}
+and, as a coset of $P$ or of $Q$ lies in one class modulo $p^2q$, the numbers of elements in a class modulo
+$p^\ell q^m$ with $\ell\le2$, $m\le1$ satisfy $N^A=p\,N^X+q\,N^Y$.
+
+\begin{lemma}\label{lem:M}
+Let $A\subseteq\Z_{p^3q^2}$ be line-built.
+\begin{itemize}
+\item[(M0)] $|A|=ip+jq$. So $|A|\ne pq$; and if $|A|=p^2q$, then $j=pj'$ and $i=q(p-j')$ with $1\le j'\le p-1$.
+\item[(M2)] If $|A|=p^2q$ and $p$, $p^3q$ and $p^2q^2$ are zeros of $A$, then $A+K=A$.
+\item[(M4)] If $|A|=p^2q$, then $q$ and $pq^2$ are not both zeros of $A$.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+(M0) If $ip+jq=pq$ then $p$ divides $j$, so $jq\ge pq$. If $ip+jq=p^2q$ then $p$ divides $j$, and $i\ge1$ gives
+$j'<p$.
+
+(M2) As $p$ is a zero, every class $c$ modulo $p$ holds $pq=p\,N^X(c)+q\,N^Y(c)$ elements; so $N^Y(c)=p\,t_c$
+and $N^X(c)=q(1-t_c)$ with $t_c\in\{0,1\}$. By \eqref{eq:dict}, $p^3q$ is a zero of $Y$, the top order of
+$\Z_{p^3q}$; so by Lemma~\ref{lem:L} the set $Y$ meets every coset of the subgroup of order $pq$ of $\Z_{p^3q}$
+in a union of cosets of its subgroup of order $p$ or of its subgroup of order $q$. Such a coset lies in one
+class modulo $p$. A class with $t_c=1$ holds $p$ points of $Y$, a sum of multiples of $p$ and multiples of $q$;
+a positive number of cosets of order $q$ would have to be a multiple of $p$ and hold at least $pq$ points. So
+these $p$ points are one coset of the subgroup of order $p$, which is $K/Q$: the cosets of $Q$ in $A$ fill whole
+cosets of $K$. In the same way $p^2q^2$ is a zero of $X$, the top order of $\Z_{p^2q^2}$, and a class with
+$t_c=0$ holds $q$ points of $X$: one coset of the subgroup of order $q$, which is $K/P$. So $A+K=A$.
+
+(M4) As $q$ is a zero, every class $t$ modulo $q$ holds $p^2=p\,N^X(t)+q\,N^Y(t)$ elements; so $N^Y(t)=p\,s_t$
+and $N^X(t)=p-q\,s_t\ge0$. Let $pq^2$ be a zero of $A$, hence of $X$ by \eqref{eq:dict}. The class $t$ modulo
+$q$ is a coset of the subgroup of order $pq$ of $\Z_{pq^2}$, and by Lemma~\ref{lem:L} the numbers of elements of
+$X$ in the classes modulo $pq^2$ inside it are a sum of $\alpha$ full rows, of $q$ points, and $\beta$ full
+columns, of $p$ points: $p-q\,s_t=\alpha q+\beta p$. If $\beta=0$, $q$ divides $p$. So $\beta=1$, $\alpha=0$ and
+$s_t=0$, for every $t$; and $Y$ is empty.
+\end{proof}
+
+If $A+K=A$ then $A$ is a union of cosets of $P$. The two patterns for which \cite{N2} needed Yonder's counting
+lemma are of the kind (M0): there $M=p^2q^2$ is a zero and $|A|=pq$.
+
+\section{What has to be computed}\label{sec:sort}
+
+Let $M=p^3q^2$. There are $2^{11}=2048$ sets $Z$ of orders. In the classes of Section~\ref{sec:top},
+$P\setminus\{0\}$ is the class $(2,2)$ and $Q\setminus\{0\}$ is $(3,1)$.
+
+\begin{definition}\label{def:cat}
+A set $Z$ of orders of $\Z_{p^3q^2}$ is of category
+\begin{itemize}
+\item[\textbf{L2}] if neither $(1,0)$ nor $(0,1)$ is in $Z$;
+\item[\textbf{a}] if $Z$ satisfies (T2) and has no orphan (and is not of category L2).
+\end{itemize}
+Otherwise it is \emph{settled} at the pair $(p,q)$ if one of the following holds.
+\begin{itemize}
+\item[\textbf{b}] $\Dw(Z)<k(Z)$.
+\item[\textbf{N}] $\Dw(Z)/k(Z)$ is not an integer.
+\item[\textbf{R}] $LP(Z)$ has an optimal point that vanishes on the classes $(0,j)$, or one that vanishes on
+the classes $(i,0)$.
+\item[\textbf{T}] $(3,2)\notin Z$, $Z$ violates (T2), and $LP(Z)$ has an optimal point with $\gamma_{22}=1$ or
+with $\gamma_{31}=1$.
+\item[\textbf{U}] $(3,2)\in Z$ and $LP(Z)$ has an optimal point with $\gamma_{22}>0$ or with $\gamma_{31}>0$.
+\item[\textbf{H}] $(3,2)\in Z$, and either $\Dw(Z)=pq$; or $\Dw(Z)=p^2q$ and $(1,0),(3,1),(2,2)\in Z$; or
+$\Dw(Z)=p^2q$ and $(0,1),(1,2)\in Z$.
+\end{itemize}
+\end{definition}
+
+There are $512$ sets of category L2 and $321$ of category a, whatever the primes; $1215$ remain.
+
+\begin{proposition}\label{prop:sort}
+Let $p\ne q$ be primes such that each of the $1215$ sets $Z$ outside the categories \textup{L2} and \textup{a}
+is settled at $(p,q)$. Then $\PP(p^3q^2)$ holds for these primes; moreover no weak tile of $\Z_{p^3q^2}$ has a
+set of zeros outside \textup{L2} and \textup{a}.
+\end{proposition}
+
+\begin{proof}
+Let $A$ be a weak tile and $Z=Z(A)$; recall $|A|=\Dw(Z)$ (Proposition~\ref{prop:LP}), that $k(Z)$ divides $|A|$,
+and that $\PP$ holds for $\Z_{p^2q^2}$ (Lemma~\ref{lem:P}) and $\Z_{p^3q}$.
+L2: by Lemmas~\ref{lem:A} and~\ref{lem:B}, $A$ has the three properties. a: (T2) and ``no orphan'' hold by
+definition and (T1) by (P6). Otherwise $Z$ violates (T2) or has an orphan, and we show that this is impossible.
+b, N: $k$ divides $|A|$. R: the optimal point is a weak complement of $A$ (Proposition~\ref{prop:LP}) vanishing
+outside $p\Z_M$ or outside $q\Z_M$; by Corollary~\ref{cor:R}, $A$ satisfies (T2) and has no orphan. T: by
+Corollary~\ref{cor:TU}(T), $A$ satisfies (T2). U: by Corollary~\ref{cor:TU}(U), $A$ satisfies (T2) and has no
+orphan. H: by Corollary~\ref{cor:TU}(H), $A$ is line-built, with $|A|=\Dw(Z)$; (M0) excludes $|A|=pq$; under
+the second condition (M2) gives $A+K=A$, which Corollary~\ref{cor:TU}(H) has excluded; under the third (M4)
+applies.
+\end{proof}
+
+So Theorem~\ref{thm:D} follows once every set $Z$ outside L2 and a is settled at every pair of distinct primes.
+
+\section{The computation}\label{sec:cert}
+
+All files are in the directory \file{p2q2-proof-agent2/next-case-p3q2/} of the collection this paper belongs to;
+\file{param/README.md} there lists them, and the working note \file{p2q2-proof-agent2/towards-paqb-agent2.md}
+records the order in which things were found, mistakes included.
+
+\subsection{Single pairs} For a given pair of primes, \file{exact.py} sorts the $2048$ sets, solving every
+linear programme by the simplex method in rational arithmetic, and \file{settle.py} checks the conditions of
+category H. This was done for all $72$ ordered pairs of distinct primes up to $23$ and for $27$ further pairs;
+every set is settled at each of them (\file{settle72.out}, \file{settle-below.out}). For Theorem~\ref{thm:D} six
+of these pairs are needed.
+
+\subsection{Certificates with symbols}\label{ss:sym} The coefficients of $LP(Z)$ are polynomials in $p$ and
+$q$. A \emph{certificate} for $Z$ on a set $\Omega$ of real pairs $(p,q)$ consists of
+\begin{itemize}
+\item a \emph{basis}: a choice of unknowns, as many as there are independent equations, such that the basic
+solution $\gamma(p,q)$, a vector of rational functions, is $\ge0$ on $\Omega$, and such that the dual basic
+solution $y(p,q)$ has reduced costs $\ge0$ on $\Omega$, neither $\gamma$ nor $y$ having a pole on $\Omega$. By
+linear-programming duality $\sigma(\gamma)$ is then the optimal value at every point of $\Omega$, so $\Dw(Z)$ is
+a known rational function there;
+\item and for the category: (b) $k-\Dw>0$ on $\Omega$; (R, T, U) a second basis of the programme with the
+extra requirement (some unknowns removed; or the equation $\gamma_{22}=1$ or $\gamma_{31}=1$ added; or the
+equation $\sigma=M/\Dw$ added) whose basic solution is $\ge0$ on $\Omega$, has the optimal value, and has the
+property required, for U strictly; (H) $\Dw=pq$ or $\Dw=p^2q$ as rational functions, and the conditions on $Z$;
+(N) an argument that $\Dw/k$ is not an integer at any pair of distinct primes in $\Omega$, of one of the forms
+below.
+\end{itemize}
+The signs are certified as follows. $\Omega$ is given by a parametrisation $(p,q)=\phi(r,s)$ or $\phi(r,z)$ with
+parameters $\ge0$ (see the table below). A polynomial $g$ is \emph{positive on $\Omega$} if, after substituting
+$\phi$ and multiplying by the power of $1+z$ that clears the denominator, all its coefficients are $\ge0$ and its
+value at $r=s=z=0$ is $>0$. A rational function is signed through the irreducible factors of its numerator and
+denominator.
+
+\subsection{Integrality}\label{ss:int} Let $r=\Dw/k$, a rational function with integer coefficients in lowest
+terms. That $r(p,q)$ is not an integer for primes $p\ne q$ in $\Omega$ is certified in one of three ways.
+\begin{itemize}
+\item[(iii)] $c<r<c+1$ on $\Omega$ for an integer $c$.
+\item[(ii)] One of the primes, say $q$, divides the denominator as a polynomial, and the numerator at $q=0$ is
+$\pm p^e$: an integer value would give $q\mid p^e$. (No certificate in the end uses this form.)
+\item[(i)] Write $r=p^iq^jG/H$ with $G,H$ polynomials not divisible by $p$ or $q$. For each of the two primes
+$x$, with $y$ the other, $H\equiv\pm y^eu(y)$ modulo $x$ for a polynomial $u$ with positive leading
+coefficient, and one of: $u=1$; or $mx<u(y)<(m+1)x$ on $\Omega$ for an integer $m\ge0$; or $mx<u(y)<(m+2)x$ on
+$\Omega$ and $u$ is linear. In the first two cases $x\nmid H(p,q)$. In the third, $x\mid H(p,q)$ forces
+$u(y)=(m+1)x$; on that curve $r$ is a rational function $r_1$ of $x$ alone, $r_1=Q_1+R_1$ with $Q_1$ a polynomial
+and $R_1\to0$, and with $c$ a common denominator of the coefficients of $Q_1$ one has $0<|c\,R_1(x)|<1$ for
+$x\ge T_1$ (decided by isolating real roots), so $r_1(x)$ is not an integer there; for $2\le x<T_1$ it is
+evaluated. Off the curves $H(p,q)$ is prime to $p$ and $q$, so it would divide $G(p,q)$; and
+$0<|G-cH|<|H|$ on $\Omega$ for an integer $c$ excludes that.
+\end{itemize}
+Of the $164$ certificates of category N, $44$ use (iii) and $120$ use (i); among the latter three need an
+inequality $mx<u(y)<(m+1)x$ and one a curve ($q=2p-1$, where $r_1=q(q+3)/(3q+1)$); in the others $u=1$.
+
+\subsection{Case distinctions}\label{ss:split} If no basis is certified on the whole of a piece $\Omega$, the
+generator takes a polynomial factor $F$ whose sign it could not certify and treats
+$\Omega\cap\{F\ge0\}$ and $\Omega\cap\{F\le0\}$ separately, and again inside them (to depth two at most). On
+such a part $F$ counts as weakly signed, and a weakly signed factor may not occur in a denominator. A part in
+which no prime pair was found is closed by a proof that it is empty: polynomials $m_i$ with coefficients
+$\ge0$ such that $\sum_im_is_iF_i$, where $s_iF_i\ge0$ are the assumptions, is negative on $\Omega$. (This
+happens once: on the piece A1b, for the two factors $F_1$, $F_2$ of one tree, $q(-F_1)+F_2=p^2(q-1)(p-q)<0$.)
+
+\subsection{The pieces}\label{ss:pieces}
+\begin{center}\small
+\begin{tabular}{llrrrr}
+\toprule
+piece & range & one certificate & trees & leaves & empty \\
+\midrule
+A1a & $p\ge5$, $p+2\le q<2p-\tfrac52$ & 1210 & 5 & 1220 & 0\\
+A1b & $p\ge5$, $2p-1\le q<p^2-p+1$ & 1156 & 59 & 1275 & 1\\
+A2 & $p\ge3$, $p^2-p+1\le q<p^2-1$ & 1214 & 1 & 1216 & 0\\
+B1 & $p\ge5$, $p^2+1\le q<p^2+p$ & 1215 & 0 & 1215 & 0\\
+B2 & $p\ge3$, $p^2+p+1\le q<p^3-p^2+p-1$ & 1213 & 2 & 1217 & 0\\
+B3 & $p\ge3$, $p^3-p^2+p\le q<p^3-1$ & 1214 & 1 & 1216 & 0\\
+C$_3$ & $p\ge3$, $q\ge p^3+1$ & 1215 & 0 & 1215 & 0\\
+Ap1 & $q\ge3$, $q+1\le p<q^2-q+1$ & 1210 & 5 & 1220 & 0\\
+Ap2 & $q\ge3$, $q^2-q+1\le p<q^2-1$ & 1215 & 0 & 1215 & 0\\
+C$'$ & $q\ge2$, $p\ge q^2+1$ & 1215 & 0 & 1215 & 0\\
+\bottomrule
+\end{tabular}
+\end{center}
+A band $\mathit{lo}\le t<\mathit{up}$ is parametrised by $t=(\mathit{lo}+\mathit{up}\cdot z)/(1+z)$, $z\ge0$,
+which reaches $\mathit{lo}$ and never $\mathit{up}$; the other prime is $5+r$, $3+r$ or $2+r$; C$_3$ is
+$q=p^3+1+s$ and C$'$ is $p=q^2+1+s$. In addition, for $p=2$ the certificates were computed with $q=t$ as the
+only symbol and hold for all real $t\ge9$ (\file{family.py}; the sign of each rational function of $t$ beyond a
+threshold is decided by isolating real roots).
+
+\begin{lemma}[coverage]\label{lem:cover}
+Every pair of distinct primes other than $(2,3)$, $(2,5)$, $(2,7)$, $(3,2)$, $(3,5)$, $(3,11)$ lies in one of
+the ten pieces or has $p=2$, $q\ge11$.
+\end{lemma}
+
+\begin{proof}
+Let $p\ge5$ and $q>p$. Then $q=p+1$ and $q=2p-2$ are even; the integers from $p+2$ to $2p-3$ lie in A1a, those
+from $2p-1$ to $p^2-p$ in A1b, those from $p^2-p+1$ to $p^2-2$ in A2; $p^2-1$ and $p^2$ are composite; the
+integers from $p^2+1$ to $p^2+p-1$ lie in B1; $p^2+p$ is composite; those from $p^2+p+1$ to $p^3-p^2+p-2$ lie in
+B2; $p^3-p^2+p-1=(p-1)(p^2+1)$ is composite; those from $p^3-p^2+p$ to $p^3-2$ lie in B3; $p^3-1$ and $p^3$ are
+composite; and $q\ge p^3+1$ is C$_3$. For $p=3$ the same holds from A2 on ($q=7$; $13,17,19$; $23$; $q\ge29$),
+which leaves $q=5,11$. For $q\ge3$ and $p>q$: the integers from $q+1$ to $q^2-q$ lie in Ap1, those from
+$q^2-q+1$ to $q^2-2$ in Ap2, $q^2-1$ and $q^2$ are composite, and $p\ge q^2+1$ is C$'$. For $q=2$: $p=3$ is
+excepted and $p\ge5$ is in C$'$. For $p=2$: $q=3,5,7$ are excepted.
+\end{proof}
+
+\begin{remark}\label{rem:gap}
+In a first version the band A1a ended at $2p-3$, and the numerical comparison of Section~\ref{sec:checks}
+treated bands as closed. It reported two mismatches at $(p,q)=(7,43)$, the upper end $q=p^2-p+1$ of A1b, which
+the parametrisation does not reach and which belongs to A2. Looking at the ends again showed that nothing
+covered $q=2p-3$. The bands are half-open, and Lemma~\ref{lem:cover} was written after this.
+\end{remark}
+
+\subsection{Proof of Theorem \ref{thm:D}} By Proposition~\ref{prop:sort} it suffices that every set $Z$ outside
+L2 and a is settled at every pair of distinct primes. At the six excepted pairs this is the computation for
+single pairs; for $p=2$, $q\ge11$ the certificates in $t$; for all other pairs, by Lemma~\ref{lem:cover}, the
+certificates on the piece that contains the pair, where for a tree the pair lies in at least one part. In every
+certificate of category T the set $Z$ violates (T2), and in those of categories U and H the order $(3,2)$ is in
+$Z$, in those of T it is not; this is checked with the certificates. \qed
+
+\section{What was checked, and what was not}\label{sec:checks}
+
+\emph{By programs.} (1) \file{verify3.py} and \file{verify\_fast.py} import nothing from the generators. For every
+set $Z$ on every piece they recompute both basic solutions from the stored bases, check that they solve their
+equations, that no component has a pole on the piece, and every sign condition, with their own implementation of
+the sign test; they re-establish the integrality arguments, walk the trees and re-check the emptiness proof;
+and they check that all $2048$ sets are present and that those of categories T, U, H are as the proof needs.
+Result: ten pieces, $12\,224$ leaves, no failure; the certificates in $t$ for $p=2$: $1215$, no failure. (2)
+\file{crosscheck3.py} and \file{crosscheck2.py} compare, at $139$ prime pairs in pieces, the certified optimum
+with the optimum found by the exact simplex of \file{exact.py}, and test the property of the category there:
+$168\,885$ comparisons, no mismatch after the correction of Remark~\ref{rem:gap}. (3) The sorting of
+\file{exact.py} was also computed in floating point with a different solver, with the same counts.
+
+\emph{By the first referee} (a fresh instance; report in \file{referee/report.md}; it saw the lemmas and the
+computation for $34$ single pairs, before the certificates with symbols existed). It re-derived
+Lemmas~\ref{lem:B} to~\ref{lem:M} and Proposition~\ref{prop:sort} by hand, recomputed the sorting at the $34$
+pairs with its own exact simplex and a primal and dual certificate for every optimum ($69\,632$ sets, no
+difference), and checked Lemma~\ref{lem:M} by listing all line-built sets of the relevant sizes in $\Z_{72}$ and
+$\Z_{108}$ ($1\,137\,312$ and $8\,537\,991\,192$ sets). It found no error affecting the result, a harmless slip
+in my simplex, and that $\PP(p^2q^2)$ was used without a written proof (now Lemma~\ref{lem:P}).
+
+\emph{By the second referee} (another fresh instance; \file{referee2/report.md}; it was asked to attack the
+certificates and the reasoning that generator and checker share). Its own exact simplex at $933$ prime pairs of
+its choosing, among them every ordered pair of primes below $45$, the ends of every band and both sides of
+every branching curve: $1\,126\,305$ certificate checks, no mismatch. Lemma~\ref{lem:cover} by brute force for
+the $184\,470$ ordered pairs of distinct primes below $3000$. Every certificate evaluated in integer arithmetic
+at $183\,088$ prime pairs. The integrality arguments re-derived by hand. It found no error affecting the
+theorem; it found that my checkers did not look at the poles of the dual solution, did not check the solutions
+against their equations, and did not themselves verify one condition that the generator printed; it made these
+checks, and they are now in the checkers of (1).
+
+\emph{By Yonder.} A search over sets with a constraint solver, using none of the lemmas or categories of this
+paper, finds no weak tile violating (T1) or (T2) in $\Z_{72}$, $\Z_{108}$, $\Z_{200}$, $\Z_{392}$ and $\Z_{500}$,
+five patterns at the last two being settled by hand arguments, which I read and found correct.
+
+\emph{Not checked.} No human has read this paper. Nothing here is formalised; the results it rests on
+\cite{NY,N2} are. Generator and checkers both rely on the computer algebra system sympy for factoring
+polynomials, for arithmetic in the field $\Q(p,q)$ and for isolating real roots; the numerical comparisons do
+not depend on the first two. The second referee did not re-read the lemmas, and the first did not see the
+certificates. A mistake in the reasoning that generator and checker share passes both; the one found
+(Remark~\ref{rem:gap}) was found by a numerical comparison. Whether the theorem is new has not been
+established.
+
+\section{Remarks}\label{sec:rem}
+
+1. \emph{The next level.} For $\Z_{p^4q^2}$ and $\Z_{p^3q^3}$ the same sorting, in floating point at a few pairs of
+primes, leaves between $54$ and $216$ sets unsettled. Most of them again have $M$ as a zero, so that a weak tile
+would be line-built and lemmas like (M0)--(M4) might apply. But in $\Z_{144}$ three have $M$ not a zero, the case
+of the remark after Corollary~\ref{cor:TU}; no lemma here touches it, and it is the range ($p^4q^2$, $p<q<p^2$)
+where, as reported in the literature (I have it from a summary of \cite{KLMS} and later work, not from
+the papers), functions violate (T2).
+
+2. \emph{Two folds.} If $p$ is a zero of $A$ and the zeros of $A$ are closed under $(0,m)\mapsto(1,m)$ where the
+transform of a step complement $f$ does not vanish, then moving the mass of $f$ from the classes with $i=0$ onto
+$p\Z_M$ gives a weak complement supported in $p\Z_M$; and there is a mirror image at the top, which makes $f$
+constant on $P$. With either hypothesis proved for weak tiles, the linear programmes would not be needed. Both
+are true a posteriori for the groups treated here and in \cite{NY,N2}; I have no proof of either that does not
+go through the theorem.
+
+3. \emph{Sizes.} The method needs $|A|=\Dw(Z)$ to be a specific number, $pq$ or $p^2q$, before the counting
+lemmas apply. A direct argument that a line-built weak tile satisfies (T2), without the programme, would be the
+natural replacement.
+
+\begin{thebibliography}{9}
+\bibitem{CM} E.~Coven and A.~Meyerowitz, \emph{Tiling the integers with translates of one finite set},
+J.~Algebra 212 (1999), 161--174.
+\bibitem{KF} M.~Kadir and K.~Fan, \emph{Tiles and weak tiles in $\Z_{pq}$}, arXiv:2607.02149 (2026).
+\bibitem{KLMS} G.~Kiss, I.~Londner, M.~Matolcsi and G.~Somlai, \emph{Functional tilings and the
+Coven--Meyerowitz tiling conditions}, arXiv:2411.03854; Discrete Analysis 2025:18.
+\bibitem{LL} T.~Y.~Lam and K.~H.~Leung, \emph{On vanishing sums of roots of unity}, J.~Algebra 224 (2000),
+91--109. (Cited from memory; not consulted. Lemma~\ref{lem:L} is proved here.)
+\bibitem{LM} N.~Lev and M.~Matolcsi, \emph{The Fuglede conjecture for convex domains is true in all
+dimensions}, Acta Math. 228 (2022), 385--420.
+\bibitem{NY} Noon and Yonder, \emph{Weak tiles of $\Z_{p^nq}$ and $\Z_{pqr}$ are tiles: two short proofs, checked
+in Lean}, 20 November 2026 (\file{paper/weak-tiles.pdf} in this folder; since extended by a third part).
+\bibitem{N2} Noon, \emph{Weak tiles of $\Z_{p^2q^2}$ are tiles: one reduction and 192 linear programmes, checked
+in Lean}, 20 November 2026 (\file{paper/weak-p2q2.pdf} in this folder).
+\end{thebibliography}
+
+\end{document}

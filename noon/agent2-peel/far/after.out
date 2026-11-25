@@ -1,0 +1,124 @@
+A. The two batches side by side (the first started every column's random stream in a way that let neighbours share starting words; the second did not)
+   first batch, to 64000:     12 windows: exponent of the variance 4000 to 64000: 0.509; variance over root depth at 64000: 0.648; slope of mean depth over 32000 to 64000: 1.325948 (0.000013)
+   first batch, to 128000:     3 windows: exponent of the variance 4000 to 64000: 0.467; variance over root depth at 64000: 0.616; slope of mean depth over 32000 to 64000: 1.325982 (0.000008)
+   second batch, to 128000:   12 windows: exponent of the variance 4000 to 64000: 0.501; variance over root depth at 64000: 0.669; slope of mean depth over 32000 to 64000: 1.325963 (0.000010)
+   points in each window against the area (in standard deviations of a count of independent points): +1.7, +0.1, +2.1, +0.6, -1.0, +0.1, -2.2, +0.3, +1.6, +1.2, +1.7, -0.5, +0.4, -0.4, -0.6, +0.8, -2.4, +1.0, +0.9, -2.2, -0.8, +0.2, +0.0, -1.6, +0.7, -0.5, +0.9
+      sum of their squares 39.4 for 27 windows; mean +0.07
+
+B. The constant
+   each window's slope over its upper half goes with how many points that half happened to hold:
+   windows to 64000:  correlation 0.89; slope = 1.325964 + 1.056 x (density - 1), where (2/3) x 1.3259 = 0.884; spread of the slopes 0.000044, and about that line 0.000022
+   windows to 128000: correlation 0.79; slope = 1.325963 + 0.846 x (density - 1), where (2/3) x 1.3259 = 0.884; spread of the slopes 0.000029, and about that line 0.000018
+   every pooling I can think of: the slope as it is, and the slope divided by (density of the same stretch)^(2/3) (mean, standard error from the spread of the windows);
+   "end to end" is the rise of the mean depth between two heights (100 bands below each) over the height between:
+      the 12 windows to 64000:           1.325948 (0.000013)      1.325961 (0.000006)
+      the 15 windows to 128000:          1.325968 (0.000007)      1.325963 (0.000005)
+      all 27, each its upper half:       1.325959 (0.000007)      1.325962 (0.000004)
+      all 27 over 32000 to 64000:        1.325958 (0.000007)      1.325960 (0.000004)
+      all 27 over 4000 to 64000:         1.325961 (0.000005)      1.325959 (0.000003)
+      the 15 tall over 4000 to 128000:   1.325964 (0.000004)      1.325958 (0.000003)
+      first batch, to 128000:            1.325972 (0.000015)      1.325960 (0.000012)
+      second batch, to 128000:           1.325967 (0.000009)      1.325964 (0.000005)
+      end to end, all 27, 4000 to top:   1.325958 (0.000004)      1.325957 (0.000002)
+      end to end, all 27, 4000 to 64000: 1.325957 (0.000005)      1.325956 (0.000002)
+      end to end, 15 tall, 4000 to 128000: 1.325963 (0.000005)      1.325957 (0.000002)
+      end to end, 15 tall, 64000 to 128000: 1.325965 (0.000007)      1.325961 (0.000003)
+   as they are the poolings run from 1.325948 to 1.325972; with the density taken out, from 1.325956 to 1.325964. The study beside this folder gave 1.3259 +- 0.0001.
+   the slope doubling by doubling (mean over the windows that reach, standard error), as it is and with the density taken out:
+        1000 to   2000 (27 windows): 1.325886 (0.000046)      1.325921 (0.000027)
+        2000 to   4000 (27 windows): 1.325937 (0.000027)      1.325955 (0.000016)
+        4000 to   8000 (27 windows): 1.325944 (0.000021)      1.325944 (0.000013)
+        8000 to  16000 (27 windows): 1.325943 (0.000011)      1.325949 (0.000007)
+       16000 to  32000 (27 windows): 1.325964 (0.000008)      1.325953 (0.000006)
+       32000 to  64000 (27 windows): 1.325958 (0.000007)      1.325960 (0.000004)
+       64000 to 128000 (15 windows): 1.325968 (0.000007)      1.325963 (0.000005)
+
+C. The variance of depth at a height, all windows that reach
+   height, variance, over root depth, over height^(1/2), over height^(2/3) (the last two as multiples of their values at 4000)
+         500    16.44   0.640   0.990   1.399
+        1000    23.19   0.638   0.987   1.243
+        2000    33.60   0.654   1.011   1.135
+        4000    47.00   0.647   1.000   1.000
+        8000    67.53   0.657   1.016   0.905
+       16000    94.07   0.647   1.001   0.794
+       32000   132.41   0.644   0.996   0.704
+       64000   190.03   0.654   1.011   0.637
+      128000   268.25   0.653   1.009   0.566
+   exponent over   1000 to   4000 (27 windows): 0.513   [95% of resamplings of the windows: 0.492 to 0.533]
+   exponent over   4000 to  64000 (27 windows): 0.501   [95% of resamplings of the windows: 0.485 to 0.515]
+   exponent over   4000 to 128000 (15 windows): 0.497   [95% of resamplings of the windows: 0.478 to 0.513]
+   exponent over  16000 to 128000 (15 windows): 0.506   [95% of resamplings of the windows: 0.472 to 0.540]
+   exponent over  64000 to 128000 (15 windows): 0.530   [95% of resamplings of the windows: 0.410 to 0.632]
+   line A3, the last doubling, by batch (steps): the first batch's 3 tall windows, 64000 to 128000: 0.647 (window by window 0.532, 1.132, 0.346); the second batch's 12, 64000 to 128000: 0.502; the first batch's 12 short, 32000 to 64000: 0.601
+
+D. The wander of a window's mean depth, and the count of points
+   618 changes over steps of 4000. D (period x variance of the changes / step) = 1.073.
+   the same for the excess of points in the stretch between (per unit of width): 1.028, where independent points give 1.
+   correlation of the two 0.840; a change of 0.858 (0.022) layers for each excess point per unit width (the slope of the one on the other, about their means), where (2/3) x 1.3259 = 0.884 is what the density alone would do.
+      (a line through the origin gives 0.880: the changes have a mean of +0.242 a step, because the offsets are taken with 1.3259 and the slope is 1.32596; that was my first figure, and the referee showed it was lifted.)
+   so of D = 1.073, the count of points carries 0.757 and 0.316 is left (the arrangement of the points).
+   independent points, each adding (2/3) x 1.3259 layers per unit of width, would carry (4/9) x 1.3259^2 = 0.781.
+   0.600 D = 0.644, against the variance of depth over root depth: 0.647 at 4000, 0.647 at 16000, 0.654 at 64000, 0.653 at 128000
+   corrections to D. The mean of a band is taken at the random places of its points, which adds (variance at one end + variance at the other) / (band x step) to D: 0.0009 here (band 100, step 4000).
+      A band 100 thick averages the walk over its thickness, which multiplies D by 1 - band / (3 x step) = 0.9917. With both: D = 1.081, and 0.600 D = 0.649.
+      at 64000: the variance measured about each window's own mean is 190.03; the equation gives 0.600 D sqrt(depth) = 188.55 for the whole line, less D y / period = 2.10 for the ring's own mean: 186.45. Predicted over measured: 0.981
+      at 128000: the variance measured about each window's own mean is 268.25; the equation gives 0.600 D sqrt(depth) = 266.65 for the whole line, less D y / period = 4.20 for the ring's own mean: 262.45. Predicted over measured: 0.978
+   a random walk? D from steps of 500: 1.025 (4944 changes), 1000: 1.062 (2472 changes), 2000: 1.058 (1236 changes), 4000: 1.073 (618 changes), 8000: 1.025 (309 changes), 16000: 1.067 (141 changes)
+      with the two corrections above made at each step: 500: 1.090, 1000: 1.095, 2000: 1.074, 4000: 1.081, 8000: 1.029, 16000: 1.069
+
+E. The slabs of the second batch (12 windows)
+   skewness and excess of kurtosis of the column means, every second slab (mean over the windows and its standard error):
+      127996: -0.080 (0.050)   -0.031 (0.075)
+      107631: -0.063 (0.037)   -0.088 (0.061)
+       90507: -0.060 (0.043)   -0.029 (0.052)
+       76107: -0.038 (0.036)   -0.124 (0.091)
+       63998: -0.003 (0.052)   -0.128 (0.087)
+       53816: +0.016 (0.036)   -0.056 (0.066)
+       45253: -0.030 (0.024)   -0.130 (0.057)
+       38053: +0.014 (0.038)   -0.123 (0.048)
+       31999: +0.039 (0.042)   -0.045 (0.066)
+       26908: +0.089 (0.038)   +0.107 (0.078)
+       22627: +0.037 (0.026)   +0.064 (0.055)
+       19027: +0.048 (0.050)   +0.141 (0.075)
+       16000: +0.021 (0.044)   -0.032 (0.077)
+       13454: +0.001 (0.028)   +0.071 (0.072)
+       11313: -0.025 (0.031)   +0.168 (0.068)
+        9513: -0.012 (0.025)   +0.060 (0.046)
+        8000: -0.018 (0.027)   +0.055 (0.037)
+        6727: -0.005 (0.030)   -0.012 (0.043)
+        5657: -0.007 (0.028)   +0.000 (0.046)
+        4757: +0.011 (0.025)   -0.006 (0.051)
+        4000: +0.019 (0.019)   +0.011 (0.053)
+        3363: -0.020 (0.015)   +0.005 (0.033)
+        2828: -0.020 (0.018)   +0.021 (0.045)
+        2378: -0.004 (0.023)   -0.018 (0.033)
+        2000: +0.016 (0.014)   +0.004 (0.052)
+        1682: +0.004 (0.024)   -0.009 (0.026)
+        1414: +0.022 (0.019)   +0.024 (0.031)
+        1189: +0.021 (0.013)   -0.025 (0.026)
+        1000: +0.036 (0.018)   -0.020 (0.022)
+         841: +0.023 (0.015)   +0.005 (0.022)
+         707: +0.006 (0.015)   -0.016 (0.016)
+         595: +0.010 (0.017)   -0.006 (0.026)
+         500: -0.000 (0.013)   -0.007 (0.020)
+         420: -0.000 (0.010)   -0.013 (0.026)
+         354: +0.007 (0.010)   +0.028 (0.030)
+         297: +0.001 (0.011)   +0.049 (0.022)
+         250: -0.010 (0.012)   -0.009 (0.015)
+   skewness over the slabs from 1000 to under 4000 (16 slabs): +0.0067 (0.0101, from the 12 windows)
+   skewness over the slabs from 4000 to under 16000 (16 slabs): -0.0052 (0.0214, from the 12 windows)
+   skewness over the slabs from 16000 to under 64000 (17 slabs): +0.0270 (0.0278, from the 12 windows)
+   skewness over the slabs from 64000 to under 128000 (8 slabs): -0.0596 (0.0330, from the 12 windows)
+   the mean square difference between columns r apart, over twice the variance times the shape 1 - exp(-s^2) + s sqrt(pi) erfc(s), s = r / sqrt(8 y / 3):
+      height        4      6      8     12     16     24     32     48     64     96    128    192    256    384    512    768   1024   1536   2048   3072   4096   6144   8192
+      127996    0.789  0.861  0.899  0.937  0.954  0.973  0.983  0.997  1.001  1.000  0.998  1.008  1.024  1.036  1.034  0.999  0.978  0.996  0.977  1.038  1.001  1.058  0.980
+       63998    0.759  0.829  0.866  0.906  0.926  0.949  0.961  0.970  0.972  0.976  0.968  0.973  0.980  0.997  0.999  0.989  1.014  0.986  0.993  1.049  1.014  1.037  0.975
+       31999    0.770  0.838  0.875  0.913  0.932  0.950  0.959  0.971  0.978  0.983  0.991  0.998  1.008  1.001  0.994  1.010  1.009  1.003  1.018  1.018  1.006  1.008  0.992
+       16000    0.767  0.836  0.873  0.910  0.929  0.947  0.954  0.964  0.966  0.974  0.987  1.002  0.995  0.987  0.998  1.036  0.994  0.984  1.016  1.021  1.013  1.009  0.997
+        8000    0.763  0.834  0.871  0.910  0.929  0.947  0.955  0.968  0.975  0.990  1.000  1.020  1.016  0.994  0.998  1.002  1.010  1.013  0.990  1.017  1.012  0.984  1.011
+        4000    0.766  0.835  0.872  0.908  0.926  0.943  0.951  0.960  0.971  0.984  0.987  1.008  1.002  1.007  0.991  1.006  1.015  1.010  1.011  0.997  1.012  0.980  1.012
+        2000    0.780  0.853  0.892  0.931  0.952  0.975  0.987  1.001  1.009  1.014  1.004  0.998  0.998  1.015  0.990  1.002  1.003  1.007  1.009  1.007  1.009  0.993  1.001
+        1000    0.811  0.882  0.919  0.957  0.975  0.994  1.005  1.017  1.017  1.005  1.001  1.004  1.008  1.004  1.001  1.005  1.012  0.992  1.002  1.006  1.012  0.990  1.002
+   over all 57 slabs from 1000 up and every distance from 48 to 8192: the measured value is furthest from the predicted, by +0.079 of it, at height 107631 and 6144 apart
+   the reach as a power of the height over 1002 to 127998: exponent 0.496 (one half for this kind of front, two thirds for the other); the smoothing constant it implies, (reach / 0.3497)^2 / (8 y): 0.323 at 127998, 0.356 at 64000, 0.344 at 32001, 0.356 at 16002, 0.358 at 8002, 0.370 at 4002, 0.350 at 2002, 0.344 at 1002
+   variance of the column means of a slab against the variance of depth in the bands at the same height (the same windows): 267.7 and 268.3 at 127996, 195.2 and 195.6 at 63998, 136.6 and 136.8 at 31999, 96.5 and 96.9 at 16000, 68.8 and 69.2 at 8000, 48.2 and 48.6 at 4000, 33.7 and 34.1 at 2000, 22.6 and 22.9 at 1000

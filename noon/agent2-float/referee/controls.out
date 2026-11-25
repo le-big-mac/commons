@@ -1,0 +1,50 @@
+(a) author's height() against referee Decimal closed form
+   300 random directions (all components > 2e-3), densities 0.02-0.98: largest difference 5.95e-15
+   TINY: directions with one component just under / over 1e-4 (after normalising)
+     d=0.10 up~(1,0.3,c): error with c=0.99e-4: -1.20e-09 ; with c=1.01e-4: -5.00e-16
+     d=0.10 up~(1,1,c): error with c=0.99e-4: -1.51e-10 ; with c=1.01e-4: +3.17e-14
+     d=0.10 up~(1,0.05,c): error with c=0.99e-4: -1.88e-09 ; with c=1.01e-4: -1.83e-15
+     d=0.22 up~(1,0.3,c): error with c=0.99e-4: -2.74e-11 ; with c=1.01e-4: +3.47e-14
+     d=0.22 up~(1,1,c): error with c=0.99e-4: +1.92e-10 ; with c=1.01e-4: +3.53e-14
+     d=0.22 up~(1,0.05,c): error with c=0.99e-4: +5.26e-11 ; with c=1.01e-4: +1.87e-14
+     d=0.30 up~(1,0.3,c): error with c=0.99e-4: +2.80e-10 ; with c=1.01e-4: +1.61e-15
+     d=0.30 up~(1,1,c): error with c=0.99e-4: +1.85e-10 ; with c=1.01e-4: +4.16e-14
+     d=0.30 up~(1,0.05,c): error with c=0.99e-4: +3.52e-10 ; with c=1.01e-4: +2.10e-13
+     d=0.50 up~(1,0.3,c): error with c=0.99e-4: +3.56e-10 ; with c=1.01e-4: +3.67e-14
+     d=0.50 up~(1,1,c): error with c=0.99e-4: +2.02e-14 ; with c=1.01e-4: +6.00e-14
+     d=0.50 up~(1,0.05,c): error with c=0.99e-4: +4.07e-10 ; with c=1.01e-4: +5.70e-13
+   TINY near face up (two small components 0.9e-4, 0.5e-4): error +3.83e-10
+
+(b) is_local_min: dependence on test radius and on where the 36 points sit
+   author's height(), radius 0.0200: corner up 'local minimum from' 0.169037 ; face up 'until' 0.211354
+   author's height(), radius 0.0100: corner up 'local minimum from' 0.167839 ; face up 'until' 0.211332
+   author's height(), radius 0.0030: corner up 'local minimum from' 0.167016 ; face up 'until' 0.211325
+   author's height(), radius 0.0010: corner up 'local minimum from' 0.166784 ; face up 'until' 0.211323
+   author's height(), radius 0.0003: corner up 'local minimum from' 0.166714 ; face up 'until' 0.211255
+   edge up at d=0.5, author's test as written: is_local_min = False
+     36 points rotated by 0 deg: edge up at 0.5 passes as local minimum: False ; at 0.495: False ; at 0.49: False
+     36 points rotated by 1 deg: edge up at 0.5 passes as local minimum: False ; at 0.495: False ; at 0.49: False
+     36 points rotated by 2 deg: edge up at 0.5 passes as local minimum: False ; at 0.495: False ; at 0.49: False
+     36 points rotated by 3 deg: edge up at 0.5 passes as local minimum: False ; at 0.495: False ; at 0.49: False
+     36 points rotated by 4 deg: edge up at 0.5 passes as local minimum: False ; at 0.495: False ; at 0.49: False
+     36 points rotated by 5 deg: edge up at 0.5 passes as local minimum: True ; at 0.495: False ; at 0.49: False
+     36 points rotated by 6 deg: edge up at 0.5 passes as local minimum: True ; at 0.495: False ; at 0.49: False
+     36 points rotated by 7 deg: edge up at 0.5 passes as local minimum: True ; at 0.495: True ; at 0.49: False
+     36 points rotated by 8 deg: edge up at 0.5 passes as local minimum: True ; at 0.495: False ; at 0.49: False
+     36 points rotated by 9 deg: edge up at 0.5 passes as local minimum: True ; at 0.495: False ; at 0.49: False
+     rotated by 4 deg: grid densities where edge up passes: []
+     rotated by 5 deg: grid densities where edge up passes: [0.5]
+     rotated by 6 deg: grid densities where edge up passes: [0.5]
+     with 360 points instead of 36 (as written otherwise): grid densities where edge up passes: []
+
+(c) the sliver: advantage of the diagonal-plane tilt over the surviving ties, Decimal 60 digits, and the author's double precision
+   d=0.2266: diag tilt 17.7957 deg; referee: h - ring = -6.258e-14 ; author's height(): h(diag) - h(ring point at azimuth 17 deg) = -6.262e-14 ; corner - diag = +4.442e-05
+   d=0.2267: diag tilt 17.8487 deg; referee: h - ring = -3.241e-12 ; author's height(): h(diag) - h(ring point at azimuth 17 deg) = -3.241e-12 ; corner - diag = +2.920e-05
+   d=0.2268: diag tilt 17.9015 deg; referee: h - ring = -2.247e-11 ; author's height(): h(diag) - h(ring point at azimuth 17 deg) = -2.247e-11 ; corner - diag = +1.402e-05
+   d=0.22685: diag tilt 17.9278 deg; referee: h - ring = -4.519e-11 ; author's height(): h(diag) - h(ring point at azimuth 17 deg) = -4.519e-11 ; corner - diag = +6.452e-06
+   d=0.22689: diag tilt 17.9489 deg; referee: h - ring = -7.311e-11 ; author's height(): h(diag) - h(ring point at azimuth 17 deg) = -7.311e-11 ; corner - diag = +4.046e-07
+   d=0.226892677: diag tilt 17.9503 deg; referee: h - ring = -7.535e-11 ; author's height(): h(diag) - h(ring point at azimuth 17 deg) = -7.535e-11 ; corner - diag = +1.175e-10
+
+(e) water plane at d=0.5 corner up (referee clipping): side lengths of the section polygon
+   d=0.5 (plane through centre): [0.707107, 0.707107, 0.707107, 0.707107, 0.707107, 0.707107]
+   d=0.3: [0.4565, 0.9577, 0.4565, 0.9577, 0.4565, 0.9577] (irregular hexagon, level approximate)

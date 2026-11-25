@@ -1,0 +1,50 @@
+// ctest.js -- tests of ccore.js.    node ctest.js
+'use strict';
+const C = require('./ccore.js'), N = 400; let pass = 0, fail = 0;
+const ok = (name, cond, extra) => { if (cond) pass++; else fail++; console.log((cond ? 'ok    ' : 'FAIL  ') + name + (extra !== undefined ? ': ' + extra : '')); };
+const draw = (seed, n) => { const r = C.rng(seed); return C.resample(C.randomCurve(r, n, 6, 1.5, N), N); };
+const curves = []; for (let s = 1; s <= 300; s++) { const n = (s % 7) - 3; curves.push([n, draw(5000 + s, n)]); }
+// 1. resample: equal steps, the length kept
+{ let good = 0; for (const [n, p] of curves.slice(0, 60)) { const e = p.map((q, i) => Math.hypot(p[(i + 1) % N][0] - q[0], p[(i + 1) % N][1] - q[1])), q2 = C.resample(p, 200); if (Math.max(...e) / Math.min(...e) < 1.02 && Math.abs(C.length(q2) / C.length(p) - 1) < 0.01) good++; }
+  ok('resample(): 400 steps equal to within 2 in a hundred, and the length kept to 1 in a hundred when halved to 200 steps', good === 60, good + ' of 60'); }
+// 2. the turning number against two other ways of counting it
+{ const upcross = p => { let c = 0; for (let i = 0; i < N; i++) { const a = p[i], b = p[(i + 1) % N], d = p[(i + 2) % N], y0 = b[1] - a[1], y1 = d[1] - b[1], x0 = b[0] - a[0], x1 = d[0] - b[0]; if (x0 > 0 && x1 > 0) { if (y0 < 0 && y1 >= 0) c++; else if (y0 >= 0 && y1 < 0) c--; } } return c; };
+  let g1 = 0, g2 = 0; for (const [n, p] of curves) { if (C.turning(p) === n && upcross(p) === n) g1++; if (C.theorem2(p).n === n) g2++; }
+  ok('turning(): the number asked for, and the number of times the direction passes due east upward less downward', g1 === 300, g1 + ' of 300');
+  ok('theorem2(): Whitney\'s count by crossings from the lowest point gives the turning number', g2 === 300, g2 + ' of 300'); }
+ok('turning() of the standard curves -3 to 3, and their crossings 2, 1, 0, 1, 0, 1, 2', [-3, -2, -1, 0, 1, 2, 3].every(n => C.turning(C.standard(n, N)) === n) && [-3, -2, -1, 0, 1, 2, 3].map(n => C.crossings(C.standard(n, N)).length).join() === '2,1,0,1,0,1,2');
+{ let good = 0; for (const [n, p] of curves.slice(0, 100)) if (C.turning(C.rotate(p, 1.234)) === n && C.turning(C.shift(p, 137)) === n && C.turning(C.mirror(p)) === -n && C.turning(p.slice().reverse()) === -n && C.turning(p.map(q => [3 * q[0] + 5, 3 * q[1] - 2])) === n) good++;
+  ok('turning(): unchanged by turning, moving, enlarging and beginning elsewhere; reversed by a mirror and by going the other way', good === 100, good + ' of 100'); }
+// 3. crossings against a second routine (signs of areas), and their parity
+{ const orient = (a, b, c) => Math.sign((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0])); let good = 0, par = 0;
+  for (const [n, p] of curves.slice(0, 120)) { let c = 0; for (let i = 0; i < N; i++) for (let j = i + 2; j < N; j++) { if (i === 0 && j === N - 1) continue; const a = p[i], b = p[(i + 1) % N], d = p[j], e = p[(j + 1) % N]; if (orient(a, b, d) * orient(a, b, e) < 0 && orient(d, e, a) * orient(d, e, b) < 0) c++; }
+    const mine = C.crossings(p); if (mine.length === c) good++; if ((c + n) % 2 !== 0) par++; }
+  ok('crossings(): the same number as a second routine finds', good === 120, good + ' of 120'); ok('crossings plus turning number is odd', par === 120, par + ' of 120'); }
+// 4. Whitney's deformation
+{ let good = 0, closed = 0, ends = 0, least = 1, farthest = 0; const far = (p, q) => { const cp = C.centroid(p), cq = C.centroid(q); return Math.max(...p.map((a, i) => Math.hypot(a[0] - cp[0] - q[i][0] + cq[0], a[1] - cp[1] - q[i][1] + cq[1]))); };
+  for (const [n, p] of curves.slice(0, 150)) { const A = C.shape(p), B = C.shape(C.standard(n, N)); let same = true, shut = true; for (const u of [0.1, 0.3, 0.5, 0.7, 0.9]) { const w = C.whitney(A, B, u); if (C.turning(w.pts) !== n) same = false; if (w.gap > 1e-9) shut = false; if (n !== 0 && w.least < least) least = w.least; }
+    good += same; closed += shut; const f0 = far(C.whitney(A, B, 0).pts, A.pts) / A.L, f1 = far(C.whitney(A, B, 1).pts, B.pts) / B.L; farthest = Math.max(farthest, f0, f1); if (f0 < 0.002 && f1 < 0.002) ends++; }
+  ok('whitney(): the turning number kept at five moments', good === 150, good + ' of 150'); ok('whitney(): the curve closes at every moment', closed === 150, closed + ' of 150');
+  ok('whitney(): it begins at the first curve and ends at the second, to within a five-hundredth part of their lengths (its steps are exactly equal; the polygons\' are equal to 2 in a hundred)', ends === 150, ends + ' of 150; the farthest ' + farthest.toExponential(1) + ' of a length'); ok('whitney(): for turning numbers other than 0 the least speed stays above a half', least > 0.5, least.toFixed(3)); }
+{ let threw = 0; try { C.whitney(C.shape(C.standard(1, N)), C.shape(C.standard(0, N)), 0.5); } catch (e) { threw++; } try { C.whitney(C.shape(C.standard(1, N)), C.shape(C.standard(1, 200)), 0.5); } catch (e) { threw++; } ok('whitney() refuses two curves of different turning numbers, and of different numbers of points', threw === 2); }
+// 5. the figure of eight and its mirror image; the laying of the target
+{ const E = C.shape(C.standard(0, N)), M = C.shape(C.mirror(E.pts)), w = C.whitney(E, M, 0.5), L = C.lay(E, M.pts);
+  ok('the bare formula shrinks a figure of eight to a point half way to its mirror image', w.least < 1e-9 && C.length(w.pts) < 1e-9, w.least.toExponential(1)); ok('lay(): with the target laid well the same pair keeps its speed above a half', L.clear > 0.5 && L.shape.n === 0, L.clear.toFixed(3));
+  let better = 0, cnt = 0, worst = 1; for (const [n, p] of curves) { if (n !== 0) continue; cnt++; const A = C.shape(p), S = C.standard(0, N), l = C.lay(A, S); if (l.clear >= C.clearance(A, C.shape(S)) - 1e-12) better++; if (l.clear < worst) worst = l.clear; }
+  ok('lay(): never worse than the target as it stands, for curves of turning number 0', better === cnt && cnt > 30, better + ' of ' + cnt + '; the least clearance ' + worst.toFixed(3)); }
+// 6. the plain way and its kinks
+{ let sum = 0, dip = 0, withK = 0, calm = 0, without = 0, ends = 0;
+  for (let s = 0; s < 300; s += 2) { const [n0, p] = curves[s], [n1, q] = curves[s + 1], A = C.shape(p), B = C.shape(q), k = C.kinks(A, B); if (k.reduce((t, x) => t + x.sense, 0) === n1 - n0) sum++;
+    if (k.length) { withK++; let least = 1; for (let d = -4; d <= 4; d++) least = Math.min(least, C.straight(A, B, k[0].u + d * 0.0005).least); if (least < 0.08) dip++; }
+    else { without++; let same = true; for (let i = 1; i < 50; i++) if (C.turning(C.straight(A, B, i / 50).pts) !== n0) same = false; if (same) calm++; }
+    const a0 = C.straight(A, B, 0).pts, b1 = C.straight(A, B, 1).pts; if (a0.every((x, i) => x[0] === A.pts[i][0] && x[1] === A.pts[i][1]) && b1.every((x, i) => x[0] === B.pts[i][0] && x[1] === B.pts[i][1])) ends++; }
+  ok('kinks(): counted with their senses they add up to the difference of the turning numbers', sum === 150, sum + ' of 150');
+  ok('kinks(): where there are any, the plain way\'s least speed falls below 0.08 at their moment', dip === withK && withK > 100, dip + ' of ' + withK);
+  for (let s = 0; s < 60; s++) { const [n0, p] = curves[s], A = C.shape(p), B = C.shape(C.rotate(p.map(q => [1.3 * q[0], 1.3 * q[1]]), 0.2 + 0.04 * s)), k = C.kinks(A, B); if (k.length) continue; without++; let same = true; for (let i = 1; i < 50; i++) { const w = C.straight(A, B, i / 50); if (C.turning(w.pts) !== n0 || w.least < 0.05) same = false; } if (same) calm++; }
+  ok('kinks(): where there are none (a curve and itself enlarged and turned by 0.2 to 2.56 radians), the plain way keeps the turning number and a speed above 0.05 at 49 moments', calm === without && without >= 50, calm + ' of ' + without); ok('straight(): begins at the first curve and ends at the second', ends === 150, ends + ' of 150'); }
+ok('kinks(): the plain circle to the figure of eight has an odd number, to the double loop an odd number, to itself turned a quarter none', C.kinks(C.shape(C.standard(1, N)), C.shape(C.standard(0, N))).length % 2 === 1 && C.kinks(C.shape(C.standard(1, N)), C.shape(C.standard(2, N))).length % 2 === 1 && C.kinks(C.shape(C.standard(1, N)), C.shape(C.rotate(C.standard(1, N), 1.5708))).length === 0);
+{ const star = [0, 1, 2, 3, 4].map(k => [Math.cos(C.TAU * 2 * k / 5 + 0.3), Math.sin(C.TAU * 2 * k / 5 + 0.3)]); ok('crossings(): a five-pointed star drawn in one stroke has 5 crossings and turning number 2 (its edges two apart cross)', C.crossings(star).length === 5 && C.turning(star) === 2, C.crossings(star).length + ', ' + C.turning(star)); }
+{ let good = 0; for (const [n, p] of curves.slice(0, 40)) { const A = C.shape(p), B = C.shape(C.rotate(p, -3)), w = C.whitney(A, B, 0.5).pts, short = C.rotate(p, -1.5), c1 = C.centroid(w), c2 = C.centroid(short); let far = 0; for (let i = 0; i < N; i++) far = Math.max(far, Math.hypot(w[i][0] - c1[0] - short[i][0] + c2[0], w[i][1] - c1[1] - short[i][1] + c2[1])); if (far < 0.002 * A.L) good++; }
+  ok('whitney(): to the same curve turned by 3 radians it goes the short way round: half way it is the curve turned by 1.5', good === 40, good + ' of 40'); }
+ok('rng(): the same seed gives the same curve, another seed another', JSON.stringify(draw(9, 1)) === JSON.stringify(draw(9, 1)) && JSON.stringify(draw(9, 1)) !== JSON.stringify(draw(10, 1)));
+console.log('\n' + pass + ' pass, ' + fail + ' fail'); process.exit(fail ? 1 : 0);

@@ -1,0 +1,41 @@
+REFEREE 4 BLIND RESULTS (written before opening anything in /home/agent2/drum/ except the brief; exact-prediction.md not yet opened either)
+Method: load = 40 equal-width rings, piecewise constant. Search: finite-volume tridiagonal solver (400 cells, analytic gradients),
+sequential-LP trust region + SLSQP minimax polish, 35-125 starts each (discs, rings, random), 75 s per case; best start re-polished on 1600 cells.
+Reported 'exact' miss = piecewise Bessel J/Y matching (root-found), independent of the finite-volume grid.
+
+1. free load, added mass <= 1.43
+   least largest miss found: 0.007675 (exact Bessel matching); 0.007657 on the 1600-cell grid; mass used 1.4300
+   ratios: [1.      1.98469 3.02298 3.00144 4.02454 3.96941 4.96174 5.03838 4.96172]
+   a per ring (ring j covers r in [j/40,(j+1)/40]):
+    [10.53, 10.76, 10.62, 12.21, 7.22, 0.0, 44.61, 0.0, 0.0, 0.95, 14.16, 11.03, 10.29, 21.38, 2.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+   starts tried: 38; best dozen (400-cell miss): [0.007658, 0.007658, 0.007658, 0.007658, 0.007658, 0.007658, 0.007658, 0.007658, 0.007658, 0.007658, 0.007658, 0.007658]
+
+1. free load, added mass <= 12
+   least largest miss found: 0.005302 (exact Bessel matching); 0.005288 on the 1600-cell grid; mass used 12.0000
+   ratios: [1.      1.98943 3.01587 2.98415 4.01413 4.02121 4.97358 4.97375 4.97366]
+   a per ring (ring j covers r in [j/40,(j+1)/40]):
+    [122.85, 111.28, 184.1, 28.46, 0.0, 0.0, 360.54, 0.0, 0.0, 0.0, 129.89, 99.47, 68.43, 64.43, 50.74, 96.68, 0.07, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+   starts tried: 35; best dozen (400-cell miss): [0.005285, 0.005285, 0.005285, 0.005285, 0.005285, 0.005285, 0.005285, 0.005285, 0.005285, 0.005285, 0.005357, 0.005357]
+
+2. load non-increasing outward, added mass <= 12
+   least largest miss found: 0.011986 (exact Bessel matching); 0.011981 on the 1600-cell grid; mass used 12.0000
+   ratios: [1.      1.97604 3.01312 2.96406 4.04793 4.00299 5.05831 5.05992 5.05993]
+   a per ring (ring j covers r in [j/40,(j+1)/40]):
+    [134.83, 75.81, 75.81, 75.81, 75.81, 75.81, 75.81, 75.81, 75.81, 71.14, 52.79, 52.79, 52.79, 52.79, 52.79, 52.79, 52.79, 47.76, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+   starts tried: 125; best dozen (400-cell miss): [0.011979, 0.011979, 0.011979, 0.011979, 0.011979, 0.011979, 0.011979, 0.011979, 0.011979, 0.011979, 0.011979, 0.011979]
+
+Where heavy, where bare:
+ free <=1.43 : heavy disc out to r~0.125 (a~10.5-12), bare gap 0.125-0.15, one very heavy thin ring 0.15-0.175 (a~45),
+               bare/near-bare 0.175-0.25, heavy band 0.25-0.375 (a~10-21), completely bare from r=0.375 to the rim. Cap binds (mass 1.43).
+ free <=12   : heavy disc out to r~0.1 (a~110-185), bare 0.1-0.15, one very heavy thin ring 0.15-0.175 (a~360), bare 0.175-0.25,
+               heavy band 0.25-0.40 (a~50-130), bare from 0.40 to the rim. Cap binds (mass 12).
+ mono <=12   : two piled plateaus: a~75.8 out to r~0.225-0.25, a~52.8 out to r~0.425-0.45, bare beyond 0.45; plus a bump (a~135) in the
+               innermost ring r<0.025. Cap binds (mass 12).
+Trust:
+ - numbers for a given load: good to ~1e-6 in miss (Bessel matching reproduces the bare Bessel zeros to 6 d.p.).
+ - free 1.43: 35 of 38 starts land on the same 0.00766 (400-cell); I trust it as the 40-ring optimum to ~1e-5, not proven global.
+ - free 12: only 10 of 35 starts reach the best; a ladder of local optima 0.00529..0.00559. Least trusted; could be lower.
+ - mono 12: essentially all 125 starts give 0.011979. Trusted as the 40-ring monotone optimum.
+ - all three are 40-equal-ring answers: thin spikes one ring wide say the true (free-shape) optimum wants narrower/denser features, so a
+   finer or free-edged discretisation should go somewhat lower. I did not test other ring counts in the blind step.
+

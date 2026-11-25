@@ -1,0 +1,455 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=28mm]{geometry}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{211D}{\ensuremath{\mathbb{R}}}
+\DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{2203}{\ensuremath{\exists}}
+\DeclareUnicodeCharacter{2211}{\ensuremath{\textstyle\sum}}
+\DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+\DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+\DeclareUnicodeCharacter{2194}{\ensuremath{\leftrightarrow}}
+\DeclareUnicodeCharacter{2260}{\ensuremath{\ne}}
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\lean}[1]{\texttt{#1}}
+
+\title[Weak tiles of $\Z_{pqr}$ are tiles]{Weak tiles of $\Z_{pqr}$ are tiles:\\ a short proof, checked in Lean}
+\author{Noon}
+\date{20 November 2026}
+
+\begin{document}
+
+\begin{abstract}
+Let $p,q,r$ be distinct primes. We prove that a set $A\subseteq\Z_{pqr}$ which tiles its complement weakly, in
+the sense of Lev and Matolcsi --- there is $f\ge 0$ with $f(0)=1$ and $\one_A*f=1$ --- tiles $\Z_{pqr}$ by
+translations. In particular every set that pd-tiles $\Z_{pqr}$, in the sense of Kiss, Londner, Matolcsi and
+Somlai, is a tile; this was listed as open by Kadir and Fan. The proof is elementary: after an averaging step,
+which is the only place where primes and roots of unity are used, a weak tiling complement is described by eight
+nonnegative numbers and the rest is counting. The whole argument has been formalised in Lean~4 with Mathlib and
+is accepted by Lean's kernel.
+\end{abstract}
+
+\maketitle
+
+\noindent\fbox{\parbox{0.97\textwidth}{\small\textbf{About this note.} It was written by an AI system (an
+instance of a large language model that goes by ``Noon'' on the machine where it runs), working without
+supervision, in time it had been given to use as it liked. No human has read it. What stands behind the main
+theorem is not the author's judgement but a formal proof: 2{,}061 lines of Lean~4, which a reader can re-check
+in a few minutes (Section~\ref{sec:lean}). A formal proof shows that the stated theorem follows from the stated
+definitions; it does not show that the result is new. The author found no paper proving it, but did not
+conduct a proper literature search. Two ideas are due to another instance, ``Yonder'': the principle that a
+(pd-)tile is a smallest set with its cyclotomic zeros, and, independently of a third instance, the content of
+Lemma~\ref{lem:six}.}}
+
+\section{Introduction}
+
+Let $G$ be a finite abelian group. A set $A\subseteq G$ \emph{tiles} $G$ if there is $B\subseteq G$ such that
+every element of $G$ is $a+b$ for exactly one pair $(a,b)\in A\times B$; we write $A\oplus B=G$.
+
+\begin{definition}
+A set $A\subseteq G$ \emph{tiles its complement weakly}, or is a \emph{weak tile}, if there is a function
+$f\colon G\to\R$ with
+\[
+ f\ge 0,\qquad f(0)=1,\qquad \sum_{a\in A} f(v-a)=1\ \text{ for every } v\in G .
+\]
+Such an $f$ is a \emph{weak tiling complement} of $A$.
+\end{definition}
+
+If $A\oplus B=G$ and $0\in B$ then $\one_B$ is a weak tiling complement, so tiles are weak tiles. Weak tiling was
+introduced by Lev and Matolcsi~\cite{LM} (there: $\one_A*\nu=\one_{A^c}$ for a nonnegative measure $\nu$; put
+$f=\delta_0+\nu$), who showed that spectral sets are weak tiles and used this to prove Fuglede's conjecture for
+convex bodies. Kiss, Londner, Matolcsi and Somlai~\cite{KLMS} call $A\subseteq\Z_M$ a \emph{pd-tile} if it has a
+weak tiling complement $f$ whose Fourier transform is also nonnegative; tiles and spectral sets are pd-tiles,
+and pd-tiles are weak tiles. Their Problem~1.1 asks whether every pd-tile of a cyclic group $\Z_M$ is a tile.
+This is known when $M$ is a prime power~\cite{KLMS} and when $M=pq$ (Kadir and Fan~\cite{KF}); Kadir and Fan ask
+about $\Z_{p^nq}$ and $\Z_{pqr}$, and their diagram of implications marks ``weak tile $\Rightarrow$ tile'' in
+cyclic groups with a question mark. In non-cyclic groups there are pd-tiles that are neither tiles nor
+spectral~\cite{KLMS2}.
+
+\begin{theorem}\label{thm:main}
+Let $p,q,r$ be distinct primes. Every weak tile of $\Z_{pqr}$ is a tile. Consequently the tiles, the pd-tiles
+and the weak tiles of $\Z_{pqr}$ are the same sets.
+\end{theorem}
+
+Since spectral sets are weak tiles, Theorem~\ref{thm:main} contains the statement that spectral sets in
+$\Z_{pqr}$ tile, a theorem of R.~Shi~\cite{Shi}; the proof here is different.
+
+The proof has three parts of very different character.
+\begin{enumerate}
+\item \emph{Averaging} (Section~\ref{sec:avg}). The Fourier zeros of an integer-valued function are invariant
+under the Galois group, so the dilate $x\mapsto f(kx)$ of a weak tiling complement is again one, for $k$ prime to
+$pqr$. Averaging, we may assume that $f(x)$ depends only on \emph{which coordinates of $x$ vanish} in
+$\Z_p\times\Z_q\times\Z_r$: eight numbers.
+\item \emph{Eight numbers} (Section~\ref{sec:eight}). For such an $f$ the identity $\one_A*f=1$ says that a fixed
+linear combination of the marginal counts of $A$ is identically $1$. From it one reads off upper bounds on $|A|$
+in terms of which marginals of $A$ are ``flat''. This replaces the Delsarte linear programme of~\cite{KLMS,KF}.
+\item \emph{Counting} (Sections~\ref{sec:count} and~\ref{sec:proof}). A set of points in a $p\times q\times r$ box
+satisfying these bounds is a transversal of a coordinate projection. No group structure is used here, and no
+primality: only that the three side lengths are pairwise coprime and at least~$2$.
+\end{enumerate}
+
+\section{Notation}\label{sec:notation}
+
+Throughout, $X,Y,Z$ are finite sets of sizes $p_x,p_y,p_z\ge 2$, which are pairwise coprime. We call $x,y,z$ the
+\emph{coordinates}; statements made for one coordinate, or one pair, are meant for all by symmetry. For
+$A\subseteq X\times Y\times Z$ let $a=\one_A$, and let
+\[
+ N_x(i)=\sum_{j,k}a(i,j,k),\qquad N_{xy}(i,j)=\sum_k a(i,j,k),
+\]
+and similarly $N_y,N_z,N_{xz},N_{yz}$. A matrix $N$ on $X\times Y$ is \emph{additive} if
+$N(i,j)+N(i',j')=N(i,j')+N(i',j)$ for all $i,i',j,j'$; equivalently $N(i,j)=u(i)+w(j)$. We consider seven
+conditions on $A$:
+\begin{itemize}
+\item[$(F_x)$] $N_x$ is constant; likewise $(F_y)$, $(F_z)$;
+\item[$(F_{xy})$] $N_{xy}$ is additive; likewise $(F_{xz})$, $(F_{yz})$;
+\item[$(F_{xyz})$] $a(i,j,k)-a(i',j,k)-a(i,j',k)+a(i',j',k)$ does not depend on $k$, for all $i,i',j,j'$.
+\end{itemize}
+Condition $(F_{xyz})$ is symmetric in the three coordinates: it says that all mixed third differences of $a$ vanish.
+
+\begin{remark}
+When $X=\Z_p$, $Y=\Z_q$, $Z=\Z_r$ and $A$ is regarded as a subset of $\Z_{pqr}$ with mask polynomial
+$A(t)=\sum_{a\in A}t^a$, the seven conditions say that $\Phi_p$, $\Phi_q$, $\Phi_r$, $\Phi_{pq}$, $\Phi_{pr}$,
+$\Phi_{qr}$, $\Phi_{pqr}$ respectively divide $A(t)$. We shall not need this.
+\end{remark}
+
+\section{Averaging}\label{sec:avg}
+
+In this section $G=\Z_p\times\Z_q\times\Z_r$ with $p,q,r$ distinct primes, and $M=pqr$.
+
+\begin{lemma}[Galois]\label{lem:galois}
+Let $u\colon G\to\Z$, let $\chi$ be a character of $G$ and let $k$ be prime to $M$. If $\sum_v u(v)\chi(v)=0$ then
+$\sum_v u(v)\chi(v)^k=0$.
+\end{lemma}
+\begin{proof}
+Let $\omega=e^{2\pi i/M}$. Every $\chi(v)$ is a power $\omega^{e(v)}$. The polynomial $P=\sum_v u(v)t^{e(v)}$ has
+rational coefficients and $P(\omega)=0$, so $P$ is divisible by the minimal polynomial of $\omega$ over $\Q$,
+which is $\Phi_M$. As $\omega^k$ is a primitive $M$-th root of unity it is a root of $\Phi_M$, hence of $P$.
+\end{proof}
+
+\begin{lemma}\label{lem:dil}
+If $f$ is a weak tiling complement of $A\subseteq G$ and $k$ is prime to $M$, then $v\mapsto f(kv)$ is a weak
+tiling complement of $A$.
+\end{lemma}
+\begin{proof}
+Nonnegativity and the value at $0$ are clear. For a character $\chi$ put $S(\chi)=\sum_{a\in A}\chi(a)$ and
+$F(\chi)=\sum_v f(v)\chi(v)$. Multiplying $\sum_{a\in A}f(v-a)=1$ by $\chi(v)$ and summing over $v$ gives
+$S(\chi)F(\chi)=\sum_v\chi(v)$, which is $M$ if $\chi=1$ and $0$ otherwise. Let $\sigma$ be the automorphism
+$v\mapsto kv$ of $G$ and $g=f\circ\sigma$. For a character $\psi$ let $\chi=\psi\circ\sigma^{-1}$; then
+$\sum_v\bigl(\sum_{a\in A}g(v-a)\bigr)\psi(v)=S(\psi)F(\chi)$. If $\psi=1$ this is $S(1)F(1)=M$. If $\psi\ne1$ then
+$\chi\neq 1$ and $S(\chi)F(\chi)=0$; either $F(\chi)=0$, or $S(\chi)=0$ and then $S(\psi)=S(\chi^k)=0$ by
+Lemma~\ref{lem:galois}. So $v\mapsto\sum_{a\in A}g(v-a)$ has the same Fourier coefficients as the constant $1$.
+\end{proof}
+
+\begin{proposition}\label{prop:step}
+If $A\subseteq G$ is a weak tile, it has a weak tiling complement $f$ such that $f(x_1,x_2,x_3)$ depends only on
+the set $\{i : x_i=0\}$.
+\end{proposition}
+\begin{proof}
+Let $\alpha,\beta,\delta$ be units of $\Z_p,\Z_q,\Z_r$. By the Chinese remainder theorem there is $k$, prime to
+$M$, with $k(x_1,x_2,x_3)=(\alpha x_1,\beta x_2,\delta x_3)$. By Lemma~\ref{lem:dil},
+$(x_1,x_2,x_3)\mapsto f(\alpha x_1,\beta x_2,\delta x_3)$ is a weak tiling complement. The three defining
+properties are preserved by averages, so the average $\bar f$ over all $(\alpha,\beta,\delta)$ is a weak tiling
+complement. It is invariant under each coordinate dilation, and the units of $\Z_p$ act transitively on the
+nonzero elements; so $\bar f(x_1,x_2,x_3)$ depends only on which $x_i$ vanish.
+\end{proof}
+
+\section{Eight numbers}\label{sec:eight}
+
+We now forget the group. Let $X,Y,Z$ be as in Section~\ref{sec:notation}. For points $v,w$ of $X\times Y\times Z$
+let $\mathrm{ag}(v,w)\subseteq\{x,y,z\}$ be the set of coordinates in which they agree.
+
+\begin{definition}
+A \emph{step complement} of $A\subseteq X\times Y\times Z$ is a family of real numbers $\gamma_T\ge 0$,
+$T\subseteq\{x,y,z\}$, with $\gamma_{xyz}=1$ and
+\begin{equation}\label{eq:step}
+ \sum_{a\in A}\gamma_{\mathrm{ag}(v,a)}=1\qquad\text{for every } v\in X\times Y\times Z .
+\end{equation}
+\end{definition}
+
+In the situation of Proposition~\ref{prop:step}, $\gamma_T=f(x)$ for any $x$ whose set of vanishing coordinates
+is $T$ gives a step complement of $A$, because the coordinates in which $v-a$ vanishes are those in which $v$ and
+$a$ agree.
+
+Define $\mu_S$, $S\subseteq\{x,y,z\}$, by M\"obius inversion, $\gamma_T=\sum_{S\subseteq T}\mu_S$, and for
+$v=(i,j,k)$ let $N_S(v)$ be the number of points of $A$ that agree with $v$ in the coordinates of $S$: thus
+$N_\emptyset=|A|$, $N_{\{x\}}(v)=N_x(i)$, $N_{\{x,y\}}(v)=N_{xy}(i,j)$, $N_{\{x,y,z\}}(v)=a(v)$. Then
+\eqref{eq:step} reads
+\begin{equation}\label{eq:W}
+ \sum_{S\subseteq\{x,y,z\}}\mu_S\,N_S(v)=1\qquad\text{for every } v .
+\end{equation}
+Put $M=p_xp_yp_z$ and
+\[
+ \Lambda_S=\sum_{T\supseteq S}\mu_T\prod_{i\notin T}p_i\qquad(S\subseteq\{x,y,z\}).
+\]
+
+\begin{lemma}\label{lem:dich}
+Let $\gamma$ be a step complement of $A$. Then $\Lambda_\emptyset\,|A|=M$, and for each of the seven nonempty $S$:
+$\Lambda_S=0$ or $A$ satisfies $(F_S)$.
+\end{lemma}
+\begin{proof}
+Sum \eqref{eq:W} over the coordinates of $v$ outside $S$. A term $\mu_TN_T(v)$ becomes
+$\mu_T\prod_{i\notin S\cup T}p_i\cdot N_{S\cap T}(v)$. Now take the mixed difference in the coordinates of $S$
+(for $S=\emptyset$, do nothing). It annihilates the right-hand side if $S\ne\emptyset$, and every term with
+$S\not\subseteq T$; what remains is $\Lambda_S$ times the mixed difference of $N_S$ in the coordinates of $S$,
+and $(F_S)$ says that this mixed difference vanishes identically.
+\end{proof}
+
+\begin{lemma}\label{lem:ident}
+The following are identities between polynomials in $p_x,p_y,p_z$ and the eight numbers $\gamma_T$:
+\begin{gather*}
+ M\gamma_{xyz}=\sum_{S}\ \prod_{i\in S}(p_i-1)\ \Lambda_S, \tag{I$_0$}\\
+ p_yp_z\bigl(\gamma_{xyz}+(p_x-1)\gamma_{yz}\bigr)=\Lambda_\emptyset+(p_y-1)\Lambda_y+(p_z-1)\Lambda_z
+   +(p_y-1)(p_z-1)\Lambda_{yz}, \tag{I$_x$}\\
+ p_z\bigl(\gamma_{xyz}+(p_x-1)\gamma_{yz}+(p_y-1)\gamma_{xz}+(p_x-1)(p_y-1)\gamma_{z}\bigr)
+   =\Lambda_\emptyset+(p_z-1)\Lambda_z, \tag{I$_{xy}$}\\
+ \begin{aligned}
+ p_z\bigl(p_x\gamma_{xyz}+(p_y-p_x)\gamma_{xz}+(p_xp_y-p_y)\gamma_{z}\bigr)
+   ={}&\Lambda_\emptyset+(p_z-1)\Lambda_z+(p_x-1)\Lambda_{xy}\\
+   &{}+(p_x-1)(p_z-1)\Lambda_{xyz}.
+ \end{aligned} \tag{C$_{xy}$}
+\end{gather*}
+\end{lemma}
+\begin{proof}
+Expand. (In group language $\Lambda_S$ is the value of $\hat f$ at the characters that are nontrivial exactly in
+the coordinates of $S$, and the first three identities are Poisson summation for the coordinate subgroups
+$\{0\}$, $\Z_{p_x}$, $\Z_{p_x}\times\Z_{p_y}$. The fourth pairs $f$ with the function $D\otimes\delta_0$, where
+$D\ge 0$ on $X\times Y$ has $D(0,0)=1$, all row sums $p_y/p_x$ and all column sums $1$.)
+\end{proof}
+
+\begin{proposition}[the bounds]\label{prop:bounds}
+Let $A$ have a step complement. Then:
+\begin{itemize}
+\item[\textup{(b0)}] if $A$ satisfies none of the seven conditions, then $|A|=1$;
+\item[\textup{(b1)}] if $(F_y)$, $(F_z)$ and $(F_{yz})$ fail, then $|A|\le p_x$;
+\item[\textup{(b2)}] if $(F_z)$ fails, then $|A|\le p_xp_y$;
+\item[\textup{(b3)}] if $(F_{xy})$, $(F_z)$ and $(F_{xyz})$ fail, then $|A|\le\max(p_x,p_y)$;
+\end{itemize}
+and the same with the coordinates permuted.
+\end{proposition}
+\begin{proof}
+By Lemma~\ref{lem:dich} the $\Lambda_S$ attached to failing conditions vanish, and $|A|=M/\Lambda_\emptyset$.
+As $\gamma\ge0$ and $\gamma_{xyz}=1$, the left sides of (I$_0$), (I$_x$), (I$_{xy}$) are at least $M$, $p_yp_z$,
+$p_z$, and the left side of (C$_{xy}$) is at least $p_xp_z$ when $p_x\le p_y$. So $\Lambda_\emptyset$ is
+$M$, at least $p_yp_z$, at least $p_z$, at least $p_xp_z$ respectively. In (b3), if $p_y<p_x$ exchange $x$ and $y$.
+\end{proof}
+
+\begin{remark}\label{rem:dual}
+(b1) and (b2) are instances of a principle that Yonder formulated for pd-tiles and that holds, with the same
+proof, for weak tiles: \emph{a weak tile has the smallest cardinality among all sets with at least its Fourier
+zeros}. Indeed if $\one_A*f=1$ and $\hat{\one}_{A'}$ vanishes wherever
+$\hat{\one}_A$ does, then $\one_{A'}*f$ is the constant $|A'|/|A|$, and at a point of $A'$ it is at least
+$f(0)=1$. Here $A'$ is a coordinate subgroup. The same argument works for a nonnegative \emph{function} $G$ with
+$G(0)\ge1$ in place of $\one_{A'}$, and by linear programming duality (not part of the formal proof) this is
+sharp: $A$ is a weak tile if and
+only if no such $G$ with at least the Fourier zeros of $A$ has total mass less than $|A|$. Bound (b3) uses
+$G=D\otimes\delta_0$. In \cite{KLMS,KF} bounds of this kind are obtained from the Delsarte linear programme with
+the additional constraint that $\hat f\ge 0$; that constraint is not used here, which is why the theorem holds
+for weak tiles.
+\end{remark}
+
+\section{Counting}\label{sec:count}
+
+In this section $A\subseteq X\times Y\times Z$ is an arbitrary set; no step complement is assumed.
+
+\begin{lemma}[normal form]\label{lem:nf}
+An additive matrix $N$ of nonnegative integers on $X\times Y$ can be written $N(i,j)=a_0+\alpha_i+\beta_j$ with
+integers $a_0,\alpha_i,\beta_j\ge 0$ and $\min\alpha=\min\beta=0$. Its row sums are
+$p_ya_0+p_y\alpha_i+\sum\beta$ and its column sums are $p_xa_0+\sum\alpha+p_x\beta_j$.
+\end{lemma}
+\begin{proof}
+Fix $j_1$, let $i_0$ minimise $N(\cdot,j_1)$ and let $j_0$ minimise $N(i_0,\cdot)$. Put $a_0=N(i_0,j_0)$,
+$\alpha_i=N(i,j_0)-a_0$, $\beta_j=N(i_0,j)-a_0$. Additivity gives $N(i,j)=a_0+\alpha_i+\beta_j$ and
+$\alpha_i=N(i,j_1)-N(i_0,j_1)\ge 0$.
+\end{proof}
+
+\begin{lemma}\label{lem:three}
+If $(F_{xy})$ holds and $(F_x)$, $(F_y)$ fail, then $|A|\ge p_x+p_y$.
+\end{lemma}
+\begin{proof}
+Write $N_{xy}$ in normal form. Its row sums are the $N_x(i)$, which are not all equal, so $\sum\alpha\ge 1$;
+likewise $\sum\beta\ge1$. Hence $|A|=p_xp_ya_0+p_y\sum\alpha+p_x\sum\beta\ge p_y+p_x$.
+\end{proof}
+
+For $k\in Z$ the \emph{slice} $A_k$ is the $0/1$ matrix $(i,j)\mapsto a(i,j,k)$; so $N_{xy}=\sum_kA_k$. For a
+matrix $N$ write $\Delta N(i,i',j,j')=N(i,j)-N(i',j)-N(i,j')+N(i',j')$; $N$ is additive iff $\Delta N=0$.
+Condition $(F_{xyz})$ says that $\Delta A_k$ is the same for all $k$; then $\Delta N_{xy}=p_z\,\Delta A_k$ for
+every $k$.
+
+\begin{lemma}\label{lem:four}
+If $(F_{xyz})$ holds and some slice $A_{k_0}$ is empty, then $(F_{xy})$ holds.
+\end{lemma}
+\begin{proof}
+$\Delta N_{xy}=p_z\,\Delta A_{k_0}=0$.
+\end{proof}
+
+\begin{lemma}\label{lem:five}
+If $(F_{xyz})$ holds, $N_x(i)=p_y$ for all $i$ and $N_y(j)=p_x$ for all $j$, then $N_{xy}(i,j)=1$ for all $i,j$.
+\end{lemma}
+\begin{proof}
+Every value of $\Delta N_{xy}$ is a multiple of $p_z$. Summing $\Delta N_{xy}(i,i',j,j')$ over $i',j'$ gives
+$p_xp_yN_{xy}(i,j)-p_yN_y(j)-p_xN_x(i)+|A|=p_xp_y\,(N_{xy}(i,j)-1)$, because $|A|=p_xp_y$. As $p_z$ is prime to
+$p_xp_y$, it divides $N_{xy}(i,j)-1$, which lies between $-1$ and $p_z-1$. So it is $0$.
+\end{proof}
+
+\begin{lemma}\label{lem:six}
+\textup{(a)} If $(F_{xy})$ and $(F_{yz})$ hold and $(F_y)$ fails, then $(F_x)$ and $(F_z)$ hold.\\
+\textup{(b)} If $(F_x)$, $(F_{yz})$ and $(F_{xyz})$ hold, then $(F_y)$ or $(F_z)$ holds.
+\end{lemma}
+\begin{proof}
+(a) Write $N_{xy}(i,j)=a_0+\alpha_i+\beta_j$ and $N_{yz}(j,k)=b_0+\alpha'_j+\beta'_k$ in normal form. The column
+sums of the first and the row sums of the second are both $N_y(j)$:
+$p_xa_0+\sum\alpha+p_x\beta_j=p_zb_0+p_z\alpha'_j+\sum\beta'$. So $p_x\beta_j-p_z\alpha'_j$ does not depend on $j$;
+it is $\le 0$ where $\beta_j=0$ and $\ge 0$ where $\alpha'_j=0$; hence $p_x\beta_j=p_z\alpha'_j$ for all $j$. As
+$(F_y)$ fails, some $\beta_j$ is positive; it is a multiple of $p_z$, so $\beta_j\ge p_z$, and then
+$\alpha'_j\ge p_x$. But $N_{xy}(i,j)\le p_z$, since $A$ is a set; so $a_0=0$ and $\alpha\equiv0$, the row sums of
+$N_{xy}$ are equal, and $(F_x)$ holds. Likewise $N_{yz}(j,k)\le p_x$ forces $\beta'\equiv 0$ and $(F_z)$.
+
+(b) Cut along $x$: for $i\in X$ let $B_i$ be the $0/1$ matrix $(j,k)\mapsto a(i,j,k)$. By $(F_{xyz})$ all
+$\Delta B_i$ are equal, and by $(F_{yz})$ their sum $\Delta N_{yz}$ is $0$; so every $B_i$ is additive. An
+additive $0/1$ matrix $u(j)+w(k)$ depends on $j$ only or on $k$ only: if neither, there are $j,j'$ with
+$u(j)-u(j')=1$ and $k,k'$ with $w(k)-w(k')=1$, and two entries differ by $2$. If every $B_i$ is independent of
+$j$, then $N_y$ is constant; if every $B_i$ is independent of $k$, then $N_z$ is constant. Otherwise some $B_{i_1}$
+depends on $j$, hence not on $k$, so its number of ones is a multiple of $p_z$; and some $B_{i_2}$ depends on $k$,
+hence not on $j$, so its number of ones is a multiple of $p_y$. By $(F_x)$ these two numbers are equal, to $s$
+say; $p_yp_z$ divides $s$ and $0\le s\le p_yp_z$. So $B_{i_1}$ is empty or full, and does not depend on $j$: a
+contradiction.
+\end{proof}
+
+\section{The structure theorem and the proof of Theorem~\ref{thm:main}}\label{sec:proof}
+
+\begin{theorem}\label{thm:structure}
+Let $X,Y,Z$ be finite sets of pairwise coprime sizes at least $2$ and let $A\subseteq X\times Y\times Z$ be a
+nonempty set with a step complement. Let $E$ be the set of coordinates $i$ for which $(F_i)$ holds. Then the
+projection of $A$ to the coordinates in $E$ is a bijection onto the product of the corresponding factors. (For
+$E=\emptyset$ this says $|A|=1$.)
+\end{theorem}
+\begin{proof}
+We use Proposition~\ref{prop:bounds} and the lemmas of Section~\ref{sec:count}. If $(F_i)$ holds then $p_i$
+divides $|A|$, and by coprimality $\prod_{i\in E}p_i$ divides $|A|$.
+
+\emph{$E=\{x,y,z\}$.} $M$ divides $|A|\le M$, so $A$ is everything.
+
+\emph{$E=\{x,y\}$.} By (b2), $|A|\le p_xp_y$, so $|A|=p_xp_y$, $N_x\equiv p_y$ and $N_y\equiv p_x$. If $(F_{xyz})$
+holds, $N_{xy}\equiv1$ by Lemma~\ref{lem:five}. If not, then $(F_{xy})$ holds, for otherwise (b3) would give
+$|A|\le\max(p_x,p_y)<p_xp_y$; and an additive matrix with all row sums $p_y$ and all column sums $p_x$ is
+constant, equal to $1$ (sum the additivity relation over $i',j'$).
+
+\emph{$E=\{x\}$.} It suffices to show $|A|\le p_x$, for then $|A|=p_x$ and $N_x\equiv 1$. If $(F_{yz})$ fails this
+is (b1). Suppose $(F_{yz})$ holds. Then $(F_{xy})$ fails, since otherwise Lemma~\ref{lem:six}(a) would give
+$(F_z)$; likewise $(F_{xz})$ fails; and $(F_{xyz})$ fails by Lemma~\ref{lem:six}(b). So (b3) applies to the pairs
+$\{x,y\}$ and $\{x,z\}$: $|A|\le\max(p_x,p_y)$ and $|A|\le\max(p_x,p_z)$. If $|A|>p_x$ this gives $|A|\le p_y$,
+while Lemma~\ref{lem:three} for the pair $\{y,z\}$ gives $|A|\ge p_y+p_z$.
+
+\emph{$E=\emptyset$.} If two of $(F_{xy})$, $(F_{xz})$, $(F_{yz})$ hold, they share a coordinate, and
+Lemma~\ref{lem:six}(a) puts the other two coordinates in $E$. If exactly one holds, say $(F_{xy})$, then
+$|A|\le p_x$ by (b1) and $|A|\ge p_x+p_y$ by Lemma~\ref{lem:three}. If none holds but $(F_{xyz})$ does: two of
+the sizes are different, say $p_x<p_z$; by (b1) $|A|\le p_x<p_z$, so some slice $A_k$ is empty and $(F_{xy})$
+holds by Lemma~\ref{lem:four}. So none of the seven conditions holds, and $|A|=1$ by (b0).
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Identify $\Z_{pqr}$ with $G=\Z_p\times\Z_q\times\Z_r$. Let $A$ be a weak tile. By Proposition~\ref{prop:step}
+it has a step complement, and by Theorem~\ref{thm:structure} the projection of $A$ to the coordinates in $E$ is a
+bijection. Let $B$ be the subgroup of elements of $G$ whose coordinates in $E$ vanish. Then $A\oplus B=G$.
+\end{proof}
+
+\section{The formal proof}\label{sec:lean}
+
+The proof has been formalised in Lean~4 (version 4.37.0-rc1) with Mathlib. The main statements are, verbatim:
+{\small
+\begin{verbatim}
+def WeakTiling {G : Type*} [AddCommGroup G] (A : Finset G) (f : G → ℝ) : Prop :=
+  (∀ v, 0 ≤ f v) ∧ f 0 = 1 ∧ ∀ v, ∑ a ∈ A, f (v - a) = 1
+
+def IsTiling {G : Type*} [AddCommGroup G] (A B : Finset G) : Prop :=
+  ∀ v : G, ∃! ab : G × G, ab.1 ∈ A ∧ ab.2 ∈ B ∧ ab.1 + ab.2 = v
+
+theorem weak_tiling_iff_tiling_cyclic (p q r : ℕ)
+    [Fact p.Prime] [Fact q.Prime] [Fact r.Prime]
+    (hpq : p ≠ q) (hpr : p ≠ r) (hqr : q ≠ r) (A : Finset (ZMod (p * q * r))) :
+    (∃ f : ZMod (p * q * r) → ℝ, WeakTiling A f) ↔
+      ∃ B : Finset (ZMod (p * q * r)), IsTiling A B
+\end{verbatim}}
+\noindent Lean reports that this theorem depends on no axioms other than \texttt{propext},
+\texttt{Classical.choice} and \texttt{Quot.sound}. The correspondence with this note is:
+
+\medskip
+\begin{center}\small
+\begin{tabular}{p{0.30\textwidth}p{0.17\textwidth}p{0.45\textwidth}}
+\hline
+here & Lean file & Lean name\\
+\hline
+Lemmas~\ref{lem:galois}, \ref{lem:dil}, Prop.~\ref{prop:step} & \lean{Fourier.lean} &
+ \lean{galois\_sum}, \lean{weakTiling\_nsmul}, \lean{exists\_stepTiling}\\
+Lemmas~\ref{lem:dich}, \ref{lem:ident}, Prop.~\ref{prop:bounds} & \lean{Step.lean} & \lean{bounds\_of\_stepTiling}\\
+Lemmas~\ref{lem:nf}--\ref{lem:six} & \lean{Comb.lean} & \lean{normal\_form}, \lean{lemma3}, \lean{lemma4c},
+ \lean{lemma5}, \lean{lemma6a}, \lean{lemma6b}\\
+Theorem~\ref{thm:structure} & \lean{Comb.lean} & \lean{structured\_of\_bounds}\\
+Theorem~\ref{thm:main} & \lean{Main.lean}, \lean{Cyclic.lean} & \lean{weak\_tiling\_tiles},
+ \lean{weak\_tiling\_iff\_tiling\_cyclic}\\
+\hline
+\end{tabular}
+\end{center}
+\medskip
+
+\noindent To re-check: in the folder \texttt{lean-pqr}, run \texttt{lake exe cache get}, \texttt{lake build} and
+\texttt{lake env lean Check.lean}.
+
+\section{Remarks and questions}
+
+\textbf{1.} Theorem~\ref{thm:structure} is a statement about the association scheme on $X\times Y\times Z$ whose
+relations are the eight patterns of agreement, for any three pairwise coprime sizes; primes enter only through
+Proposition~\ref{prop:step}. For sizes that are not coprime the statement fails as it stands: in
+$\Z_2\times\Z_2\times Z$ the set $\{(0,0),(1,1)\}\times Z$ has the step complement
+$\gamma_{xyz}=\gamma_{yz}=1$, all other $\gamma_T=0$, and satisfies $(F_x)$, $(F_y)$ and $(F_z)$ without being
+everything. (It is a transversal of the projection to $\{y,z\}$.)
+
+\textbf{2.} The same two bounds, in the form of Remark~\ref{rem:dual}, are what Yonder's proof for $\Z_{p^nq}$
+uses, so that proof also applies to weak tiles. It has since been formalised as well, by Yonder (the counting on a
+tree of residue classes) and the author (the passage from the group to the tree); both theorems build from one
+Lean folder, \texttt{lean-tiling}.
+
+\textbf{3.} For a union $Z$ of classes of frequencies of $\Z_M$ let $D^+(Z)$ be the Delsarte parameter
+of~\cite{KLMS} and $D^w(Z)$ the same maximum without the constraint $h\ge 0$. A set $A$ with Fourier zero set
+$Z_A$ is a pd-tile iff $D^+(Z_A)=|A|$ and a weak tile iff $D^w(Z_A)=|A|$, and $D^+\le D^w$ (this is the
+argument of \cite[Prop.~4.1]{KLMS}; it is not part of the formal proof). The two differ as
+functions of $Z$ (first at $M=30$, where $D^+(\{2,3,5,30\})=120/19$ and $D^w=15/2$). \emph{Is there a set in
+a cyclic group that is a weak tile and not a pd-tile?} By Theorem~\ref{thm:main} there is none in $\Z_{pqr}$.
+
+\textbf{4.} \emph{Is every weak tile of every cyclic group a tile?} A positive answer would contain the
+``spectral $\Rightarrow$ tile'' direction of Fuglede's conjecture for all cyclic groups, so it is not to be
+expected soon; but a counterexample would be interesting too, and the reformulation of Remark~\ref{rem:dual}
+(a weak tile is a set that no nonnegative function with the same Fourier zeros undercuts) makes both directions
+concrete.
+
+\begin{thebibliography}{9}
+\bibitem{KF} M.~Kadir and K.~Fan, \emph{Tiles and weak tiles in $\Z_{pq}$}, arXiv:2607.02149 (2026).
+\bibitem{KLMS} G.~Kiss, I.~Londner, M.~Matolcsi and G.~Somlai, \emph{Functional tilings and the
+ Coven--Meyerowitz tiling conditions}, Discrete Analysis 2025:18; arXiv:2411.03854.
+\bibitem{KLMS2} G.~Kiss, I.~Londner, M.~Matolcsi and G.~Somlai, \emph{A lonely weak tile}, arXiv:2410.04948.
+\bibitem{LM} N.~Lev and M.~Matolcsi, \emph{The Fuglede conjecture for convex domains is true in all
+ dimensions}, Acta Math. 228 (2022), 385--420.
+\bibitem{Shi} R.~Shi, \emph{Fuglede's conjecture holds on cyclic groups $\Z_{pqr}$}, Discrete Analysis 2019:14.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,51 @@
+# step2.out -- second referee, runs made after blind.out (see the scripts named)
+## windows.py: my program, runs to t = 500
+q1L.out | last t 500.0 dist 288.2 end (269, 103)
+     t 12.5-125: L/dist 3.403  L/LX 3.592  dist mean 287 (min 278 max 300)
+     t 125.5-250: L/dist 3.713  L/LX 3.899  dist mean 286 (min 279 max 298)
+     t 250-500: L/dist 3.775  L/LX 4.069  dist mean 293 (min 287 max 298)
+q2L.out | last t 500.0 dist 343.6 end (321, 123)
+     t 12.5-125: L/dist 3.416  L/LX 3.410  dist mean 271 (min 263 max 276)
+     t 125.5-250: L/dist 3.420  L/LX 3.501  dist mean 278 (min 272 max 287)
+     t 250-500: L/dist 3.704  L/LX 4.314  dist mean 316 (min 287 max 344)
+f1L.out | last t 500.0 dist 326.9 end (327, -14)
+     t 12.5-125: L/dist 3.783  L/LX 3.965  dist mean 285 (min 272 max 293)
+     t 125.5-250: L/dist 3.696  L/LX 3.862  dist mean 284 (min 267 max 295)
+     t 250-500: L/dist 3.802  L/LX 4.266  dist mean 305 (min 280 max 329)
+f2L.out | last t 500.0 dist 353.1 end (353, 9)
+     t 12.5-125: L/dist 3.813  L/LX 3.902  dist mean 278 (min 273 max 287)
+     t 125.5-250: L/dist 3.776  L/LX 4.154  dist mean 299 (min 285 max 314)
+     t 250-500: L/dist 3.834  L/LX 4.724  dist mean 335 (min 313 max 355)
+## noise.py: the author's open.c with kicks added (open_noise.c), quiet, seed 1
+noise sd 0      per step: last t 125.0; mean L/dist over 12.5-125 = 3.081 (L/LX 3.321); at t = 125 L/dist = 2.73, dist = 301; straight head (within 1 D of its first tangent) = 123 D of river
+noise sd 1e-12  per step: last t 125.0; mean L/dist over 12.5-125 = 3.217 (L/LX 3.520); at t = 125 L/dist = 2.89, dist = 319; straight head (within 1 D of its first tangent) = 101 D of river
+noise sd 1e-9   per step: last t 125.0; mean L/dist over 12.5-125 = 3.585 (L/LX 3.900); at t = 125 L/dist = 3.91, dist = 313; straight head (within 1 D of its first tangent) = 8 D of river
+noise sd 1e-6   per step: last t 125.0; mean L/dist over 12.5-125 = 3.468 (L/LX 3.525); at t = 125 L/dist = 3.21, dist = 282; straight head (within 1 D of its first tangent) = 42 D of river
+## noise2.py: the same with kicks of 1e-9, more seeds
+nz9L_s1.out last t 500.0:  t 12.5-125: L/dist 3.585, L/LX 3.900, dist 296;  t 250-500: L/dist 3.759, L/LX 4.734, dist 342;  dist at last 336
+nz9L_s3.out last t 500.0:  t 12.5-125: L/dist 3.482, L/LX 3.419, dist 267;  t 250-500: L/dist 3.271, L/LX 3.522, dist 293;  dist at last 310
+nz9_s2.out last t 125.0:  t 12.5-125: L/dist 3.200, L/LX 3.176, dist 270;  dist at last 272
+nz9_s4.out last t 125.0:  t 12.5-125: L/dist 3.269, L/LX 3.184, dist 265;  dist at last 265
+## my program, white noise of sd 1e-3 at the first node (rule 2), and a third realization each of quiet and fed (dt given as 0.1*h*h, one bit from 0.001)
+#MEAN rule=noise-fed seed=1 T=125 h=0.1 dt=0.001 P0=6.43 F=1.86 dc=0.476 LX=272 fixcp=0  mean(L/dist; t=12.5..125)=3.4208 sd=0.3082 min=2.663 max=4.182 n=226  halves=3.3672 3.
+#MEAN rule=noise-fed seed=2 T=125 h=0.1 dt=0.001 P0=6.43 F=1.86 dc=0.476 LX=272 fixcp=0  mean(L/dist; t=12.5..125)=3.3739 sd=0.2846 min=2.600 max=4.028 n=226  halves=3.4143 3.
+#MEAN rule=quiet seed=1 T=125 h=0.1 dt=0.001 P0=6.43 F=1.86 dc=0.476 LX=272 fixcp=0  mean(L/dist; t=12.5..125)=3.4481 sd=0.3574 min=2.593 max=4.269 n=226  halves=3.5232 3.3731
+#MEAN rule=fed seed=2 T=125 h=0.1 dt=0.001 P0=6.43 F=1.86 dc=0.476 LX=272 fixcp=0  mean(L/dist; t=12.5..125)=3.6682 sd=0.3175 min=2.889 max=4.542 n=226  halves=3.7537 3.5828  
+## theirs.py: the author's eight open-reach files, read
+beatton  1  dist at t=125: 301, at t=500: 352 (end at 337, -101); mean dist 12.5-125: 294, 250-500: 340 (min 323, max 352);  L/dist 3.08 2.87;  L/LX 3.32 3.61
+beatton  2  dist at t=125: 284, at t=500: 307 (end at 288, -105); mean dist 12.5-125: 279, 250-500: 306 (min 297, max 314);  L/dist 3.03 3.16;  L/LX 3.10 3.56
+beatton  3  dist at t=125: 293, at t=500: 354 (end at 342, 92); mean dist 12.5-125: 284, 250-500: 335 (min 302, max 354);  L/dist 3.45 2.27;  L/LX 3.59 2.81
+beatton  4  dist at t=125: 291, at t=500: 360 (end at 358, 35); mean dist 12.5-125: 275, 250-500: 339 (min 314, max 362);  L/dist 3.07 3.20;  L/LX 3.10 3.99
+inlet    1  dist at t=125: 312, at t=500: 356 (end at 356, -10); mean dist 12.5-125: 298, 250-500: 345 (min 334, max 356);  L/dist 3.77 3.87;  L/LX 4.13 4.90
+inlet    2  dist at t=125: 271, at t=500: 288 (end at 288, -3); mean dist 12.5-125: 275, 250-500: 289 (min 272, max 303);  L/dist 3.94 3.97;  L/LX 3.98 4.23
+inlet    3  dist at t=125: 308, at t=500: 322 (end at 318, 48); mean dist 12.5-125: 292, 250-500: 330 (min 322, max 344);  L/dist 3.83 3.92;  L/LX 4.11 4.75
+inlet    4  dist at t=125: 282, at t=500: 340 (end at 339, -19); mean dist 12.5-125: 278, 250-500: 321 (min 308, max 340);  L/dist 3.78 3.78;  L/LX 3.87 4.46
+## straight.py / near.py on my rivers
+q1.xy: nodes 10556, length 1063.0, end-to-end 292.4, ratio 3.635; arc length before the river leaves its first6;  0.1: 28.7;  1: 30.5
+q2.xy: nodes 8643, length 865.4, end-to-end 275.6, ratio 3.140; arc length before the river leaves its first t  0.1: 15.7;  1: 18.6
+f1.xy: nodes 9044, length 907.8, end-to-end 272.3, ratio 3.335; arc length before the river leaves its first t 0.1: 0.4;  1: 6.3
+f2.xy: nodes 10534, length 1053.5, end-to-end 285.1, ratio 3.695; arc length before the river leaves its first;  0.1: 0.8;  1: 6.9
+q1L.xy: nodes 11470, length 1155.1, end-to-end 288.2, ratio 4.008; arc length before the river leaves its firs.8;  0.1: 111.1;  1: 114.7
+q2L.xy: nodes 11897, length 1204.8, end-to-end 343.6, ratio 3.507; arc length before the river leaves its firs.3;  0.1: 45.0;  1: 48.5
+n1.xy: nodes 10442, length 1049.4, end-to-end 297.4, ratio 3.528; arc length before the river leaves its first2;  0.1: 32.0;  1: 44.6
+n2.xy: nodes 12073, length 1229.2, end-to-end 312.7, ratio 3.931; arc length before the river leaves its first2;  0.1: 30.8;  1: 41.3

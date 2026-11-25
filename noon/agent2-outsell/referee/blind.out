@@ -1,0 +1,44 @@
+REFEREE BLIND OUTPUT (written before opening anything but expectations.md), 21:21:24 UTC
+Method: exact step-by-step DP over nA (numpy float64); for g=1,a=1 also Rubin embedding formula by mpmath quadrature (30 digits).
+== part small
+# item 1: P after 1,000 sales, q=1.1, a=1
+g=0     P=0.934008  (sum=1.000000000000)
+g=0.25  P=0.924660  (sum=1.000000000000)
+g=0.5   P=0.870088  (sum=1.000000000000)
+g=0.75  P=0.752939  (sum=1.000000000000)
+g=1     P=0.650686  (sum=1.000000000000)
+g=1.5   P=0.567589  (sum=1.000000000000)
+g=1 a=10 N=1000 P=0.799754
+# item 2: g=1, N=1000
+q=1.1: chance B sold more than 550 = 0.304246; A more than 550 = 0.602742
+least q (step 0.01) with P>=0.9 at N=1000,g=1: q=1.38  P=0.901172; at q=1.37 P=0.896174
+# item 4: formula m*int (1-u^q)^m (1-u)^(m-1) du vs step-by-step at N=2m-1
+q=1.1 m=50: DP=0.599700650119 formula=0.599700650119 diff=+0.00e+00
+q=2.0 m=500: DP=0.996069955463 formula=0.996069955463 diff=+0.00e+00
+q=1.1 m=500: DP=0.650664336431 formula=0.650664336431 diff=+1.11e-16
+q=2.0 m=50: DP=0.965660245312 formula=0.965660245312 diff=+0.00e+00
+even-N check N=1000 q=1.1: formula=0.650685985413 DP=0.650685985413
+== part big
+# item 1: g=1 q=1.1 a=1 N=100000 DP P=0.744173 (sum=1.000000000000)
+   formula 0.5[I(50001,50000)+I(50000,50001)] = 0.744173362
+== part g15
+# item 3: g=1.5 q=1.1: P(100)=0.561675 P(1000)=0.567589 P(10000)=0.569482
+least q (step 0.05) with P>=0.9 at N=10000,g=1.5: q=2.05 P=0.905769; at q=2.0 P=0.897955
+== part five
+# item 5: g=1,q=1.1,a=1; exact formula at huge m (mpmath, 30 digits)
+  m=1e+03 N=2m-1: P=0.665652953
+  m=1e+05 N=2m-1: P=0.756818718
+  m=1e+07 N=2m-1: P=0.830069090
+  m=1e+09 N=2m-1: P=0.884920764
+  m=4e+09 N=2m-1: P=0.898159046
+  m=5e+09 N=2m-1: P=0.900160879
+  m=6e+09 N=2m-1: P=0.901770749
+  m=1e+10 N=2m-1: P=0.906159977
+  m=1e+11 N=2m-1: P=0.923849182
+  real-m root of I(m,m)=0.9: m=4910424222  -> N=2m-1 ~ 9820848443
+  dps=30: I(m0)=0.899999999999760699  I(m0+1000)-I(m0)=1.81363e-9
+  dps=45: I(m0)=0.899999999999760699  I(m0+1000)-I(m0)=1.81363e-9
+  parity: P(2m0)-P(2m0-1) = 9.06813e-13
+  asymptotic E exp(-m^(1-q) W^q) at m0: 0.899999999983
+Item 4 proof sketch: independent exponential clocks; A's m-th sale time = sum Exp(q k), k=1..m = max of m iid Exp(q), cdf (1-e^{-qt})^m; B's = max of m iid Exp(1), density m(1-e^{-t})^{m-1}e^{-t}; after 2m-1 sales A leads iff T_A(m)<T_B(m); u=e^{-t} gives m*int_0^1 (1-u^q)^m (1-u)^{m-1} du. TRUE (and agrees with DP to 1e-16).
+Item 5: least N ~ 9.8208e9 (root m = 4,910,424,222.1, N=2m-1 ~ 9,820,848,443; parity offset about half a step, so least N is within a few sales of that). Trust: high for 4-5 figures (formula proven, checked vs DP to 1e-9 at N=1e5, two precisions agree to 1e-18); not checked: monotonicity of P in N over the whole range (only spot values).

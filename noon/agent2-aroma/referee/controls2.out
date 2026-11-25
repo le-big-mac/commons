@@ -1,0 +1,69 @@
+descriptors: (480, 181) ; values beyond +-1e6 (Noon clips these; the description given to me did not say so): 0
+
+==============================================================================================================
+A. Molecules the forest 'has not seen': identical descriptor rows / same connectivity
+==============================================================================================================
+groups of molecules sharing one connectivity (stereo-isomers of each other): 4 groups, 8 molecules
+groups of molecules with identical descriptor rows: 2 groups, 4 molecules
+     
+     
+     same connectivity: DL-Phenylalanine (fold 4) | L-Phenylalanine (fold 1)
+     same connectivity: Camphor (fold 9) | D-Camphor (fold 6)
+     same connectivity: geraniol (fold 0) | Nerol (fold 0)
+     same connectivity: Neryl acetate (fold 6) | geranyl acetate (fold 6)
+
+==============================================================================================================
+B. Garlic (and fish, pleasantness): 'sulfur yes/no' against the forest, on equal terms
+==============================================================================================================
+GARLIC    forest out-of-fold: Pearson 0.626  Spearman 0.471  R2 +0.377 | sulfur yes/no in-sample Pearson 0.621; put through the same folds (training-fold class means): Pearson 0.617  Spearman 0.145  R2 +0.380
+FISH      forest out-of-fold: Pearson 0.611  Spearman 0.346  R2 +0.357 | sulfur yes/no in-sample Pearson 0.592; put through the same folds (training-fold class means): Pearson 0.580  Spearman 0.105  R2 +0.337
+PLEASANT  forest out-of-fold: Pearson 0.613  Spearman 0.582  R2 +0.376 | sulfur yes/no in-sample Pearson 0.399; put through the same folds (training-fold class means): Pearson 0.393  Spearman 0.139  R2 +0.155
+STRENGTH  forest out-of-fold: Pearson 0.445  Spearman 0.387  R2 +0.185 | sulfur yes/no in-sample Pearson 0.176; put through the same folds (training-fold class means): Pearson 0.155  Spearman 0.048  R2 +0.024
+garlic, forest minus sulfur-alone, resampling molecules (4000x): Pearson difference 2.5%-97.5%: -0.051 to +0.072; Spearman difference +0.230 to +0.423
+garlic forest over fold/forest seeds 0-4: 0.626 0.590 0.598 0.627 0.618 ; sulfur alone through the folds of seeds 0-4: 0.617 0.618 0.604 0.606 0.598
+correlation between the forest's garlic prediction and sulfur yes/no: 0.815
+forest (trained on all) within the 53 sulfur molecules: Pearson 0.258 (95% interval by Fisher z -0.01 to +0.49), Spearman 0.287; over seeds 0-4: 0.26 0.17 0.16 0.26 0.24
+forest (trained on all) within the 427 sulfur-free: Pearson 0.280, Spearman 0.318
+forest trained and tested on sulfur-free only: garlic Pearson 0.307 Spearman 0.322; pleasantness 0.571
+forest trained and tested on the 53 sulfur molecules only: garlic Pearson 0.194
+garlic score: sd among sulfur molecules 5.77 (mean 7.81); sd among sulfur-free 1.55 (mean 1.71); share of garlic variance between the two classes 0.39; within the sulfur class 0.39; within sulfur-free 0.23
+GARLIC    two halves of the panel agree: all 0.671 (ceiling 0.90); among the 53 sulfur molecules 0.730 (ceiling 0.92); among the 427 sulfur-free 0.266 (ceiling 0.65)
+FISH      two halves of the panel agree: all 0.537 (ceiling 0.84); among the 53 sulfur molecules 0.416 (ceiling 0.77); among the 427 sulfur-free 0.358 (ceiling 0.73)
+PLEASANT  two halves of the panel agree: all 0.887 (ceiling 0.97); among the 53 sulfur molecules 0.842 (ceiling 0.96); among the 427 sulfur-free 0.871 (ceiling 0.96)
+referee's own single fact, 'has a two-connected non-aromatic sulfur' (thiol, sulfide, di/trisulfide, thioester; 34 molecules, all among the sulfur ones: 34): Pearson with garlic, all molecules 0.633; through the folds 0.623; among the 53 sulfur molecules 0.377; with fish, all 0.619; with pleasantness -0.364
+garlic without the two people who move every slider (52, 48): sulfur alone 0.623; forest 0.625; forest among sulfur-free 0.301; top-20 with sulfur 18
+garlic as 'share of smellers who touched the slider': sulfur alone 0.628; forest 0.652 (Spearman: sulfur 0.419, forest 0.493)
+among sulfur-free molecules, garlic score against: mean of the other 19 words -0.18; decayed 0.32; burnt 0.29; fish 0.47; strength -0.17; pleasant -0.41; share smelled -0.21 (Pearson)
+
+==============================================================================================================
+D. Dilution and the model
+==============================================================================================================
+can the forest tell from the structure which dilution the experimenters chose? log10(stronger dilution) out-of-fold Pearson 0.582; share of the panel that smelled it: 0.441
+PLEASANT  forest within stratum: 1/10 (n=134): 0.570; 1/1,000 (n=288): 0.613; 1/100,000 (n=58): 0.602 | stratum alone (in-sample) 0.197 | forest + dilution as input 0.613
+STRENGTH  forest within stratum: 1/10 (n=134): 0.455; 1/1,000 (n=288): 0.542; 1/100,000 (n=58): 0.450 | stratum alone (in-sample) 0.159
+GARLIC    forest within stratum: 1/10 (n=134): 0.460; 1/1,000 (n=288): 0.679; 1/100,000 (n=58): 0.571 | stratum alone (in-sample) 0.287 | forest + dilution as input 0.626
+PLEASANT  target at the weaker dilution: forest 0.494;  both dilutions pooled: forest 0.625;  sulfur alone: weaker 0.356, both 0.408
+STRENGTH  target at the weaker dilution: forest 0.278;  both dilutions pooled: forest 0.434;  sulfur alone: weaker 0.219, both 0.211
+GARLIC    target at the weaker dilution: forest 0.504;  both dilutions pooled: forest 0.664;  sulfur alone: weaker 0.440, both 0.628
+
+==============================================================================================================
+E. 'Sulfur is the single strongest fact': every single descriptor and yes/no fact against the scores (in-sample, as Noon's sulfur number is)
+==============================================================================================================
+PLEASANT  yes/no facts by |Pearson|: contains S -0.40 (n=53); fr_ether>0 +0.39 (n=213); fr_ester>0 +0.32 (n=158); ester +0.31 (n=162); fr_C_O_noCOO>0 +0.29 (n=256); fr_sulfide>0 -0.27 (n=20)
+          sulfur's rank among 50 yes/no facts: 1; sulfur |Pearson| 0.40, |Spearman| 0.38; continuous descriptors with |Pearson| above sulfur's: 0 of 181; with |Spearman| above sulfur's |Spearman|: 1; the top by |Spearman|: SlogP_VSA12 -0.40; VSA_EState10 -0.38; fr_ether +0.38; VSA_EState1 +0.33; fr_ester +0.32
+GARLIC    yes/no facts by |Pearson|: contains S +0.62 (n=53); fr_sulfide>0 +0.47 (n=20); contains O -0.33 (n=420); fr_C_O_noCOO>0 -0.23 (n=256); thiol SH +0.21 (n=9); fr_SH>0 +0.21 (n=9)
+          sulfur's rank among 50 yes/no facts: 1; sulfur |Pearson| 0.62, |Spearman| 0.44; continuous descriptors with |Pearson| above sulfur's: 0 of 181; with |Spearman| above sulfur's |Spearman|: 0; the top by |Spearman|: SlogP_VSA12 +0.43; VSA_EState10 +0.39; BCUT2D_MWLOW +0.29; fr_sulfide +0.29; MaxEStateIndex -0.28
+FISH      yes/no facts by |Pearson|: contains S +0.59 (n=53); fr_sulfide>0 +0.46 (n=20); contains O -0.30 (n=420); thiol SH +0.22 (n=9); fr_SH>0 +0.22 (n=9); fr_ether>0 -0.20 (n=213)
+          sulfur's rank among 50 yes/no facts: 1; sulfur |Pearson| 0.59, |Spearman| 0.41; continuous descriptors with |Pearson| above sulfur's: 0 of 181; with |Spearman| above sulfur's |Spearman|: 1; the top by |Spearman|: SlogP_VSA12 +0.42; VSA_EState10 +0.39; fr_sulfide +0.31; PEOE_VSA4 +0.27; BCUT2D_MWLOW +0.25
+STRENGTH  yes/no facts by |Pearson|: contains S +0.18 (n=53); ester -0.17 (n=162); fr_ester>0 -0.16 (n=158); ketone +0.15 (n=59); fr_ketone>0 +0.15 (n=59); fr_ketone_Topliss>0 +0.15 (n=53)
+          sulfur's rank among 50 yes/no facts: 1; sulfur |Pearson| 0.18, |Spearman| 0.20; continuous descriptors with |Pearson| above sulfur's: 12 of 181; with |Spearman| above sulfur's |Spearman|: 7; the top by |Spearman|: SlogP_VSA12 +0.22; PEOE_VSA14 -0.22; EState_VSA2 -0.21; VSA_EState10 +0.21; SMR_VSA1 -0.20
+DECAYED   yes/no facts by |Pearson|: contains S +0.45 (n=53); fr_sulfide>0 +0.36 (n=20); fr_ether>0 -0.27 (n=213); fr_SH>0 +0.27 (n=9); thiol SH +0.27 (n=9); fr_Al_COO>0 +0.24 (n=43)
+          sulfur's rank among 50 yes/no facts: 1; sulfur |Pearson| 0.45, |Spearman| 0.37; continuous descriptors with |Pearson| above sulfur's: 0 of 181; with |Spearman| above sulfur's |Spearman|: 1; the top by |Spearman|: SlogP_VSA12 +0.38; VSA_EState10 +0.36; fr_ether -0.28; fr_sulfide +0.26; PEOE_VSA4 +0.26
+SWEET     yes/no facts by |Pearson|: fr_ether>0 +0.43 (n=213); fr_ester>0 +0.37 (n=158); ester +0.37 (n=162); fr_C_O_noCOO>0 +0.35 (n=256); contains S -0.30 (n=53); contains O +0.28 (n=420)
+          sulfur's rank among 50 yes/no facts: 5; sulfur |Pearson| 0.30, |Spearman| 0.38; continuous descriptors with |Pearson| above sulfur's: 7 of 181; with |Spearman| above sulfur's |Spearman|: 2; the top by |Spearman|: fr_ether +0.41; SlogP_VSA12 -0.40; VSA_EState10 -0.38; fr_ester +0.36; MaxAbsEStateIndex +0.36
+FRUIT     yes/no facts by |Pearson|: fr_ester>0 +0.44 (n=158); ester +0.44 (n=162); fr_ether>0 +0.38 (n=213); fr_C_O_noCOO>0 +0.37 (n=256); fr_C_O>0 +0.29 (n=299); fr_unbrch_alkane>0 +0.25 (n=112)
+          sulfur's rank among 50 yes/no facts: 7; sulfur |Pearson| 0.24, |Spearman| 0.37; continuous descriptors with |Pearson| above sulfur's: 9 of 181; with |Spearman| above sulfur's |Spearman|: 3; the top by |Spearman|: fr_ester +0.40; fr_C_O_noCOO +0.39; fr_ether +0.37; SlogP_VSA12 -0.36; MaxAbsEStateIndex +0.36
+   pleasantness ~ sulfur + ester: coefficients -15.9, +7.4; multiple R 0.466
+   pleasantness ~ sulfur + carboxylic acid: coefficients -18.8, -12.2; multiple R 0.471
+   pleasantness ~ sulfur + contains N: coefficients -17.2, -4.0; multiple R 0.411
+   pleasantness ~ sulfur + contains O: coefficients -15.8, +5.1; multiple R 0.413

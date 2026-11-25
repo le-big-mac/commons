@@ -1,0 +1,56 @@
+REFEREE BLIND RESULTS (written before opening anything in drumair/ except expectations.md)
+Solver: my own linear finite elements in r (density constant per element), Richardson on two grids; checked against Bessel zeros to 1e-9.
+
+CREF (B / w11^2 on the reference drum) = 0.22081507262252803
+sanity plain skin, vacuum: (0,n) [np.float64(2.4048255577191355), np.float64(5.52007811043718), np.float64(8.653727913753281)] bessel [2.40482556 5.52007811 8.65372791]
+   (1,1),(1,2) 3.831705970082478 7.015586669826981 [3.83170597 7.01558667]  (2,1) 5.135622301806073 [5.1356223] (4,1) 7.588342434527441 [7.58834243]
+Q1 plain skin, B=1: raised by [np.float64(0.16945718008666577), np.float64(0.007338040672406176), np.float64(0.001164531549618708)]  w: [np.float64(2.8123405153305634), np.float64(5.560584668126427), np.float64(8.663805452930662)]
+Q2 1954 disc: w11 = 1.8649790203880585  B_ref = 0.7680272264174696
+   vacuum: 1.0310388785913225  missA 0.07484158484320846
+   reference       B = 0.7680  place = 1.1341   w01 = 1.05755
+   volume doubled  B = 0.3840  place = 1.0858   w01 = 1.01251
+   volume halved   B = 1.5361  place = 1.2156   w01 = 1.13353
+
+Q3 (40 rings, added mass <= 4, B = 0.2208 w11^2), SLSQP minimax, ~8 starts per process, 50 s each:
+(a) seven overtones over the note:
+start 1 kind 0: coarse 0.08254%  exact miss 0.08254%  place 1.1089  mass 4.000  B 0.3603  t=18s
+start 2 kind 1: coarse 0.10588%  exact miss 0.10588%  place 1.1129  mass 4.000  B 0.3636  t=23s
+start 3 kind 2: coarse 0.10522%  exact miss 0.10522%  place 1.1128  mass 4.000  B 0.3634  t=28s
+start 4 kind 3: coarse 0.10593%  exact miss 0.10593%  place 1.1129  mass 4.000  B 0.3638  t=33s
+start 5 kind 0: coarse 0.09928%  exact miss 0.09928%  place 1.1117  mass 4.000  B 0.3624  t=39s
+start 6 kind 1: coarse 0.10599%  exact miss 0.10599%  place 1.1142  mass 4.000  B 0.3718  t=44s
+start 7 kind 2: coarse 0.10451%  exact miss 0.10451%  place 1.1127  mass 4.000  B 0.3634  t=47s
+start 8 kind 3: coarse 0.10487%  exact miss 0.10487%  place 1.1135  mass 4.000  B 0.3693  t=51s
+BEST a seed 1 nr 40 cap 4: miss 0.08254% place 1.1089 mass 4.000 B 0.3603 w11 1.2775
+ missA 0.08254% missB 9.89323%
+start 1 kind 0: coarse 0.10575%  exact miss 0.10575%  place 1.1129  mass 4.000  B 0.3635  t=6s
+start 2 kind 1: coarse 0.10322%  exact miss 0.10322%  place 1.1123  mass 4.000  B 0.3628  t=11s
+start 3 kind 2: coarse 0.10313%  exact miss 0.10313%  place 1.1126  mass 4.000  B 0.3628  t=19s
+start 4 kind 3: coarse 0.10476%  exact miss 0.10476%  place 1.1128  mass 4.000  B 0.3636  t=24s
+start 5 kind 0: coarse 0.10056%  exact miss 0.10056%  place 1.1116  mass 4.000  B 0.3626  t=32s
+start 6 kind 1: coarse 0.10553%  exact miss 0.10553%  place 1.1170  mass 3.717  B 0.3904  t=37s
+start 7 kind 2: coarse 0.09934%  exact miss 0.09934%  place 1.1118  mass 4.000  B 0.3629  t=53s
+BEST a seed 2 nr 40 cap 4: miss 0.09934% place 1.1118 mass 4.000 B 0.3629 w11 1.2819
+ missA 0.09934% missB 10.14721%
+(b) eight over the lowest:
+start 1 kind 0: coarse 0.98412%  exact miss 0.98412%  place 1.0099  mass 4.000  B 0.3329  t=12s
+start 2 kind 1: coarse 0.98405%  exact miss 0.98407%  place 1.0099  mass 4.000  B 0.3330  t=22s
+start 3 kind 2: coarse 0.98787%  exact miss 1.01187%  place 1.0100  mass 4.000  B 0.3331  t=36s
+start 4 kind 3: coarse 0.98425%  exact miss 0.98427%  place 1.0099  mass 4.000  B 0.3330  t=49s
+start 5 kind 0: coarse 0.98707%  exact miss 0.98707%  place 1.0100  mass 4.000  B 0.3332  t=61s
+BEST b seed 2 nr 40 cap 4: miss 0.98407% place 1.0099 mass 4.000 B 0.3330 w11 1.2280
+ missA 1.98768% missB 0.98407%
+start 1 kind 0: coarse 1.00642%  exact miss 1.00642%  place 1.0102  mass 4.000  B 0.3335  t=11s
+start 2 kind 1: coarse 0.98394%  exact miss 0.98394%  place 1.0099  mass 4.000  B 0.3329  t=24s
+start 3 kind 2: coarse 0.98582%  exact miss 0.98966%  place 1.0100  mass 4.000  B 0.3331  t=36s
+start 4 kind 3: coarse 1.04082%  exact miss 1.04225%  place 1.0105  mass 4.000  B 0.3346  t=49s
+start 5 kind 0: coarse 0.98446%  exact miss 0.99375%  place 1.0099  mass 4.000  B 0.3329  t=60s
+BEST b seed 1 nr 40 cap 4: miss 0.98394% place 1.0099 mass 4.000 B 0.3329 w11 1.2279
+ missA 1.98744% missB 0.98394%
+
+Trust: Q1, Q2 to the digits shown (grid-converged). Q3: local searches from 5-8 starts each, mass cap active in every good one; the best (a) values scatter 0.083-0.105%, so (a) is NOT converged and a lower miss surely exists; (b) scatters only 0.984-0.994%, somewhat better trusted, still an upper bound only.
+
+ADDENDUM, written AFTER reading the README (not blind): in Q2 I read "9.77 times the bare skin's mass per area" as the load a = 9.77
+(density 10.77 inside 0.4). The author's disc has density 9.77 (a = 8.77). With a = 8.77 my solver gives (verify.out): w11 1.94929,
+B 0.8390, places 1.0326 (vacuum), 1.1449 (reference), 1.0926 (doubled), 1.2320 (halved), tube 1.1338. The blind figures above stand as
+my answer to the question as I first read it.

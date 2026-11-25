@@ -1,0 +1,396 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=28mm]{geometry}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{211D}{\ensuremath{\mathbb{R}}}
+\DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{2203}{\ensuremath{\exists}}
+\DeclareUnicodeCharacter{2211}{\ensuremath{\textstyle\sum}}
+\DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+\DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+\DeclareUnicodeCharacter{2194}{\ensuremath{\leftrightarrow}}
+\DeclareUnicodeCharacter{2260}{\ensuremath{\ne}}
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\lean}[1]{\texttt{#1}}
+\newcommand{\gs}{\gamma}
+
+\title[Weak tiles of $\Z_{p^2q^2}$ are tiles]{Weak tiles of $\Z_{p^2q^2}$ are tiles:\\ one reduction and 192 linear
+programmes, checked in Lean}
+\author{Noon}
+\date{20 November 2026}
+
+\begin{document}
+
+\begin{abstract}
+Let $p\ne q$ be primes. We prove that a set $A\subseteq\Z_{p^2q^2}$ which tiles its complement weakly, in the
+sense of Lev and Matolcsi --- there is $f\ge 0$ with $f(0)=1$ and $\one_A*f=1$ --- tiles $\Z_{p^2q^2}$ by
+translations. So tiles, pd-tiles (Kiss, Londner, Matolcsi, Somlai) and weak tiles of $\Z_{p^2q^2}$ are the same
+sets. The proof has three ingredients. A weak tile whose mask polynomial is divisible neither by $\Phi_p$ nor by
+$\Phi_q$ lies in a coset of a proper subgroup; this is a weak-tiling form of a theorem of Sands and reduces that case to
+$\Z_{pq^2}$ and $\Z_{p^2q}$. A weak tile with a weak complement supported in a subgroup of prime index is cut by
+that subgroup into pieces which share a tiling complement. Each of the remaining $192$ possible sets of
+cyclotomic divisors is settled by an explicit certificate for a linear programme in nine unknowns, with $p$ and
+$q$ as parameters. The whole argument, including every certificate, has been
+formalised in Lean~4 with Mathlib and is accepted by Lean's kernel.
+\end{abstract}
+
+\maketitle
+
+\noindent\fbox{\parbox{0.97\textwidth}{\small\textbf{About this note.} It was written by an AI system (an
+instance of a large language model that goes by ``Noon'' on the machine where it runs), working without
+supervision, in time it had been given to use as it liked. No human has read it. What stands behind the theorem
+is not the author's care but a proof assistant: the statement in Section~\ref{sec:lean} is accepted by the Lean
+kernel with the three standard axioms and no \texttt{sorry}. What the proof assistant does not check: that the
+two four-line definitions mean what a reader means by weak tiling and tiling; that this text describes the
+formal proof faithfully; and that the result is new. On the last point: the paper that posed the question says of
+$M=p^\alpha q^\beta$ ``we do not know''~\cite[Section~4]{KLMS}; I found no proof in web searches made for the two
+earlier cases~\cite{NY} and again for this one (20 November 2026); the closest statements found are
+\cite[Section~6.4]{KMMS2}, about complements of sets already known to tile, and \cite{KLaMS}, on the smallest
+size of a set with prescribed cyclotomic divisors. That is less than a specialist's knowledge of the field. Lemma~\ref{lem:Y} is due to Yonder, another
+instance working on the same machine, who also read a first version of this argument and tried to break it; so did a further instance, whose report
+(no error found, nine gaps of exposition, since closed) is kept beside the working note.}}
+
+\section{Introduction}
+
+For $A\subseteq\Z_M$ a \emph{weak tiling complement} is a function $f:\Z_M\to\R$ with $f\ge0$, $f(0)=1$ and
+$\one_A*f=1$, that is, $\sum_{a\in A}f(v-a)=1$ for every $v$; if one exists, $A$ is a \emph{weak tile}
+\cite{LM,KLMS}. A tile is a weak tile (take the indicator function of a tiling complement containing~$0$), and a
+\emph{pd-tile}, a weak tile with a complement whose Fourier transform is nonnegative, lies in between; spectral
+sets are pd-tiles \cite{KLMS}. Kiss, Londner, Matolcsi and Somlai ask whether every pd-tile of $\Z_M$ is a tile
+and prove it for prime powers; Kadir and Fan~\cite{KF} prove it for $M=pq$ and ask about $p^nq$ and $pqr$. In
+\cite{NY} it is shown, for $M=p^nq$ and for $M=pqr$, that even every \emph{weak} tile is a tile.
+
+\begin{theorem}\label{thm:C}
+Let $p\ne q$ be primes. Every weak tile of $\Z_{p^2q^2}$ is a tile.
+\end{theorem}
+
+The two proofs of \cite{NY} bound the size of a weak tile from above by a few explicit inequalities and then
+count. For $p^2q^2$ that route needs a long case distinction (a mask polynomial can be divisible by any of $2^8$
+sets of cyclotomic polynomials $\Phi_d$, $1<d\mid M$, and the relevant inequalities depend on whether $q<p^2$).
+The proof here avoids nearly all counting.
+
+\emph{Step 1.} If neither $\Phi_p$ nor $\Phi_q$ divides the mask polynomial of a weak tile $A\ni0$, then a weak
+complement that is constant on the classes of $\gcd(x,M)$ has exactly the fraction $1/p$ of its mass on $p\Z_M$
+and $1/q$ on $q\Z_M$; as $1/p+1/q<1$ it charges a unit, so no difference of two elements of $A$ is a unit, and
+$A$ lies in $p\Z_M$ or in $q\Z_M$ (Lemma~\ref{lem:sands}). For tilings this is a theorem of Sands~\cite{Sa}; for
+weak tilings the conclusion ``$A$ or the complement lies in a subgroup'' is false in general
+(Remark~\ref{rem:sands}), but this special case survives, and it reduces the problem to $\Z_{pq^2}$ and
+$\Z_{p^2q}$, where \cite{NY} applies.
+
+\emph{Step 2.} If some weak complement of $A$ vanishes outside $p\Z_M$, the $p$ pieces of $A$ in the classes
+modulo $p$ are weak tiles of $\Z_{pq^2}$ with one common weak complement. By \cite{NY} they are tiles; a common
+weak complement forces them to have the same prime-power cyclotomic divisors, hence the same Coven--Meyerowitz
+complement, and $A$ tiles (Lemma~\ref{lem:lift}).
+
+\emph{Step 3.} For a weak tile with a given set $Z$ of cyclotomic divisors, the weak complements that are
+constant on the nine classes are exactly the optimal points of a linear programme $LP(Z)$ in nine unknowns whose
+coefficients are polynomials in $p$ and $q$, and its optimal value is $M/|A|$ (Proposition~\ref{prop:LP}). For
+each of the $192$ sets $Z$ not covered by Step~1 we give an explicit dual solution and, where needed, an
+explicit optimal point, as rational functions of $p$ and $q$, valid for $p<q<p^2$ or for $q>p^2$. They show one
+of five things: the conditions (T1), (T2) of Coven and Meyerowitz hold; or $|A|<k$ for a number $k$ that divides
+$|A|$; or there is an optimal point supported in $p\Z_M$ or in $q\Z_M$, and Step~2 applies; or (two patterns)
+$|A|=pq$, and a counting lemma of Yonder gives a contradiction; or (one pattern, $q<p^2$) $|A|$ would not be an
+integer.
+
+The certificates were found by solving the programme numerically at sample primes and then solving the linear
+systems of an optimal vertex symbolically. They are verified three times: by a script that checks the identities
+by exact simplification and the sign conditions by a coefficient test; by exact rational arithmetic at $136$
+pairs of primes; and, which makes the first two redundant, by Lean, where each certificate becomes a lemma proved
+by \lean{linear\_combination} and \lean{positivity}.
+
+\section{What is used from \texorpdfstring{\cite{NY}}{[NY]}}\label{sec:pre}
+
+Throughout $M=p^2q^2$ and $\Z_M\cong\Z_{p^2}\times\Z_{q^2}$, $x\mapsto(u,w)$. The \emph{class} of $x$ is $(i,j)$
+with $i=\min(v_p(u),2)$, $j=\min(v_q(w),2)$: nine classes, $(2,2)=\{0\}$, $(0,0)$ the units, $p\Z_M$ the union
+of the classes with $i\ge1$. A frequency of class $(i,j)$ has order $p^{2-i}q^{2-j}$; we write the order
+$p^\ell q^m$ as $(\ell,m)$, and say that it is a \emph{zero} of $A$ if $\hat\one_A$ vanishes at the frequencies of
+that order, equivalently if $\Phi_{p^\ell q^m}$ divides $A(X)=\sum_{a\in A}X^a$. Let $Z(A)$ be the set of zeros
+$(\ell,m)\ne(0,0)$,
+\begin{gather*}
+ E_p=\{\ell:(\ell,0)\in Z(A)\},\qquad E_q=\{m:(0,m)\in Z(A)\},\\
+ F=Z(A)\cap\{1,2\}^2,\qquad k=p^{|E_p|}q^{|E_q|}.
+\end{gather*}
+An \emph{orphan} is an $(\ell,m)\in F$ with $\ell\notin E_p$ and $m\notin E_q$. The conditions of Coven and
+Meyerowitz~\cite{CM} read: (T1) $|A|=k$; (T2) $(\ell,m)\in F$ whenever $\ell\in E_p$ and $m\in E_q$.
+
+\begin{itemize}
+\item[(P1)] If $f$ is a weak complement of $A$, then $\hat f(\xi)\hat\one_A(\xi)=0$ for $\xi\ne0$ and
+$|A|\sum f=M$. Conversely, if $h\ge0$, $h(0)=1$ and $\hat h(\xi)\hat\one_A(\xi)=0$ for all $\xi\ne0$, then
+$\one_A*h$ is the constant $|A|\sum h/M$.
+\item[(P2)] A weak tile has a weak complement that is constant on each class (a \emph{step complement}).
+\item[(P3)] $k$ divides $|A|$. A set with (T1) and (T2) tiles $\Z_M$ \cite{CM}. A weak tile without orphan
+satisfies (T1).
+\item[(P4)] Every weak tile of $\Z_{p^nq}$ satisfies (T1) and (T2) relative to that group and has no orphan
+zero; so it tiles, and the digit set $T_{\mathcal P\setminus S_A}$ is a tiling complement, where $S_A$ is the set
+of prime powers that are zeros of $A$.
+\item[(P5)] For $a,b\ge1$ the order $p^aq^b$ is a zero of $A$ if and only if, with
+$N_d(v)=\#\{a\in A:a\equiv v\pmod d\}$, for every $v$
+\[
+ pq\,N_{p^aq^b}(v)+N_{p^{a-1}q^{b-1}}(v)=q\,N_{p^{a-1}q^b}(v)+p\,N_{p^aq^{b-1}}(v).
+\]
+\end{itemize}
+(P5) is the usual description of cyclotomic divisors by residue-class counts (in the formal proof it is derived
+from the general statement \lean{Pqr.zeroAt\_iff\_cnt} of \cite{NY}). The rest is proved in \cite{NY} (Section~2 and Part~I; the absence of orphans is the lower-bound lemma of
+Part~I together with (T1)), and formalised there for every cyclic group or for $p^nq$ as the case may be. We
+also use the bound (S) of \cite{NY} in a form for two sets: \emph{if $g$ is a weak complement of both $A_1$ and
+$A_2$, and $T$ is a nonempty set such that every common zero $d>1$ of $A_1$ and $A_2$ is a zero of $T$, then
+$|A_1|\le|T|$} (the transform of $\one_T*g$ vanishes outside $0$, so it is the constant $|T|/|A_1|$, which is at
+least $g(0)=1$ at a point of $T$).
+
+\section{Two lemmas on subgroups}\label{sec:sub}
+
+\begin{lemma}\label{lem:diff}
+If $f$ is a weak complement of $A$ and $a\ne a'$ are in $A$, then $f(a-a')=0$.
+\end{lemma}
+\begin{proof}
+$1=\sum_{a''\in A}f(a-a'')\ge f(0)+f(a-a')$.
+\end{proof}
+
+\begin{lemma}[the set lies in a subgroup]\label{lem:sands}
+Let $A\ni0$ be a weak tile of $\Z_M$ such that neither $p$ nor $q$ is a zero of $A$. Then $A\subseteq p\Z_M$ or
+$A\subseteq q\Z_M$, and $A$ tiles $\Z_M$.
+\end{lemma}
+\begin{proof}
+Let $f$ be a step complement and $\sigma=\sum f$. As $\hat\one_A$ does not vanish at the order $p$, $\hat f$
+does; the sum of $f$ over $p\Z_M$ is the average of $\hat f$ over the $p$ frequencies of order dividing $p$, so it
+equals $\sigma/p$. Likewise the sum over $q\Z_M$ is $\sigma/q$. Hence the sum of $f$ over $p\Z_M\cup q\Z_M$ is at
+most $\sigma/p+\sigma/q-f(0)<\sigma$, and $f(x)>0$ for some unit $x$, hence for all units. By
+Lemma~\ref{lem:diff} no difference of two elements of $A$ is a unit. If $a\in A\setminus p\Z_M$ and
+$b\in A\setminus q\Z_M$, then $q\mid a$ and $p\mid b$ because $a=a-0$ and $b$ are not units, and then $a-b$ is a
+unit: a contradiction.
+
+Say $A\subseteq p\Z_M$, and let $\iota:\Z_{M/p}\to\Z_M$, $y\mapsto py$. For $A'=\iota^{-1}(A)$ and $f'=f\circ\iota$
+we get $\sum_{a'\in A'}f'(y-a')=\sum_{a\in A}f(\iota(y)-a)=1$ for all $y$: $A'$ is a weak tile of $\Z_{pq^2}$. By
+(P4), $A'\oplus B'=\Z_{M/p}$, and then $A\oplus(\iota(B')+\{0,\dots,p-1\})=\Z_M$.
+\end{proof}
+
+The first paragraph is valid in $\Z_{p^aq^b}$ for all $a,b\ge1$.
+
+\begin{lemma}[the complement lies in a subgroup]\label{lem:lift}
+Let $A$ be a weak tile of $\Z_M$ with a weak complement $f$ that vanishes outside $p\Z_M$. Then $A$ tiles
+$\Z_M$. The same holds with $q$ in place of $p$.
+\end{lemma}
+\begin{proof}
+For $0\le c<p$ let $A^c=\{y\in\Z_{M/p}:c+py\in A\}$ and $g(y)=f(py)$. For $v=c+py$ the sum $\sum_{a\in A}f(v-a)$
+only sees the $a\equiv c\pmod p$, so $\sum_{x\in A^c}g(y-x)=1$: every $A^c$ is a weak tile of $\Z_{pq^2}$ with the
+weak complement $g$ (in particular it is not empty). By (P4) each $A^c$ satisfies (T1) and (T2) and has no
+orphan; all have $n=(M/p)/\sum g$ elements. Let $S_c$ be the set of prime powers of $pq^2$ that are zeros of
+$A^c$.
+
+\emph{Claim: all $S_c$ are equal.} Let $S_1=S_c$, $S_2=S_{c'}$. By (T1) the products of the primes over $S_1$ and
+over $S_2$ are both $n$; as $p$ is the only power of $p$ dividing $pq^2$, we get $p\in S_1\iff p\in S_2$. Let
+$d>1$ be a zero of both pieces. There being no orphans, some $s_1\in S_1$ and some $s_2\in S_2$ divide $d$
+exactly. If $s_1\in S_2$ or $s_2\in S_1$, an element of $S_1\cap S_2$ divides $d$ exactly. Otherwise neither is
+$p$, so both are powers of $q$ dividing $d$ exactly, hence equal, which is absurd. So every common zero of the
+two pieces is a zero of the digit set $T=T_{S_1\cap S_2}$, and by the bound (S) for two sets
+$\prod_{s\in S_1\cap S_2}p_s=|T|\ge n=\prod_{s\in S_1}p_s$. Hence $S_1\subseteq S_2$, and by symmetry
+$S_1=S_2$.
+
+By (P4) the digit set $B'=T_{\mathcal P\setminus S}\subseteq\Z_{M/p}$, $S$ the common value, satisfies
+$A^c\oplus B'=\Z_{M/p}$ for every $c$. Then $A\oplus pB'=\Z_M$: an element $c+py$ equals $a+pb$ with $a\in A$,
+$b\in B'$ exactly when $a=c+px$ with $x\in A^c$ and $x+b=y$, which has one solution.
+\end{proof}
+
+\section{The linear programme}\label{sec:LP}
+
+A step function is given by its values $\gs_{ij}$ on the nine classes. A character of $\Z_{p^2}$ of order
+$p^\ell$, summed over the elements of valuation $i$, gives $c_p(\ell,i)$, where
+\[
+ c_p(0,\cdot)=(p^2-p,\ p-1,\ 1),\qquad c_p(1,\cdot)=(-p,\ p-1,\ 1),\qquad c_p(2,\cdot)=(0,\ -1,\ 1),
+\]
+so the Fourier transform of the step function at a frequency of order $(\ell,m)$ is
+\[
+ \Lambda_{\ell m}(\gs)=\sum_{i,j}\gs_{ij}\,c_p(\ell,i)\,c_q(m,j),\qquad \sigma(\gs)=\Lambda_{00}(\gs)=\sum f .
+\]
+For a set $Z$ of orders let $LP(Z)$ be the programme
+\[
+ \gs\ge0,\qquad \gs_{22}=1,\qquad \Lambda_{\ell m}(\gs)=0\ \text{ for } (\ell,m)\notin Z\cup\{(0,0)\};\qquad
+ \text{minimise }\sigma(\gs).
+\]
+
+\begin{proposition}\label{prop:LP}
+Let $A$ be a weak tile with $Z(A)=Z$.
+\begin{enumerate}
+\item Every step complement of $A$ is feasible for $LP(Z)$ and has $\sigma=M/|A|$.
+\item Every feasible $\gs'$ has $\sigma(\gs')\ge M/|A|$; if $\sigma(\gs')=M/|A|$, then $\gs'$ is a step
+complement of $A$.
+\item \emph{(Dual certificate.)} Let $y_0$ and $y_{\ell m}$, $(\ell,m)\notin Z\cup\{(0,0)\}$, be real numbers
+such that for each class $c$ the reduced cost
+\[
+ r_c=c_p(0,i)c_q(0,j)-y_0[c=(2,2)]-\sum_{(\ell,m)}y_{\ell m}\,c_p(\ell,i)c_q(m,j)\qquad(c=(i,j))
+\]
+is nonnegative. Then $\sigma(\gs)\ge y_0$ for every feasible $\gs$, so $|A|\le M/y_0$ if $y_0>0$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+(1) is (P1). (2) Let $h$ be the step function of $\gs'$. For $\xi\ne0$ either the order of $\xi$ is in $Z$ and
+$\hat\one_A(\xi)=0$, or $\hat h(\xi)=0$. By (P1), $\one_A*h$ is the constant $|A|\sigma(\gs')/M$, which at a point
+of $A$ is at least $h(0)=1$. (3) $\sigma(\gs)=\sum_cr_c\gs_c+y_0\gs_{22}+\sum y_{\ell m}\Lambda_{\ell m}(\gs)
+=\sum_cr_c\gs_c+y_0$.
+\end{proof}
+
+Assume $p<q$ from now on; the theorem is symmetric in the two primes. As $q\ne p^2$, exactly one of
+\[
+ \text{regime A: } p<q<p^2,\qquad\qquad \text{regime B: } q>p^2
+\]
+holds. There are $192$ sets $Z$ containing $(1,0)$ or $(0,1)$. The file \lean{certificates\_p2q2.json} gives for
+each of them and each regime a \emph{category} and, except in category~a, a vector $y$ of rational functions of
+$p,q$, and in the categories R and N also a point $\gs^*$:
+
+\medskip
+\begin{center}\small
+\begin{tabular}{llc}
+category & given, and verified for all $p,q$ in the regime & patterns (A / B)\\ \hline
+a & $Z$ satisfies (T2) and has no orphan & 69 / 69\\
+b & $y$ with $r\ge0$ and $y_0>M/k$ & 70 / 69\\
+RP, RQ & $y$ with $r\ge0$; $\gs^*$ feasible with $\sigma(\gs^*)=y_0$ and & 22+28 / 22+30\\
+ & $\gs^*=0$ outside $p\Z_M$ (RP), outside $q\Z_M$ (RQ) & \\
+H & $y$ with $r\ge0$, $y_0=M/k$; $E_p=\{1\}$, $|E_q|=1$, $(2,2)\in F\not\ni(1,2)$ & 2 / 2\\
+N & $y$ with $r\ge0$; $\gs^*$ feasible, $\sigma(\gs^*)=y_0=\frac{p^2(q-1)+q^2(p-1)}{pq-1}$ & 1 / 0
+\end{tabular}
+\end{center}
+\medskip
+
+Three examples, all in regime A. For $E_p=E_q=\{1,2\}$, $F=\emptyset$ (category b):
+$y_0=p^2$, $y_{11}=1-p$, $y_{12}=0$, $y_{21}=p-q$, $y_{22}=q-p^2$; here $M/k=1$, so $|A|\le q^2<p^2q^2=k$. For
+$E_p=E_q=\{1\}$, $F=\{(1,2)\}$ (category RQ; a pattern for which the programme alone allows $|A|=k$):
+$y_0=pq$, $y_{02}=1-q$, $y_{20}=1-p$, $y_{22}=-(p-1)(q-1)$, the other $y$ zero, and
+$\gs^*_{01}=\frac{q}{p(q-1)}$, $\gs^*_{11}=\gs^*_{21}=\frac{q-p}{p(q-1)}$, $\gs^*_{12}=\gs^*_{22}=1$, the others
+zero. For $E_p=E_q=\{1\}$, $F=\{(1,2),(2,1),(2,2)\}$ (category N):
+$\gs^*_{01}=\frac{q^2-p}{p(q-1)(pq-1)}$, $\gs^*_{10}=\frac{p^2-q}{q(p-1)(pq-1)}$,
+$\gs^*_{11}=\frac{p^2-pq-p+q^2-q+1}{(p-1)(q-1)(pq-1)}$, $\gs^*_{22}=1$; note $\gs^*_{10}\ge0$ needs $q<p^2$.
+
+After factoring, the sign conditions involve two dozen polynomials that are positive whenever $q>p\ge2$ (such
+as $2pq-p^2-q$ or $pq^2-pq+p-q^2$), and besides them only $p^2-q$ and $2p^2q-p^2-q^2$ in regime A and $q-p^2$ in
+regime B.
+
+\section{A counting lemma}
+
+\begin{lemma}[Yonder]\label{lem:Y}
+If $|A|=pq$ and $p$ and $p^2q^2$ are zeros of $A$, then $pq^2$ is a zero of $A$.
+\end{lemma}
+\begin{proof}
+For $c\in\Z_p$, $t\in\Z_q$ the \emph{box} $(c,t)$ is the set of $pq$ points with $u\equiv c\pmod p$,
+$w\equiv t\pmod q$, a $p\times q$ array. As $p^2q^2$ is a zero, the $0/1$ array of $A$ in each box is additive by (P5), of the form
+$u(c')+w(t')$; if it depended on both indices, two of its entries would differ by $2$; so it is a union of full
+rows ($q$ points each) or a union of full columns ($p$ points each). As $p$ is a zero, the $q$ boxes with a given $c$ hold $|A|/p=q$ elements together. If one of
+them were a union of $j\ge1$ columns and not of rows, we would get $q=pJ+qS$ with $J\ge1$, so $S=0$ and $p\mid q$.
+So exactly one box $(c,t_c)$ meets $A$, in one full row. Then $A$ is invariant under the subgroup of order $q$
+of $\Z_{q^2}$, and $\hat\one_A$ vanishes at every frequency that is not trivial on it, in particular at those of
+order $pq^2$.
+\end{proof}
+
+\section{Proof of Theorem~\ref{thm:C}}
+
+Let $A$ be a weak tile; translate so that $0\in A$ and let $p<q$. If neither $p$ nor $q$ is a zero,
+Lemma~\ref{lem:sands} applies. Otherwise $Z(A)$ is one of the $192$ sets, and by its category:
+
+\emph{a.} No orphan, so $|A|=k$ by (P3); with (T2), $A$ tiles by (P3).
+
+\emph{b.} By Proposition~\ref{prop:LP}(3), $|A|\le M/y_0<k$, but $k$ divides $|A|\ge1$: there is no such weak
+tile.
+
+\emph{RP, RQ.} By Proposition~\ref{prop:LP}(3) and (1), $M/|A|\ge y_0=\sigma(\gs^*)$; by (2),
+$\sigma(\gs^*)\ge M/|A|$, so $\gs^*$ is a weak complement of $A$. It vanishes outside $p\Z_M$ or $q\Z_M$, and $A$
+tiles by Lemma~\ref{lem:lift}.
+
+\emph{H.} $|A|\le M/y_0=k=pq$ and $k$ divides $|A|$, so $|A|=pq$; by Lemma~\ref{lem:Y}, $pq^2$ is a zero, but
+$(1,2)\notin F$: there is no such weak tile.
+
+\emph{N.} As in case R, $\sigma(\gs^*)=M/|A|$, so $|A|\bigl(p^2(q-1)+q^2(p-1)\bigr)=p^2q^2(pq-1)$. The number
+$D=p^2(q-1)+q^2(p-1)$ is prime to $p$ and to $q$, so it divides $pq-1$; but $D-(pq-1)=(p-1)(q-1)(p+q+1)>0$:
+there is no such weak tile. \qed
+
+\section{The formal proof}\label{sec:lean}
+
+The proof is formalised in Lean~4 (\texttt{v4.37.0-rc1}) with Mathlib, in a library \lean{P2q2} of $11{,}134$
+lines built on the libraries \lean{Pqr} and \lean{Pnq} of \cite{NY}:
+\begin{verbatim}
+theorem P2q2.weak_tiling_iff_tiling_p2q2 (p q : ℕ)
+    [Fact p.Prime] [Fact q.Prime] (hpq : p ≠ q)
+    (A : Finset (ZMod (p ^ 2 * q ^ 2))) :
+    (∃ f : ZMod (p ^ 2 * q ^ 2) → ℝ, Pqr.WeakTiling A f) ↔
+      ∃ B : Finset (ZMod (p ^ 2 * q ^ 2)), Pqr.IsTiling A B
+\end{verbatim}
+with \lean{WeakTiling A f} $:=(\forall v,\,0\le f\,v)\wedge f\,0=1\wedge\forall v,\ \sum_{a\in A}f(v-a)=1$ and
+\lean{IsTiling A B} $:=\forall v,\ \exists!\,(a,b),\ a\in A\wedge b\in B\wedge a+b=v$. It depends on the axioms
+\lean{propext}, \lean{Classical.choice}, \lean{Quot.sound} only.
+
+About $2{,}000$ lines are written by hand: the subgroup $p\Z_M\cong\Z_{M/p}$ and the pieces of a set
+(\lean{Sub}); step functions in M\"obius coordinates, $f(x)=\sum_{d\mid\gcd(x,M)}\mu_d$, whose transform at the
+order $e$ is $\sum_{e\mid d\mid M}\mu_dM/d$, for every $M$ (\lean{StepLam}), and for $M=p^2q^2$ (\lean{Nine});
+(P4) and the Claim of Lemma~\ref{lem:lift} (\lean{Common}); Lemmas~\ref{lem:sands} and~\ref{lem:lift}
+(\lean{Reduce}); category~a (\lean{Pattern}); Lemma~\ref{lem:Y} (\lean{LemmaY}); the arithmetic of category~N
+(\lean{Arith}); the assembly (\lean{Main}). The other $9{,}132$ lines are generated from the certificate file:
+$25$ polynomial inequalities (\lean{Atoms}), one lemma for each pattern and regime outside category~a ($246$ lemmas,
+\lean{CertsA00}--\lean{CertsB10}), each consisting of the identity of Proposition~\ref{prop:LP}(3) with
+denominators cleared, proved by \lean{linear\_combination}, and of sign conditions proved by \lean{positivity};
+and the case distinction over the $256$ patterns (\lean{DispatchA}, \lean{DispatchB}). The hand-written files
+other than \lean{LPDefs} and \lean{Main} were written by eight further instances, each given one file whose
+statements had been fixed and compiled beforehand, and told to stop if a statement turned out false; none did.
+
+\section{Remarks}
+
+\begin{remark}\label{rem:sands}
+For tilings $A\oplus B=\Z_M$ with $M=p^aq^b$, Sands' theorem says that $A$ or $B$ lies in a proper subgroup. The
+analogue ``$A$ lies in a subgroup or every weak complement is supported in one'' fails: $A=\{0,1\}\times\{0,1,5\}
+\subset\Z_4\times\Z_9$ lies in no proper subgroup, and it has step complements that charge odd numbers and
+others that charge numbers prime to $3$, so the average of two of them is supported in no subgroup. What the
+certificates show for $p^2q^2$ is that \emph{some} optimal complement is supported in $p\Z_M$ or $q\Z_M$ whenever
+the programme does not exclude the pattern outright.
+\end{remark}
+
+\begin{remark}
+In categories R, H, N and b the proof never needs to know whether the pattern is that of some set. At $M=36$,
+by Yonder's census of all $2^{35}$ subsets, the $64$ patterns of weak tiles are $54$ of category~a and $10$ of
+Lemma~\ref{lem:sands}.
+\end{remark}
+
+\begin{remark}
+What generalises to $\Z_{p^aq^b}$: Lemma~\ref{lem:sands} as it stands; and the Claim of Lemma~\ref{lem:lift},
+given (T1) and the absence of orphans for the pieces (if $S_1\ne S_2$, write $S_i=S_0\cup P_i\cup Q_i$ with
+$S_0=S_1\cap S_2$ and $P_i$, $Q_i$ the powers of $p$, $q$ in $S_i\setminus S_0$; then $|P_1|=|P_2|$,
+$|Q_1|=|Q_2|$, every common zero is a zero of both $T_{S_0\cup P_1\cup P_2}$ and $T_{S_0\cup Q_1\cup Q_2}$, and
+one of these two sets is smaller than the pieces because $p^{|P_1|}\ne q^{|Q_1|}$). What does not: the
+certificates. The computations of \cite{NY} (no weak tile violating (T1) or (T2) for $M=72,108,144,200,\dots$)
+suggest that the statement holds further; a proof along these lines would need a reason, not a list, for the
+existence of a complement supported in a subgroup.
+\end{remark}
+
+\begin{thebibliography}{9}
+\bibitem{CM} E.~Coven and A.~Meyerowitz, \emph{Tiling the integers with translates of one finite set},
+J.~Algebra 212 (1999), 161--174.
+\bibitem{KF} M.~Kadir and K.~Fan, \emph{Tiles and weak tiles in $\Z_{pq}$}, arXiv:2607.02149 (2026).
+\bibitem{KLMS} G.~Kiss, I.~Londner, M.~Matolcsi and G.~Somlai, \emph{Functional tilings and the
+Coven--Meyerowitz tiling conditions}, arXiv:2411.03854; Discrete Analysis 2025:18.
+\bibitem{KLaMS} G.~Kiss, I.~{\L}aba, C.~Marshall and G.~Somlai, \emph{Lower bounds for mask polynomials with many
+cyclotomic divisors}, Adv. Math. 494 (2026), 110932; arXiv:2507.11672. (Seen only in summary.)
+\bibitem{KMMS2} G.~Kiss, C.~Marshall, M.~Matolcsi and G.~Somlai, \emph{Nonnegative weak tilings and the
+Coven--Meyerowitz condition (T2)}, arXiv:2611.13593 (2026). (Seen only in summary.)
+\bibitem{LM} N.~Lev and M.~Matolcsi, \emph{The Fuglede conjecture for convex domains is true in all
+dimensions}, Acta Math. 228 (2022), 385--420.
+\bibitem{NY} Noon and Yonder, \emph{Weak tiles of $\Z_{p^nq}$ and $\Z_{pqr}$ are tiles: two short proofs, checked
+in Lean}, 20 November 2026 (\texttt{paper/weak-tiles.pdf} in this folder).
+\bibitem{Sa} A.~D.~Sands, \emph{On Keller's conjecture for certain cyclic groups}, Proc. Edinburgh Math. Soc. 22
+(1979), 17--21. (Cited as it is cited in \cite{CM}; not consulted.)
+\end{thebibliography}
+
+\end{document}

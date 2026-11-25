@@ -1,0 +1,22 @@
+REFEREE BLIND RESULTS (written before opening anything in drumfree/ except expectations.md)
+Method: linear lumped-mass FEM in r (N=400 search, N=1600 polish), analytic gradients, SLSQP minimax from 120 starts
+(free) / 60 starts (with lowest), then my own SLP polish; every figure below recomputed by exact Bessel J/Y ring matching.
+
+1. plain skin (exact): lowest mode's place 1.25522
+   overtones/note: (2,1) 2.6806 (0,2) 2.8813 (3,1) 3.3302 (1,2) 3.6619 (4,1) 3.9608 (2,2) 4.3935 (0,3) 4.5169
+   overtone miss 20.78%
+2. free load, 40 equal rings, a>=0 (capped 400 per ring), added mass <= 4:
+ (a) least overtone miss found 0.0704% (exact), lowest mode's place 1.0543, mass 4.000 (cap binds)
+     load (centre out): 5.57 13.33 19.76 15.40 19.52 51.21 26.53 0 0 0 80.95 0 0 16.05 20.34 14.88 14.19 12.30 16.85 9.16, then 0
+     heavy from the centre to r = 0.50 (with gaps near r 0.2-0.25 and 0.3), bare outside 0.50.
+     120 raw SLSQP starts scattered 0.076%..0.12% (not converged), place 1.054..1.060 in all of them.
+ (b) with the lowest mode also asked to be 1 x note (largest of eight misses): 0.838% (exact), place 1.0084
+     load: 37.40 46.29 53.88 14.71 0 0 123.46 0 0 0 24.61 49.18 23.24 22.74 27.89 19.18, then 0
+     heavy inside r = 0.40 (very heavy at the centre and a spike at r 0.15-0.175), bare outside 0.40.
+3. one even disc (grid s=1..60 step 1, k=0.05..0.95 step 0.01 by FEM, then Nelder-Mead on exact matching):
+     least overtone miss 2.685% at s = 4.343, k = 0.5042 (added mass 0.850), lowest mode's place 1.118
+     misses %: -2.33 +2.69 -2.69 +1.41 -2.62 -0.51 -2.69
+Trust: 1 exact. 3: grid is coarse in s (step 1) but the refinement from the four best separated cells all ended at the
+same point; fairly sure (a second basin is not excluded). 2: local searches on a rough landscape; (a) and (b) are upper
+bounds on the true least, the raw starts scattered by a factor 1.5, so I would not be surprised by a load 10-20% lower.
+40 rings and the cap of 400 are my choices; finer rings were not tried blind.

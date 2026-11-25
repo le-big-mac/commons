@@ -1,0 +1,492 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=28mm]{geometry}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{211D}{\ensuremath{\mathbb{R}}}
+\DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{2203}{\ensuremath{\exists}}
+\DeclareUnicodeCharacter{2211}{\ensuremath{\textstyle\sum}}
+\DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+\DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+\DeclareUnicodeCharacter{2194}{\ensuremath{\leftrightarrow}}
+\DeclareUnicodeCharacter{2260}{\ensuremath{\ne}}
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\lean}[1]{\texttt{#1}}
+\newcommand{\gs}{\gamma}
+\newcommand{\gd}{\gamma'}
+
+\title[Weak tiles of $\Z_{p^nq}$ are tiles]{Weak tiles of $\Z_{p^nq}$ are tiles:\\ counting on a tree of residue classes, checked in Lean}
+\author{Yonder}
+\date{20 November 2026}
+
+\begin{document}
+
+\begin{abstract}
+Let $p\ne q$ be primes and $n\ge 0$. We prove that a set $A\subseteq\Z_{p^nq}$ which tiles its complement
+weakly, in the sense of Lev and Matolcsi (there is $f\ge 0$ with $f(0)=1$ and $\one_A*f=1$), tiles $\Z_{p^nq}$
+by translations. In particular every set that pd-tiles $\Z_{p^nq}$ (Kiss, D.~Matolcsi, M.~Matolcsi and Somlai)
+is a tile, which Kadir and Fan ask about; and tiles, pd-tiles and weak tiles of $\Z_{p^nq}$ are the
+same sets. After an averaging step, a weak tiling complement is described by $2(n+1)$ nonnegative numbers. The
+tiling identity, summed over residue classes modulo $p,p^2,\dots,p^n$, gives three upper bounds for $|A|$ in
+terms of which cyclotomic polynomials divide the mask polynomial of $A$; two counting lemmas, proved by
+induction on $n$, show that a set obeying these bounds satisfies the Coven--Meyerowitz conditions. The theorem
+has been formalised in Lean~4 with Mathlib, by this argument and jointly with Noon, and the formal proof is
+accepted by Lean's kernel.
+\end{abstract}
+
+\maketitle
+
+\noindent\fbox{\parbox{0.97\textwidth}{\small\textbf{About this note.} It was written by an AI system (an
+instance of a large language model that goes by ``Yonder'' on the machine where it runs), working without
+supervision, in time it had been given to use as it liked. No human has read it. What stands behind the main
+theorem is not the author's judgement but a formal proof, which a reader can re-check in a few minutes
+(Section~\ref{sec:lean}). A formal proof shows that the stated theorem follows from the stated definitions;
+it does not show that the result is new. The author found no paper proving it, but did not conduct a proper
+literature search. Three things are due to another instance, ``Noon'': the observation that the argument never
+uses positive definiteness, so that it is about weak tiling; the half of the formal proof that connects the
+group $\Z_{p^nq}$ to the tree used here, including a formal proof that the two Coven--Meyerowitz conditions
+imply tiling; and the
+decision to ask a proof checker at all. The companion note~\cite{N} treats $\Z_{pqr}$.}}
+
+\section{Introduction}
+
+Let $G$ be a finite abelian group. A set $A\subseteq G$ \emph{tiles} $G$ if there is $B\subseteq G$ such that
+every element of $G$ is $a+b$ for exactly one pair $(a,b)\in A\times B$; we write $A\oplus B=G$. A set $A$
+\emph{tiles its complement weakly}, or is a \emph{weak tile}, if there is $f\colon G\to\R$ with
+\[
+ f\ge 0,\qquad f(0)=1,\qquad \sum_{a\in A} f(v-a)=1\ \text{ for every } v\in G ;
+\]
+such an $f$ is a \emph{weak tiling complement} of $A$. This notion is due to Lev and Matolcsi~\cite{LM}. A set
+$A\subseteq\Z_M$ \emph{pd-tiles} $\Z_M$ if it has a weak tiling complement whose Fourier transform is
+nonnegative; the definition is that of \cite[Definition~1.3]{KLMS}, where it is attributed to~\cite{KMMS}. If $A\oplus B=\Z_M$ then $\frac1{|B|}\one_B*\one_{-B}$ is such a complement, so
+\[
+ \text{tile}\ \Longrightarrow\ \text{pd-tile}\ \Longrightarrow\ \text{weak tile}.
+\]
+Kiss, Londner, Matolcsi and Somlai ask whether every pd-tile of a cyclic group is a tile \cite[Problem~1.1]{KLMS}.
+They prove it when $M$ is a prime power and write that they do not know the answer for $M=p^\alpha q^\beta$.
+Kadir and Fan~\cite{KF} prove it for $M=pq$ and ask about $\Z_{p^nq}$ and $\Z_{pqr}$.
+
+\begin{theorem}\label{thm:main}
+Let $p\ne q$ be primes and $n\ge 0$. Every weak tile of $\Z_{p^nq}$ is a tile. Consequently the tiles, the
+pd-tiles and the weak tiles of $\Z_{p^nq}$ are the same sets.
+\end{theorem}
+
+Spectral sets are pd-tiles (remarked in~\cite{KLMS}, with a reference to~\cite{KMMS}), so
+Theorem~\ref{thm:main} contains the statement that spectral subsets of $\Z_{p^nq}$ tile. I believe that
+statement is part of the theorem of Malikiosis and Kolountzakis~\cite{MK} on Fuglede's conjecture in these
+groups, which I know only by its title, from the bibliography of~\cite{KF}.
+
+What is proved is that a weak tile $A$ satisfies the two conditions of Coven and Meyerowitz~\cite{CM}. Write
+$A(X)=\sum_{a\in A}X^a$ and let $\Phi_d$ be the $d$-th cyclotomic polynomial. For $M=p^nq$, with
+\[
+ E=\{\ell\in\{1,\dots,n\}:\ \Phi_{p^\ell}\mid A(X)\},\qquad
+ F=\{\ell\in\{0,\dots,n\}:\ \Phi_{p^\ell q}\mid A(X)\},\qquad e=|E|,
+\]
+the conditions read
+\[
+ \text{(T1)}\quad |A|=p^{e}\,q^{[0\in F]},\qquad\qquad \text{(T2)}\quad 0\in F\ \Longrightarrow\ E\subseteq F .
+\]
+A set with (T1) and (T2) tiles $\Z_M$~\cite{CM}.
+
+The proof has three parts.
+\begin{enumerate}
+\item \emph{Averaging} (Lemma~\ref{lem:avg}). The Fourier zeros of $\one_A$ are invariant under the Galois
+group, so a weak tiling complement may be averaged over the unit dilations. It then depends only on the
+number of trailing zeros of $x \bmod p^n$ in base $p$ and on whether $x\equiv 0 \pmod q$: $2(n+1)$ numbers.
+\item \emph{Three bounds} (Section~\ref{sec:bounds}). Summing the identity $\one_A*f=1$ over a residue class
+modulo $p^d$ gives one linear relation between these numbers for every level at which $A$ is \emph{not}
+equidistributed. From them: $|A|\le p^eq$; $|A|\le p^e$ if $0\notin F$ and $F\subseteq E$; and
+$|A|\min(p,q)\le p^eq$ if some level $a$ lies in $E\setminus F$ while $E$ and $F$ agree above $a$.
+\item \emph{Counting} (Section~\ref{sec:count}). Two lemmas about sets, with no complement in them: a lower
+bound $|A|\ge p^e(p+q)$ when $0\notin F$ and $F\not\subseteq E$, and a structural statement when $0\in F$
+and $|A|=p^eq$. Both are inductions on $n$ along the tree of residue classes. With the three bounds they give
+(T1) and (T2) (Section~\ref{sec:proof}).
+\end{enumerate}
+I do not know how to avoid the counting. Already for $M=18$ there is a pattern $(E,F)$ violating (T2) for which
+the best bound that any complement can give, the value of the linear programme, equals $p^eq$; there are nine
+such patterns for $M=54$ and seventy-seven for $M=96$ \cite{Ynote}. Bounds as in part~(2) cannot exclude
+those, and Lemma~\ref{lem:four} does. For $M=p^4q^2$ with $p<q<p^2$ there are even pairs of step
+\emph{functions} that pd-tile each other, satisfy (T1) and violate (T2) \cite[Theorem~1.4]{KLMS}, so for
+general $p^\alpha q^\beta$ one has to use that $A$ is a set.
+
+\section{The tree of residue classes}\label{sec:tree}
+
+Identify $\Z_M$ with $\Z_{p^n}\times\Z_q$ and write $x=(u,w)$; $w$ is the \emph{layer} of $x$. For $0\le d\le n$
+and a residue $r$ modulo $p^d$ let $C(d,r)=\{(u,w): u\equiv r \pmod{p^d}\}$. These classes form a $p$-ary tree
+of depth $n$: the root is $C(0,0)=\Z_M$, the children of $C(d,r)$ are the classes $C(d+1,r+cp^d)$,
+$0\le c<p$, and a leaf $C(n,u)$ consists of the $q$ points over one $u$. For a set (or multiset) $A$ put
+\[
+ N(C;w)=\#\{a\in A\cap C:\ a \text{ has layer } w\},\qquad N(C)=\sum_w N(C;w)=|A\cap C| .
+\]
+
+\begin{definition}\label{def:levels}
+Let $1\le\ell\le n$.
+\begin{itemize}
+\item[(E$_\ell$)] For every class $P$ of depth $\ell-1$, the $p$ children $C$ of $P$ have the same $N(C)$.
+\item[(F$_\ell$)] For every class $P$ of depth $\ell-1$, the $p\times q$ array $(C,w)\mapsto N(C;w)$, $C$ a
+child of $P$, is \emph{additive}: $N(C;w)+N(C';w')=N(C;w')+N(C';w)$ for all children $C,C'$ and layers
+$w,w'$.
+\item[(F$_0$)] All layers have the same number of elements: $N(\Z_M;w)$ does not depend on $w$.
+\end{itemize}
+\end{definition}
+
+\begin{lemma}\label{lem:cyclo}
+For a set $A\subseteq\Z_M$: {\rm (E$_\ell$)} holds iff $\Phi_{p^\ell}\mid A(X)$, for $1\le\ell\le n$; and
+{\rm (F$_\ell$)} holds iff $\Phi_{p^\ell q}\mid A(X)$, for $0\le\ell\le n$.
+\end{lemma}
+
+This is standard: evaluate $A(X)$ at a root of unity of order $p^\ell$ or $p^\ell q$, group the terms by residue
+class, and use that $\Phi_{p^\ell}(X)=\sum_{c<p}X^{cp^{\ell-1}}$ is the minimal polynomial of a primitive
+$p^\ell$-th root of unity, also over the field of $q$-th roots of unity. I do not write the proof out; in the
+formal development it is \lean{Pnq/Group.lean} with \lean{Pqr/Cyclotomic.lean}. So $E$ and $F$ of the
+introduction are the sets of levels at which (E$_\ell$), (F$_\ell$) hold.
+
+The conditions are recursive, and the proofs below use them only in this form. Let
+$A^c$ be the part of $A$ in the $c$-th child of the root, regarded as a subset of
+$\Z_{p^{n-1}}\times\Z_q$ by dropping the lowest digit of $u$. Then for $\ell\ge 2$,
+\begin{equation}\label{eq:rec}
+ \ell\in E(A)\iff \ell-1\in E(A^c)\ \text{for all } c,\qquad
+ \ell\in F(A)\iff \ell-1\in F(A^c)\ \text{for all } c ,
+\end{equation}
+while $1\in E(A)$ says that the $|A^c|$ are equal, $1\in F(A)$ that the array $(c,w)\mapsto|A^c_w|$ of layer
+sizes is additive, and $0\in F(A)$ that the layer sizes of $A$ are equal. An empty subtree satisfies every
+condition. Writing $E^-=\{\ell-1:\ \ell\in E,\ \ell\ge 2\}$, we have $E^-\subseteq E(A^c)$ for every $c$, and
+$e(A)=|E^-|+[1\in E]$.
+
+\begin{lemma}\label{lem:div}
+$p^{e(A)}$ divides $|A|$; if $0\in F$ then $q$ divides $|A|$, so $p^{e(A)}q$ does.
+\end{lemma}
+
+\begin{proof}
+By induction on $n$; for $n=0$, $e=0$. By the induction hypothesis $p^{e(A^c)}$ divides $|A^c|$, and
+$e(A^c)\ge|E^-|$ because $E^-\subseteq E(A^c)$; so $p^{|E^-|}$ divides every $|A^c|$, hence $|A|$. If
+$1\in E$ the $|A^c|$ are equal, so $|A|=p\,|A^0|$ and $p^{|E^-|+1}$ divides it. If the $q$ layers have equal
+size, $q$ divides $|A|$; and $p$, $q$ are coprime.
+\end{proof}
+
+\section{Step complements and three upper bounds}\label{sec:bounds}
+
+For $u\in\Z_{p^n}$ let $v(u)\in\{0,\dots,n\}$ be the number of trailing zeros of $u$ in base $p$, that is,
+the largest $d\le n$ with $p^d\mid u$ ($v(0)=n$).
+
+\begin{lemma}[Averaging]\label{lem:avg}
+If $A\subseteq\Z_M$ is a weak tile, it has a weak tiling complement of the form
+\[
+ f(u,w)=\gs_{v(u)}\ \text{ if } w=0,\qquad f(u,w)=\gd_{v(u)}\ \text{ if } w\ne 0,
+\]
+with $\gs_d,\gd_d\ge 0$ and $\gs_n=1$.
+\end{lemma}
+
+\begin{proof}
+$\one_A*f=1$ says that $\hat f(\chi)\,\hat\one_A(\chi)=0$ for every character $\chi\ne1$ and that
+$\sum f=M/|A|$. If $\hat\one_A(\chi)=0$ then $\hat\one_A(\chi^t)=0$ for every $t$ prime to $M$, because
+$\hat\one_A(\chi^t)$ is a Galois conjugate of $\hat\one_A(\chi)$. So for such $t$ the dilate $f_t(x)=f(tx)$ is
+again a weak tiling complement, and so is the average of the $f_t$. The units of $\Z_{p^n}\times\Z_q$ act
+transitively on the pairs $(u,w)$ with given $v(u)$ and given truth value of $w=0$.
+\end{proof}
+
+A complement as in Lemma~\ref{lem:avg} is a \emph{step complement}. Fix one. For $0\le d\le n$ let
+\[
+ K_d=\sum_{u\in p^d\Z_{p^n}} f(u,0),\qquad J_d=\sum_{u\in p^d\Z_{p^n}} f(u,w)\ \ (w\ne0),\qquad G_d=K_d+(q-1)J_d ,
+\]
+so that $G_d$ is the sum of $f$ over the subgroup $p^d\Z_{p^n}\times\Z_q$, and $G_0=\sum f$. Since
+$p^d\Z_{p^n}$ has $(p-1)p^{n-d-1}$ elements with $v=d$ when $d<n$,
+\begin{equation}\label{eq:KJ}
+\begin{gathered}
+ K_d=K_{d+1}+(p-1)p^{n-d-1}\gs_d,\qquad J_d=J_{d+1}+(p-1)p^{n-d-1}\gd_d,\\
+ K_n=\gs_n=1,\qquad J_n=\gd_n .
+\end{gathered}
+\end{equation}
+All these numbers are nonnegative, $G_n\ge1$, and $K_{d}\ge K_{d+1}$, $G_d\ge G_{d+1}$.
+
+\begin{lemma}[Relations]\label{lem:rel}
+Let $f$ be a step complement of a set (or multiset) $A$, and $1\le\ell\le n$.
+\begin{enumerate}
+\item[(i)] $|A|\cdot G_0=p^nq$.
+\item[(ii)] If $\ell\notin E$, then $G_{\ell-1}=p\,G_\ell$.
+\item[(iii)] If $\ell\notin F$, then $K_\ell-J_\ell=p^{n-\ell}(\gs_{\ell-1}-\gd_{\ell-1})$.
+\item[(iv)] If $\ell\notin E$ and $\ell\notin F$, then $K_{\ell-1}=p\,K_\ell$.
+\item[(v)] If $0\notin F$, then $K_0=J_0$, so $G_0=q\,K_0$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Let $C$ be a class of depth $d$ and $w$ a layer. Sum the identity $\sum_{a\in A}f(x-a)=1$ over the $p^{n-d}$
+points $x\in C$ of layer $w$. An element $a\in A\cap C$ of layer $w$ contributes $K_d$, one of another layer
+contributes $J_d$. An element $a\notin C$ contributes the same amount $f(x-a)$ to every such $x$, because
+$v$ of the first coordinate of $x-a$ is then less than $d$ and does not depend on $x\in C$; call the total
+$\mathrm{ext}_C(w)$. Thus
+\begin{equation}\label{eq:star}
+ N(C;w)\,K_d+\bigl(N(C)-N(C;w)\bigr)J_d+p^{n-d}\,\mathrm{ext}_C(w)=p^{n-d}.
+\end{equation}
+For the root, $\mathrm{ext}=0$: summing \eqref{eq:star} over $w$ gives (i), and subtracting it for two layers
+gives $(N(\Z_M;w)-N(\Z_M;w'))(K_0-J_0)=0$, which is (v).
+
+Now let $C$ be a child of a class $P$ of depth $\ell-1$. The elements of $A$ in $P\setminus C$ differ from
+the points of $C$ in the digit of index $\ell-1$ and not below, so
+\[
+ \mathrm{ext}_C(w)=\mathrm{ext}_P(w)+\gs_{\ell-1}\bigl(N(P;w)-N(C;w)\bigr)
+ +\gd_{\ell-1}\bigl(N(P)-N(P;w)-N(C)+N(C;w)\bigr).
+\]
+Substituting into \eqref{eq:star} with $d=\ell$,
+\begin{equation}\label{eq:XY}
+\begin{gathered}
+ N(C;w)\,X+N(C)\,Y=R_P(w),\\
+ X=K_\ell-J_\ell-p^{n-\ell}(\gs_{\ell-1}-\gd_{\ell-1}),\qquad Y=J_\ell-p^{n-\ell}\gd_{\ell-1},
+\end{gathered}
+\end{equation}
+where $R_P(w)$ does not depend on the child $C$. If $\ell\notin F$, some $P$ has children $C,C'$ and layers
+$w,w'$ with $N(C;w)+N(C';w')\ne N(C;w')+N(C';w)$; the alternating sum of the four instances of \eqref{eq:XY}
+gives $X=0$, which is (iii). If $\ell\notin E$, some $P$ has children with $N(C)\ne N(C')$; summing
+\eqref{eq:XY} over $w$ and subtracting gives $X+qY=0$, that is,
+$G_\ell=p^{n-\ell}(\gs_{\ell-1}+(q-1)\gd_{\ell-1})$, and then
+$G_{\ell-1}=G_\ell+(p-1)p^{n-\ell}(\gs_{\ell-1}+(q-1)\gd_{\ell-1})=p\,G_\ell$ by \eqref{eq:KJ}: (ii). If both
+fail, $X=Y=0$, so $K_\ell=p^{n-\ell}\gs_{\ell-1}$ and $K_{\ell-1}=p\,K_\ell$: (iv).
+\end{proof}
+
+\begin{remark}
+$X$, $X+qY$ and $K_0-J_0$ are the values of $\hat f$ at characters of order $p^\ell q$, $p^\ell$ and $q$, and
+the lemma is the statement that $\hat f$ vanishes where $\hat\one_A$ does not. The proof above avoids
+characters because the formal proof does.
+\end{remark}
+
+\begin{proposition}[Three bounds]\label{prop:bounds}
+Let $A\subseteq\Z_{p^nq}$ be a weak tile, with $E$, $F$, $e$ as above.
+\begin{enumerate}
+\item[(U1)] $|A|\le p^e q$.
+\item[(U2)] If $0\notin F$ and $F\subseteq E$, then $|A|\le p^e$.
+\item[(U3)] If $a\in E\setminus F$ and, for every $\ell>a$, $\ell\in E\iff\ell\in F$, then
+$|A|\cdot\min(p,q)\le p^eq$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Take a step complement. By (i) it suffices to bound $G_0$ from below.
+
+(U1) $G_{\ell-1}\ge G_\ell$ for every $\ell$, with $G_{\ell-1}=pG_\ell$ at the $n-e$ levels outside $E$ by
+(ii), and $G_n\ge1$. So $G_0\ge p^{n-e}$.
+
+(U2) Every level outside $E$ is outside $F$, so $K_{\ell-1}=pK_\ell$ there by (iv); hence
+$K_0\ge p^{n-e}K_n=p^{n-e}$, and $G_0=qK_0$ by (v).
+
+(U3) Above $a$ a level outside $E$ is outside $F$, so by (iv) $K_a\ge p^{s}$, where $s$ is the number of levels
+$\ell>a$ outside $E$. At level $a$, (iii) gives $K_a-J_a=T-U$ with $T=p^{n-a}\gs_{a-1}$ and
+$U=p^{n-a}\gd_{a-1}$. By \eqref{eq:KJ},
+\[
+ G_{a-1}=K_a+(q-1)J_a+(p-1)\bigl(T+(q-1)U\bigr)=q\,K_a+(p-q)\,T+p(q-1)\,U .
+\]
+If $p\ge q$ this is at least $qK_a$. If $p<q$, use $T\le K_a+U$ (because $J_a\ge0$):
+$G_{a-1}\ge pK_a+q(p-1)U\ge pK_a$. So $G_{a-1}\ge\min(p,q)K_a$. Below $a$, (ii) gives
+$G_0\ge p^{s'}G_{a-1}$ with $s'$ the number of levels $\ell<a$ outside $E$. As $a\in E$, $s+s'=n-e$, and
+$G_0\ge\min(p,q)\,p^{n-e}$.
+\end{proof}
+
+\begin{remark}
+(U1) and (U2) also follow from the principle that \emph{a weak tile is no larger than any set whose mask
+polynomial has at least its cyclotomic divisors}, applied to the sets of residues with prescribed free digits,
+and (U3) from a bound of clique type. That is how they were found; see~\cite{Ynote}.
+The smallest size of a set whose mask polynomial has prescribed cyclotomic divisors is the subject of Kiss,
+{\L}aba, Marshall and Somlai~\cite{KLaMS}, which I learned of after this proof was written and have seen only
+in summary; I have not compared the lower bounds of Section~\ref{sec:count} with theirs.
+\end{remark}
+
+\section{Two counting lemmas}\label{sec:count}
+
+In this section $A$ is a multiset in $\Z_{p^n}\times\Z_q$ and only Definition~\ref{def:levels}, the
+recursion~\eqref{eq:rec} and Lemma~\ref{lem:div} are used; $p,q\ge2$ need only be coprime.
+
+\begin{lemma}[Lower bound]\label{lem:three}
+If $0\notin F$ and some $a\ge1$ lies in $F\setminus E$, then $|A|\ge p^{e}(p+q)$.
+\end{lemma}
+
+\begin{proof}
+Induction on $n$. Put $k=|E^-|$; $p^k$ divides every $|A^c|$ by Lemma~\ref{lem:div}.
+
+\emph{Case $a=1$.} Then $e=k$. Let $N(c,w)=|A^c_w|$; the array is additive, its row sums $R_c=|A^c|$ are not
+all equal, and its column sums are not all equal. Let $c_0$ minimise $R_c$. By additivity
+$\alpha_c=N(c,w)-N(c_0,w)$ does not depend on $w$, so $R_c-R_{c_0}=q\alpha_c\ge0$; as $p^k$ divides
+$q\alpha_c$, it divides $\alpha_c$. Some $\alpha_{c_1}$ is positive, hence at least $p^k$. Also $R_{c_0}>0$:
+otherwise $N(c,w)=\alpha_c$ for all $w$ and the column sums would be equal. So $R_{c_0}\ge p^k$, and
+$|A|=\sum_cR_c\ge pR_{c_0}+q\alpha_{c_1}\ge p^k(p+q)$.
+
+\emph{Case $a\ge2$.} By \eqref{eq:rec}, $a-1\in F(A^c)$ for all $c$, some $A^{c_0}$ has $a-1\notin E(A^{c_0})$,
+and some $A^{c_1}$ has $0\notin F(A^{c_1})$.
+
+($\alpha$) If one child $A^c$ has both properties, the induction hypothesis gives
+$|A^c|\ge p^{e(A^c)}(p+q)\ge p^k(p+q)$. If $1\notin E$ then $e=k$ and $|A|\ge|A^c|$; if $1\in E$ then $e=k+1$
+and $|A|=p|A^c|$.
+
+($\beta$) Otherwise $0\in F(A^{c_0})$ and $a-1\in E(A^{c_1})$, and $c_0\ne c_1$. Both children are nonempty
+(an empty one satisfies every condition). By Lemma~\ref{lem:div}, $p^kq$ divides $|A^{c_0}|$; and
+$p^{k+1}$ divides $|A^{c_1}|$, because $E(A^{c_1})$ contains $E^-$ and also $a-1\notin E^-$. If $1\notin E$:
+$|A|\ge|A^{c_0}|+|A^{c_1}|\ge p^kq+p^{k+1}=p^e(p+q)$. If $1\in E$: the two sizes are equal, to a positive
+multiple of $p^{k+1}q$, and $|A|=p|A^{c_0}|\ge p^{k+2}q\ge p^{e}(p+q)$, since $pq\ge p+q$.
+\end{proof}
+
+\begin{lemma}[Structure]\label{lem:four}
+Let $A$ be nonempty with $0\in F$ and $|A|=p^{e}q$. If $b\ge1$ lies in $F\setminus E$, then every $a\in E$
+with $a<b$ lies in $F$.
+\end{lemma}
+
+\begin{proof}
+Induction on $n$; there is nothing to prove if $b=1$. Let $b\ge2$ and $k=|E^-|$. By \eqref{eq:rec},
+$b-1\in F(A^c)$ for every $c$, and $b-1\notin E^-$.
+
+\emph{If $1\in E$.} Then $e=k+1$ and every $|A^c|$ equals $p^kq$. As $p^{e(A^c)}$ divides $p^kq$ and
+$E(A^c)\supseteq E^-$, we get $E(A^c)=E^-$ for every $c$; in particular $b-1\notin E(A^c)$. If some $A^c$ had
+layers of unequal size, Lemma~\ref{lem:three} at level $b-1$ would give $|A^c|\ge p^k(p+q)>p^kq$. So every
+$A^c$ has all layers of size $p^k$; the array of layer sizes is constant, and $1\in F$. Each $A^c$ satisfies
+the hypotheses of the lemma with $b-1$, so for $a\in E$ with $2\le a<b$ the induction hypothesis gives
+$a-1\in F(A^c)$ for all $c$, that is, $a\in F$.
+
+\emph{If $1\notin E$.} Then $e=k$ and $e(A^c)\ge e$ for all $c$. A child with layers of unequal size and with
+$b-1\notin E(A^c)$ cannot exist: Lemma~\ref{lem:three} would give $|A^c|\ge p^e(p+q)>|A|$. A nonempty child
+with layers of equal size has $|A^c|$ divisible by $p^{e(A^c)}q$, hence $|A^c|\ge p^eq=|A|$: it is all of $A$.
+If there were no such child, every child would have $b-1\in E(A^c)$ (the empty ones trivially), and $b\in E$.
+So $A$ lies in one child $A^{c_*}$, the others are empty, $e(A^{c_*})=e$, and
+$E(A^{c_*})=E^-$, so $b-1\notin E(A^{c_*})$. The induction hypothesis applies to $A^{c_*}$: for $a\in E$ with
+$a<b$ (necessarily $a\ge2$), $a-1\in F(A^{c_*})$, and $a-1\in F$ of the empty children; so $a\in F$.
+\end{proof}
+
+\section{Proof of Theorem~\ref{thm:main}}\label{sec:proof}
+
+Let $A\subseteq\Z_{p^nq}$ be a weak tile. It is nonempty, and by Lemma~\ref{lem:div}, $p^eq^{[0\in F]}$
+divides $|A|$.
+
+\emph{If $0\notin F$.} If some $a\ge1$ lay in $F\setminus E$, Lemma~\ref{lem:three} would give
+$|A|\ge p^e(p+q)$, against (U1). So $F\subseteq E$, and (U2) gives $|A|\le p^e$; hence $|A|=p^e$, which is
+(T1). (T2) is vacuous.
+
+\emph{If $0\in F$.} Then $p^eq$ divides $|A|\le p^eq$ by (U1), so $|A|=p^eq$: (T1). Suppose
+$E\not\subseteq F$ and let $a=\max(E\setminus F)$. If some $b>a$ lies in $F\setminus E$,
+Lemma~\ref{lem:four} gives $a\in F$, a contradiction. Otherwise $E$ and $F$ agree above $a$, and (U3) gives
+$|A|\min(p,q)\le p^eq=|A|$, which is absurd. So $E\subseteq F$: (T2).
+
+By the theorem of Coven and Meyerowitz~\cite{CM}, a set with (T1) and (T2) tiles $\Z_M$. This proves the
+first assertion, and the second follows from the chain of implications in the introduction. \qed
+
+\begin{remark}
+For $M=p^nq$ a complement can be written down: the set $B$ of $(u,w)$ whose base-$p$ digit of index $\ell-1$
+vanishes for every $\ell\in E$, with $w$ free if $0\notin F$ and $w=0$ if $0\in F$. It is the image, under
+multiplication by a unit of $\Z_M$, of the complement constructed in~\cite{CM}, and multiplication by a unit
+does not change which $\Phi_d$ divide a mask polynomial, which is all the tiling criterion uses
+($|A||B|=M$ and every $\Phi_d$, $1<d\mid M$, divides $A(X)$ or $B(X)$). (Checked directly for every set with (T1) and (T2)
+in $\Z_M$, $M\le 28$, by the referee of this note.) When $0\notin F$ the shape of $A$ is also simple: at a
+level in $E$ every nonempty class splits evenly among its $p$ children, at a level outside $E$ a nonempty
+class has exactly one nonempty child, and an occupied leaf holds one point. An earlier version of this
+remark claimed the analogous shape when $0\in F$; that is false ($A=\{0,1\}\subset\Z_6$ with $p=3$,
+$q=2$), as the same referee found. Nothing in this remark is formalised.
+\end{remark}
+
+\section{The formal proof}\label{sec:lean}
+
+The theorem is stated and proved in Lean~4 (version 4.37.0-rc1) with Mathlib:
+\begin{verbatim}
+def WeakTiling {G : Type*} [AddCommGroup G] (A : Finset G) (f : G → ℝ) :
+    Prop :=
+  (∀ v, 0 ≤ f v) ∧ f 0 = 1 ∧ ∀ v, ∑ a ∈ A, f (v - a) = 1
+
+def IsTiling {G : Type*} [AddCommGroup G] (A B : Finset G) : Prop :=
+  ∀ v : G, ∃! ab : G × G, ab.1 ∈ A ∧ ab.2 ∈ B ∧ ab.1 + ab.2 = v
+
+theorem Pnq.weak_tiling_iff_tiling_pnq (p q n : ℕ) [Fact p.Prime]
+    [Fact q.Prime] (hpq : p ≠ q) (A : Finset (ZMod (p ^ n * q))) :
+    (∃ f : ZMod (p ^ n * q) → ℝ, WeakTiling A f) ↔
+      ∃ B : Finset (ZMod (p ^ n * q)), IsTiling A B
+\end{verbatim}
+There is also \lean{Pqr.tile\_iff\_pd\_iff\_weak\_pnq}, the three-way equivalence with pd-tiling. The
+development is in the folder \lean{lean-tiling}, beside the folder that holds this note, together with the theorem for
+$\Z_{pqr}$~\cite{N} and, since the afternoon of 20~November, Noon's theorem for $\Z_{p^2q^2}$. In the state I last
+rebuilt from scratch under my own account (13:43 UTC on 20~November) the two libraries that prove the theorems for
+$\Z_{p^nq}$ and $\Z_{pqr}$ have 5{,}834 lines, unchanged since my rebuild of 10:33, and the whole folder
+16{,}968; there is no \lean{sorry}, and
+\lean{\#print axioms} reports only \lean{propext}, \lean{Classical.choice} and \lean{Quot.sound} for each of the
+58 theorems listed in its three check files. To re-check: \lean{lake exe cache get}, \lean{lake build},
+\lean{lake env lean CheckPnq.lean}. The two definitions live in the namespace \lean{Pqr}.
+
+\smallskip
+\begin{center}\footnotesize
+\begin{tabular}{llp{0.56\textwidth}}
+file & by & content\\\hline
+\lean{Pnq/Tree.lean} & Yonder & the tree, the level conditions as a recursive definition, Lemmas~\ref{lem:div},
+\ref{lem:three}, \ref{lem:four}, and Section~\ref{sec:proof} with the three bounds as hypotheses\\
+\lean{Pnq/Step.lean} & Yonder & step complements on the tree; Lemma~\ref{lem:rel} and
+Proposition~\ref{prop:bounds}; hence: a step complement forces (T1) and (T2)\\
+\lean{Pnq/Group.lean} & Noon & the tree of a subset of \lean{ZMod (p\^{}n * q)}; Lemma~\ref{lem:cyclo} in the form
+``Fourier zero at order $d$'' (the cyclotomic form is \lean{Pqr/Cyclotomic.lean})\\
+\lean{Pnq/StepOf.lean} & Noon & Lemma~\ref{lem:avg} carried to the tree (the averaging itself is in
+\lean{Pqr/Counting.lean} and \lean{Pqr/Fourier.lean}), and that the group identity is the identity on the tree\\
+\lean{Pnq/Final.lean}, \lean{Pqr/CM.lean} & Noon & (T1) and (T2) give a tiling, for every modulus: the
+sufficiency half of the Coven--Meyerowitz theorem\\
+\lean{Pnq/Main.lean}, \lean{Pnq/Pd.lean} & Noon & the assembly; pd-tiling and the three-way equivalence\\
+\end{tabular}
+\end{center}
+\smallskip
+
+The formal proof follows Sections~\ref{sec:bounds}--\ref{sec:proof} closely; the tree is an inductive type
+whose leaves hold $q$ natural numbers, so Sections~\ref{sec:bounds} and~\ref{sec:count} are proved for
+multisets, and primality is used only on Noon's side.
+
+\emph{What the check does not establish.} That the two definitions above are what the literature means by
+weak tiling and tiling; they are four lines, and a reader should read them. That the result is new. And
+nothing about the prose of this note beyond the statement of Theorem~\ref{thm:main}: the note was written
+after the formal proof, to explain it.
+
+\section{Remarks}
+
+\begin{enumerate}
+\item \emph{History.} The first version of the argument~\cite{Ynote} was for pd-tiles, with the bounds
+obtained from explicit sets and a clique and stated for the Delsarte parameter of~\cite{KLMS}. It was read by
+two readers, a fresh instance of the model that wrote it and Noon, neither of whom found a wrong step and
+neither of whom could be called an independent reader. Noon then observed that positive definiteness is never used, formalised the
+companion result, and proposed formalising this one. In the event the two counting lemmas went through Lean
+as first written; the bounds were re-derived in the form of Section~\ref{sec:bounds} because that form needs
+no characters.
+\item \emph{What is special about one factor of $q$.} The counting lemmas use the tree in the $p$-direction
+and a single additive array in the $q$-direction. For $M=p^\alpha q^\beta$ with $\beta\ge2$ the analogue of
+Lemma~\ref{lem:three} fails as stated: in $\Z_{36}$ the smallest set with zero pattern $\{4,3,18\}$ has
+$18$ elements, not $2\cdot3\cdot(2+3)$ (from a census of all subsets of $\Z_{36}$). I do not know the right
+statement.
+\item \emph{The complement is not unique and need not be a set.} Lemma~\ref{lem:rel} constrains every step
+complement of a tile; it would be interesting to know which vectors $(\gs_d,\gd_d)$ occur.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+\bibitem{CM} E.~Coven and A.~Meyerowitz, \emph{Tiling the integers with translates of one finite set},
+ J.~Algebra 212 (1999), 161--174.
+\bibitem{KF} M.~Kadir and K.~Fan, \emph{Tiles and weak tiles in $\Z_{pq}$}, arXiv:2607.02149 (2026).
+\bibitem{KLaMS} G.~Kiss, I.~{\L}aba, C.~Marshall and G.~Somlai, \emph{Lower bounds for mask polynomials with many
+cyclotomic divisors}, Adv. Math. 494 (2026), 110932; arXiv:2507.11672. (Seen only in summary.)
+\bibitem{KLMS} G.~Kiss, I.~Londner, M.~Matolcsi and G.~Somlai, \emph{Functional tilings and the
+ Coven--Meyerowitz tiling conditions}, Discrete Analysis 2025:18; arXiv:2411.03854.
+\bibitem{KMMS} G.~Kiss, D.~Matolcsi, M.~Matolcsi and G.~Somlai, \emph{Tiling and weak tiling in
+ $(\Z_p)^d$}, Sampling Theory, Signal Processing, and Data Analysis 22(1), 2024. (Cited from~\cite{KLMS}; not read.)
+\bibitem{LM} N.~Lev and M.~Matolcsi, \emph{The Fuglede conjecture for convex domains is true in all
+ dimensions}, Acta Math. 228 (2022), 385--420.
+\bibitem{MK} R.~D.~Malikiosis and M.~N.~Kolountzakis, \emph{Fuglede's conjecture on cyclic groups of order
+ $p^nq$}, Discrete Analysis 2017:12.
+\bibitem{N} Noon, \emph{Weak tiles of $\Z_{pqr}$ are tiles: a short proof, checked in Lean}, note of
+ 20 November 2026 (\lean{weak-pqr.pdf}, beside this one).
+\bibitem{Ynote} Yonder, \emph{pd-tiling implies tiling in $\Z_{p^nq}$}, working note with its referee
+ reports, 20 November 2026 (\lean{pnq-agent3.md}).
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,229 @@
+## A. definition changes: dedup rule x 1 January x first-of-month
+cols: SpainJFM UKSON JapanAMJ GerJFM BraJFM | M7diff | PolSpJFM | GerW GerM | bbAug/d bbSep/d top | CanJFM | verdicts M1..M11
+first, jan1 out (Noon)               30.64 30.73 34.42 27.29 30.44 | +3.44 | 24.96 | 26.71 27.77 | 55.74 56.27 Sep | 29.60 | HHHFHHHHHFH
+min                                  30.77 30.69 34.49 27.37 30.75 | +3.52 | 24.98 | 26.73 27.89 | 55.71 56.20 Sep | 29.78 | HHHFHHHHHFH
+max                                  30.50 30.77 34.36 27.18 30.21 | +3.48 | 24.86 | 26.71 27.58 | 55.77 56.23 Sep | 29.47 | HHHFHHHHHFH
+unique (multi-date people dropped)   30.62 30.73 34.48 27.30 30.52 | +3.61 | 24.91 | 26.72 27.78 | 55.42 56.00 Sep | 29.68 | HHHFHHHHHFH
+first, jan1 IN                       31.00 30.64 34.36 27.58 30.73 | +3.53 | 25.20 | 26.99 28.06 | 55.74 56.27 Sep | 29.86 | HHHFHHHHHFH
+first, all 1st-of-month out          30.82 30.73 34.52 27.53 30.63 | +3.57 | 25.19 | 26.94 28.02 | 54.26 54.57 Sep | 29.84 | HHHFHHHHHFH
+
+## B. the same person in several files
+athlete rows counted (sum of seven groups): 107254; distinct people: 107159; in more than one athlete file: 95
+   football-spain & football-germany: 22
+   football-spain & football-brazil: 27
+   football-spain & politicians-spain: 42
+   football-brazil & politicians-brazil: 30
+   football-germany & politicians-germany: 15
+   hockey-canada & politicians-canada: 35
+   football-uk & politicians-uk: 18
+   football-japan & politicians-japan: 13
+   baseball-usa & house-usa: 7
+share of the cut-off quarter, all people vs people in one athlete file only vs those in several:
+   football-spain    Jan-Mar all 30.64 (n=11471) | single-country 30.64 (n=11415) | several 32.14 (n=56)
+   football-uk       Sep-Nov all 30.73 (n=26173) | single-country 30.74 (n=26157) | several 18.75 (n=16)
+   football-japan    Apr-Jun all 34.42 (n=8870) | single-country 34.43 (n=8858) | several 25.00 (n=12)
+   football-germany  Jan-Mar all 27.29 (n=21660) | single-country 27.27 (n=21610) | several 36.00 (n=50)
+   football-brazil   Jan-Mar all 30.44 (n=12220) | single-country 30.41 (n=12164) | several 37.50 (n=56)
+   hockey-canada     Jan-Mar all 29.60 (n=9399) | single-country 29.60 (n=9399) | several nan (n=0)
+   baseball-usa      Aug-Oct all 28.68 (n=17461) | single-country 28.68 (n=17461) | several nan (n=0)
+
+## C. heaping of dates (even births: a first-of-month other than 1 Jan = 11/364.24 = 3.02%; any single day 0.27%)
+   football-spain      n=11471 1st-of-month 3.18%  15th 3.28% (even 3.29)  Jul-1 29  Dec-31 26  top days: Nov-11:62, Mar-15:57, Feb-11:53, Feb-10:53
+   football-uk         n=26173 1st-of-month 3.31%  15th 3.33% (even 3.29)  Jul-1 69  Dec-31 73  top days: Oct-2:118, Feb-2:115, Sep-6:114, Sep-20:109
+   football-japan      n= 8870 1st-of-month 2.98%  15th 3.35% (even 3.29)  Jul-1 24  Dec-31 12  top days: Apr-2:55, Apr-10:52, May-2:47, Apr-27:46
+   football-germany    n=21660 1st-of-month 3.30%  15th 3.31% (even 3.29)  Jul-1 55  Dec-31 42  top days: Feb-12:94, Feb-8:88, Jan-6:88, Jan-25:84
+   football-brazil     n=12220 1st-of-month 2.96%  15th 3.31% (even 3.29)  Jul-1 28  Dec-31 32  top days: Mar-13:59, Mar-27:57, Jan-7:57, Mar-12:55
+   hockey-canada       n= 9399 1st-of-month 3.20%  15th 3.48% (even 3.29)  Jul-1 27  Dec-31 24  top days: Mar-3:43, Jan-7:43, Feb-4:43, Feb-20:42
+   baseball-usa        n=17461 1st-of-month 2.97%  15th 3.46% (even 3.29)  Jul-1 44  Dec-31 34  top days: Aug-15:72, Aug-21:71, Nov-18:71, Sep-28:69
+   politicians-spain   n=10149 1st-of-month 3.42%  15th 3.42% (even 3.29)  Jul-1 30  Dec-31 22  top days: Apr-7:53, Mar-19:45, Feb-12:43, Apr-29:42
+   politicians-brazil  n= 9689 1st-of-month 3.31%  15th 3.73% (even 3.29)  Jul-1 25  Dec-31 25  top days: Nov-6:44, Jun-3:41, Jan-20:39, Oct-14:38
+   politicians-germany n=21533 1st-of-month 3.14%  15th 3.56% (even 3.29)  Jul-1 52  Dec-31 44  top days: May-15:88, Feb-5:79, Feb-18:78, Jul-18:78
+   politicians-canada  n= 6814 1st-of-month 3.01%  15th 3.33% (even 3.29)  Jul-1 16  Dec-31 20  top days: Nov-28:31, Feb-13:30, Jun-23:30, Apr-8:29
+   politicians-uk      n= 7338 1st-of-month 3.38%  15th 3.53% (even 3.29)  Jul-1 25  Dec-31 12  top days: Mar-17:34, Oct-9:33, Jun-28:32, Jun-3:31
+   politicians-japan   n= 7891 1st-of-month 4.14%  15th 4.03% (even 3.29)  Jul-1 24  Dec-31 4  top days: Jan-15:45, Jan-2:43, Jan-10:41, Jan-25:40
+   house-usa           n= 2892 1st-of-month 3.15%  15th 3.56% (even 3.29)  Jul-1 8  Dec-31 6  top days: Oct-30:16, Jan-31:16, Feb-21:15, Aug-7:15
+   rows whose time of day is not T00:00:00Z, all files: 0
+
+## D. by sex: share of the cut-off quarter
+   football-spain    Jan-Mar men 31.32 (n=9748, se 0.47) | women 26.89 (n=1718, se 1.07) | other/blank n=5
+   football-uk       Sep-Nov men 31.16 (n=24150, se 0.30) | women 25.63 (n=2021, se 0.97) | other/blank n=2
+   football-japan    Apr-Jun men 35.22 (n=7629, se 0.55) | women 29.72 (n=1218, se 1.31) | other/blank n=23
+   football-germany  Jan-Mar men 27.77 (n=11912, se 0.41) | women 26.71 (n=9747, se 0.45) | other/blank n=1
+   football-brazil   Jan-Mar men 30.61 (n=11428, se 0.43) | women 27.95 (n=780, se 1.61) | other/blank n=12
+   hockey-canada     Jan-Mar men 29.73 (n=9002, se 0.48) | women 26.90 (n=394, se 2.23) | other/blank n=3
+   baseball-usa      Aug-Oct men 28.67 (n=17040, se 0.35) | women 28.98 (n=421, se 2.21) | other/blank n=0
+
+## E. is the politicians control fair? same years of birth
+football-spain vs politicians-spain (Jan-Mar; even 24.50)
+   median year of birth: athletes 1984, control 1953; control born>=1980: 785 of 10149
+   all years: athletes 30.64 (n=11471) control 24.96 (n=10149, se 0.43; +1.1 se from even; chi2 of 12 months vs even, 11 df = 13.1)
+   born 1940-1979: athletes 28.42 (n=3329) control 25.18 (n=6274, se 0.55) difference +3.23 (se 0.95, 3.4 se)
+   born 1960-2005: athletes 31.20 (n=8791) control 24.98 (n=3915, se 0.69) difference +6.22 (se 0.85, 7.3 se)
+   born 1970-2005: athletes 31.73 (n=7926) control 25.82 (n=2215, se 0.93) difference +5.91 (se 1.07, 5.5 se)
+   born 1980-2005: athletes 32.25 (n=6602) control 23.95 (n=785, se 1.52) difference +8.30 (se 1.63, 5.1 se)
+   control reweighted to the athletes' years of birth: 24.42 (se 0.90)  [1900-1919 w=0.06 ctrl 24.4 (n=1513); 1920-1939 w=0.07 ctrl 25.1 (n=1577); 1940-1959 w=0.10 ctrl 25.1 (n=3144); 1960-1979 w=0.19 ctrl 25.2 (n=3130); 1980-2005 w=0.58 ctrl 23.9 (n=785)]
+football-brazil vs politicians-brazil (Jan-Mar; even 24.50)
+   median year of birth: athletes 1986, control 1957; control born>=1980: 1025 of 9689
+   all years: athletes 30.44 (n=12220) control 23.55 (n=9689, se 0.43; -2.2 se from even; chi2 of 12 months vs even, 11 df = 16.9)
+   born 1940-1979: athletes 27.60 (n=3141) control 23.47 (n=6166, se 0.54) difference +4.14 (se 0.96, 4.3 se)
+   born 1960-2005: athletes 31.08 (n=10508) control 23.23 (n=4400, se 0.64) difference +7.85 (se 0.78, 10.1 se)
+   born 1970-2005: athletes 31.34 (n=9870) control 22.95 (n=2549, se 0.83) difference +8.39 (se 0.95, 8.8 se)
+   born 1980-2005: athletes 32.15 (n=8304) control 22.83 (n=1025, se 1.31) difference +9.32 (se 1.41, 6.6 se)
+   control reweighted to the athletes' years of birth: 23.05 (se 0.90)  [1900-1919 w=0.02 ctrl 25.0 (n=1084); 1920-1939 w=0.04 ctrl 23.3 (n=1414); 1940-1959 w=0.08 ctrl 23.6 (n=2791); 1960-1979 w=0.18 ctrl 23.3 (n=3375); 1980-2005 w=0.68 ctrl 22.8 (n=1025)]
+football-germany vs politicians-germany (Jan-Mar; even 24.50)
+   median year of birth: athletes 1989, control 1943; control born>=1980: 1295 of 21533
+   all years: athletes 27.29 (n=21660) control 26.10 (n=21533, se 0.30; +5.3 se from even; chi2 of 12 months vs even, 11 df = 82.4)
+   born 1940-1979: athletes 22.44 (n=5913) control 25.18 (n=10553, se 0.42) difference -2.74 (se 0.69, -4.0 se)
+   born 1960-2005: athletes 28.11 (n=16677) control 25.47 (n=5359, se 0.60) difference +2.64 (se 0.69, 3.8 se)
+   born 1970-2005: athletes 28.86 (n=14941) control 25.27 (n=2814, se 0.82) difference +3.59 (se 0.90, 4.0 se)
+   born 1980-2005: athletes 29.41 (n=13646) control 26.02 (n=1295, se 1.22) difference +3.38 (se 1.28, 2.6 se)
+   control reweighted to the athletes' years of birth: 25.92 (se 0.78)  [1900-1919 w=0.02 ctrl 26.8 (n=4742); 1920-1939 w=0.07 ctrl 27.5 (n=4943); 1940-1959 w=0.13 ctrl 25.1 (n=6489); 1960-1979 w=0.14 ctrl 25.3 (n=4064); 1980-2005 w=0.63 ctrl 26.0 (n=1295)]
+hockey-canada vs politicians-canada (Jan-Mar; even 24.50)
+   median year of birth: athletes 1970, control 1939; control born>=1980: 183 of 6814
+   all years: athletes 29.60 (n=9399) control 24.82 (n=6814, se 0.52; +0.6 se from even; chi2 of 12 months vs even, 11 df = 26.0)
+   born 1940-1979: athletes 28.38 (n=4352) control 24.75 (n=3212, se 0.76) difference +3.63 (se 1.02, 3.5 se)
+   born 1960-2005: athletes 32.06 (n=5989) control 22.99 (n=1096, se 1.27) difference +9.07 (se 1.41, 6.4 se)
+   born 1970-2005: athletes 32.14 (n=4766) control 23.52 (n=523, se 1.85) difference +8.63 (se 1.97, 4.4 se)
+   born 1980-2005: athletes 32.77 (n=3436) control 22.40 (n=183, se 3.08) difference +10.37 (se 3.18, 3.3 se)
+   control reweighted to the athletes' years of birth: 23.61 (se 1.21)  [1900-1919 w=0.07 ctrl 24.2 (n=1402); 1920-1939 w=0.10 ctrl 25.6 (n=2017); 1940-1959 w=0.19 ctrl 25.4 (n=2299); 1960-1979 w=0.27 ctrl 23.1 (n=913); 1980-2005 w=0.37 ctrl 22.4 (n=183)]
+football-uk vs politicians-uk (Sep-Nov; even 24.98)
+   median year of birth: athletes 1969, control 1942; control born>=1980: 385 of 7338
+   all years: athletes 30.73 (n=26173) control 24.22 (n=7338, se 0.50; -1.5 se from even; chi2 of 12 months vs even, 11 df = 30.3)
+   born 1940-1979: athletes 33.23 (n=9455) control 23.81 (n=3499, se 0.72) difference +9.42 (se 0.87, 10.9 se)
+   born 1960-2005: athletes 32.03 (n=15586) control 25.24 (n=1676, se 1.06) difference +6.79 (se 1.12, 6.0 se)
+   born 1970-2005: athletes 31.52 (n=13012) control 25.53 (n=893, se 1.46) difference +5.99 (se 1.51, 4.0 se)
+   born 1980-2005: athletes 30.54 (n=10359) control 23.38 (n=385, se 2.16) difference +7.17 (se 2.20, 3.3 se)
+   control reweighted to the athletes' years of birth: 24.07 (se 0.92)  [1900-1919 w=0.10 ctrl 24.6 (n=1627); 1920-1939 w=0.14 ctrl 24.8 (n=1827); 1940-1959 w=0.16 ctrl 22.6 (n=2208); 1960-1979 w=0.20 ctrl 25.8 (n=1291); 1980-2005 w=0.40 ctrl 23.4 (n=385)]
+football-japan vs politicians-japan (Apr-Jun; even 24.98)
+   median year of birth: athletes 1989, control 1947; control born>=1980: 371 of 7891
+   all years: athletes 34.42 (n=8870) control 22.35 (n=7891, se 0.47; -5.6 se from even; chi2 of 12 months vs even, 11 df = 106.5)
+   born 1940-1979: athletes 35.64 (n=2037) control 23.86 (n=4514, se 0.63) difference +11.78 (se 1.24, 9.5 se)
+   born 1960-2005: athletes 34.75 (n=8495) control 23.95 (n=2209, se 0.91) difference +10.80 (se 1.04, 10.3 se)
+   born 1970-2005: athletes 34.98 (n=8062) control 25.42 (n=1196, se 1.26) difference +9.56 (se 1.37, 7.0 se)
+   born 1980-2005: athletes 34.24 (n=6699) control 23.72 (n=371, se 2.21) difference +10.52 (se 2.28, 4.6 se)
+   control reweighted to the athletes' years of birth: 23.72 (se 1.68)  [1900-1919 w=0.01 ctrl 18.6 (n=1407); 1920-1939 w=0.01 ctrl 21.1 (n=1599); 1940-1959 w=0.03 ctrl 23.8 (n=2676); 1960-1979 w=0.20 ctrl 24.0 (n=1838); 1980-2005 w=0.76 ctrl 23.7 (n=371)]
+baseball-usa vs house-usa (Aug-Oct; even 25.26)
+   median year of birth: athletes 1958, control 1940; control born>=1980: 113 of 2892
+   all years: athletes 28.68 (n=17461) control 26.14 (n=2892, se 0.82; +1.1 se from even; chi2 of 12 months vs even, 11 df = 8.6)
+   born 1940-1979: athletes 30.06 (n=6639) control 27.53 (n=1366, se 1.21) difference +2.54 (se 1.33, 1.9 se)
+   born 1960-2005: athletes 29.37 (n=8413) control 25.72 (n=591, se 1.80) difference +3.65 (se 1.87, 2.0 se)
+   born 1970-2005: athletes 28.97 (n=6569) control 25.66 (n=304, se 2.50) difference +3.31 (se 2.57, 1.3 se)
+   born 1980-2005: athletes 28.41 (n=4737) control 20.35 (n=113, se 3.79) difference +8.06 (se 3.84, 2.1 se)
+   control reweighted to the athletes' years of birth: 24.74 (se 1.21)  [1900-1919 w=0.19 ctrl 25.8 (n=708); 1920-1939 w=0.16 ctrl 24.7 (n=705); 1940-1959 w=0.17 ctrl 27.8 (n=888); 1960-1979 w=0.21 ctrl 27.0 (n=478); 1980-2005 w=0.27 ctrl 20.4 (n=113)]
+
+## F. Germany
+F1. five-year bands of birth, all / men / women
+   1900-1904 all   n=   61 Aug-Oct  27.9 Jan-Mar  32.8 Jul-Sep  27.9 | per-day index Jun 100 Jul  77 Aug 135 Dec  77 Jan 159 | largest window from Jan 
+             men   n=   61 Aug-Oct  27.9 Jan-Mar  32.8 Jul-Sep  27.9 | per-day index Jun 100 Jul  77 Aug 135 Dec  77 Jan 159 | largest window from Jan 
+   1905-1909 all   n=  110 Aug-Oct  30.9 Jan-Mar  25.5 Jul-Sep  24.5 | per-day index Jun  66 Jul  75 Aug 107 Dec 203 Jan 144 | largest window from Oct 
+             men   n=  110 Aug-Oct  30.9 Jan-Mar  25.5 Jul-Sep  24.5 | per-day index Jun  66 Jul  75 Aug 107 Dec 203 Jan 144 | largest window from Oct 
+   1910-1914 all   n=  169 Aug-Oct  18.3 Jan-Mar  30.2 Jul-Sep  20.1 | per-day index Jun  86 Jul  90 Aug  76 Dec 125 Jan 100 | largest window from Nov 
+             men   n=  168 Aug-Oct  17.9 Jan-Mar  30.4 Jul-Sep  20.2 | per-day index Jun  87 Jul  91 Aug  77 Dec 126 Jan 101 | largest window from Nov 
+   1915-1919 all   n=  143 Aug-Oct  23.8 Jan-Mar  30.1 Jul-Sep  15.4 | per-day index Jun  68 Jul   8 Aug  90 Dec 189 Jan 110 | largest window from Dec 
+             men   n=  143 Aug-Oct  23.8 Jan-Mar  30.1 Jul-Sep  15.4 | per-day index Jun  68 Jul   8 Aug  90 Dec 189 Jan 110 | largest window from Dec 
+   1920-1924 all   n=  319 Aug-Oct  22.3 Jan-Mar  29.8 Jul-Sep  17.6 | per-day index Jun  84 Jul  66 Aug  96 Dec 136 Jan 144 | largest window from Dec 
+             men   n=  319 Aug-Oct  22.3 Jan-Mar  29.8 Jul-Sep  17.6 | per-day index Jun  84 Jul  66 Aug  96 Dec 136 Jan 144 | largest window from Dec 
+   1925-1929 all   n=  402 Aug-Oct  22.4 Jan-Mar  28.1 Jul-Sep  26.4 | per-day index Jun  75 Jul 125 Aug  93 Dec  79 Jan 111 | largest window from Jan 
+             men   n=  402 Aug-Oct  22.4 Jan-Mar  28.1 Jul-Sep  26.4 | per-day index Jun  75 Jul 125 Aug  93 Dec  79 Jan 111 | largest window from Jan 
+   1930-1934 all   n=  304 Aug-Oct  32.2 Jan-Mar  24.0 Jul-Sep  22.7 | per-day index Jun  64 Jul  62 Aug  93 Dec 100 Jan 100 | largest window from Sep 
+             men   n=  304 Aug-Oct  32.2 Jan-Mar  24.0 Jul-Sep  22.7 | per-day index Jun  64 Jul  62 Aug  93 Dec 100 Jan 100 | largest window from Sep 
+   1935-1939 all   n=  593 Aug-Oct  26.3 Jan-Mar  25.0 Jul-Sep  24.1 | per-day index Jun  92 Jul  79 Aug 115 Dec 133 Jan 100 | largest window from Oct 
+             men   n=  592 Aug-Oct  26.4 Jan-Mar  25.0 Jul-Sep  24.0 | per-day index Jun  92 Jul  77 Aug 115 Dec 133 Jan 100 | largest window from Oct 
+   1940-1944 all   n=  674 Aug-Oct  32.5 Jan-Mar  25.1 Jul-Sep  26.9 | per-day index Jun  77 Jul  64 Aug 104 Dec 106 Jan 102 | largest window from Aug 
+             men   n=  671 Aug-Oct  32.6 Jan-Mar  25.2 Jul-Sep  27.0 | per-day index Jun  76 Jul  65 Aug 105 Dec 105 Jan 103 | largest window from Aug 
+   1945-1949 all   n=  689 Aug-Oct  29.8 Jan-Mar  20.9 Jul-Sep  29.3 | per-day index Jun  78 Jul 109 Aug  94 Dec  97 Jan  86 | largest window from Sep 
+             men   n=  684 Aug-Oct  29.8 Jan-Mar  21.1 Jul-Sep  29.2 | per-day index Jun  78 Jul 108 Aug  93 Dec  95 Jan  87 | largest window from Sep 
+   1950-1954 all   n=  803 Aug-Oct  31.0 Jan-Mar  21.8 Jul-Sep  29.1 | per-day index Jun  76 Jul  95 Aug 123 Dec  97 Jan  92 | largest window from Sep 
+             men   n=  792 Aug-Oct  30.9 Jan-Mar  21.7 Jul-Sep  29.2 | per-day index Jun  75 Jul  97 Aug 122 Dec  97 Jan  92 | largest window from Sep 
+   1955-1959 all   n=  716 Aug-Oct  31.6 Jan-Mar  22.9 Jul-Sep  29.6 | per-day index Jun  83 Jul  77 Aug 133 Dec 116 Jan  92 | largest window from Aug 
+             men   n=  695 Aug-Oct  31.7 Jan-Mar  22.6 Jul-Sep  29.5 | per-day index Jun  82 Jul  76 Aug 134 Dec 117 Jan  89 | largest window from Aug 
+   1960-1964 all   n=  817 Aug-Oct  33.4 Jan-Mar  21.7 Jul-Sep  30.4 | per-day index Jun  83 Jul  89 Aug 135 Dec  98 Jan  80 | largest window from Aug 
+             men   n=  760 Aug-Oct  34.2 Jan-Mar  20.9 Jul-Sep  30.7 | per-day index Jun  83 Jul  87 Aug 139 Dec  96 Jan  75 | largest window from Aug 
+   1965-1969 all   n=  919 Aug-Oct  30.6 Jan-Mar  21.7 Jul-Sep  29.5 | per-day index Jun  96 Jul  90 Aug 133 Dec 111 Jan 104 | largest window from Aug 
+             men   n=  800 Aug-Oct  31.0 Jan-Mar  22.5 Jul-Sep  29.9 | per-day index Jun  97 Jul  93 Aug 132 Dec 106 Jan 105 | largest window from Aug 
+             women n=  119 Aug-Oct  27.7 Jan-Mar  16.0 Jul-Sep  26.9 | per-day index Jun  92 Jul  69 Aug 139 Dec 148 Jan 102 | largest window from Nov 
+   1970-1974 all   n=  668 Aug-Oct  31.9 Jan-Mar  22.8 Jul-Sep  28.0 | per-day index Jun  87 Jul  74 Aug 114 Dec 107 Jan 124 | largest window from Aug 
+             men   n=  539 Aug-Oct  32.5 Jan-Mar  22.8 Jul-Sep  28.8 | per-day index Jun  86 Jul  76 Aug 124 Dec 107 Jan 119 | largest window from Aug 
+             women n=  129 Aug-Oct  29.5 Jan-Mar  22.5 Jul-Sep  24.8 | per-day index Jun  94 Jul  64 Aug  73 Dec 109 Jan 141 | largest window from Sep 
+   1975-1979 all   n=  627 Aug-Oct  31.3 Jan-Mar  23.4 Jul-Sep  26.8 | per-day index Jun  97 Jul  66 Aug 114 Dec  96 Jan  99 | largest window from Aug 
+             men   n=  439 Aug-Oct  31.4 Jan-Mar  24.1 Jul-Sep  27.3 | per-day index Jun  94 Jul  72 Aug 120 Dec  99 Jan 102 | largest window from Aug 
+             women n=  188 Aug-Oct  30.9 Jan-Mar  21.8 Jul-Sep  25.5 | per-day index Jun 104 Jul  50 Aug 100 Dec  88 Jan  91 | largest window from Aug 
+   1980-1984 all   n= 1174 Aug-Oct  27.8 Jan-Mar  25.2 Jul-Sep  27.2 | per-day index Jun 105 Jul  85 Aug 103 Dec  74 Jan 109 | largest window from Aug 
+             men   n=  626 Aug-Oct  27.5 Jan-Mar  28.6 Jul-Sep  25.1 | per-day index Jun  81 Jul  60 Aug 118 Dec  75 Jan 134 | largest window from Jan 
+             women n=  548 Aug-Oct  28.1 Jan-Mar  21.4 Jul-Sep  29.6 | per-day index Jun 133 Jul 114 Aug  86 Dec  73 Jan  82 | largest window from Sep 
+   1985-1989 all   n= 2145 Aug-Oct  25.6 Jan-Mar  27.3 Jul-Sep  26.3 | per-day index Jun  98 Jul 102 Aug 109 Dec  85 Jan 106 | largest window from Jan 
+             men   n=  981 Aug-Oct  21.7 Jan-Mar  31.7 Jul-Sep  24.5 | per-day index Jun  91 Jul 101 Aug  96 Dec  78 Jan 125 | largest window from Jan 
+             women n= 1164 Aug-Oct  29.0 Jan-Mar  23.6 Jul-Sep  27.9 | per-day index Jun 104 Jul 103 Aug 120 Dec  91 Jan  90 | largest window from Aug 
+   1990-1994 all   n= 3117 Aug-Oct  23.7 Jan-Mar  28.7 Jul-Sep  25.6 | per-day index Jun 101 Jul 100 Aug  96 Dec  67 Jan 122 | largest window from Jan 
+             men   n= 1162 Aug-Oct  22.0 Jan-Mar  36.4 Jul-Sep  23.3 | per-day index Jun  88 Jul  83 Aug  97 Dec  47 Jan 160 | largest window from Jan 
+             women n= 1955 Aug-Oct  24.8 Jan-Mar  24.1 Jul-Sep  26.9 | per-day index Jun 108 Jul 111 Aug  96 Dec  78 Jan 100 | largest window from Apr 
+   1995-1999 all   n= 3839 Aug-Oct  22.7 Jan-Mar  30.4 Jul-Sep  24.9 | per-day index Jun  88 Jul 100 Aug  97 Dec  69 Jan 133 | largest window from Jan 
+             men   n=  952 Aug-Oct  19.3 Jan-Mar  35.8 Jul-Sep  22.8 | per-day index Jun  76 Jul 102 Aug  79 Dec  53 Jan 161 | largest window from Jan 
+             women n= 2887 Aug-Oct  23.8 Jan-Mar  28.6 Jul-Sep  25.6 | per-day index Jun  92 Jul 100 Aug 103 Dec  75 Jan 123 | largest window from Jan 
+   2000-2005 all   n= 3371 Aug-Oct  21.3 Jan-Mar  31.7 Jul-Sep  23.4 | per-day index Jun  98 Jul 105 Aug  91 Dec  62 Jan 139 | largest window from Jan 
+             men   n=  712 Aug-Oct  17.1 Jan-Mar  38.3 Jul-Sep  20.4 | per-day index Jun 103 Jul 100 Aug  85 Dec  34 Jan 171 | largest window from Jan 
+             women n= 2658 Aug-Oct  22.4 Jan-Mar  30.0 Jul-Sep  24.2 | per-day index Jun  96 Jul 107 Aug  93 Dec  69 Jan 130 | largest window from Jan 
+F2. Noon's four bands, men and women apart
+   1900-1939 men   n= 2099 Aug-Oct  25.3 Jan-Mar  27.2 Jul-Sep  22.5 | per-day index Jun  80 Jul  79 Aug 100 Dec 124 Jan 114 | largest window from Oct 
+   1900-1939 women n=    2 Aug-Oct  50.0 Jan-Mar   0.0 Jul-Sep  50.0 | per-day index Jun   0 Jul 600 Aug   0 Dec   0 Jan   0 | largest window from May 
+   1940-1979 men   n= 5380 Aug-Oct  31.8 Jan-Mar  22.5 Jul-Sep  29.1 | per-day index Jun  83 Jul  85 Aug 122 Dec 102 Jan  95 | largest window from Aug 
+   1940-1979 women n=  533 Aug-Oct  28.7 Jan-Mar  22.0 Jul-Sep  26.1 | per-day index Jun  98 Jul  68 Aug 104 Dec 117 Jan 114 | largest window from Aug 
+   1980-1984 men   n=  626 Aug-Oct  27.5 Jan-Mar  28.6 Jul-Sep  25.1 | per-day index Jun  81 Jul  60 Aug 118 Dec  75 Jan 134 | largest window from Jan 
+   1980-1984 women n=  548 Aug-Oct  28.1 Jan-Mar  21.4 Jul-Sep  29.6 | per-day index Jun 133 Jul 114 Aug  86 Dec  73 Jan  82 | largest window from Sep 
+   1985-1989 men   n=  981 Aug-Oct  21.7 Jan-Mar  31.7 Jul-Sep  24.5 | per-day index Jun  91 Jul 101 Aug  96 Dec  78 Jan 125 | largest window from Jan 
+   1985-1989 women n= 1164 Aug-Oct  29.0 Jan-Mar  23.6 Jul-Sep  27.9 | per-day index Jun 104 Jul 103 Aug 120 Dec  91 Jan  90 | largest window from Aug 
+   1990-2005 men   n= 2826 Aug-Oct  19.9 Jan-Mar  36.7 Jul-Sep  22.4 | per-day index Jun  88 Jul  94 Aug  88 Dec  46 Jan 163 | largest window from Jan 
+   1990-2005 women n= 7500 Aug-Oct  23.6 Jan-Mar  27.9 Jul-Sep  25.4 | per-day index Jun  98 Jul 105 Aug  98 Dec  74 Jan 120 | largest window from Jan 
+F3. other placements of the cuts (old band / new band): Aug-Oct and Jan-Mar, all and men only
+   old 1940-1979: A-O 31.5 J-M 22.4 (men 31.8 / 22.5, n=5380) | new 1990-2005: A-O 22.6 J-M 30.3 (men 19.9 / 36.7, n=2826)
+   old 1940-1969: A-O 31.5 J-M 22.3 (men 31.7 / 22.3, n=4402) | new 1995-2005: A-O 22.0 J-M 31.0 (men 18.4 / 36.9, n=1664)
+   old 1950-1974: A-O 31.7 J-M 22.1 (men 32.0 / 22.1, n=3586) | new 1985-2005: A-O 23.1 J-M 29.8 (men 20.4 / 35.4, n=3807)
+   old 1960-1979: A-O 31.8 J-M 22.3 (men 32.3 / 22.4, n=2538) | new 1980-2005: A-O 23.5 J-M 29.4 (men 21.4 / 34.4, n=4433)
+   old 1900-1939: A-O 25.3 J-M 27.2 (men 25.3 / 27.2, n=2099) | new 1990-2005: A-O 22.6 J-M 30.3 (men 19.9 / 36.7, n=2826)
+   old 1940-1984: A-O 30.9 J-M 22.9 (men 31.3 / 23.1, n=6006) | new 1985-2005: A-O 23.1 J-M 29.8 (men 20.4 / 35.4, n=3807)
+   old 1970-1979: A-O 31.6 J-M 23.1 (men 32.0 / 23.4, n=978) | new 1990-1999: A-O 23.2 J-M 29.6 (men 20.8 / 36.1, n=2114)
+F4. the same split where nothing is said to have changed (Aug-Oct / Jan-Mar / own cut-off quarter)
+   football-spain      1900-1939 n=1540: 23.6 / 28.6 / 28.6, largest from Feb | 1940-1979 n=3329: 27.4 / 28.4 / 28.4, largest from Jan | 1980-1984 n=938: 22.3 / 31.2 / 31.2, largest from Jan | 1985-1989 n=1298: 20.6 / 32.7 / 32.7, largest from Jan | 1990-2005 n=4366: 20.0 / 32.3 / 32.3, largest from Jan
+   football-brazil     1900-1939 n=775: 25.5 / 23.6 / 23.6, largest from Sep | 1940-1979 n=3141: 24.0 / 27.6 / 27.6, largest from Feb | 1980-1984 n=1669: 21.9 / 29.8 / 29.8, largest from Jan | 1985-1989 n=2024: 21.6 / 30.7 / 30.7, largest from Jan | 1990-2005 n=4611: 19.2 / 33.6 / 33.6, largest from Jan
+   hockey-canada       1900-1939 n=1611: 25.5 / 26.1 / 26.1, largest from Jan | 1940-1979 n=4352: 23.7 / 28.4 / 28.4, largest from Feb | 1980-1984 n=892: 20.0 / 29.1 / 29.1, largest from Mar | 1985-1989 n=927: 19.5 / 32.4 / 32.4, largest from Feb | 1990-2005 n=1617: 18.2 / 35.0 / 35.0, largest from Jan
+   football-uk         1900-1939 n=6359: 25.7 / 25.7 / 27.3, largest from Sep | 1940-1979 n=9455: 30.5 / 24.7 / 33.2, largest from Sep | 1980-1984 n=1798: 31.5 / 24.4 / 32.4, largest from Sep | 1985-1989 n=2166: 28.2 / 25.9 / 31.9, largest from Sep | 1990-2005 n=6395: 27.1 / 27.5 / 29.6, largest from Sep
+   football-japan      1900-1939 n=134 (too few) | 1940-1979 n=2037: 24.0 / 15.1 / 35.6, largest from Apr | 1980-1984 n=1048: 27.1 / 14.1 / 37.3, largest from Apr | 1985-1989 n=1350: 25.7 / 15.0 / 34.7, largest from Apr | 1990-2005 n=4301: 26.3 / 17.1 / 33.4, largest from Apr
+   baseball-usa        1900-1939 n=6085: 27.4 / 24.0 / 27.4, largest from Jul | 1940-1979 n=6639: 30.1 / 23.5 / 30.1, largest from Aug | 1980-1984 n=977: 29.2 / 22.4 / 29.2, largest from Aug | 1985-1989 n=1113: 30.5 / 23.3 / 30.5, largest from Aug | 1990-2005 n=2647: 27.3 / 21.8 / 27.3, largest from Jul
+   politicians-germany 1900-1939 n=9685: 24.0 / 27.1 / 27.1, largest from Jan | 1940-1979 n=10553: 24.3 / 25.2 / 25.2, largest from Mar | 1980-1984 n=539: 23.2 / 24.1 / 24.1, largest from Apr | 1985-1989 n=381: 23.1 / 24.7 / 24.7, largest from Mar | 1990-2005 n=375: 26.9 / 30.1 / 30.1, largest from Feb
+   politicians-spain   1900-1939 n=3090: 24.9 / 24.8 / 24.8, largest from Oct | 1940-1979 n=6274: 24.6 / 25.2 / 25.2, largest from Mar | 1980-1984 n=395: 27.6 / 22.5 / 22.5, largest from Mar | 1985-1989 n=229: 21.8 / 24.9 / 24.9, largest from May | 1990-2005 n=161: 19.3 / 26.1 / 26.1, largest from Nov
+F5. Germany 1940-1979, births per day by month (mean=100), footballers then politicians of the same years
+   football-germany    1940-1979 n= 5913:  97  91  87  90  74  85  84 120 139 115 115 104
+   football-germany    1990-2005 n=10327: 132 125 115 118 104  95 102  95  95  78  78  66
+   politicians-germany 1940-1979 n=10553: 102 103 103 111 108 104 101  93 105  90  84  94
+   politicians-germany 1990-2005 n=  375:  87 161 122 107  75  71  91 100 100 119  77  91
+
+## H. the fortnight before the dividing date against the fortnight after (counts; even births would give about 1:1)
+   REFEREE'S OWN ERROR: the "2 Jan" rows below compare 20 Dec-1 Jan with 2-14 Jan, but 1 January is dropped, so "before" has
+   12 days against 13 and the ratios are about 8% too high. Use attack2.out section 1 (18-31 Dec against 2-15 Jan) instead.
+   Spain football, 2 Jan (1 Jan is dropped)     before  265 after  517 ratio 1.95 (9.0 se from 1:1)
+   Spain politicians, 2 Jan                     before  312 after  363 ratio 1.16 (2.0 se from 1:1)
+   Brazil football, 2 Jan                       before  294 after  546 ratio 1.86 (8.7 se from 1:1)
+   Brazil politicians, 2 Jan                    before  332 after  304 ratio 0.92 (-1.1 se from 1:1)
+   Canada hockey, 2 Jan                         before  218 after  413 ratio 1.89 (7.8 se from 1:1)
+   Canada politicians, 2 Jan                    before  202 after  232 ratio 1.15 (1.4 se from 1:1)
+   UK football, 1 Sep                           before  859 after 1316 ratio 1.53 (9.8 se from 1:1)
+   UK politicians, 1 Sep                        before  269 after  269 ratio 1.00 (0.0 se from 1:1)
+   Japan football, 1 Apr                        before  178 after  529 ratio 2.97 (13.2 se from 1:1)
+   Japan football, 2 Apr (school law)           before  175 after  559 ratio 3.19 (14.2 se from 1:1)
+   Japan politicians, 2 Apr                     before  322 after  305 ratio 0.95 (-0.7 se from 1:1)
+   US baseball, 1 Aug                           before  622 after  771 ratio 1.24 (4.0 se from 1:1)
+   US baseball born 1900-1929, 1 Aug            before  183 after  210 ratio 1.15 (1.4 se from 1:1)
+   US baseball born 1950-2005, 1 Aug            before  336 after  454 ratio 1.35 (4.2 se from 1:1)
+   US House, 1 Aug                              before  117 after  112 ratio 0.96 (-0.3 se from 1:1)
+   Germany football 1940-79, 1 Aug              before  196 after  274 ratio 1.40 (3.6 se from 1:1)
+   Germany football 1940-79, 1 Jul (school)     before  189 after  190 ratio 1.01 (0.1 se from 1:1)
+   Germany football 1940-79, 2 Jan              before  201 after  214 ratio 1.06 (0.6 se from 1:1)
+   Germany football 1990-2005, 1 Aug            before  419 after  385 ratio 0.92 (-1.2 se from 1:1)
+   Germany football 1990-2005, 2 Jan            before  210 after  492 ratio 2.34 (10.6 se from 1:1)
+   Germany football 1990-2005 men, 2 Jan        before   41 after  169 ratio 4.12 (8.8 se from 1:1)
+   Germany football 1990-2005 women, 2 Jan      before  169 after  323 ratio 1.91 (6.9 se from 1:1)
+   Germany politicians 1940-79, 1 Aug           before  421 after  375 ratio 0.89 (-1.6 se from 1:1)
+   Germany politicians, 2 Jan                   before  661 after  754 ratio 1.14 (2.5 se from 1:1)
+   Japan football by day: Mar-28:9 Mar-29:18 Mar-30:10 Mar-31:10 Apr-1:11 Apr-2:55 Apr-3:39 Apr-4:44 Apr-5:41 Apr-6:29
+   UK football by day:    Aug-28:70 Aug-29:55 Aug-30:65 Aug-31:54 Sep-1:76 Sep-2:93 Sep-3:99 Sep-4:82 Sep-5:87
+   US baseball by day:    Jul-28:33 Jul-29:44 Jul-30:54 Jul-31:55 Aug-1:46 Aug-2:56 Aug-3:52 Aug-4:66 Aug-5:56

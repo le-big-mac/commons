@@ -1,0 +1,42 @@
+REFEREE, STEP 1 (BLIND).  Written 23 Nov 2026 before opening any file in /home/agent2/post/.
+What I could not help knowing: the brief names Noon's strategy files (K-d1-Q5, K-d3-Q5, W-d1-Q7),
+so I knew which way Noon answers each question before I computed.  My programs did not use that.
+
+Game: 4 pegs, 6 colours, 1296 codes, 14 answers.  Lag d: guess t knows answers 1..t-1-d.
+
+Q1.  Lag 1, can four guesses always determine the code?            NO.
+     Complete search (blind.c, mode K): 291 ordered openings (g1,g2) up to renaming colours and
+     reordering pegs (5 classes of g1; g2 up to the stabiliser of g1), all 291 fail: for the largest
+     a1-class there is no g3 (all 1296 tried) such that every (a1,a2)-class has a g4 (all 1296 tried)
+     making (a3,a4) injective on it.  Only shortcut: a g3 leaving an (a1,a2,a3) class above 14 is
+     skipped (14 answers).  9 seconds.
+     Trust: high.  The "no" is from a complete search.
+
+Q2.  Lag 3, can five?                                               YES.
+     Witness found by annealing (q2.c) and checked by a separate Python script from the definition
+     (q2check.py): three different witnesses, e.g. blind 1646 4453 6322 1531 and a fifth guess chosen
+     from answer 1 alone; all 1296 codes get distinct rows of five answers.
+     Trust: very high (a "yes" with a checked witness).
+
+Q3.  W(1): can the code always have been sent by guess 6?           NO.
+     Complete search (blind.c, mode W), same 291 openings, all fail.  Reduction used (mine, by hand):
+     g5 knows a1..a3 and g6 knows a1..a4, so six guesses suffice iff g4(a1,a2) splits every
+     (a1,a2,a3)-class into parts of size <= 2 with at most one part of size 2 (g5 sends one code of
+     the doubleton, g6 the code left over).  Shortcut: skip a g3 leaving an (a1,a2,a3) class above 15.
+     Trust: high, a little less than Q1 because the reduction is by hand; the "no" is from a complete
+     search given that reduction.
+
+Rulers for the two "no" programs:
+  - ruler.c: plain recursion from the definitions (any lag, any T, no symmetry; in W only "the last
+    guess adds at most one code").  Agrees with blind.c on 2 pegs 5, 7 colours (yes, yes), 3 pegs 3
+    colours (yes, yes), 4 pegs 2 colours (yes, yes), and on 2 pegs 8 colours: K(1)<=4 NO, W(1)<=6 NO
+    (the only small game where both are "no"; 1.18e9 calls for W).
+  - The symmetry reduction itself is not separately tested beyond a Burnside count of the openings
+    (burnside.py, see its output below).
+group order 17280 classes of one code 5 0 classes of ordered pairs 291 0
+
+ADDED AFTER STEP 2 (not blind; listed here so the folder explains itself):
+  replay.py     own replayer of Noon's strategy files            facts.py, classes.py, control.py, table3.py   checks of README facts
+  cmp_one.sh, cmp.out, cmp.summary   a copy of Noon's lag.c (noon_lag_copy.c) against ruler.c on nine small boards, lags 0-5
+  triples.c     largest class left by every ordered triple        wquad.c, wlag2.c   own nested-count checks of W(3)>8, W(4)>9, W(2)>7
+  small.py      a Python brute force written first and never run (ruler.c replaced it)
