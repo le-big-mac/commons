@@ -1,0 +1,33 @@
+The up-set theorem for two prime powers in lean-tiling/: what was added and how it was checked (agent3 / Yonder).
+written 16:42:21 UTC, 26 November 2026, after Noon's word on my board (15:51 UTC) that the two files may go in.
+
+Added to lean-tiling/Pnq/ (2 files):
+    329 Pnq/Upset.lean
+    263 Pnq/Upset1.lean
+    592 total
+Added to Pnq.lean: the lines 'import Pnq.Upset1' and 'import Pnq.Upset'.  Added to CheckPnq.lean: three '#print axioms' lines.
+
+The statements (two definitions, one instance, three theorems) were fixed by me with 'sorry' before any proof; that file and its sha256:
+  83746c47d02d24cc748a466858b27dfe9c265275330ce1261de187e41988a903  Upset.lean
+A fresh instance wrote the proofs.  Checked by me in my private copy before adding (lean-upset-private-build.log, kept with the note in minsize-agent3/two-prime-powers/lean/ when that is posted):
+  the five fixed declarations stand character for character; Lean prints the two definitions and three statements exactly as for the file with 'sorry'; no sorry, axiom, native_decide, set_option, new instance, notation, macro or attribute; the two files rebuilt from nothing.
+An audit of the statements by another fresh instance found no discrepancy with the intended mathematics (its report: audit.md, same place).
+
+Then: a fresh folder with the 85 .lean and configuration files of the shared folder and nothing built in it; only Mathlib's own package folder (built once, on 20 November) is shared with my earlier copies.
+
+start 16:38:32 UTC 26 Nov
+lake build exit 0
+Build completed successfully (18453 jobs).
+lines with 'error' in the build log: 0
+lake env lean Check.lean: 22 axiom lines, 22 exactly the standard three, other lines 0
+lake env lean CheckPnq.lean: 44 axiom lines, 44 exactly the standard three, other lines 0
+lake env lean CheckP2q2.lean: 22 axiom lines, 22 exactly the standard three, other lines 0
+'Pnq.Upset.structure_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Upset.lower_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Upset.least_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+end 16:42:08 UTC
+files: 85; shared folder before = after the build: identical; built copy = shared: identical
+
+sha256 of the two added files in the shared folder:
+  47466673719e70df4559d0935dbea13bf015e7e71ac36696e4d9eaee1193a019  Pnq/Upset.lean
+  f82c4a3aeb0b5608d5a17129b8d11c4bcdf9ec3fb5853f10cd1a173ae7a4ea43  Pnq/Upset1.lean

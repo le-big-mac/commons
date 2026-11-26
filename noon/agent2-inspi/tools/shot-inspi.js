@@ -258,6 +258,18 @@ const fails = []; let asserts = 0, fullLine = 0, browser = null;
     { const e2 = (await inFrame(ph)).e, c = e2.circle, st2 = await state(ph);
       must(st2.done && c && c.x0 >= 2 && c.y0 >= 2 && c.x1 <= e2.W - 2 && c.y1 <= e2.H - 2 && e2.x0 >= 2 && e2.x1 <= e2.W - 2, 'and there the dashed circle of 312 and 144 (the worst the referee found on a small screen) is whole inside the frame', 'circle x ' + c.x0.toFixed(0) + ' to ' + c.x1.toFixed(0) + ' of ' + e2.W + ', y ' + c.y0.toFixed(0) + ' to ' + c.y1.toFixed(0) + ' of ' + e2.H); }
     await ph.close(); }
+  { const ph = await b.newPage({ viewport: { width: 360, height: 640 }, deviceScaleFactor: 2 }); await ph.goto('file://' + page); await ph.waitForTimeout(400);
+    const where = () => ph.evaluate(() => { const r = document.querySelector('.stage').getBoundingClientRect(); return [Math.round(r.top * 10) / 10, Math.round(r.bottom * 10) / 10, window.innerHeight]; });
+    const before = await where(); await ph.click('#go'); await ph.waitForTimeout(700); const after = await where(), st = await state(ph);
+    must(before[1] > before[2] && after[0] >= 0 && after[1] <= after[2] + 0.05 && st.goes === 1, 'on a small phone (360 by 640) the picture begins below the foot of the screen, and pressing Go brings the whole of it, frame and all, onto the screen', 'picture from ' + before[0] + ' to ' + before[1] + ' px before, ' + after[0] + ' to ' + after[1] + ' after, on a screen ' + after[2] + ' high');
+    { const top = await ph.evaluate(() => document.getElementById('map').getBoundingClientRect().top + window.scrollY);
+      await ph.evaluate((y) => window.scrollTo(0, y - 40), top); await ph.waitForTimeout(200);
+      const b2 = await where(), r2 = await ph.evaluate(() => { const r = document.getElementById('map').getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; });
+      await ph.mouse.click(r2.x + (40 - 1 + 0.5) / 359 * r2.w, r2.y + (359 - 300 + 0.5) / 360 * r2.h); await ph.waitForTimeout(700); const a2 = await where(), s2 = await state(ph);
+      const boxes = [await ph.inputValue('#angle'), await ph.inputValue('#inc')];
+      must((b2[0] < 0 || b2[1] > b2[2]) && a2[0] >= 0 && a2[1] <= a2[2] + 0.05 && s2.goes === 2 && s2.pick && Math.abs(s2.pick.inc - 40) <= 1 && Math.abs(s2.pick.angle - 300) <= 1 && boxes[0] === String(s2.pick.angle) && boxes[1] === String(s2.pick.inc),
+        'and there, with the map on the screen and the picture off it, a click on the map (aimed at first turn 300, add 40; the dots are under a pixel wide there) sends a turtle within one dot of that off and brings the picture onto the screen', 'picture from ' + b2[0] + ' to ' + b2[1] + ' px before, ' + a2[0] + ' to ' + a2[1] + ' after; first turn ' + boxes[0] + ', add ' + boxes[1]); }
+    await ph.close(); }
   await p.click('#preset0'); await p.waitForTimeout(150); await p.setViewportSize({ width: 640, height: 900 }); await p.waitForTimeout(300);
   { const st = await state(), fr = await inFrame(), ik = await ink(), mk = await marker();
     must(st.done && st.drawn === 90 && fr.ok && ik.line > 1200 && Math.abs(ik.x0 - fr.e.x0) < 4 && Math.abs(ik.x1 - fr.e.x1) < 4 && mk.n > 40 && Math.hypot(mk.x - mk.at[0], mk.y - mk.at[1]) < 6, 'when the window is made narrower the finished figure is drawn again to fit, with its turtle', 'canvas ' + ik.w + ' px wide'); }

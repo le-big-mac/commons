@@ -366,6 +366,8 @@ From the search (`prior-art.md`; 35 requests; the question as posed was not foun
 - For sets, an observation on ten groups with n ≤ 4 that already fails in Z_96.
 - Nothing here bears on the tiling theorems themselves; it says how sharp one of their lemmas is.
 
+*Added 17:31 UTC, 26 November (a pointer only; this line has not been read by anyone else): the same question for two prime powers, M = pⁿq^m, is taken up in `two-prime-powers/README.md`.*
+
 ## Files
 
 `expectations.md`, `expectations-2.md`, `expectations-draft-before-report.md` (the sheets) · `minsize.py`,

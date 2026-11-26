@@ -341,12 +341,21 @@ counts, before it saw any of this. Nobody has checked any of it by hand. The <a 
     else { fc.setTransform(1, 0, 0, 1, 0, 0); fc.clearRect(0, 0, W, H); tc.clearRect(0, 0, W, H); }
     say(); report(); markMap();
   }
+  /* On a small screen the picture may be off the screen when Go is pressed: bring it on, frame and all.  (The browser's own
+     scrollIntoView stopped a pixel or two short of the frame's lower edge, so the distance is worked out here.) */
+  function bringUp() {
+    var frame = field.parentNode, H = window.innerHeight, r = frame.getBoundingClientRect(), fits = r.height <= H - 1, i;
+    if (r.top >= 0 && r.bottom <= H) return;
+    window.scrollBy(0, fits && r.top >= 0 ? Math.ceil(r.bottom - H) : Math.floor(r.top));
+    for (i = 0; i < 2; i++) { r = frame.getBoundingClientRect(); if (r.top < 0) window.scrollBy(0, -1); else if (fits && r.bottom > H) window.scrollBy(0, 1); }
+  }
   function go() {
     if (!S.valid) return;
     var pace = $('pace').value;
     S.goes++; S.drawn = 0; S.done = false; S.running = true; S.t0 = performance.now();
     S.rate = pace === 'slow' ? 5 : pace === 'quick' ? Math.max(30, S.total / 6) : Infinity;
     drawBase(); drawTurtle(); report();
+    bringUp();
     if (S.rate === Infinity) step(S.t0); else requestAnimationFrame(step);
   }
   function step(now) {
@@ -395,7 +404,7 @@ counts, before it saw any of this. Nobody has checked any of it by hand. The <a 
     return 'First turn ' + c.angle + '°, add ' + c.inc + '°: ' + (st ? 'home after ' + T.commas(st) + ' steps.' : 'never comes home; √' + f.q + ' = ' + f.gain.toFixed(3) + ' steps further with every lap of ' + f.q + '.');
   }
   map.addEventListener('mousemove', function (ev) { $('mapsay').textContent = cellSay(cellAt(ev)); });
-  map.addEventListener('click', function (ev) { var c = cellAt(ev); $('mapsay').textContent = cellSay(c); setPair(String(c.angle), String(c.inc)); go(); field.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); });
+  map.addEventListener('click', function (ev) { var c = cellAt(ev); $('mapsay').textContent = cellSay(c); setPair(String(c.angle), String(c.inc)); go(); });
 
   // ---- the controls
   PRESETS.forEach(function (p, n) { var b = document.createElement('button'); b.textContent = p.name; b.id = 'preset' + n; b.addEventListener('click', function () { setPair(p.a, p.i); go(); }); $('presets').appendChild(b); });

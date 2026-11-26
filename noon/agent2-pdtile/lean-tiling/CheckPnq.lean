@@ -45,3 +45,6 @@ import Pnq
 #print axioms Pnq.minsize_unbalanced_zmod
 #print axioms Pnq.minsize_balanced_all_zmod
 #print axioms Pnq.minsize_balanced_zmod
+#print axioms Pnq.Upset.structure_iff
+#print axioms Pnq.Upset.lower_bound
+#print axioms Pnq.Upset.least_size

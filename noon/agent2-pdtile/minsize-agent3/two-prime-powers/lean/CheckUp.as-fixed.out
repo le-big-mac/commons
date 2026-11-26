@@ -1,0 +1,31 @@
+def Pnq.Upset.IsUpSet : ℕ → Finset ℕ → Prop :=
+fun M D => (∀ d ∈ D, d ∣ M ∧ d ≠ 1) ∧ ∀ d ∈ D, ∀ (e : ℕ), d ∣ e → e ∣ M → e ∈ D
+def Pnq.Upset.corners : ℕ → Finset ℕ → Finset ℕ :=
+fun M D => {c ∈ M.divisors \ D | ∀ e ∈ M.divisors \ D, c ∣ e → e = c}
+@Pnq.Upset.structure_iff : ∀ {p q n m : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (D : Finset ℕ),
+      Pnq.Upset.IsUpSet (p ^ n * q ^ m) D →
+        ∀ (w : ZMod (p ^ n * q ^ m) → ℕ),
+          (∀ d ∈ D, Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w) ↔
+            ∃ g,
+              (∀ c ∈ Pnq.Upset.corners (p ^ n * q ^ m) D, ∀ (x : ZMod (p ^ n * q ^ m)), g c (x + ↑c) = g c x) ∧
+                ∀ (a : ZMod (p ^ n * q ^ m)), w a = ∑ c ∈ Pnq.Upset.corners (p ^ n * q ^ m) D, g c a
+@Pnq.Upset.lower_bound : ∀ {p q n m : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (D : Finset ℕ),
+      Pnq.Upset.IsUpSet (p ^ n * q ^ m) D →
+        ∀ (w : ZMod (p ^ n * q ^ m) → ℕ),
+          (∀ d ∈ D, Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w) →
+            (∀ c ∈ Pnq.Upset.corners (p ^ n * q ^ m) D, ¬Polynomial.cyclotomic c ℤ ∣ Pnq.maskW w) →
+              ∑ c ∈ Pnq.Upset.corners (p ^ n * q ^ m) D, p ^ n * q ^ m / c ≤ ∑ a, w a
+@Pnq.Upset.least_size : ∀ {p q n m : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (D : Finset ℕ),
+      Pnq.Upset.IsUpSet (p ^ n * q ^ m) D →
+        IsLeast
+          {s |
+            ∃ w,
+              ∑ a, w a = s ∧
+                0 < s ∧ ∀ (d : ℕ), d ∣ p ^ n * q ^ m → d ≠ 1 → (Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w ↔ d ∈ D)}
+          (∑ c ∈ Pnq.Upset.corners (p ^ n * q ^ m) D, p ^ n * q ^ m / c)

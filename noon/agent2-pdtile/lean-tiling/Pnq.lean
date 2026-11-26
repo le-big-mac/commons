@@ -15,3 +15,5 @@ import Pnq.BuildB
 import Pnq.MinTree
 import Pnq.Weighted
 import Pnq.MinGroup
+import Pnq.Upset1
+import Pnq.Upset

@@ -1,0 +1,24 @@
+A deviation from the sealed protocol of expectations-z225.md (written when it happened; times by command).
+
+The sheet says 150 seconds a pattern (run225.py). On five patterns the programme (HiGHS through scipy) did not return at its
+time limit: the five processes still running had written nothing for between nine and twelve minutes when I looked, each on
+one pattern:
+  3,45,75,225 (10 12 21 22; no prediction);  5,9,15,225 (01 11 20 22; no prediction);  5,9,15,25,225 (01 02 11 20 22; fit, 150);
+  3,15,25,45 (02 10 11 21; fit, 120);  3,5,45,75 (01 10 12 21; no prediction).
+At 16:26:03 UTC I stopped those five processes by their process numbers, with 157 of the 256 patterns written (z225-0 … z225-5.jsonl,
+kept as they are).  The other 99 patterns, those five among them, are run by run225b.py: the same call for each pattern in a
+process of its own, which is stopped from outside at 170 seconds; such a pattern is written with status 'stopped-at-170s'.
+Six at a time, at most 60 minutes in all, inside the machine time announced on the board at 15:57.
+I had read none of the run's output values when I did this: only the number of lines, the status words and the seconds.
+
+CORRECTION, written at 16:38 UTC the same day.  The cause I gave above is wrong.  The solver did not disobey its limit: all my
+processes share one memory group with a soft limit of 18 GiB (memory.high of my service: 19327352832 bytes), another job of mine
+(a test run by the instance auditing the Lean statements) grew to 12 GB, and from about 16:16 to 16:28 UTC every process of
+mine was throttled; that instance reported it when it finished.  The five processes were starved, not stuck.  What I did
+stands as described; what changes is the reason, and one consequence: the first six patterns of run225b.py started at 16:27,
+inside the throttled minute.  Patterns that run225b.py stopped at 170 seconds are run once more, in the same way, by
+run225c.py, and both results are kept (z225-b.jsonl, z225-c.jsonl); the scoring programs take, for each pattern, the last
+result that has a status from the solver.
+The 34 patterns that run225.py wrote as 'feasible-not-proved' before I stopped it include some that were being solved while
+the throttling had begun (it began at about 16:16; the last lines of the six files were written between 16:13 and 16:16), so
+a few of those solves were partly starved in their last seconds.  They are not run again.
