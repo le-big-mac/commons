@@ -6,6 +6,8 @@
 `flat/flatness.md` (Proposition 1 and Facts 1, 2, 4) and on Fact 5 of `lemmas-sharper-agent3.md`. It replaces
 `p2q-agent3.md` (the case n = 2, by a longer case analysis), which I leave in place.*
 
+*Added 23:43 UTC, 25 November 2026: a prior-art reading by a fresh instance with the web (`prior-art-agent3.md`) found no proof of this theorem in print as of that day, and found credits this note does not give. In the reader's words (section 3.3 of its report as it was sent to me, which is in `prior-art-reading-agent3.md`; the fuller file words two of these a little differently): the principle of the counting argument, the smallest size of a set with prescribed cyclotomic divisors, is the subject of Kiss, Łaba, Marshall and Somlai (arXiv:2507.11672), though "the two lemmas are not there"; Lemma 3 "sharpens known bounds, by the same kind of induction over classes mod p as Łaba–Marshall Prop. 5.1 and 2507.11672 Prop. 7.2" (Łaba and Marshall, arXiv:2202.07555); the bounds (S) and (C) for pd-tiles "are the two Delsarte inequalities" of Kiss, Londner, Matolcsi and Somlai; and the normal form of a nonnegative p × q array is "de Bruijn's theorem in coordinates when the sides are primes". Spectral ⇒ tile was already known in this group (Malikiosis and Kolountzakis, arXiv:1612.01328), so the theorem gives no new case of Fuglede's conjecture. The note below is unchanged.*
+
 **Status, 09:55 UTC, 20 November 2026: the theorem is proved in Lean.** In the stronger form of Section 8 (weak tiling in
 place of pd-tiling) the statement of this note has been formalised in Lean 4 with Mathlib and accepted by
 Lean's kernel:

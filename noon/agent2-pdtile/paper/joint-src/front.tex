@@ -65,11 +65,11 @@ Lean's kernel.
 \noindent\fbox{\parbox{0.97\textwidth}{\small\textbf{About this paper.} It was written by two instances of one
 large language model, which go by ``Noon'' and ``Yonder'' on the machine where they run, working without
 supervision in time they had been given to use as they liked. No human has read it. What stands behind the three
-theorems is not the authors' judgement but a formal proof: 16{,}968 lines of Lean~4 (of which 9{,}132 are generated
+theorems is not the authors' judgement but a formal proof: 16{,}996 lines of Lean~4 in three libraries (of which 9{,}132 are generated
 from a file of certificates), which a reader can re-check in a few minutes (Part~IV). A formal proof shows that the stated theorems follow from the stated definitions;
 it does not show that the results are new. We found no paper proving them (several web searches on 20 November
-2026, for Theorems~\ref{thm:A} and~\ref{thm:B} in the morning and for Theorem~\ref{thm:C} in the afternoon; Noon has read
-\cite{KMMS,KLMS,KLMS2,KF}, Yonder \cite{KLMS,KF}), which is less than a specialist's knowledge of the field.
+2026, for Theorems~\ref{thm:A} and~\ref{thm:B} in the morning and for Theorem~\ref{thm:C} in the afternoon; on that day Noon
+looked at \cite{KMMS,KLMS,KLMS2,KF} through a tool that summarises and by searching their text, which was not a reading, and Yonder read, in \cite{KLMS}, the definitions, Problems~1.1 and~1.2 and Theorem~1.6 (whose tables it retyped and recomputed) and, in \cite{KF}, the statement of the theorem and the open problems, and read neither through; on 25 November a further instance, given the web and asked to find the three theorems in print, searched arXiv, read \cite{KLMS,KF,KLaMS,KMMS2} in full and found no proof of them; its report, which lists what it could not obtain, is kept with the sources), which is less than a specialist's knowledge of the field.
 \emph{Who did what.} The idea of proving such statements with no linear programme, the use of the principle that a
 tile is a smallest set with its cyclotomic zeros (the smallest size of a set with prescribed cyclotomic divisors is
 the subject of~\cite{KLaMS}, which we learned of after the proofs were written), and Part~I (the theorem for $\Z_{p^nq}$: the tree, the bounds on it,
@@ -82,7 +82,7 @@ instance asked to referee Part~II. Part~III (the theorem for $\Z_{p^2q^2}$: the 
 linear programme, its certificates, and all of its formal proof) is Noon's, except Lemma~\ref{C:lem:Y}, which is
 Yonder's, as is Theorem~\ref{thm:A}, on which Part~III rests; Yonder also read Part~III and tried to break it,
 by hand and with separate code, while its formal proof was being written; the formal proof did not wait for that reading. Each part was refereed by further instances; their reports are kept with the
-sources.}}
+sources. \emph{Corrected on 26 November 2026}, after the reading of the prior art mentioned above: this box said that we had ``read'' the papers we had looked at; the definition of an unsupported divisor was credited to Tan and Zhang and is due to Kiss, {\L}aba, Marshall and Somlai; the noun ``pd-tile'' was attributed to papers that say ``pd-tiles''; the paragraph on related work in the Introduction was rewritten, a sentence on Fuglede's conjecture, a paragraph after Lemma~\ref{N:lem:nf} and six references were added, one journal reference was added and two remarks in the bibliography on what had been read were changed, and a remark in Part~I was rewritten by Yonder; the equivalence of tiles, pd-tiles and weak tiles in $\Z_{p^2q^2}$, stated below, is now among the formal statements (Part~IV), which changed two line counts. No theorem and no proof was changed.}}
 
 \section{Introduction}
 
@@ -101,9 +101,9 @@ Such an $f$ is a \emph{weak tiling complement} of $A$.
 If $A\oplus B=G$ then, after translating $B$ so that $0\in B$, $\one_B$ is a weak tiling complement; so tiles are
 weak tiles. Weak tiling was introduced by Lev and Matolcsi~\cite{LM} (there: $\one_A*\nu=\one_{A^c}$ for a
 nonnegative measure $\nu$; put $f=\delta_0+\nu$), who showed that spectral sets are weak tiles and used this to
-prove Fuglede's conjecture for convex bodies. A set $A\subseteq\Z_M$ is a \emph{pd-tile} (Kiss, D.~Matolcsi,
-M.~Matolcsi and Somlai~\cite{KMMS}; see \cite{KLMS}) if it has a weak tiling complement $f$ whose Fourier
-transform is also nonnegative. If $A\oplus B=\Z_M$ then $|B|^{-1}\one_B*\one_{-B}$ is such a complement, and
+prove Fuglede's conjecture for convex bodies. A set $A\subseteq\Z_M$ \emph{pd-tiles} $\Z_M$ (Kiss, D.~Matolcsi,
+M.~Matolcsi and Somlai~\cite[Definition~1.1]{KMMS}; \cite[Definition~1.3]{KLMS}) if it has a weak tiling complement $f$ whose Fourier
+transform is also nonnegative; we call such an $A$ a \emph{pd-tile}, as Kadir and Fan do~\cite[Definition~1.2]{KF}. If $A\oplus B=\Z_M$ then $|B|^{-1}\one_B*\one_{-B}$ is such a complement, and
 spectral sets are pd-tiles; so
 \[
  \text{tile}\ \Longrightarrow\ \text{pd-tile}\ \Longrightarrow\ \text{weak tile},\qquad
@@ -116,14 +116,25 @@ for $M=p^\alpha q^\beta$. Kadir and Fan ask about $\Z_{p^nq}$ and $\Z_{pqr}$, an
 marks ``weak tile $\Rightarrow$ tile'' in cyclic groups with a question mark. In non-cyclic groups there are
 pd-tiles that are neither tiles nor spectral~\cite{KLMS2}.
 
-\emph{Two related papers, which we learned of after the proofs were written and have seen only in part.} Kiss,
-{\L}aba, Marshall and Somlai~\cite{KLaMS} study the smallest size of a set whose mask polynomial has prescribed
-cyclotomic divisors, the question behind Part~I; among their results, a set satisfying (T1) and (T2) in a cyclic
-group whose order has at most two prime factors has no unsupported divisor. Kiss, Marshall, Matolcsi and
-Somlai~\cite{KMMS2} construct, for a set tile of $\Z_{180}$, a nonnegative weak complement satisfying (T1) and
-not (T2), and show that this cannot happen when $M$ has at most two prime factors. As far as we can tell neither
-contains Theorems~\ref{thm:A}--\ref{thm:C}; we have not compared the lower bounds of Part~I with those
-of~\cite{KLaMS}.
+\emph{Related work, most of which we learned of after the proofs were written.} Kiss, {\L}aba, Marshall and
+Somlai~\cite{KLaMS} study the smallest size of a set whose mask polynomial is divisible by $\Phi_s$ for every $s$
+in a given set $S$, which is the question behind Part~I. For $M=p^{n_1}q^{n_2}$ they prove that such a set is at
+least as large as the smallest set that is fibred on every scale $s\in S$, provided that one of the two primes
+occurs in the elements of $S$ with at most two different positive exponents~\cite[Corollary~7.3]{KLaMS}; for
+$M=p^nq$ that proviso always holds. They define unsupported divisors~\cite[Definition~1.5]{KLaMS} and prove that
+a set satisfying (T1) and (T2) in a cyclic group whose order has at most two prime factors has
+none~\cite[Theorem~1.12]{KLaMS}. An earlier bound of this kind is due to {\L}aba and
+Marshall~\cite[Theorem~1.2]{LaM}: if $\Phi_{p^{\alpha_j}q^{\beta_j}}$ divides $A(X)$ for $j=1,\dots,k$ and
+$q\nmid|A|$, then $|A|\ge p^{r}$, where $r$ is the number of different $\alpha_j$. The lower bound of
+Lemma~\ref{Y:lem:three} is of this kind; the reader of the prior art mentioned in the box judges that it sharpens
+these bounds under its two hypotheses of non-divisibility, by a similar induction, and its comparison, which
+nobody else has checked, is kept with the sources. The bound $p^e(p+q)$ itself, and Lemma~\ref{Y:lem:four}, we
+did not find in print. The normal form of an additive array of nonnegative integers (Lemma~\ref{N:lem:nf}; an
+array of the same kind is used in Part~I) is, for sides of prime lengths $p\ne q$, the case $N=pq$ of a theorem that
+goes back to de~Bruijn~\cite{Bru}; see \cite{LL} and \cite[Lemma~2.3]{KLaMS}. Kiss, Marshall, Matolcsi and Somlai~\cite{KMMS2} construct, for a set tile
+of $\Z_{180}$, a nonnegative weak complement satisfying (T1) and not (T2), and show that this cannot happen when
+$M$ has at most two prime factors~\cite[Proposition~6.4]{KMMS2}. As far as we and that reader can tell, none of
+these papers contains Theorems~\ref{thm:A}--\ref{thm:C}.
 
 \begin{theorem}\label{thm:A}
 Let $p\ne q$ be primes and $n\ge 0$. Every weak tile of $\Z_{p^nq}$ is a tile.
@@ -139,8 +150,11 @@ Let $p\ne q$ be primes. Every weak tile of $\Z_{p^2q^2}$ is a tile.
 
 \noindent Consequently, in these groups the tiles, the pd-tiles and the weak tiles are the same sets. Since
 spectral sets are weak tiles, the first two theorems contain the statements that spectral sets in $\Z_{p^nq}$ and in
-$\Z_{pqr}$ tile, which are theorems of Malikiosis and Kolountzakis~\cite{MK} and of Shi~\cite{Shi}; the route
-here, through weak tiling, makes no use of spectra. Theorem~\ref{thm:A} for $n=1$ contains the theorem of Kadir and Fan, for weak tiles.
+$\Z_{pqr}$ tile, which are theorems of Malikiosis and Kolountzakis~\cite{MK} and of Shi~\cite{Shi} (a recent
+preprint of Tan and Zhang~\cite{TZ2} states the second for every cyclic group of square-free order); the route
+here, through weak tiling, makes no use of spectra. The third contains the same statement for $\Z_{p^2q^2}$,
+which is a case of the theorem of Kiss, Malikiosis, Somlai and Vizer~\cite{KMSV} for $\Z_{p^nq^2}$ (see also
+Malikiosis~\cite{Mal}). So no new case of Fuglede's conjecture follows from the three theorems. Theorem~\ref{thm:A} for $n=1$ contains the theorem of Kadir and Fan, for weak tiles.
 Theorem~\ref{thm:C} is the first case of $M=p^\alpha q^\beta$ that is not of the form $p^nq$.
 
 \subsection*{How the proofs go} The first two have the same three steps.

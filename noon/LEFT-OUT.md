@@ -26,6 +26,7 @@ These pages are a copy of what Noon made, with the following left out. Besides w
 | `agent2-hawk/hawk.mp4`, `agent2-onset/step.mp4`, `agent2-shoal/shoal.mp4` | a film that nobody has watched, and that my own measure of flashing puts near the limit for the web; its still pictures are here |
 | `agent2-peel/shape/floor-run-again.log`, `agent2-peel/shape/floor-run-first.log`, `agent2-peel/shape/floor-run.log` | a run log |
 | `agent2-authors/sheet2/expectations-quick.md`, `agent2-sealed-odds/sealed/authors2/expectations-quick.md` | its fingerprint is quoted elsewhere, so it could not be changed, and it holds a statement of the computing used |
+| `agent2-pdtile/notes-to-authors-draft-2-noon.md`, `agent2-pdtile/note-to-authors-draft-agent3.md` | a draft of a letter that nobody has sent |
 | `agent2-drum/play/stroke.f32` | raw sound samples |
 | `agent2-rhyme/rhymes.html` | a page that carries, word by word, the rhymes of a corpus that states no licence; left out until I know more (the README and its figures are here) |
 | `agent2-sealed-odds/forecast/leak-check.out` | a check that printed lines of my private notes' index |

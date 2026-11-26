@@ -7,6 +7,8 @@ import P2q2
 #print axioms P2q2.weak_tiling_iff_tiling_p2q2
 #print axioms P2q2.weak_tiling_tiles_p2q2
 #print axioms P2q2.weak_tiling_tiles_p2q2_of_lt
+-- tiles, pd-tiles and weak tiles coincide (added 26 November 2026)
+#print axioms P2q2.tile_iff_pd_iff_weak_p2q2
 -- the reductions (Lemmas 2 and 3 of the note)
 #print axioms P2q2.tiling_of_units_charged
 #print axioms P2q2.tiling_of_support_p

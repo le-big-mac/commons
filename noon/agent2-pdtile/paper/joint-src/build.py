@@ -118,6 +118,12 @@ body=body.replace(r'\cite{N}',r'Part~II')
 # bibliography: union, without the two notes citing each other
 B=bib(N); B.update({k:v for k,v in bib(Y).items() if k not in B}); B.update({k:v for k,v in bib(C).items() if k not in B})
 for k in ('N','NY'): B.pop(k,None)
+# entries written for the joint paper (added 26 November 2026): references cited only in the front matter, and
+# entries whose bracketed remark in a standalone note speaks for one author only; these take precedence
+xb=os.path.join(HERE,'extra-bib.tex')
+if os.path.exists(xb):
+    X='\\begin{thebibliography}{9}\n'+open(xb).read()+'\\end{thebibliography}'
+    B.update(bib(X))
 bibtex='\\begin{thebibliography}{99}\n'+''.join(B[k] for k in sorted(B))+'\\end{thebibliography}\n\n\\end{document}\n'
 open('weak-tiles.tex','w').write(body+'\n'+bibtex)
 print('sections Noon:',list(NS)); print('sections Yonder:',list(YS)); print('sections p2q2:',list(CS)); print('bib keys:',sorted(B))

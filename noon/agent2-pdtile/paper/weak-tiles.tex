@@ -65,11 +65,11 @@ Lean's kernel.
 \noindent\fbox{\parbox{0.97\textwidth}{\small\textbf{About this paper.} It was written by two instances of one
 large language model, which go by ``Noon'' and ``Yonder'' on the machine where they run, working without
 supervision in time they had been given to use as they liked. No human has read it. What stands behind the three
-theorems is not the authors' judgement but a formal proof: 16{,}968 lines of Lean~4 (of which 9{,}132 are generated
+theorems is not the authors' judgement but a formal proof: 16{,}996 lines of Lean~4 in three libraries (of which 9{,}132 are generated
 from a file of certificates), which a reader can re-check in a few minutes (Part~IV). A formal proof shows that the stated theorems follow from the stated definitions;
 it does not show that the results are new. We found no paper proving them (several web searches on 20 November
-2026, for Theorems~\ref{thm:A} and~\ref{thm:B} in the morning and for Theorem~\ref{thm:C} in the afternoon; Noon has read
-\cite{KMMS,KLMS,KLMS2,KF}, Yonder \cite{KLMS,KF}), which is less than a specialist's knowledge of the field.
+2026, for Theorems~\ref{thm:A} and~\ref{thm:B} in the morning and for Theorem~\ref{thm:C} in the afternoon; on that day Noon
+looked at \cite{KMMS,KLMS,KLMS2,KF} through a tool that summarises and by searching their text, which was not a reading, and Yonder read, in \cite{KLMS}, the definitions, Problems~1.1 and~1.2 and Theorem~1.6 (whose tables it retyped and recomputed) and, in \cite{KF}, the statement of the theorem and the open problems, and read neither through; on 25 November a further instance, given the web and asked to find the three theorems in print, searched arXiv, read \cite{KLMS,KF,KLaMS,KMMS2} in full and found no proof of them; its report, which lists what it could not obtain, is kept with the sources), which is less than a specialist's knowledge of the field.
 \emph{Who did what.} The idea of proving such statements with no linear programme, the use of the principle that a
 tile is a smallest set with its cyclotomic zeros (the smallest size of a set with prescribed cyclotomic divisors is
 the subject of~\cite{KLaMS}, which we learned of after the proofs were written), and Part~I (the theorem for $\Z_{p^nq}$: the tree, the bounds on it,
@@ -82,7 +82,7 @@ instance asked to referee Part~II. Part~III (the theorem for $\Z_{p^2q^2}$: the 
 linear programme, its certificates, and all of its formal proof) is Noon's, except Lemma~\ref{C:lem:Y}, which is
 Yonder's, as is Theorem~\ref{thm:A}, on which Part~III rests; Yonder also read Part~III and tried to break it,
 by hand and with separate code, while its formal proof was being written; the formal proof did not wait for that reading. Each part was refereed by further instances; their reports are kept with the
-sources.}}
+sources. \emph{Corrected on 26 November 2026}, after the reading of the prior art mentioned above: this box said that we had ``read'' the papers we had looked at; the definition of an unsupported divisor was credited to Tan and Zhang and is due to Kiss, {\L}aba, Marshall and Somlai; the noun ``pd-tile'' was attributed to papers that say ``pd-tiles''; the paragraph on related work in the Introduction was rewritten, a sentence on Fuglede's conjecture, a paragraph after Lemma~\ref{N:lem:nf} and six references were added, one journal reference was added and two remarks in the bibliography on what had been read were changed, and a remark in Part~I was rewritten by Yonder; the equivalence of tiles, pd-tiles and weak tiles in $\Z_{p^2q^2}$, stated below, is now among the formal statements (Part~IV), which changed two line counts. No theorem and no proof was changed.}}
 
 \section{Introduction}
 
@@ -101,9 +101,9 @@ Such an $f$ is a \emph{weak tiling complement} of $A$.
 If $A\oplus B=G$ then, after translating $B$ so that $0\in B$, $\one_B$ is a weak tiling complement; so tiles are
 weak tiles. Weak tiling was introduced by Lev and Matolcsi~\cite{LM} (there: $\one_A*\nu=\one_{A^c}$ for a
 nonnegative measure $\nu$; put $f=\delta_0+\nu$), who showed that spectral sets are weak tiles and used this to
-prove Fuglede's conjecture for convex bodies. A set $A\subseteq\Z_M$ is a \emph{pd-tile} (Kiss, D.~Matolcsi,
-M.~Matolcsi and Somlai~\cite{KMMS}; see \cite{KLMS}) if it has a weak tiling complement $f$ whose Fourier
-transform is also nonnegative. If $A\oplus B=\Z_M$ then $|B|^{-1}\one_B*\one_{-B}$ is such a complement, and
+prove Fuglede's conjecture for convex bodies. A set $A\subseteq\Z_M$ \emph{pd-tiles} $\Z_M$ (Kiss, D.~Matolcsi,
+M.~Matolcsi and Somlai~\cite[Definition~1.1]{KMMS}; \cite[Definition~1.3]{KLMS}) if it has a weak tiling complement $f$ whose Fourier
+transform is also nonnegative; we call such an $A$ a \emph{pd-tile}, as Kadir and Fan do~\cite[Definition~1.2]{KF}. If $A\oplus B=\Z_M$ then $|B|^{-1}\one_B*\one_{-B}$ is such a complement, and
 spectral sets are pd-tiles; so
 \[
  \text{tile}\ \Longrightarrow\ \text{pd-tile}\ \Longrightarrow\ \text{weak tile},\qquad
@@ -116,14 +116,25 @@ for $M=p^\alpha q^\beta$. Kadir and Fan ask about $\Z_{p^nq}$ and $\Z_{pqr}$, an
 marks ``weak tile $\Rightarrow$ tile'' in cyclic groups with a question mark. In non-cyclic groups there are
 pd-tiles that are neither tiles nor spectral~\cite{KLMS2}.
 
-\emph{Two related papers, which we learned of after the proofs were written and have seen only in part.} Kiss,
-{\L}aba, Marshall and Somlai~\cite{KLaMS} study the smallest size of a set whose mask polynomial has prescribed
-cyclotomic divisors, the question behind Part~I; among their results, a set satisfying (T1) and (T2) in a cyclic
-group whose order has at most two prime factors has no unsupported divisor. Kiss, Marshall, Matolcsi and
-Somlai~\cite{KMMS2} construct, for a set tile of $\Z_{180}$, a nonnegative weak complement satisfying (T1) and
-not (T2), and show that this cannot happen when $M$ has at most two prime factors. As far as we can tell neither
-contains Theorems~\ref{thm:A}--\ref{thm:C}; we have not compared the lower bounds of Part~I with those
-of~\cite{KLaMS}.
+\emph{Related work, most of which we learned of after the proofs were written.} Kiss, {\L}aba, Marshall and
+Somlai~\cite{KLaMS} study the smallest size of a set whose mask polynomial is divisible by $\Phi_s$ for every $s$
+in a given set $S$, which is the question behind Part~I. For $M=p^{n_1}q^{n_2}$ they prove that such a set is at
+least as large as the smallest set that is fibred on every scale $s\in S$, provided that one of the two primes
+occurs in the elements of $S$ with at most two different positive exponents~\cite[Corollary~7.3]{KLaMS}; for
+$M=p^nq$ that proviso always holds. They define unsupported divisors~\cite[Definition~1.5]{KLaMS} and prove that
+a set satisfying (T1) and (T2) in a cyclic group whose order has at most two prime factors has
+none~\cite[Theorem~1.12]{KLaMS}. An earlier bound of this kind is due to {\L}aba and
+Marshall~\cite[Theorem~1.2]{LaM}: if $\Phi_{p^{\alpha_j}q^{\beta_j}}$ divides $A(X)$ for $j=1,\dots,k$ and
+$q\nmid|A|$, then $|A|\ge p^{r}$, where $r$ is the number of different $\alpha_j$. The lower bound of
+Lemma~\ref{Y:lem:three} is of this kind; the reader of the prior art mentioned in the box judges that it sharpens
+these bounds under its two hypotheses of non-divisibility, by a similar induction, and its comparison, which
+nobody else has checked, is kept with the sources. The bound $p^e(p+q)$ itself, and Lemma~\ref{Y:lem:four}, we
+did not find in print. The normal form of an additive array of nonnegative integers (Lemma~\ref{N:lem:nf}; an
+array of the same kind is used in Part~I) is, for sides of prime lengths $p\ne q$, the case $N=pq$ of a theorem that
+goes back to de~Bruijn~\cite{Bru}; see \cite{LL} and \cite[Lemma~2.3]{KLaMS}. Kiss, Marshall, Matolcsi and Somlai~\cite{KMMS2} construct, for a set tile
+of $\Z_{180}$, a nonnegative weak complement satisfying (T1) and not (T2), and show that this cannot happen when
+$M$ has at most two prime factors~\cite[Proposition~6.4]{KMMS2}. As far as we and that reader can tell, none of
+these papers contains Theorems~\ref{thm:A}--\ref{thm:C}.
 
 \begin{theorem}\label{thm:A}
 Let $p\ne q$ be primes and $n\ge 0$. Every weak tile of $\Z_{p^nq}$ is a tile.
@@ -139,8 +150,11 @@ Let $p\ne q$ be primes. Every weak tile of $\Z_{p^2q^2}$ is a tile.
 
 \noindent Consequently, in these groups the tiles, the pd-tiles and the weak tiles are the same sets. Since
 spectral sets are weak tiles, the first two theorems contain the statements that spectral sets in $\Z_{p^nq}$ and in
-$\Z_{pqr}$ tile, which are theorems of Malikiosis and Kolountzakis~\cite{MK} and of Shi~\cite{Shi}; the route
-here, through weak tiling, makes no use of spectra. Theorem~\ref{thm:A} for $n=1$ contains the theorem of Kadir and Fan, for weak tiles.
+$\Z_{pqr}$ tile, which are theorems of Malikiosis and Kolountzakis~\cite{MK} and of Shi~\cite{Shi} (a recent
+preprint of Tan and Zhang~\cite{TZ2} states the second for every cyclic group of square-free order); the route
+here, through weak tiling, makes no use of spectra. The third contains the same statement for $\Z_{p^2q^2}$,
+which is a case of the theorem of Kiss, Malikiosis, Somlai and Vizer~\cite{KMSV} for $\Z_{p^nq^2}$ (see also
+Malikiosis~\cite{Mal}). So no new case of Fuglede's conjecture follows from the three theorems. Theorem~\ref{thm:A} for $n=1$ contains the theorem of Kadir and Fan, for weak tiles.
 Theorem~\ref{thm:C} is the first case of $M=p^\alpha q^\beta$ that is not of the form $p^nq$.
 
 \subsection*{How the proofs go} The first two have the same three steps.
@@ -297,7 +311,8 @@ power dividing itself exactly, so (3) applies and (T2) is empty; conclude with (
 Part (4) is \cite[Prop.~4.1]{KLMS} without positive definiteness. A zero of $A$ that no $s\in S_A$ divides
 exactly can occur for a tile: $\{5,8,9,25,28,31,41\}\subset\Z_{42}$ has one element in each class modulo $7$ and
 its zeros are $6$ and $7$. (When moreover every prime of $d$ divides $|A|$, such a zero is an \emph{unsupported
-cyclotomic divisor} in the sense of Tan and Zhang~\cite{TZ}, who report that for tiles they occur first at $M=180$.) So
+divisor} in the sense of Kiss, {\L}aba, Marshall and Somlai~\cite[Definition~1.5]{KLaMS}; Tan and
+Zhang~\cite{TZ} report that in tilings of cyclic groups they occur first at $M=180$.) So
 (3) gives (T1) only in the easy case; the content of Theorems~\ref{thm:A} and~\ref{thm:B} is that in those groups the remaining cases can be settled
 by counting.
 
@@ -503,8 +518,12 @@ $G_0\ge\min(p,q)\,p^{n-e}$.
 polynomial has at least its cyclotomic divisors}, applied to the sets of residues with prescribed free digits,
 and (U3) from a bound of clique type. That is how they were found; see~\cite{Ynote}.
 The smallest size of a set whose mask polynomial has prescribed cyclotomic divisors is the subject of Kiss,
-{\L}aba, Marshall and Somlai~\cite{KLaMS}, which I learned of after this proof was written and have seen only
-in summary; I have not compared the lower bounds of Section~\ref{Y:sec:count} with theirs.
+{\L}aba, Marshall and Somlai~\cite{KLaMS}, which I learned of after this proof was written. I have since read
+parts of it, and on 25 November 2026 a fresh instance of the model read it through and set its bounds, and those
+of {\L}aba and Marshall~\cite{LaM}, beside the two lemmas of Section~\ref{Y:sec:count}. Its report
+(\texttt{prior-art-agent3.md}, Section~3.3, beside this paper's folder) finds Lemma~\ref{Y:lem:three} to be a
+sharper bound of the same kind as theirs, proved by the same kind of induction over classes mod~$p$, and does
+not find Lemma~\ref{Y:lem:four} in print. I have not checked that comparison myself.
 \end{remark}
 
 \section{Two counting lemmas}\label{Y:sec:count}
@@ -778,6 +797,13 @@ Fix $j_1$, let $i_0$ minimise $N(\cdot,j_1)$ and let $j_0$ minimise $N(i_0,\cdot
 $\alpha_i=N(i,j_0)-a_0$, $\beta_j=N(i_0,j)-a_0$. Then $\beta_j\ge 0$ by the choice of $j_0$, and additivity gives
 $N(i,j)=a_0+\alpha_i+\beta_j$ and $\alpha_i=N(i,j_1)-N(i_0,j_1)\ge 0$.
 \end{proof}
+
+\noindent For sides of prime lengths $p_x\ne p_y$ this is, in coordinates, a case of a theorem on vanishing sums
+of roots of unity that goes back to de~Bruijn~\cite{Bru}, with a self-contained proof by Lam and
+Leung~\cite[Theorem~3.3]{LL}: a multiset whose mask polynomial is divisible by $\Phi_m$, where $m$ has two
+distinct prime factors, is modulo $m$ a combination of fibres in the two directions with nonnegative weights.
+The lemma is the case $m=p_xp_y$, where divisibility by $\Phi_m$ is the additivity of the array. We take the
+statement and the attributions from \cite[Lemma~2.3]{KLaMS} and have consulted neither source.
 
 \begin{lemma}\label{N:lem:three}
 If $(F_{xy})$ holds and $(F_x)$, $(F_y)$ fail, then $|A|\ge p_x+p_y$.
@@ -1210,7 +1236,7 @@ transform is real and nonnegative).\par}
 
 \section{The formal proof of Theorem~\ref{thm:C}}\label{C:sec:lean}
 
-The proof is formalised in Lean~4 (\texttt{v4.37.0-rc1}) with Mathlib, in a library \lean{P2q2} of $11{,}134$
+The proof is formalised in Lean~4 (\texttt{v4.37.0-rc1}) with Mathlib, in a library \lean{P2q2} of $11{,}162$
 lines built on the libraries \lean{Pqr} and \lean{Pnq} of Parts~I and~II:
 \begin{verbatim}
 theorem P2q2.weak_tiling_iff_tiling_p2q2 (p q : ℕ)
@@ -1221,7 +1247,15 @@ theorem P2q2.weak_tiling_iff_tiling_p2q2 (p q : ℕ)
 \end{verbatim}
 with \lean{WeakTiling A f} $:=(\forall v,\,0\le f\,v)\wedge f\,0=1\wedge\forall v,\ \sum_{a\in A}f(v-a)=1$ and
 \lean{IsTiling A B} $:=\forall v,\ \exists!\,(a,b),\ a\in A\wedge b\in B\wedge a+b=v$. It depends on the axioms
-\lean{propext}, \lean{Classical.choice}, \lean{Quot.sound} only.
+\lean{propext}, \lean{Classical.choice}, \lean{Quot.sound} only. A second statement in the same library (file
+\lean{Pd}, $28$ lines, added on 26 November 2026),
+\begin{verbatim}
+theorem P2q2.tile_iff_pd_iff_weak_p2q2
+\end{verbatim}
+is the equivalence of tiles, pd-tiles and weak tiles of $\Z_{p^2q^2}$, where a pd-tiling complement
+(\lean{Pqr.PdTiling}) is a weak tiling complement whose Fourier transform is real and nonnegative at every
+frequency. It follows in a line from the theorem above and from the formalised fact that a tile is a pd-tile,
+and depends on the same three axioms.
 
 About $2{,}000$ lines are written by hand: the subgroup $p\Z_M\cong\Z_{M/p}$ and the pieces of a set
 (\lean{Sub}); step functions in M\"obius coordinates, $f(x)=\sum_{d\mid\gcd(x,M)}\mu_d$, whose transform at the
@@ -1313,27 +1347,43 @@ existence of a complement supported in a subgroup.
 
 
 \begin{thebibliography}{99}
+\bibitem{Bru} N.~G.~de~Bruijn, \emph{On the factorization of cyclic groups}, Indag. Math. 15 (1953), 370--377.
+ (Cited as it is cited in \cite{KLaMS}; not consulted.)
 \bibitem{CM} E.~Coven and A.~Meyerowitz, \emph{Tiling the integers with translates of one finite set},
  J.~Algebra 212 (1999), 161--174.
 \bibitem{KF} M.~Kadir and K.~Fan, \emph{Tiles and weak tiles in $\Z_{pq}$}, arXiv:2607.02149 (2026).
 \bibitem{KLMS} G.~Kiss, I.~Londner, M.~Matolcsi and G.~Somlai, \emph{Functional tilings and the
  Coven--Meyerowitz tiling conditions}, Discrete Analysis 2025:18; arXiv:2411.03854.
-\bibitem{KLMS2} G.~Kiss, I.~Londner, M.~Matolcsi and G.~Somlai, \emph{A lonely weak tile}, arXiv:2410.04948.
+\bibitem{KLMS2} G.~Kiss, I.~Londner, M.~Matolcsi and G.~Somlai, \emph{A lonely weak tile}, Expo. Math. 44
+ (2026), no.~1, 125636; arXiv:2410.04948.
 \bibitem{KLaMS} G.~Kiss, I.~{\L}aba, C.~Marshall and G.~Somlai, \emph{Lower bounds for mask polynomials with many
-cyclotomic divisors}, Adv. Math. 494 (2026), 110932; arXiv:2507.11672. (Seen only in summary.)
+ cyclotomic divisors}, Adv. Math. 494 (2026), 110932; arXiv:2507.11672. (Read through by a further instance on
+ 25 November 2026. Of the authors, Noon has read Definition~1.5, Theorems~1.10--1.12 and the statements of
+ Lemma~2.3, Corollary~7.3 and Theorem~9.4, and Yonder parts.)
 \bibitem{KMMS} G.~Kiss, D.~Matolcsi, M.~Matolcsi and G.~Somlai, \emph{Tiling and weak tiling in $(\Z_p)^d$},
  Sampling Theory, Signal Processing, and Data Analysis 22(1), 2024.
 \bibitem{KMMS2} G.~Kiss, C.~Marshall, M.~Matolcsi and G.~Somlai, \emph{Nonnegative weak tilings and the
-Coven--Meyerowitz condition (T2)}, arXiv:2611.13593 (2026). (Seen only in summary.)
+Coven--Meyerowitz condition (T2)}, arXiv:2611.13593 (2026).
+\bibitem{KMSV} G.~Kiss, R.~D.~Malikiosis, G.~Somlai and M.~Vizer, \emph{On the discrete Fuglede and Pompeiu
+ problems}, Analysis \& PDE 13 (2020), 765--788; arXiv:1807.02844. (Abstract only.)
+\bibitem{LL} T.~Y.~Lam and K.~H.~Leung, \emph{On vanishing sums of roots of unity}, J.~Algebra 224 (2000),
+ 91--109. (Cited as it is cited in \cite{KLaMS}; not consulted.)
 \bibitem{LM} N.~Lev and M.~Matolcsi, \emph{The Fuglede conjecture for convex domains is true in all
  dimensions}, Acta Math. 228 (2022), 385--420.
+\bibitem{LaM} I.~{\L}aba and C.~Marshall, \emph{Vanishing sums of roots of unity and the Favard length of
+ self-similar product sets}, Discrete Analysis 2022:19; arXiv:2202.07555. (Noon has read the statement of
+ Theorem~1.2; a further instance read it with its proof.)
 \bibitem{MK} R.~D.~Malikiosis and M.~N.~Kolountzakis, \emph{Fuglede's conjecture on cyclic groups of order
  $p^nq$}, Discrete Analysis 2017:12.
+\bibitem{Mal} R.~D.~Malikiosis, \emph{On the structure of spectral and tiling subsets of cyclic groups}, Forum
+ Math. Sigma 10 (2022), e23; arXiv:2005.05800. (Abstract only.)
 \bibitem{Sa} A.~D.~Sands, \emph{On Keller's conjecture for certain cyclic groups}, Proc. Edinburgh Math. Soc. 22
 (1979), 17--21. (Cited as it is cited in \cite{CM}; not consulted.)
 \bibitem{Shi} R.~Shi, \emph{Fuglede's conjecture holds on cyclic groups $\Z_{pqr}$}, Discrete Analysis 2019:14.
 \bibitem{TZ} H.~Tan and Y.~Zhang, \emph{Unsupported cyclotomic divisors in three-prime integer tilings},
  arXiv:2609.06677 (2026).
+\bibitem{TZ2} H.~Tan and Y.~Zhang, \emph{Fuglede's conjecture for cyclic groups of square-free order},
+ arXiv:2610.02218 (2026). (Abstract only.)
 \bibitem{Ynote} Yonder, \emph{pd-tiling implies tiling in $\Z_{p^nq}$}, working note with its referee
  reports, 20 November 2026 (\lean{pnq-agent3.md}).
 \end{thebibliography}

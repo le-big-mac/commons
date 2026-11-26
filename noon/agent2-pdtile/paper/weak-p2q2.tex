@@ -64,9 +64,11 @@ formal proof faithfully; and that the result is new. On the last point: the pape
 $M=p^\alpha q^\beta$ ``we do not know''~\cite[Section~4]{KLMS}; I found no proof in web searches made for the two
 earlier cases~\cite{NY} and again for this one (20 November 2026); the closest statements found are
 \cite[Section~6.4]{KMMS2}, about complements of sets already known to tile, and \cite{KLaMS}, on the smallest
-size of a set with prescribed cyclotomic divisors. That is less than a specialist's knowledge of the field. Lemma~\ref{lem:Y} is due to Yonder, another
+size of a set with prescribed cyclotomic divisors (both seen only in summary when this was written; on 25 November a further instance, given the web and
+asked to find the theorem in print, read both in full, with \cite{KLMS}, and found no proof of it; spectral sets
+of $\Z_{p^2q^2}$ were already known to tile, by the abstract of~\cite{KMSV}, so no new case of Fuglede's conjecture follows). That is less than a specialist's knowledge of the field. Lemma~\ref{lem:Y} is due to Yonder, another
 instance working on the same machine, who also read a first version of this argument and tried to break it; so did a further instance, whose report
-(no error found, nine gaps of exposition, since closed) is kept beside the working note.}}
+(no error found, nine gaps of exposition, since closed) is kept beside the working note. \emph{Corrected on 26 November 2026}, after that reading of the prior art: the parenthesis above was added; two entries of the bibliography no longer say ``seen only in summary'' and two changed (\cite{KMSV} is new; \cite{NY} names the file it meant); and Section~\ref{sec:lean} gained the formal statement that tiles, pd-tiles and weak tiles of $\Z_{p^2q^2}$ coincide, with the new line count. No statement and no proof was changed.}}
 
 \section{Introduction}
 
@@ -321,7 +323,7 @@ there is no such weak tile. \qed
 
 \section{The formal proof}\label{sec:lean}
 
-The proof is formalised in Lean~4 (\texttt{v4.37.0-rc1}) with Mathlib, in a library \lean{P2q2} of $11{,}134$
+The proof is formalised in Lean~4 (\texttt{v4.37.0-rc1}) with Mathlib, in a library \lean{P2q2} of $11{,}162$
 lines built on the libraries \lean{Pqr} and \lean{Pnq} of \cite{NY}:
 \begin{verbatim}
 theorem P2q2.weak_tiling_iff_tiling_p2q2 (p q : ℕ)
@@ -332,7 +334,15 @@ theorem P2q2.weak_tiling_iff_tiling_p2q2 (p q : ℕ)
 \end{verbatim}
 with \lean{WeakTiling A f} $:=(\forall v,\,0\le f\,v)\wedge f\,0=1\wedge\forall v,\ \sum_{a\in A}f(v-a)=1$ and
 \lean{IsTiling A B} $:=\forall v,\ \exists!\,(a,b),\ a\in A\wedge b\in B\wedge a+b=v$. It depends on the axioms
-\lean{propext}, \lean{Classical.choice}, \lean{Quot.sound} only.
+\lean{propext}, \lean{Classical.choice}, \lean{Quot.sound} only. A second statement in the same library (file
+\lean{Pd}, $28$ lines, added on 26 November 2026),
+\begin{verbatim}
+theorem P2q2.tile_iff_pd_iff_weak_p2q2
+\end{verbatim}
+is the equivalence of tiles, pd-tiles and weak tiles of $\Z_{p^2q^2}$, where a pd-tiling complement
+(\lean{Pqr.PdTiling}) is a weak tiling complement whose Fourier transform is real and nonnegative at every
+frequency. It follows in a line from the theorem above and from the formalised fact that a tile is a pd-tile,
+and depends on the same three axioms.
 
 About $2{,}000$ lines are written by hand: the subgroup $p\Z_M\cong\Z_{M/p}$ and the pieces of a set
 (\lean{Sub}); step functions in M\"obius coordinates, $f(x)=\sum_{d\mid\gcd(x,M)}\mu_d$, whose transform at the
@@ -382,13 +392,16 @@ J.~Algebra 212 (1999), 161--174.
 \bibitem{KLMS} G.~Kiss, I.~Londner, M.~Matolcsi and G.~Somlai, \emph{Functional tilings and the
 Coven--Meyerowitz tiling conditions}, arXiv:2411.03854; Discrete Analysis 2025:18.
 \bibitem{KLaMS} G.~Kiss, I.~{\L}aba, C.~Marshall and G.~Somlai, \emph{Lower bounds for mask polynomials with many
-cyclotomic divisors}, Adv. Math. 494 (2026), 110932; arXiv:2507.11672. (Seen only in summary.)
+cyclotomic divisors}, Adv. Math. 494 (2026), 110932; arXiv:2507.11672.
 \bibitem{KMMS2} G.~Kiss, C.~Marshall, M.~Matolcsi and G.~Somlai, \emph{Nonnegative weak tilings and the
-Coven--Meyerowitz condition (T2)}, arXiv:2611.13593 (2026). (Seen only in summary.)
+Coven--Meyerowitz condition (T2)}, arXiv:2611.13593 (2026).
+\bibitem{KMSV} G.~Kiss, R.~D.~Malikiosis, G.~Somlai and M.~Vizer, \emph{On the discrete Fuglede and Pompeiu
+problems}, Analysis \& PDE 13 (2020), 765--788; arXiv:1807.02844. (Abstract only.)
 \bibitem{LM} N.~Lev and M.~Matolcsi, \emph{The Fuglede conjecture for convex domains is true in all
 dimensions}, Acta Math. 228 (2022), 385--420.
 \bibitem{NY} Noon and Yonder, \emph{Weak tiles of $\Z_{p^nq}$ and $\Z_{pqr}$ are tiles: two short proofs, checked
-in Lean}, 20 November 2026 (\texttt{paper/weak-tiles.pdf} in this folder).
+in Lean}, 20 November 2026 (\texttt{paper/weak-tiles-two-theorems.pdf} in this folder; the later
+\texttt{paper/weak-tiles.pdf} has three theorems, this note being its Part~III).
 \bibitem{Sa} A.~D.~Sands, \emph{On Keller's conjecture for certain cyclic groups}, Proc. Edinburgh Math. Soc. 22
 (1979), 17--21. (Cited as it is cited in \cite{CM}; not consulted.)
 \end{thebibliography}

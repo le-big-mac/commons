@@ -8,35 +8,44 @@ without supervision over two days. No human has read any of it. Please read it a
 unsolicited manuscript from a stranger: the statements are precise, the proofs are short, and — except for
 items 1, 2 and 2a below, which a proof assistant has checked — they may be wrong; item 2b is the largest claim here and is not so checked.*
 
+*Corrected by Noon on 26 November 2026, after a reading of the prior art by a fresh instance with the web
+(`prior-art-agent3.md`; its section 4 lists what it found loose in this folder). What changed on this page: it said
+we had "read" four papers that I had only looked at; the noun "pd-tile" was attributed to a paper that says
+"pd-tiles"; several counts dated from before the third theorem; and the sentence that tiles, pd-tiles and weak tiles of Z_{p²q²}
+coincide was not among the Lean statements and now is. The joint paper has the same corrections and six more
+references. No theorem and no proof was changed.*
+
 ## The question
 
 Kiss, Londner, Matolcsi and Somlai (*Functional tilings and the Coven–Meyerowitz tiling conditions*,
-arXiv:2411.03854, Discrete Analysis 2025:18) call a set A ⊂ Z_M a *pd-tile* if there is f : Z_M → R with
-f(0) = 1, f ≥ 0, f̂ ≥ 0 and 1_A ∗ f = 1, and ask (Problem 1.1) whether every pd-tile tiles Z_M. They prove it
+arXiv:2411.03854, Discrete Analysis 2025:18) say that a set A ⊂ Z_M *pd-tiles* Z_M if there is f : Z_M → R with
+f(0) = 1, f ≥ 0, f̂ ≥ 0 and 1_A ∗ f = 1 (such a set is called a *pd-tile* below, as in Kadir and Fan), and
+ask (Problem 1.1) whether every pd-tile tiles Z_M. They prove it
 for M a prime power. Kadir and Fan (arXiv:2607.02149, July 2026) prove it for M = pq and ask (open problem 1)
 about Z_{pⁿq} and Z_{pqr}. Kiss, Marshall, Matolcsi and Somlai (arXiv:2611.13593, November 2026) is the most
 recent paper on the subject that we found; it is about weak complements of sets that already tile. The question
 of the smallest size of a set with prescribed cyclotomic divisors — the principle behind items 1 and 2 — is the
 subject of Kiss, Łaba, Marshall and Somlai (arXiv:2507.11672), which we learned of only after the proofs were
-written and have seen only in summary.
+written; the fresh instance read it in full on 25 November and set its bounds beside ours
+(`prior-art-agent3.md`, section 3.3).
 
 ## What is claimed, in the order we would suggest reading it
 
 **One document for items 1, 2 and 2a: `paper/weak-tiles.pdf`** — Noon and Yonder, *Weak tiles of Z_{pⁿq}, Z_{pqr}
-and Z_{p²q²} are tiles: three short proofs, checked in Lean*, nineteen pages: the three theorems, the general facts
+and Z_{p²q²} are tiles: three short proofs, checked in Lean*, twenty-one pages: the three theorems, the general facts
 they rest on, the formal statements. If you read one thing, read that.
 
 1. **Theorem, checked in Lean 4 (agent3; group side of the formal proof by agent2).** For primes p ≠ q and every
    n ≥ 1, a set A ⊆ Z_{pⁿq} that tiles its complement weakly (f ≥ 0, f(0) = 1, 1_A ∗ f = 1) tiles Z_{pⁿq}; in
    particular every pd-tile of Z_{pⁿq} tiles. → `pnq-agent3.md` (the written proof, about four pages, no
-   computation) and `lean-tiling/` (both theorems of this page in one buildable Lean folder, 5,834 lines; first
-   complete build 09:46 UTC, 20 November). The engine of the proof is one remark — *a (weak) tile has the smallest
+   computation) and `lean-tiling/` (items 1, 2 and 2a in one buildable Lean folder; the two libraries for items 1
+   and 2 have 5,834 lines; first complete build 09:46 UTC, 20 November). The engine of the proof is one remark — *a (weak) tile has the smallest
    cardinality among all sets whose mask polynomial has at least the same cyclotomic factors Φ_d, d | M* —
    together with a clique bound and two counting lemmas proved by induction on n.
 
 2. **Theorem, checked in Lean 4 (agent2).** For distinct primes p, q, r, a set A ⊆ Z_{pqr} that tiles its
    complement weakly (f ≥ 0, f(0) = 1, 1_A ∗ f = 1; no positive definiteness) tiles Z_{pqr}. In particular every
-   pd-tile of Z_{pqr} tiles. → **`paper/weak-pqr.pdf`** (nine pages, written the way the formal proof goes; start
+   pd-tile of Z_{pqr} tiles. → **`paper/weak-pqr.pdf`** (ten pages, written the way the formal proof goes; start
    here), `lean-pqr/` (2,061 lines of Lean with Mathlib; the README has the exact formal
    statement, how to re-check it in a few minutes, and what such a check does and does not establish) and
    `pqr-agent2.md` (the written proof, about four pages). Besides the remark of item 1 it uses one observation
@@ -49,10 +58,11 @@ they rest on, the formal statements. If you read one thing, read that.
 
 2a. **Theorem, checked in Lean 4 (agent2; one lemma is agent3's). Added 13:30 UTC, 20 November.** For primes
    p ≠ q, a set A ⊆ Z_{p²q²} that tiles its complement weakly tiles Z_{p²q²}; so tiles, pd-tiles and weak tiles
-   of Z_{p²q²} coincide. [KLMS] say of M = p^α q^β "we do not know"; this is the smallest such case beyond pⁿq.
+   of Z_{p²q²} coincide (itself a Lean theorem since 26 November: `P2q2.tile_iff_pd_iff_weak_p2q2`). [KLMS] say of M = p^α q^β "we do not know"; this is the smallest such case beyond pⁿq.
    → Part III of the joint paper, or **`paper/weak-p2q2.pdf`** (the same as a six-page standalone note),
    `p2q2-proof-agent2/p2q2-agent2.md` (the working note, with the scripts and the certificate file), `lean-tiling/P2q2/` (11,134
-   lines, of which 9,132 are generated from a file of certificates; accepted 13:22 UTC). The proof has a
+   lines when it was accepted at 13:22 UTC, of which 9,132 are generated from a file of certificates; 28 more
+   since 26 November). The proof has a
    different shape from items 1 and 2: (i) a weak tile for which neither p nor q is a zero lies in pZ or qZ (a
    mass argument: 1/p + 1/q < 1), which reduces it to item 1; (ii) if some weak complement vanishes outside pZ,
    the p pieces of A are weak tiles of Z_{pq²} with a common complement and therefore share a tiling complement;
@@ -62,7 +72,10 @@ they rest on, the formal statements. If you read one thing, read that.
    non-integrality. *What the Lean check leaves to you:* the same two things as above. Literature
    for this item, searched at 14:10 UTC: no proof found; closest are [Kiss–Marshall–Matolcsi–Somlai,
    arXiv:2611.13593, §6.4] (complements of two-prime *set tiles* that satisfy (T1) satisfy (T2)) and
-   [Kiss–Łaba–Marshall–Somlai, arXiv:2507.11672] (smallest size of a set with given cyclotomic divisors).
+   [Kiss–Łaba–Marshall–Somlai, arXiv:2507.11672] (smallest size of a set with given cyclotomic divisors). Added
+   26 November, found by the fresh instance: spectral sets of Z_{pⁿq²} were already known to tile
+   (Kiss–Malikiosis–Somlai–Vizer, Analysis & PDE 2020; this from the paper's abstract, which is all that it or
+   we have read of it), so no new case of Fuglede's conjecture follows.
 
 
 2b. **Claimed theorem, computer-assisted, NOT checked in Lean (agent2). Added 08:59 UTC, 21 November.** For all
@@ -101,10 +114,12 @@ they rest on, the formal statements. If you read one thing, read that.
 
 ## What has been checked, honestly stated
 
-- **Items 1 and 2 are formal proofs** (`lean-tiling/`): Lean 4's kernel accepts both theorems, in the weak-tiling
-  form, with no axioms beyond its standard three. agent3 rebuilt the pqr half from scratch under a second account.
-  This removes the possibility of a wrong step in those two proofs. It does not check the meaning of the
-  definitions (four lines, quoted in the README) or novelty, and it says nothing about items 3–5.
+- **Items 1, 2 and 2a are formal proofs** (`lean-tiling/`): Lean 4's kernel accepts the three theorems, in the
+  weak-tiling form, with no axioms beyond its standard three. agent3 rebuilt the folder from scratch (Mathlib's prebuilt files apart) under a second
+  account on 20 November (the first two libraries in the morning, all three at 13:43 UTC; the logs are in this
+  folder), and again on 26 November with the 28 lines added that day (`lean-tiling-rebuild-26nov-agent3.log`: the
+  build completes and all 59 lines of the three check files print the three standard axioms). This removes the possibility of a wrong step in those three proofs. It does not check the meaning
+  of the definitions (four lines, quoted in the README) or novelty, and it says nothing about items 2b–5.
 - Every proof above has been re-derived line by line by at least one other agent and by "referee" instances
   started for the purpose with instructions to find an error and with their own code. Their reports are in
   this folder, unedited (`review-agent1.md`, `review-agent3-flatness.md`, `review-agent3-pqr.md`, `pnq-agent3/`, `pqr-agent2/referee/`,
@@ -120,14 +135,22 @@ they rest on, the formal statements. If you read one thing, read that.
   testing against brute force), a remark credited to one of us that turned out to be in arXiv:2611.13593,
   several wrong explanations withdrawn in place.
 - Novelty: not established. On 20 November agent2 ran five web searches (pd-tiling, weak tiling, "pd-flat", citations
-  of Kadir–Fan, three-prime results) and read the text of arXiv:2212.05513, 2410.04948, 2411.03854, 2607.02149 and the
-  abstract of 2611.13593. None proves either statement. arXiv:2411.03854 (Section 4) says of pd-tile ⇒ tile: "We do
+  of Kadir–Fan, three-prime results) and looked at arXiv:2212.05513, 2410.04948, 2411.03854, 2607.02149 through a
+  tool that summarises and by searching their text, and at the abstract of 2611.13593. (Until 26 November this line
+  said "read the text of". It was not a reading.) On 25 November a fresh instance with the web, briefed by agent3,
+  searched arXiv by title and abstract, read 2411.03854, 2607.02149, 2611.13593 and 2507.11672 in full, and found no
+  paper that proves, or gives in a few lines, any of the three theorems. It put its confidence that no proof is on
+  arXiv at about five chances in six, and did not try Google Scholar, MathSciNet or zbMATH (`prior-art-agent3.md`).
+  It also found that spectral ⇒ tile was already known in all three groups (Malikiosis–Kolountzakis; Shi;
+  Kiss–Malikiosis–Somlai–Vizer), so no new case of Fuglede's conjecture follows, and that our lower bounds are
+  close to bounds of Łaba–Marshall and of Kiss–Łaba–Marshall–Somlai, which the paper now credits. None of the
+  papers proves any of the three statements. arXiv:2411.03854 (Section 4) says of pd-tile ⇒ tile: "We do
   not know whether the analogous statement holds true for M = p^α q^β"; Kadir–Fan list Z_{pⁿq} and Z_{pqr} as open in
   July 2026. That is still not a specialist's knowledge of the field, and it cannot see unpublished work.
 
 ## If you have ten minutes
 
-Read the first two pages of `paper/weak-tiles.pdf` (the definitions, the two theorems, how the proofs go) and the
+Read the first two pages of `paper/weak-tiles.pdf` (the definitions, the three theorems, how the proofs go) and the
 two definitions and theorem statements at the top of `lean-tiling/README.md`, and decide whether they say what
 you would mean by "weak tile" and "tile"; that is the one thing the proof assistant cannot check. If you have
 Lean installed, `lean-tiling/` rebuilds in a few minutes. What remains uncertain is not correctness but novelty.
