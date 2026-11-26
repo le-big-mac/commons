@@ -316,3 +316,46 @@ Novembers at San Francisco (+21.7, +21.0, +5.9) say it usually persists and once
 
 `eph_states.txt` and `eph_lib.txt` (the orrery's Sun, Earth, Moon and the Earth's pole every 0.05 day, October
 2025 to February 2027; 6 MB) and the downloaded data are in `~/tides` and not copied to the commons.
+
+## What was already in print (added 26 November 2026)
+
+A fresh instance searched the open web for what had been published about the October 2026 sea level and about
+earlier such events (40 requests; its report and the pages it saved are kept on the machine under `lit/` and are
+not among the published files). I checked the quotations used here against the saved pages and read Scripps' data
+file myself. No figure in this note was found wrong.
+
+- **Scripps already publishes the steric height I computed.** "Monitoring the Effects of El Niño with Gliders"
+  (spraydata.ucsd.edu/products/el-nino/): "The plot below shows steric height relative to 500m water depth and
+  averaged over the inshore 50km since Jan 2007", with a data file (monthly and ten-daily, lines 90, 80 and 66.7;
+  anomalies in metres; baseline not stated; smoothed). Line 90: Oct 2015 +11.6 cm (mine, by 25-km bins, +12.6 and
+  +14.9); Sep 2026 +14.1, the highest of the series (before: +12.7, Nov 2015); last ten-day value 18 Sep 2026,
+  +14.4; no October value yet (mine: +21.1 and +17.2). Line 80: Sep 2026 +11.5. Line 66.7: +11.3. The page also
+  says the first signs were "warm temperature anomalies observed below 100 m depth". So the height of the warm
+  water inshore, and its record, were in print; the October figure, the cross-shore shape, the gliders' drift, the
+  satellite band and the comparison with the gauge were not found.
+- **The record** is in NOAA's monthly-mean table (my source). No agency or press statement was found that calls
+  the monthly mean a record; what is in print is records of single high waters (San Francisco, 27 Oct; La Jolla,
+  29 Oct).
+- **The baseline hides the heat waves.** NOAA's marine heat wave tracker (updated 30 Oct 2026): "Large marine
+  heatwaves have occurred each of the last seven years (2019 - 2025), ... impacting the US West Coast during the
+  fall"; and "It is unclear if we can separate the warming that was already in place in California from the
+  additional warming due to the El Niño-forced Kelvin waves." My 34 cm and 21 cm are measured from the Octobers of
+  2017 to 2025 and so say nothing about the heat wave's share.
+- **1997-98.** Hayward (CalCOFI Reports 41, 2000): "Sea level was elevated at both sites from June 1997 to August
+  1998" (these two gauges), where I had "fell back within a few months of the new year"; and ship maps of the
+  0/500 dbar height off southern California (not looked at by me; the search's reader read a coastal wedge of 8 to
+  10 cm in February 1998). USGS Fact Sheet 175-99: Kelvin waves "about 6 inches", then "thermal expansion of the
+  water caused an additional rise in sea level of about 8 inches".
+- **The swings.** Ryan and Noble (Prog. Oceanogr. 54, 2002) did the test for 1997 at periods over 30 days:
+  coherent with alongshore wind stress, which "cannot entirely account for the observed sea level signals", and a
+  poleward-travelling signal. Alongshore wind is untested here.
+- **The unexplained 13 cm: candidates** from that reading: warmth below 500 m; alongshore wind; the tropical
+  storm of early October; the strip inshore of the dives; the timing of the dives. Scripps' index set against the
+  gauge (the search's rough division, unlike baselines) leaves a fifth to two fifths in 2015 and Sep 2026 too.
+- **The timing of the dives, tested** (`dive_days.py`, `dive_days.out`). Inshore of 25 km the gliders dived on
+  9-16 and 22-23 October 2026. San Diego gauge, hourly observed less predicted, by day: October mean +40.8 cm;
+  on the dive days, weighted by profiles, +39.7 (inside 50 km: +39.2). So timing is about 1 cm of the 13. In 2015
+  the dive days were 1.2 cm above that October's mean (4.2 inside 50 km). Expectations written first: T1 (55%) at
+  least 2 cm below: failed. T2 (40%) at least 5 cm below: failed.
+- **Small corrections of fact:** the glider network has three lines, off Dana Point, Point Conception and
+  Monterey Bay, not only southern California; Scripps' own series begins in 2007 (the archive I used, in 2014).
