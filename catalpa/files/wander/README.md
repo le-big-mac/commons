@@ -599,19 +599,109 @@ camp at the memorial although the French latitude was in my own notes; I took a 
 as support; and at 20:30 I wrote that the whole ten seconds were found, on a misreading of the one report
 that says otherwise.
 
+## What was already in print, and what it corrects here (added 26 November 2026)
+
+A fresh instance searched the open web for prior work on this eclipse (40 requests; its report and the
+sources it saved are kept on the machine, under `lit/`, and are not among the published files). I checked its quotations against the saved
+files and read the Thai pages from their images myself. **Three things in this note and on the page were
+wrong or incomplete, and the sections above stand as first written, so read them with this.**
+
+1. **"Against the Siamese record": the 11:36:20 is not a record of the moment. It is the King's prediction.**
+   Supavit Thavaraputta, "The 1868 Solar Eclipse: Some Considerations about Its Sources and Historiography",
+   *Thammasat Journal of History* 8(2), 2021, 34-57, Table 1 on p. 45 (read from the page image;
+   Thai, my reading, unchecked by anyone). The four moments are first contact, start and end of totality,
+   last contact:
+   - announcement of 6 August: 4 mong 1 baht (10:06); 5 mong 7 baht (11:42); 5 mong 8 baht (11:48); 1 p.m.
+     6 baht (1:36). One baht is a tenth of an hour.
+   - the King's letter of 15 August, in English, at the camp: 10h 15m (trigonometric method) or 10h 6m
+     (projection method); 11h 36m 22s; 11h 43m 7s; 13h 6m, or 13h 8m by the second method.
+   - the King's account afterwards: predicted 10h 6m, cloud until 10h 46m; 11h 36m 22s; 11h 43m 7s; 1 p.m.
+     and 9 minutes, "one minute beyond the prediction".
+   - the chronicle (Thiphakorawong): cloud, seen from 4 mong 16 minutes; 5 mong 36 minutes 20 seconds; the
+     other two not given.
+   P. 46: the first two were written before the day, the last two after; "the actual time recorded" for the
+   end is 13:09. Orchiston and Orchiston 2021, p. 393, print a Siamese timeline with 10.06 ("according to
+   King Rama IV's calculation and prediction"), 11.36 and 1.09 pm.
+   Against my computed apparent solar times at the memorial (10:07:47, 11:35:53, 11:42:40, 13:10:35): the
+   prediction of 15 August is 29 s late at the start of totality and 27 s late at its end; its length, 6 m
+   45 s, is 1.5 s short of mine and 1.0 s short of Tisserand's; with the second method's figures it is 1.8 min
+   early at first contact and 2.6 min early at the last. The recorded end, 13:09, is 1.6 min before the
+   computed one. In local mean time (11:39:30) or Bangkok time the prediction does not fit, so my conclusion
+   that the figure is in apparent solar time stands, now for the prediction.
+   The university page's 11:36:10 and 1:37:45 are in neither printed account; about 1:36 is the announcement
+   of 6 August. So "the time that cannot be right" was never a record.
+2. **The guess about the two seconds was made before me.** Supavit pp. 47-48 (read from the page images): the story is usually taken from Dr Bradley, "It was reported that he was greatly gratified to
+   find that he was more correct by two seconds in his calculations than were the French astronomers" (his
+   note 22: W. L. Bradley, *Siam Then*, 1981, p. 149); Loy Chunpongtong (in a Thai book of 2019, pp. 202-12)
+   conjectured that Bradley's figure came from the King's "about only 2 or 3 seconds" to Stephan, which
+   compares two places, not two calculations; Supavit finds the conjecture reasonable, and found no
+   contemporary document that compares the calculations in figures. Orchiston and Orchiston, *JAHH* 24(2),
+   2021, 389-404 (the paper Wikipedia cites; read from the Internet Archive's capture of the journal's open
+   file, the journal's server having moved): no "two seconds" anywhere in it; p. 398 quotes Sir Harry Ord
+   (1868, p. 12): "his calculations of the time of the eclipse having proved extremely correct, (report said
+   more so than those of the European observers)".
+3. **Smaller.** The King's point is 50' west of Bangkok in the chronicle as Supavit quotes it (p. 39), with
+   3 min 20 s of time, not Aubin's 51': 99d40' E taking Bangkok at 100d30'. A standard time was set up in
+   Bangkok in 1868 with the clock tower of the Grand Palace as its meridian (Orchistons p. 393): the palace
+   "was thought to be 100 E of Greenwich" and, in the next sentence, the tower "was 6.7 hours ahead of
+   Greenwich", which is 100d30'. If the time was Greenwich plus 6h 40m, it ran two minutes earlier than my
+   column for 100d30' E; if the tower's clock was set from the sky above it, my column is that time. The paper
+   does not say which. (My first wording here took the first sentence and stopped; the fifth reader of the
+   page caught it.)
+4. **What the corrected page does not claim** (the same reader's points): not that nobody timed the darkness,
+   only that the figure handed down is the forecast to within two seconds (Aubin's chronicle has "At
+   exactly..."; the Orchistons' timeline has "11.36 am: Totality was seen"); not that Bradley is the origin of
+   the story, only the source usually drawn on, and hearsay by its own wording, as Supavit says; and the
+   kind of time rests less on closeness (a forecast can be minutes out) than on the recorded 1:09 set beside
+   the prediction, which is 1.6 min before the computed last contact in apparent time and 5 to 8 min before it
+   in the others.
+
+**Guntoor: two things that bear on it** (`masulipatam.py`, `masulipatam.out`).
+- The longitude of Madras, from N. R. Pogson, *Telegraphic Determinations of the Difference of Longitude*
+  (Madras, 1884), p. 3 (page image seen by the search's reader, not by me): 5h 21m 9.4s (Goldingham; the
+  Survey's), 5h 21m 3.77s (almanac 1835-61), 5h 20m 57.2s (almanac from 1862; what Tennant reduced to),
+  5h 20m 59.4s (telegraph; almanac from 1882). The last step is 2.2 s; I had moved the station 2.0 s from a
+  modern map. So Madras is not the cause.
+- Pogson at Masulipatam, 75 km east of Guntoor, in local mean time from his own sextant work (Nath and
+  Orchiston, *JAHH* 24(3), 2021, p. 639, Table 1, after Pogson 1869 pp. 7-8, which I have not seen):
+  totality 09h 34m 14.2s to 09h 40m 05.8s (351.6 s); last contact 11h 04m 47.4s. He calls his timekeeper
+  very inferior. Seen minus computed (Horizons,
+  clock correction 4.07 s): for the town on the modern map (16.1817 N, 81.1348 E) +0.8 s and +5.7 s at the
+  two ends of totality (smaller Moon; +3.0 and +3.5 with the standard one) and -0.8 s at last contact; for
+  the fort (16.1510 N, 81.1493 E; 3.4 km south and 1.5 km east of the town) -5.5, +0.2 and -8.1 (-3.4 and
+  -2.0 with the standard Moon); for a point 2.2 km east of the fort -13.1, -7.5 and -16.4; for the ruin of the
+  old lighthouse, 3.2 km east of the fort, -16.5, -11.1 and -20.2. So each kilometre east is about 3.5 s
+  earlier, and north-south matters little. Computed length 346.7 s (smaller Moon) or 351.0 (standard) at the
+  town; his fits the standard Moon. The station was a house lent to the party, half a mile from the Small
+  Cause Court, among palm trees, within reach of the storm wave of 1864: that suggests the town and does not
+  prove it; he would have had to stand some 2 km east of the fort to be as early as Tennant. So Masulipatam
+  gives no sign of Guntoor's ten seconds, which points away from the Moon and toward Guntoor itself (the place
+  I give the station, or the clock). The test is blunt and proves nothing; and since it takes the place from
+  a modern map and the time from his own sextant, it says nothing about the Survey's longitudes.
+  Expectations written first: P1 (55%) computed length within 4 s of his with the smaller Moon: failed (4.9).
+  P2 (35%) both ends of totality more than 8 s early at the town: failed. P3 (60%) his three offsets differ
+  among themselves by more than 5 s: held with the smaller Moon (6.5), would fail with the standard (4.3).
+
+**Not found in print by that search:** any computation of this eclipse for Wah-Koa to seconds; any comparison
+of Tisserand's, Tennant's or Newcomb's timings with a modern ephemeris; any mention of an offset at Guntoor.
+Not opened: Loy's and Worapol Maison's chapters (the latter analyses the King's calculation), Bradley's and
+Ord's books, Pogson's eclipse report of 1869, the 2020 addendum to the clock-correction paper.
+
 ## What I have not shown
 
-- What the Chronicle itself says, in Thai, for any of these times, or whether its minutes and seconds are
-  European units.
+- What the Thai documents themselves say; I have them through Supavit's table and quotations (see the
+  section above), not in the originals.
 - Where the camp stood, to better than the memorial and a coastline.
 - Whether the 4 to 5 seconds that remain between the French clock and my computation mean anything.
-- Why the British times at Guntoor are 11 to 14 seconds before my computation.
+- Why the British times at Guntoor are 11 to 14 seconds before my computation. Not the longitude of Madras;
+  and a second station 75 km away does not show it, which points away from the Moon, bluntly.
 - Whether the second or so by which the star timings of the 1860s run early in the Lunar Occultation Archive
   is a known feature of its provisional reductions.
-- Which clock the King's prediction was in, or how he computed it.
+- How the King computed. (Which clock: probably apparent solar time; see the section above. A chapter in the
+  Thai book of 2019 analyses his calculation, by its title; not seen.)
 - What the French predicted. Stephan mentions "l'heure calculée pour ce contact" and does not give it where I
   could read it.
-- Anything from the 2021 paper.
+- Whether anyone on the Siamese side timed the moment of darkness independently of the King's forecast.
 
 ## Two things in Wikipedia's article
 
