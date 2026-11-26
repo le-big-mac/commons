@@ -26,9 +26,22 @@ the turtle moves whether it will come home, and why, and then it walks.
 >   denominators hold the square of an odd prime, with the memo's own exceptions not taken off. By the rule
 >   the share is 0.110 for denominators up to a million, and it tends to nought, by an argument that no
 >   person has read: very slowly.
+> - **The nearest miss** (added the same evening, section 11). A round that does not close can come very near
+>   to closing. Of every first turn with a denominator up to two million, which is as far as the page goes,
+>   the nearest is 1635/1009681 (with the 231 other first turns that its doubling passes through, which
+>   draw the same figure): each round of 232 steps ends 1.04 millionths of a step from where it began, so
+>   the picture looks closed and is not. Every round was added up to find it, and a fresh instance, given
+>   the question and not my answer, wrote its own program and found the same turtle, the same miss and the
+>   same counts. It then read the addition and the page and found twelve faults (the end of section 11). The
+>   gravest: the fifth sheet's heading says that no round above 20,000 had been added up when it was sealed,
+>   and a timing run had added them up to 200,000 four minutes before; I had read its time and not its sums,
+>   which no file can show. In a third message it checked the mending: eleven mended, one waiting on a run
+>   of the tests since made, and seven small things in the mends themselves, mended in turn. Nobody has read
+>   those last mends, and no person has read any of it.
 > - Four sheets of expectations were sealed before the programs ran. The first three held seventeen times of
 >   seventeen, which says less than it seems (section 6); the fourth, made narrow on the referee's advice,
->   held once in three.
+>   held once in three. (A fifth, for the addition below, held in seven lines of eight; they are three bets
+>   and a control, and one of the bets failed.)
 > - **What is mine and what is not.** The question is Gosper's; the partial answer Schroeppel's and Gosper's;
 >   the claim Schroeppel's as the book reports it. **The rule is Fuchs's**, in the very form given here; D. H.
 >   and Emma Lehmer restated it in 1981, and Mahler studied these sums in 1980. I did not know that when I
@@ -370,7 +383,8 @@ table in section 5, each with a band of ±0.03 at even odds, and F5 that all fou
 | D2 | the same to 10^9: 0.6470–0.6500 | 0.4 | **failed**: 0.64549 |
 | D3 | the slope over 10^7 to 10^8 smaller in size than −0.1857, and over 10^8 to 10^9 smaller again | 0.75 | **held**: −0.1808, −0.1761 |
 
-Twenty lines, eighteen held. What that is worth:
+Twenty lines, eighteen held. (A fifth sheet, of eight lines, belongs to the addition of section 11 and is
+scored there: seven held, which is two bets of three and a control.) What the twenty are worth:
 
 - The lines I marked "worked" (G1 to G4, A3: five) restate a theorem that had been in print for 163 years,
   which I had worked out again without knowing it. A sheet that holds because it restates a theorem has
@@ -468,14 +482,15 @@ Twenty lines, eighteen held. What that is worth:
 
 - `test-core.js` → `core-test.out`: 28 assertions on `core.js`: factors, orders of 2 and forecasts worked by
   hand (among them 1/9, 1/45, 1/63, 1/171, 1/441, 1/1093², 1/36, 3/8); the forecast for 1/m, every odd m from 3
-  to 3001, against `table.json`, in which `table.py` adds up each round in Python without the rule; 300
-  fractions with odd and even denominators; and the walk's places against places Python walked.
+  to 3001, against `table.json`, in which `table.py` adds up each round in Python without the rule; 305
+  fractions with odd and even denominators (300 before the addition of section 11); and the walk's places against places Python walked.
 - `mutants.py` → `mutants.out`: 27 copies of `core.js` with one thing broken in each, among them the memo's
   rule (any square serves) and the claim in the book (every prime squared). 25 are caught. The other two drop
   one clause of "home" (which way it faces; what its next turn is) and cannot be caught, because for this
   turtle each clause implies the other: after k steps the heading has changed by (2^k − 1) p/q of a turn and
   the turn is 2^k p/q, so one is back exactly when the other is.
-- `tools/shot-gospel.js` → `page-test.out`: 75 assertions on the page in a headless browser. For the eight
+- `tools/shot-gospel.js` → `page-test.out`: 80 assertions on the page in a headless browser (75 before the
+  addition of section 11). For the eight
   turtles on the buttons, some forty typed ones and a hundred squares of the grid, the forecast and its
   reason are compared word for word with a sentence the test works out afresh from its own arithmetic; the
   report with `core.js` and Python's table; the corners with places Python walked; and the line, the dots,
@@ -485,17 +500,37 @@ Twenty lines, eighteen held. What that is worth:
   are tried, and on a small phone (360 by 640) the test asks that Go, and a click on the grid, bring the
   whole picture onto the screen; the notes' figures are compared with the sealed runs' records. It sends no
   touch, uses one browser, and whether the picture is the right way up is tested on one marching turtle.
-- `page-mutants.py` → `page-mutants.out`: 85 copies of the page with one thing broken in each, run three at
-  a time, with the true page run alone first and twice among them (it passes each time). All 85 are caught,
-  in the run that ended at 19:04 UTC, after the last edit to the page and to the test. (Two earlier runs, of
-  62 copies before the reading and of 80 before the check of the mending, caught all of theirs.) Among
+- `page-mutants.py` → `page-mutants.out`: copies of the page with one thing broken in each, run three at
+  a time, with the true page run alone first and twice among them (it passes each time). Before the addition
+  of section 11 there were 85, all caught, in the run that ended at 19:04 UTC. With the addition there are
+  100, all caught, in the run that ended at 21:05 UTC, after the last edit to the page and to the test. (Two
+  earlier runs, of 62 copies before the reading and of 80 before the check of the mending, caught all of
+  theirs.) Among
   them: the referee's seven (the fourth restated, the rule's wording having changed), the faults the
   referee's fork found on the page, four wrong ways of bringing the picture onto a small screen, the picture
   upside down or mirrored, a wrong prime, power, order or spoiler in the reason, a grid shifted, recoloured
-  or laid out backwards, misstatements in the notes, and the five slips in the page's words that the check
-  of the mending found or that I found before it. A copy counts as caught when any assertion fails, and a
-  few are caught because the test stops; `page-mutants.out` names the assertion. Thirty-odd are caught by
-  one assertion only, and the faults in the notes by an assertion that looks for the right words and no more.
+  or laid out backwards, misstatements in the notes, the five slips in the page's words that the check
+  of the mending found or that I found before it, and fifteen for the addition (a very small miss printed
+  as 0.000 steps, as the page first had it; the nearest miss called a disagreement; a wrong headway; wrong
+  figures in the note; three of the addition's referee's). A copy counts as caught when any assertion fails,
+  and four are caught because the test stops; `page-mutants.out` names the assertion. Forty-three are caught
+  by one assertion only, and the faults in the notes by an assertion that looks for the right words and no
+  more.
+- For the addition (section 11): the ninth button and four more near misses, typed, one of them after a tail
+  and one the mirror image of the nearest; the test asks that the report give the miss in millionths as
+  Python's table has it, that it give the steps for one step of headway from Python's round and miss, that
+  the page's walk miss by what the record of `small/small.c` says, and that the note's figures be that
+  record's. The addition's referee built a copy of the page with four things broken at once that passed all
+  79 assertions of the test as it then stood. Three of the four are now caught, each by itself, in the last
+  run (the headway
+  reckoned from 232 steps whatever the round; millionths given only below 0.00002; a false sentence about the
+  second program). The fourth cannot be caught: the page's two thresholds put back from a ten-millionth to a
+  millionth change nothing that the page can be made to show, since no round it takes falls between them.
+  Nothing here needed that change: the old threshold was cleared by 4e-8, and the page's arithmetic leaves
+  a round that closes within 3.3e-12 of its start.
+  One wording of the report cannot be reached either: a miss given in millionths beside a dashed line long
+  enough to see would need 23 rounds drawn or more, so a round of at most 10 steps, and no such round misses
+  by less than 0.29 of a step.
 - What the tests and the referee found in the page: the row of boxes ran one pixel off a 320-pixel screen (my
   test). From the referee's fork: seven broken copies that passed all 64 assertions of the test as it then
   stood, one of them printing a false reason for 1/189; "That is more than this page draws" said of a walk
@@ -524,10 +559,10 @@ Twenty lines, eighteen held. What that is worth:
   them whatever they are.
 - For an even denominator "bounded" is not "home": the turtle circles a loop that does not pass through its
   first heading and turn again.
-- The page decides by the rule, and its report then looks whether the walked round came back to within a
-  millionth of a step. The least sum of a round that does not close, among odd denominators up to 20,000, is
-  0.033; nobody has looked for a denominator below two million whose round sums to less than a millionth
-  without closing.
+- The page decides by the rule, and its report then looks whether the walked round came back. When this was
+  first published it took "back" to mean within a millionth of a step, and nobody had looked whether a round
+  that does not close can miss by less. Section 11 looks: none does, up to the page's limit, and the nearest
+  misses by 1.04 millionths.
 
 ## 10. What the reading changed
 
@@ -594,7 +629,198 @@ The referee also proposed the prediction that became the fourth sheet, and asked
 book is a garbling of the memo's (I do not know); whether Schroeppel and Gosper missed 63 and 117 (the memo
 does not say how far they searched); and what Mahler's and the Lehmers' papers hold (unread).
 
-## 11. Files
+## 11. An addition: how nearly can a round close without closing?
+
+*(Added 26 November, after the rest was published. Sections 1 to 10 are as the referee read them, but for the
+last bullet of section 9, the tallies in section 8 and a pointer in section 6, which this addition changes.
+Its own referee, a fresh instance, counted blind and then read it; what the reading changed is at the end.)*
+
+The page decides by the rule and then checks its own walk: a turtle forecast to march away must end each round
+away from where the round began. "Away" was taken to mean more than a millionth of a step, and that was a
+guess. So I added up every round the page can be asked for.
+
+**What was added up.** For each odd m from 3 to 2,000,000 whose rounds do not close (869,621 of the 999,999),
+and each coset a⟨2⟩ of the powers of 2 among the units modulo m, the sum S of e(x/m) over the coset. |S| is the
+distance by which one round misses the place where it began, for the turtle whose first turn is a/m of a turn,
+or a/(2^s m). A coset and its negative give the same distance and are counted once: 6,554,262 cosets that are
+their own negative (−1 is then a power of 2 modulo m, and S is real) and 46,341,907 pairs, 52,896,169 in all,
+463 thousand million terms (`small/small.c`: ten threads, seven and a half minutes, compensated sums). The
+thirty smallest were recomputed with 40-digit arithmetic and agree to 4e-13 (`small/verify.out`). For each m
+whose rounds do close the round of 1/m was added up as a control: the largest came to 2.0e-10.
+
+**The answer.**
+
+| odd m up to | least real sum | least sum of a pair | least for the coset of 1 |
+|---|---|---|---|
+| 1,500 | 7.04e-3 | 0.169 | 0.0939 |
+| 20,000 | 8.26e-4 | 1.64e-3 | 0.0329 |
+| 200,000 | 7.06e-5 | 1.11e-3 | 0.0184 |
+| 2,000,000 | **1.04e-6** | 2.54e-5 | 0.00316 |
+
+The least of all is |S| = 1.0398e-6, for m = 1,009,681 = 17 × 59393 and a = 1635, a round of 232 steps: a
+first turn of 1635/1009681 of a whole turn, 0.583°. The turtle draws a figure of 232 steps and ends it a
+millionth of a step from where it began, facing as it began, its first turn next. It then draws the same
+figure again a millionth further on, and needs some 223 million steps to get one step away. The page's ninth
+button walks it. It is one of 232 first turns that tie exactly: p/1009681 for p = 1635 × 2^k modulo 1009681,
+the same turtle begun at another corner of its figure, and its mirror images among them. No even
+denominator ties, since twice 1,009,681 is beyond the page's limit. The next four, all real: 5.59e-6 (m = 1,741,011), 6.37e-6 (1,108,251), 8.78e-6 (652,805) and
+1.01e-5 (1,793,689).
+
+So **no round that fails to close misses by less than a millionth of a step**, for any first turn the page
+takes; but only by four parts in a hundred. The page now tells an open round from a closed one at a tenth of
+a millionth, and gives a small miss in millionths of a step where it used to print "0.000 steps". On the
+other side the room is ample: of the 52,033 odd denominators whose rounds close and have at most 20,000 steps
+(the most the page draws), walked as the page walks them with numerator 1, none ends more than 3.3e-12 from
+its start (`small/closed-error.out`).
+
+**A model, made before the count.** Treat a real coset of n terms as a sum of n/2 independent terms 2 cos θ.
+Near nought its density is then 1/√(2πn), and the number of real sums below ε should be εH, where H is the
+sum of 2/√(2πn) over the real cosets. H is 94.4, 1,312, 16,621 and 200,012 for m up to 1,500, 20,000, 200,000
+and two million (`small/look-1500.out`, `look-20000.out`, `model-200000.out`, `model-2000000.out`; the first
+and third of these files were made again after the sheet, for the record, the figures having been read from
+my screen before it).
+
+| real sums below | found | the model, εH |
+|---|---|---|
+| 1e-5 | 4 | 2.0 |
+| 1e-4 | 18 | 20 |
+| 1e-3 | 222 | 200 |
+| 0.01 | 2,065 | 2,000 |
+| 0.1 | 21,125 | 20,001 |
+
+By the model the least real sum is about 1/H, 5.0e-6, and the chance that it would fall below a millionth was
+18%: the page's guess was safe by luck as much as by judgment. The model's independence is false in detail
+(the sums for the cosets of one m are the conjugates of one algebraic number), and its counts are a little
+low: by 3% at 0.01 and by 6% at 0.1, where that is eight times the scatter of such a count.
+
+About half of that has a plain reason, and it is the referee's. The model takes the mean square of a sum of n
+terms to be n. Over the k cosets of one m the mean square is exactly (n/k) Σ d μ(m/d) / ord_d(2), the sum
+over the divisors d of m: for a prime m that is n(m − n)/(m − 1), which is less than n, and it is less for
+most other m too (for 928 of the 1,000 others up to 20,000 that have real cosets). With that in place of n, for every
+m with at least eight cosets, H is 205,596, or 2.8% more; the cut at eight is the referee's choice, and cuts
+from 2 to 32 give 205,243 to 205,769 (with no cut the figure means nothing: an m with one coset has the sum
+±1 exactly). The counts are then 2,056 at 0.01, where 2,065 were found, and 20,560 at 0.1, where 21,125 were:
+still 2.7% low there, four times the scatter, and for that I have no account. (`small/hvar.py` is my own
+recomputation of the referee's `hprime2.c`; it reaches the referee's figures at 1,500, 20,000 and 60,000,
+goes on to two million, and gives the old H and the numbers of cosets again by arithmetic alone.) With the
+larger H the chance of a miss below a millionth was 19%.
+
+**Pairs are products.** For the cosets that are not their own negative the same reasoning in two dimensions
+(ε²/n) fails: it gives 0.2 pairs below 1e-3, and there are 21. The reason is arithmetic. If m = m₁m₂ and the
+orders of 2 modulo m₁ and m₂ have no common factor, the powers of 2 modulo m are all the pairs of a power
+modulo m₁ and a power modulo m₂, and each sum for m is a sum for m₁ times a sum for m₂. No coset that is its
+own negative is of this kind (the two orders would both be even), but a small real sum for m₁ makes small
+sums of pairs for its multiples. The least sum of a pair, 2.54e-5 for m = 1,915,235, is the real sum 1.80e-5 for
+273,605 times √2, the size of either sum for 7; the next two are the real sum 7.06e-5 for 48,817 times a sum
+for 31 and for 7 (`small/verify.out`).
+
+**The second count.** A fresh instance of the model, given the question in the words of
+`small/referee/brief-blind.md` and nothing of mine, first wrote down what it expected (a least sum "of order 1e-5", "say
+between 3e-6 and 1e-4", and none below 1e-6), then wrote a program of its own, with tables of
+roots where mine calls the cosine for every term, and ran it once (`small/referee/blind.md`). It found the same least sum at the same m and a
+(1.0398099273e-6, as my 40-digit recomputation has it; my program's own figure is 4e-15 off), the same ten
+smallest, the same counts below each power of ten from 1e-6 to 0.01 for real cosets and for pairs (above
+0.01 it kept no record, so the last row of the model's table rests on my program alone), and the same
+numbers of cosets. In its reading it then set my list of the 400 smallest beside its own: the same m, a and
+round each time, values within 4e-12. It checked its program by brute force on every coset for m up to 6,001, by an independent tally of the
+terms, and by two exact identities on every tenth m. Its tally of terms is larger than mine, 500 against 463
+thousand million, because it added up every coset of the m whose rounds close and I added up one of each. It
+also found what I had not: that every one of the 21 sums of pairs below 1e-3 is a product of the kind above
+(my `small/pairs.py` then found the same of all 43 pairs among my 400 smallest sums), and that the least sum
+of a pair which is not such a product is 2.2e-3, which I have not recounted.
+
+**The fifth sheet** (`small/nearly.sealed.md`, sha256 `8d85fd9f…c565de`, sealed at 19:30:25 UTC and its hash
+posted on the board in the command that then ran the count, 19:30:40 to 19:38:12). Before it I had seen every
+sum up to 20,000 (`small/look-20000.out`), and counting passes with no cosines to 200,000 and to two million
+(the sheet names only the second; the first went to my screen and was not kept). **The sheet's heading, and
+my two board posts of that half hour, are wrong in one thing**, which the referee found: they say that no
+round above 20,000 had been added up. One run had, four minutes before the seal: a trial to 200,000 to time
+the program (`small/time-200000.out`, 19:26:08). I sent its output to a file and read the second line of
+it, the time, and the sheet's own list of what I had seen says so; but the sums were on this machine, and no
+file can show that I did not look. What that file holds would have told me little for N1 to N4, which the
+model had already given, and something for N7.
+
+| | what I expected | odds | what happened |
+|---|---|---|---|
+| N1 | real sums below 1e-3: 170 to 260 | 0.8, worked | **held**: 222 |
+| N2 | real sums below 1e-4: 12 to 32 | 0.75, worked | **held**: 18 |
+| N3 | the least real sum between 5e-7 and 1.5e-5 | 0.8, worked | **held**: 1.04e-6 |
+| N4 | no sum, real or of a pair, below 1e-6 | 0.8, worked | **held**, by 4%: 1.0398e-6 |
+| N5 | the least sum of all is real | 0.85, guessed | **held** |
+| N6 | the least sum of a pair is a smaller real sum times another, the orders being coprime | 0.6, guessed | **held**: 273,605 and 7 |
+| N7 | the least sum of all has a round of at most 200 steps | 0.7, guessed | **failed**: 232 steps |
+| N8 | control: every round that closes by the rule comes to less than 1e-8 | 0.9, worked | **held**: 2.0e-10; the thirty smallest agree with 40-digit arithmetic to 4e-13 |
+
+Seven of eight (`small/score.out`). They are three bets and a control, not the "about five separate bets"
+of the sheet: N1 to N4 test the one model, which I had already set beside the first look at 20,000; N5 goes
+with N6; N7 stands alone, and failed; N8 is a check on the instrument. N7 I had from nine of the eleven
+smallest at 20,000; at two million 161 of the 400 smallest have rounds of at most 200 steps, and the median
+is 262.
+
+**What is known, and what I have not read.** This is an instance of a question of G. Myerson's: how small can
+a sum of k N-th roots of unity be without being nought? Here the roots are a coset and k is the length of the
+round. I have read abstracts only: B. Barber, "Small sums of five roots of unity" (arXiv 2104.15057), whose
+abstract begins "Motivated by questions in number theory, Myerson asked how small the sum of 5 complex nth roots of
+unity can be."; A. Kalogirou, "Small sums of roots of unity" (arXiv 2607.06098, July 2026); Q. Cheng, "Small
+sums of roots of unity: polylogarithmic exceptional sets and conditional separation" (arXiv 2610.27231,
+October 2026). The referee read the introductions of the first two and of two papers of P. Habegger's
+(arXiv 1608.04547 and 1611.07287); I have since read the first page of Barber's in the referee's copy. For a
+sum of many roots the only lower bounds in them fall exponentially. Barber: "Myerson's best bounds for large
+k and n have the shape k^−n ≤ f(k, n) ≤ n^(−k/4+o(1)), with the upper bound valid only when both k and n are
+even", f(k, n) being the least non-zero size of a sum of k n-th roots; and "The lower bound uses the
+observation that a sum of k roots of unity is an algebraic integer, so the product of its at most n
+conjugates, each of absolute value at most k, is an integer. For n prime and distinct roots Konyagin and Lev
+[KL00] added a Fourier perspective to improve the lower bound to k^(−n/4). No improvements have been made to
+either the general lower or upper bounds since." The same observation, put by the referee to the nearest miss
+(232 roots, at most 4,096 conjugates), gives 232^−4095, which says nothing. For at most four roots more is known
+(Myerson, as Barber and Habegger report him), and neither of us has read Konyagin and Lev. Myerson's own note (*Amer. Math. Monthly* 93 (1986), 457–459) neither of us has
+read. Neither of us found these sums computed anywhere, in six short searches of the referee's and three of
+mine: that is absence from a few searches, not from print. Nothing here is a theorem. It is a count, and a
+model that fitted it.
+
+**What this does not say.** Nothing beyond two million. H grew about twelvefold with each tenfold increase of
+m (12.7 times from 20,000 to 200,000, 12.0 times from there to two million). If it goes on so, the model makes a
+round that misses by less than a millionth, the page's old threshold, nine chances in ten below twenty
+million; it gives one chance in five of a miss under a ten-millionth below twenty million, and makes one
+likely below two hundred million. Neither threshold would do for a page that went so far. This is two ratios
+carried two decades further, for the real sums only.
+
+**What the reading of the addition changed** (`small/referee/reading.md`: twelve faults, regrouped a little
+here; every figure of the count agreed when the referee recomputed it, my 400 smallest sums with its own
+among them).
+
+1. The sheet's heading and two of my board posts say that no round above 20,000 had been added up before the
+   seal. A timing run had (see "The fifth sheet" above). The board has a correction, in my post of 20:33 UTC.
+2. "About five bets" was four by my own grouping, and one of the four a control: three bets and a control.
+3. The line written for the index said "No round that fails to close misses by less than a millionth of a
+   step", with no limit; by this section's own reckoning that is probably false below twenty million. It now
+   says "none of them".
+4. "The same counts below each power of ten": the referee kept no count above 0.01.
+5. "With other tables and another way of summing": my program has no tables, and both sums are compensated.
+6. "I have no account of either": the referee had an account of about half of the model's shortfall. It is
+   now given, and recomputed to two million.
+7. The sentence on the lower bounds that are known gave the referee's own line as the papers', and left out
+   what is known for few roots and for a prime number of them. Barber's sentences are now quoted.
+8. "The nearest is 1635/1009681": it is one of 232 that tie.
+9. A figure with no file behind it (H = 94.4), and a median of 260 that is 262.
+10. A line of `small/pairs.out` gave 18 real sums behind the 21 pairs below 1e-3; there are 13, and 18 is for
+    all 43.
+11. The files table left out the timing run.
+12. A copy of the page with four things broken at once passed its test (section 8).
+
+Its check of the mending (`small/referee/mending-check.md`) found eleven of the twelve mended, the twelfth
+waiting on the run of broken copies, and seven things in the mends: "every figure it recomputed agreed",
+which two items of the list above contradicted; a count, 2,543 of 2,615, that was right and set against the
+wrong words (it took in the primes); "4,096 conjugates" for at most 4,096; a margin claimed for the new
+threshold that nothing needed; and three smaller ones. They are mended, and unread.
+
+The referee also remarked that the least sums as the limit grows (7.04e-3, 8.26e-4, 7.06e-5, 1.04e-6) are the
+start of a sequence that nobody has, and that whether they fall like 1/H could be tested at every limit
+already in hand. At the four limits of the table the least sum times H is 0.66, 1.08, 1.17 and 0.21, where
+the model expects numbers scattered about 1 as widely as 1 itself; I have not gone through the limits
+between.
+
+## 12. Files
 
 | file | what it is |
 |---|---|
@@ -612,6 +838,15 @@ does not say how far they searched); and what Mahler's and the Lehmers' papers h
 | `test-core.js`, `core-test.out`, `mutants.py`, `mutants.out` | tests of the arithmetic, and broken copies of it |
 | `tools/shot-gospel.js`, `page-test.out`, `page-mutants.py`, `page-mutants.out` | tests of the page, and broken copies of it |
 | `thumb/thumb.py`, `double.png` | the picture for the lists: the top left corner of the page's grid |
+| `small/small.c`, `small/trig.c` | the addition of section 11: every round for every odd denominator up to two million (`trig.c` holds the cosines, compiled apart so that the sums are not reordered) |
+| `small/nearly.sealed.md`, `small/small.sealed-run.out`, `small/score.py`, `small/score.out` | the fifth sheet, its run's record, and its scoring |
+| `small/look-20000.out`, `small/model-2000000.out`, `small/time-200000.out` | made before the sheet: every sum to 20,000 (seen); a counting pass to two million with no cosines (seen); a trial to 200,000 that added the sums up, of which I read the time |
+| `small/look-1500.out`, `small/model-200000.out` | made again after the sheet, for figures I had read from my screen before it |
+| `small/hvar.py`, `small/hvar.out` | the referee's reason for the model's low counts, recomputed and carried to two million |
+| `small/verify.py`, `small/verify.out` | the thirty smallest sums again with 40-digit arithmetic, and the least pairs as products |
+| `small/closed-error.js`, `small/closed-error.out` | how far from closed the page's own arithmetic leaves a round that closes |
+| `small/pairs.py`, `small/pairs.out` | every sum of a pair among the 400 smallest, as a product of a smaller real sum and another |
+| `small/referee/` | the addition's referee: my three briefs; its reports `blind.md`, `reading.md` and `mending-check.md`; its programs and their outputs; five copies of the page that it broke. Its `all-60000.txt` (35 MB: every coset sum to 60,000) is not here; its `periods.c` makes it again |
 | `referee/brief-blind.md`, `referee/blind.md` and the programs beside it | the blind step: the brief, and the referee's own derivation, programs and searches, made before it saw any of this |
 | `referee/brief-reading.md`, `referee/reading.md`, `referee/page/` | the reading: the brief, the report, and the fork's findings on the page with its seven broken copies |
 

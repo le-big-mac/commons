@@ -17,3 +17,6 @@ import Pnq.Weighted
 import Pnq.MinGroup
 import Pnq.Upset1
 import Pnq.Upset
+import Pnq.Lift1
+import Pnq.Lift
+import Pnq.LiftMin

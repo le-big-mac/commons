@@ -36,7 +36,22 @@ M = [
  ('whole-turns-unsaid', "the page does not say that whole turns were left out of 10/9 (the referee's)", "(within ? '' : ', whole turns left out')", "''"),
  ('report-as-typed', "the report gives the fraction as typed, not in lowest terms", "its next turn would be ' + frac() + ' of a turn again.'", "its next turn would be ' + S.P + '/' + S.Q + ' of a turn again.'"),
  ('loop-says-home', "a turtle circling its loop is reported as home", "s = '<b>Step ' + T.commas(k) + ': back where it stood at step ' + T.commas(t) + '</b>, at the end of its tail.", "s = '<b>Step ' + T.commas(k) + ': home.</b> It stood at step ' + T.commas(t) + ', at the end of its tail."),
- ('gain-doubled', "the report gives twice the distance a round carries it", "' has carried it ' + S.gain.toFixed(3) + ' steps further'", "' has carried it ' + (2 * S.gain).toFixed(3) + ' steps further'"),
+ ('gain-doubled', "the report gives twice the distance a round carries it", "var far = S.gain >= 0.0005 ? S.gain.toFixed(3) + ' steps'", "var far = S.gain >= 0.0005 ? (2 * S.gain).toFixed(3) + ' steps'"),
+ ('gain-three-places', "a very small distance is given to three places, as 0.000 steps (the page as first published)", "var far = S.gain >= 0.0005 ? S.gain.toFixed(3) + ' steps' : (S.gain * 1e6).toPrecision(3) + ' millionths of a step'", "var far = S.gain.toFixed(3) + ' steps'"),
+ ('millionths-are-thousandths', "a very small distance is called millionths and is thousandths", "(S.gain * 1e6).toPrecision(3)", "(S.gain * 1e3).toPrecision(3)"),
+ ('open-called-closed', "the page takes a round for closed when it misses by less than a hundred-thousandth: the nearest miss is then called a disagreement", "S.gain > 1e-7 && (S.rounds < 2 || onGuide())", "S.gain > 1e-5 && (S.rounds < 2 || onGuide())"),
+ ('line-always-seen', "the report speaks of the dashed line when it is under a pixel long", "hidden = Math.hypot(g1[0] - g0[0], g1[1] - g0[1]) < DPR;", "hidden = false;"),
+ ('line-never-seen', "the report calls every dashed line too short to see", "hidden = Math.hypot(g1[0] - g0[0], g1[1] - g0[1]) < DPR;", "hidden = true;"),
+ ('headway-in-rounds', "the steps needed for one step of headway are given as the rounds needed", "T.commas(Number((n / S.gain).toPrecision(3)))", "T.commas(Number((1 / S.gain).toPrecision(3)))"),
+ ('nearest-button-other', "the ninth button sends off another turtle", "{ p: '1635', q: '1009681', name:", "{ p: '1637', q: '1009681', name:"),
+ ('note-nearest-wrong', "the note misstates the nearest miss", "ends 1.04 millionths", "ends 1.40 millionths"),
+ ('note-next-wrong', "the note misstates the next nearest miss", "misses by 5.59 millionths", "misses by 5.95 millionths"),
+ ('note-count-wrong', "the note misstates how many rounds were added up", "some 53 million of them", "some 35 million of them"),
+ ('headway-from-232', "the steps for one step of headway are reckoned from 232 steps whatever the round (the referee's)", "T.commas(Number((n / S.gain).toPrecision(3)))", "T.commas(Number((232 / S.gain).toPrecision(3)))"),
+ ('millionths-too-late', "a miss is given in millionths only below 0.00002 steps, so that 141 millionths prints as 0.000 steps (the referee's)", "var far = S.gain >= 0.0005 ?", "var far = S.gain >= 0.00002 ?"),
+ ('note-other-turtle', "the note says that the second program found a different turtle (the referee's)", "found the same turtle and the same miss", "found a different turtle and a smaller miss"),
+ ('note-person-checked', "the note says that a person has checked the count", "No person has checked\neither.", "A person has checked\nboth."),
+ ('note-ties-unsaid', "the note does not say that 231 other first turns tie with the nearest", ", with the 231 other first turns that its doubling\npasses through", ""),
  ('rounds-one-more', "the report counts one round too many", "mark the end of each of the ' + T.commas(S.rounds) + ' rounds drawn.'", "mark the end of each of the ' + T.commas(S.rounds + 1) + ' rounds drawn.'"),
  ('straight-unsaid', "a turtle walking straight on is reported as going round", "It is walking straight on.';", "It is going round.';"),
  ('stop-unsaid', "the forecast does not say the page will stop early", "s += ' That is more than this page draws: it will stop at step ' + T.commas(S.total) + '.';", "s += '';"),
@@ -94,7 +109,7 @@ for name, what, a, b in M: assert src.count(a) == 1, (name, src.count(a))
 work = os.path.join(here, 'mutants', 'page'); os.makedirs(work, exist_ok=True)
 env = dict(os.environ, LD_LIBRARY_PATH=os.path.expanduser('~/web/sysroot/usr/lib/x86_64-linux-gnu'), NODE_PATH=os.path.expanduser('~/web/node_modules'))
 test = os.path.expanduser('~/web/shot-gospel.js'); assert open(test, encoding='utf-8').read() == rd(os.path.join('tools', 'shot-gospel.js')), 'the test in ~/web is not the copy in tools/'
-def run(path, out=None): return subprocess.run(['node', test, path, out or work, os.path.join(here, 'core.js'), os.path.join(here, 'table.json'), os.path.join(here, 'gospel.sealed-run.out'), os.path.join(here, 'more.sealed-run.out')], cwd=os.path.expanduser('~/web'), env=env, capture_output=True, text=True, timeout=400)
+def run(path, out=None): return subprocess.run(['node', test, path, out or work, os.path.join(here, 'core.js'), os.path.join(here, 'table.json'), os.path.join(here, 'gospel.sealed-run.out'), os.path.join(here, 'more.sealed-run.out'), os.path.join(here, 'small', 'small.sealed-run.out')], cwd=os.path.expanduser('~/web'), env=env, capture_output=True, text=True, timeout=400)
 def one(job):
     name, what, a, b = job; out = os.path.join(work, name); os.makedirs(out, exist_ok=True); path = os.path.join(out, name + '.html')
     open(path, 'w', encoding='utf-8').write((src if a is None else src.replace(a, b)).replace('/*CORE*/', core))

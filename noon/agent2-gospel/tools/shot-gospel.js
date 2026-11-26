@@ -1,10 +1,11 @@
-// Headless checks of the doubling turtle's page.   usage: node shot-gospel.js PAGE.html OUTDIR CORE.js TABLE.json GOSPEL.out MORE.out
-// TABLE.json is made by table.py in Python, by walking and adding up; GOSPEL.out and MORE.out are the sealed runs' records.
+// Headless checks of the doubling turtle's page.   usage: node shot-gospel.js PAGE.html OUTDIR CORE.js TABLE.json GOSPEL.out MORE.out SMALL.out
+// TABLE.json is made by table.py in Python, by walking and adding up; GOSPEL.out and MORE.out are the sealed runs' records;
+// SMALL.out is the record of small.c, which added up every round for every odd denominator up to two million.
 const { chromium } = require('playwright'); const path = require('path'); const fs = require('fs');
 const fails = []; let asserts = 0, browser = null;
 (async () => {
   const page = path.resolve(process.argv[2]), out = path.resolve(process.argv[3]), T = require(path.resolve(process.argv[4])), table = JSON.parse(fs.readFileSync(path.resolve(process.argv[5]), 'utf8'));
-  const sealed = fs.readFileSync(path.resolve(process.argv[6]), 'utf8'), more = fs.readFileSync(path.resolve(process.argv[7]), 'utf8');
+  const sealed = fs.readFileSync(path.resolve(process.argv[6]), 'utf8'), more = fs.readFileSync(path.resolve(process.argv[7]), 'utf8'), small = fs.readFileSync(path.resolve(process.argv[8]), 'utf8');
   const b = await chromium.launch(); browser = b;
   const p = await b.newPage({ viewport: { width: 1000, height: 1500 } });
   const errs = []; p.on('pageerror', e => errs.push(String(e))); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
@@ -105,8 +106,10 @@ const fails = []; let asserts = 0, browser = null;
     await p.waitForTimeout(400); const d = await state(); must(d.drawn === 0 && !d.running, 'and it stays stopped until Go is pressed'); }
 
   // ---- 4. the turtles on the buttons
-  const want = [['1', '9', '1/9, the book’s figure'], ['1', '45', '1/45: home, against the claim'], ['1', '63', '1/63: away, though it holds 9'], ['1', '171', '1/171, the memo’s exception'], ['1', '7', '1/7: no square'], ['1', '36', '1/36: a tail, then a loop'], ['1', '441', '1/441: one square spoilt, one not'], ['1', '1194649', '1 over 1093 squared']];
-  must(JSON.stringify(s.presets) === JSON.stringify(want), 'eight buttons, with the numbers the tests expect');
+  const want = [['1', '9', '1/9, the book’s figure'], ['1', '45', '1/45: home, against the claim'], ['1', '63', '1/63: away, though it holds 9'], ['1', '171', '1/171, the memo’s exception'], ['1', '7', '1/7: no square'], ['1', '36', '1/36: a tail, then a loop'], ['1', '441', '1/441: one square spoilt, one not'], ['1', '1194649', '1 over 1093 squared'], ['1635', '1009681', '1635/1009681: the nearest miss']];
+  must(JSON.stringify(s.presets) === JSON.stringify(want), 'nine buttons, with the numbers the tests expect');
+  const gsay = g => g >= 0.0005 ? g.toFixed(3) + ' steps' : (g * 1e6).toPrecision(3) + ' millionths of a step';      // how the report should give a distance, written again here
+  const txt0 = await p.evaluate(() => document.querySelector('main').textContent.replace(/\s+/g, ' '));
   await p.selectOption('#pace', 'once');
   for (let n = 0; n < want.length; n++) {
     const [a, i, name] = want[n], P = +a, Q = +i; await p.click('#preset' + n); await p.waitForTimeout(200); s = await state();
@@ -121,9 +124,12 @@ const fails = []; let asserts = 0, browser = null;
       ok = ok && s.total === r.tail + r.round && back < 1e-9 && s.say.includes('it never comes home, and never gets away') && s.say.includes('After a tail of ' + r.tail + ' steps') && s.report.startsWith('Step ' + s.total + ': back where it stood at step ' + r.tail) && s.report.includes('It is not home'); detail = 'tail ' + r.tail + ', loop ' + r.round; }
     else { let even = true; const B = [pts[r.tail + r.round][0] - pts[r.tail][0], pts[r.tail + r.round][1] - pts[r.tail][1]]; for (let j = 0; j <= s.rounds; j++) if (Math.hypot(pts[r.tail + j * r.round][0] - pts[r.tail][0] - j * B[0], pts[r.tail + j * r.round][1] - pts[r.tail][1] - j * B[1]) > 1e-8) even = false;
       const mid = await p.evaluate(([x, y]) => window.GOSPELPX(x, y), [pts[r.tail][0] + (s.rounds / 2 + 0.25) * B[0], pts[r.tail][1] + (s.rounds / 2 + 0.25) * B[1]]);
-      ok = ok && even && s.rounds >= 4 && s.total === r.tail + s.rounds * r.round && Math.abs(Math.hypot(B[0], B[1]) - r.gain) < 1e-9 && Math.abs(s.gain - r.gain) < 1e-9 && s.say.includes('it never comes home.') && s.say.includes('a round does not close')
-        && s.report.includes('Each round of ' + T.commas(r.round) + ' steps has carried it ' + r.gain.toFixed(3) + ' steps further along the dashed line, where the dots mark the end of each of the ' + s.rounds + ' rounds drawn.') && (await rustNear(mid[0], mid[1], 8, 40)) > 0;
-      detail = s.rounds + ' rounds of ' + r.round + ', ' + r.gain.toFixed(3) + ' steps each'; }
+      const e0 = await p.evaluate(([x, y]) => window.GOSPELPX(x, y), pts[r.tail]), e1 = await p.evaluate(([x, y]) => window.GOSPELPX(x, y), pts[r.tail + s.rounds * r.round]), unseen = Math.hypot(e1[0] - e0[0], e1[1] - e0[1]) < s.DPR;
+      const rest = unseen ? ', along a line too short to be seen here: the dots that mark the ends of the ' + s.rounds + ' rounds drawn lie on top of one another. At that rate about ' + T.commas(Number((r.round / r.gain).toPrecision(3))) + ' steps carry it one step along that line.'
+        : ' along the dashed line, where the dots mark the end of each of the ' + s.rounds + ' rounds drawn.';
+      ok = ok && even && s.rounds >= 4 && s.total === r.tail + s.rounds * r.round && Math.abs(Math.hypot(B[0], B[1]) - r.gain) < 1e-12 && Math.abs(s.gain - r.gain) < 1e-12 && s.say.includes('it never comes home.') && s.say.includes('a round does not close')
+        && s.report.endsWith('Each round of ' + T.commas(r.round) + ' steps has carried it ' + gsay(r.gain) + ' further' + rest) && (unseen || (await rustNear(mid[0], mid[1], 8, 40)) > 0) && unseen === (n === 8);
+      detail = s.rounds + ' rounds of ' + r.round + ', ' + gsay(r.gain) + ' each' + (unseen ? ', the dashed line under a pixel long' : ''); }
     must(ok, 'the button "' + name + '" puts ' + a + ' and ' + i + ' in the boxes and sends the turtle off; forecast, walk, dots, guide and report agree with core.js and with Python\'s walk; the figure is in the frame', detail + '; ' + s.dots + ' dots');
     if (n === 1) must(r.home === 12 && s.say.endsWith('45 = 3² × 5 holds 3², and nothing spoils it: 3 does not divide the order of 2 modulo 5 (which is 4).'), '1/45: the prime 5 occurs once, and the turtle is home at step 12 all the same; the reason printed is the rule\'s, worked afresh by the test');
     if (n === 2) must(!r.bounded && s.say.endsWith('63 = 3² × 7 holds a square, but it is spoilt: 3 divides the order of 2 modulo 7 (which is 3).'), '1/63: it holds 9 and marches away; the reason printed is the rule\'s');
@@ -131,6 +137,15 @@ const fails = []; let asserts = 0, browser = null;
     if (n === 4) must(s.say.endsWith('7 holds no square of a prime, and without one a round cannot close.'), '1/7: no square');
     if (n === 5) must(s.say.includes('After a tail of 2 steps its turns') && s.say.endsWith('The odd part of the denominator, 9 = 3², holds its prime 3 at least squared, and there is no other prime in it to spoil that.') && s.pick === null, '1/36: a tail of 2 steps, the reason given for the odd part, 9, and no square of the grid marked');
     if (n === 6) must(r.home === 42 && s.say.endsWith('441 = 3² × 7² holds 7², and nothing spoils it: 7 does not divide the order of 2 modulo 3 (which is 2).') && f.spoilt.length === 1 && f.spoilt[0].l === 3, '1/441: 49 serves (and 9 is spoilt by 7)');
+    if (n === 8) { const top = [...small.matchAll(/^\s+([0-9.e+-]+)\s+m = (\d+)\s+a = (\d+)\s+round of (\d+) steps\s+(real|complex)/gm)].map(x => [parseFloat(x[1]), +x[2], +x[3], +x[4], x[5]]);
+      const below6 = /below 1e-06: 0 real, 0 pairs/.test(small), upto = /^odd m from 3 to 2000000:/.test(small), cnt = small.match(/cosets added up: (\d+) real \(the coset is its own negative\), (\d+) pairs/);
+      must(!r.bounded && r.round === 232 && r.home === 0 && s.home === 0 && s.fails.length === 0 && s.say.endsWith('1,009,681 = 17 × 59393 holds no square of a prime, and without one a round cannot close.')
+        && s.report === 'Step 928: not home, and it will not be. Each round of 232 steps has carried it 1.04 millionths of a step further, along a line too short to be seen here: the dots that mark the ends of the 4 rounds drawn lie on top of one another. At that rate about 223,000,000 steps carry it one step along that line.'
+        && Math.abs(232 / r.gain / 223e6 - 1) < 0.005, 'the nearest miss, 1635/1009681: forecast never home; the walk is not home either, and the report gives the miss in millionths of a step, says that the dashed line is too short to see, and how many steps make one step of headway (232 over Python\'s gain)', s.report.slice(40, 130));
+      must(upto && below6 && top.length >= 2 && top[0][1] === 1009681 && top[0][2] === 1635 && top[0][3] === 232 && Math.abs(top[0][0] - r.gain) < 1e-12 && Math.abs(s.gain - top[0][0]) < 1e-12 && top[0][0] > 1e-6,
+        'and it is the least sum in the record of the program that added up every round for odd denominators up to two million; the page\'s walk gives the same miss as that record and as Python; no round in the record misses by less than a millionth', top.length ? top[0][0].toExponential(6) + ' against the page\'s ' + s.gain.toExponential(6) : 'no list in the record');
+      must(txt0.includes('the nearest is 1635/1,009,681, with the 231 other first turns that its doubling passes through: each of its rounds of 232 steps ends ' + (top[0][0] * 1e6).toPrecision(3) + ' millionths of a step from where it began') && txt0.includes('The next nearest misses by ' + (top[1][0] * 1e6).toPrecision(3) + ' millionths.')
+        && cnt && txt0.includes('some ' + Math.round((+cnt[1] + +cnt[2]) / 1e6) + ' million of them') && txt0.includes('found the same turtle and the same miss. No person has checked either.') && top[0][3] - 1 === 231, 'the note\'s figures for the nearest miss (the miss, the 231 that tie with it, the next nearest, how many rounds were added up) are the record\'s, and it says that a second program found the same and that no person has checked', cnt ? (+cnt[1] + +cnt[2]) + ' rounds' : ''); }
     if (n === 7) must(!r.bounded && r.round === 364 && s.say.endsWith('1,194,649 = 1093² holds a square, but it is spoilt: 2 has the same order modulo 1093² as modulo 1093, so 1093² is of no use.'), '1 over 1093 squared: rounds of 364, and it marches away'),
       await p.setViewportSize({ width: 700, height: 1500 }), await p.waitForTimeout(300),
       must((await rustNear(...(await p.evaluate(([x, y]) => window.GOSPELPX(x, y), [(pts[r.round][0] + pts[2 * r.round][0]) / 2, (pts[r.round][1] + pts[2 * r.round][1]) / 2])), 6, 40)) > 0 && (await state()).report.includes('along the dashed line'), 'and when the window is made narrower the dashed line it speaks of is drawn again'),
@@ -164,6 +179,16 @@ const fails = []; let asserts = 0, browser = null;
   await typed('3', '8'); s = await once();
   { const r = py(3, 8), pts = await pathOf(); must(r.tail === 3 && !r.bounded && s.say.includes('After 3 steps its turn is a whole number of turns, which is no turn, and it walks straight on for ever.') && s.report === 'Step 33: not home, and it will not be. It is walking straight on.' && Math.abs(Math.hypot(pts[33][0] - pts[3][0], pts[33][1] - pts[3][1]) - 30) < 1e-9 && (await frame()).ok,
       '3/8: after 3 steps the turn is whole turns and it walks straight on (30 steps in one line are drawn)', s.report); }
+  // near misses, typed: the miss in millionths, the headway, a tail, a mirror image; Python's table gives the miss and the round
+  { const bad = [], says = { '1739/1094420': '18.0', '12605/1741011': '5.59', '2195/65537': '141', '1008046/1009681': '1.04' };
+    for (const key of Object.keys(says)) { const [P, Q] = key.split('/').map(Number);
+      await typed(String(P), String(Q)); s = await once(); const r = py(P, Q), pts = await pathOf();
+      const e0 = await p.evaluate(([x, y]) => window.GOSPELPX(x, y), pts[r.tail]), e1 = await p.evaluate(([x, y]) => window.GOSPELPX(x, y), pts[r.tail + s.rounds * r.round]), unseen = Math.hypot(e1[0] - e0[0], e1[1] - e0[1]) < s.DPR;
+      const want = 'Step ' + T.commas(r.tail + s.rounds * r.round) + ': not home, and it will not be. Each round of ' + T.commas(r.round) + ' steps has carried it ' + says[key] + ' millionths of a step further, along a line too short to be seen here: the dots that mark the ends of the '
+        + s.rounds + ' rounds drawn lie on top of one another. At that rate about ' + T.commas(Number((r.round / r.gain).toPrecision(3))) + ' steps carry it one step along that line.';
+      if (!(r && !r.bounded && r.home === 0 && (r.gain * 1e6).toPrecision(3) === says[key] && unseen && s.report === want && s.fails.length === 0 && s.home === 0 && Math.abs(s.gain - r.gain) < 1e-12
+            && (P === 1739 ? r.tail === 2 && s.say.includes('After a tail of 2 steps') : r.tail === 0) && (P !== 1008046 || Math.abs(r.gain - py(1635, 1009681).gain) < 1e-12))) bad.push(key + ': ' + s.report.slice(40, 150)); }
+    must(bad.length === 0, 'four more near misses, typed (18.0 millionths after a tail of 2 steps, 5.59 and 141 millionths, and the mirror image of the nearest, which misses by the same 1.04): each report gives Python\'s miss in millionths, and the steps for one step of headway from Python\'s round and miss', bad.join(' | ')); }
   await typed('1', '1'); s = await once();
   { const pts = await pathOf(), n = pts.length - 1; must(s.forecast.straight && s.forecast.m === 1 && s.forecast.tail === 0 && !s.forecast.bounded && s.home === 0 && s.report.includes('It is walking straight on.') && n >= 20 && Math.abs(Math.hypot(pts[n][0], pts[n][1]) - n) < 1e-9 && (await frame()).ok,
       'a denominator of 1 (no prime in it at all): the turtle walks straight on and is not home', s.say.slice(0, 160) + ' | ' + s.report); }

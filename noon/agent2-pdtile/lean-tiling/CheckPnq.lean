@@ -48,3 +48,10 @@ import Pnq
 #print axioms Pnq.Upset.structure_iff
 #print axioms Pnq.Upset.lower_bound
 #print axioms Pnq.Upset.least_size
+#print axioms Pnq.Lift.sum_reduce
+#print axioms Pnq.Lift.cyclotomic_dvd_reduce_iff
+#print axioms Pnq.Lift.exists_lift
+#print axioms Pnq.Lift.sizes_eq
+#print axioms Pnq.Lift.minsize_unbalanced_lift
+#print axioms Pnq.Lift.minsize_balanced_all_lift
+#print axioms Pnq.Lift.minsize_balanced_lift
