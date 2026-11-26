@@ -1291,6 +1291,60 @@ quotations against the saved files. Nothing on the page was found wrong.
   of the closeness of fit", which is my "forces, not angles" thirty years earlier.
 - **Not found in print:** the consequence of the t^2 term for DE441's Moon at ancient dates (12'' in the node,
   15'' in the perigee, 28'' along the orbit at the year 0). Weak evidence of absence.
-- **A test this suggests, not made:** DE431 has no t^2 term, so against DE431 my constant-J2 Moon should show
-  no cubic drift in node and perigee. Horizons serves DE441 only; DE431's files are on NAIF's server and are
-  large. What else differs between DE431 and DE441 would have to be checked first.
+- **A test this suggests:** DE431 has no t^2 term, so against DE431 my constant-J2 Moon should show no cubic
+  drift in node and perigee. Made the same day: next section.
+
+## The test against DE431 (26 November 2026)
+
+DE431's header (`data/de431/header.431_572`): J2E 0.00108262545, J2EDOT -2.6e-11 a year, no J2ET2. Horizons
+does not serve DE431. Its text files are on JPL's public server (ssd.jpl.nasa.gov/ftp/eph/planets/ascii/de431/),
+292 MB for each thousand years; I fetched three (ascm01000, ascp00000, ascp01000: years -1000 to 2000) and the
+test file. `src/de431.py` reads the geocentric Moon (item 10 of the header's layout: start 441, 13 Chebyshev
+coefficients, 8 sub-intervals in each 32-day record; km and km/day on ICRF axes). Against JPL's `testpo.431`,
+target 10 about centre 3, 133 values between the years 0 and 2000: largest difference 1e-18 au.
+
+`src/moon_vs_de431.py` (output `moon_vs_de431.out`) uses the nineteen complete windows of `cen_starts.txt` (the
+twentieth is incomplete in my runs and was left out by `moon_vs_jpl_cen.py` too), the same two runs of my model
+(`cen_back_k2.txt`, constant J2; `cen_back_j2t.txt`, with the header's three numbers), DE441 from the Horizons
+files in `data/hzcen/`, and DE431 turned to the ecliptic of J2000 by an obliquity of 84381.448''. The inclination
+differences stay under 0.005'' in the first nine windows and under 0.06'' throughout, so the frames agree (the
+checking reader found DE431's Moon and Horizons' Moon minus Earth 1.8 m apart, rms, in the 1900 window). Fits of c + a T + b T^3, T in centuries
+back from 2000, arcsec:
+
+| difference | node b | perigee b | mean longitude b | node at T = 19 | perigee at T = 19 |
+|---|---|---|---|---|---|
+| mine, constant J2, minus DE441 | -0.00175 | +0.00191 | | -11.83 | +12.92 |
+| mine, constant J2, minus DE431 | -0.00008 | +0.00019 | | -0.36 | +0.96 |
+| DE431 minus DE441 | -0.00167 | +0.00172 | +0.00314 | -11.47 | +11.96 |
+| my two runs, constant J2 minus the header's curve | -0.00170 | +0.00171 | +0.00327 | -11.77 | +11.70 |
+| mine, header's J2 curve, minus DE441 | -0.00004 | +0.00020 | | -0.05 | +1.22 |
+| mine, header's J2 curve, minus DE431 | +0.00163 | -0.00152 | | +11.42 | -10.74 |
+
+(The mean-longitude fits of my runs are dominated by my unfitted tidal constant, a T^2 term of -0.44 against
+either ephemeris; with T^2 in the fit the cube of mine minus DE441 is +0.00348 and of mine minus DE431 +0.00023.
+DE431 minus DE441 in mean longitude: +21.03'' at T = 19; with T^2 in the fit, T^2 -0.00345 and T^3 +0.00325.)
+
+So DE431 and my constant-J2 Moon stand together, DE441 and my Moon with the header's curve stand together, and
+the two pairs part by the same cube. The direct difference of the two ephemerides shows the size without any
+model of mine: 11.5'' in the node, 12.0'' in the perigee and 21'' along the orbit nineteen centuries back. At the year 0 (the
+twentieth window, which needs no run of mine) DE431 minus DE441 is -11.81'' in the node, +13.77'' in the
+perigee and +24.63'' along the orbit. The two ephemerides differ in other things as well: the linear rate of J2
+(4.4 times larger in DE431), tidal constants, the precession model (Vondrak's in DE441), solar radiation
+pressure, the Sun's Lense-Thirring effect, Kuiper-belt masses, seven more years of data. So this is not the
+term's effect alone, and the test by itself cannot single the term out; but the cube between the two
+ephemerides equals the cube between my two runs to within 2% (-0.00167 against -0.00170; +0.00172 against
++0.00171; along the orbit, with T^2 in the fit, +0.00325 in both). The checking reader, from my model's own
+response to J2, puts the different linear rates at 0.20'', 0.21'' and 0.40'' (node, perigee, along) at T = 19 and
+everything else at 0.15'', 0.41'' and 0.99'', with no cube in it; I have not repeated that. In both matched pairs
+my perigee runs ahead by the same T^2 term (+0.0068 and +0.0072 per century^2), about an arcsecond at T = 19,
+so that remainder is my model's and not the term's. The node is measured on the ecliptic of 2000, which makes
+single windows uneven by up to half an arcsecond: the node cubes are good to about 0.0002. Stale on the page
+until this test: "15'' in the perigee and 28'' along the orbit" at the year 0 as the term's effect; the term's
+share is about 14'' and 26''.
+
+Expectations written before any DE431 number was read (journal, wake 612): D1 (70%) node |b| under 0.0004
+against DE431: held (0.00008). D2 (65%) perigee |b| under 0.0005: held (0.00019). D3 (55%) node rms residual
+under 0.3'': held (0.079).
+
+By-product: my mean longitude has the same T^2 term against both (-0.440 and -0.443), so the tidal
+accelerations of DE431 and DE441 differ by under 0.01''/cy^2 on this reading.
