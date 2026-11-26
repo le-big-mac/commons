@@ -1,4 +1,4 @@
-# Elisions counted straight from the text, by kind, for all eleven poems (no scanner): what is being elided, and how the totals depend on what one counts.
+# Elisions counted straight from the text, by kind, for all sixteen poems (no scanner): what is being elided, and how the totals depend on what one counts.
 # Kinds: a word ending in -que (the enclitic, and atque, neque, quoque...); any word before est or es (often not counted as elision at all); a word in vowel + m; any other final vowel.
 import re, sys, glob, collections; sys.path.insert(0, '/home/agent1/arator')
 import scan, gold
@@ -16,6 +16,8 @@ for name in ['geo', 'aen', 'met', 'lucan', 'vflaccus', 'thebaid', 'achilleid', '
 late = [l.rstrip('\n').split('\t') for l in open('/home/agent1/arator/late_scans.tsv')]
 sets['claudian'] = [r[5] for r in late if r[0] == 'claudian']; sets['sedulius'] = [r[5] for r in late if r[0] == 'sedulius']
 sets['arator'] = [l.rstrip('\n').split('\t')[6] for l in open('/home/agent1/arator/arator_scans.tsv')]
+late2 = [l.rstrip('\n').split('\t') for l in open('/home/agent1/arator/late2_scans.tsv')]      # the five poems added on 26 Nov
+for name in ('juvencus', 'ausonius', 'prudentius', 'dracontius', 'corippus'): sets[name] = [r[5] for r in late2 if r[0] == name]
 print('poem        lines  places  per 100 |  -que   est/es  vowel+m  other |  per 100 lines: without est/es; other and vowel+m only | share of all that is -que or est/es')
 for name, L in sets.items():
     c = collections.Counter(k for ln in L for k, x, y in kinds(ln)); n = sum(c.values())

@@ -1,4 +1,4 @@
-# One figure for the page: share of dactyls in the first four feet, and elisions per 100 lines, for eleven poems in order of date; Arator picked out, the rest as context.
+# One figure for the page: share of dactyls in the first four feet, and elisions per 100 lines, for sixteen poems in order of date; Arator picked out, the rest as context.
 # Colours and mark sizes follow the charting guide I use (one accent hue, grey for context, thin bars with a rounded data end, values at the tips, no gridlines).
 import json, matplotlib
 matplotlib.use('Agg')
@@ -6,10 +6,13 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 from matplotlib.transforms import IdentityTransform
 M = json.load(open('/home/agent1/arator/metrics.json'))
+M2 = json.load(open('/home/agent1/arator/late2_metrics.json'))          # the five poems added on 26 Nov, from the run in which the scanner learned from all sixteen
+for k in ('juvencus', 'ausonius', 'prudentius', 'dracontius', 'corippus'): M[k] = M2[k]
 ROWS = [('geo', 'Virgil, Georgics', '29 BC'), ('aen', 'Virgil, Aeneid', '19 BC'), ('met', 'Ovid, Metamorphoses', 'AD 8'), ('lucan', 'Lucan', 'c. 65'), ('vflaccus', 'Valerius Flaccus', 'c. 80'),
-        ('thebaid', 'Statius, Thebaid', 'c. 92'), ('achilleid', 'Statius, Achilleid', 'c. 95'), ('juvenal', 'Juvenal', 'c. 120'), ('claudian', 'Claudian', 'c. 400'), ('sedulius', 'Sedulius', 'c. 430'), ('arator', 'Arator', '544')]
+        ('thebaid', 'Statius, Thebaid', 'c. 92'), ('achilleid', 'Statius, Achilleid', 'c. 95'), ('juvenal', 'Juvenal', 'c. 120'), ('juvencus', 'Juvencus', 'c. 330'), ('ausonius', 'Ausonius, Mosella', 'c. 371'),
+        ('claudian', 'Claudian', 'c. 400'), ('prudentius', 'Prudentius', 'c. 405'), ('sedulius', 'Sedulius', 'c. 430'), ('dracontius', 'Dracontius', 'c. 490'), ('arator', 'Arator', '544'), ('corippus', 'Corippus', 'c. 550')]
 SURF, INK, INK2, MUTED, BASE, ACCENT, GREY = '#fcfcfb', '#0b0b0b', '#52514e', '#898781', '#c3c2b7', '#2a78d6', '#898781'
-W, H, DPI = 1500, 720, 200
+W, H, DPI = 1500, 970, 200
 fig = plt.figure(figsize=(W / DPI, H / DPI), dpi=DPI, facecolor=SURF)
 top, pitch, bar = 150, 50, 26                     # pixels
 panels = [(480, 390, 'dact', 100.0, 60.0, 'Dactyls in the first four feet', 'per cent of feet'), (1015, 390, 'el', 1.0, 60.0, 'Elisions', 'per 100 lines')]

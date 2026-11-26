@@ -7,12 +7,16 @@ import re, unicodedata, itertools, math, collections
 VOW = set('aeiouy')
 MUTES = set('bcdgptf'); LIQ = set('lr')
 PREFIX = ('ad', 'ab', 'ob', 'sub', 'con', 'in', 'dis', 'per', 'inter', 'circum', 'super', 'trans')
-JSTEM = ('iac', 'iec', 'iug', 'iun', 'iur', 'ius', 'iuv', 'iud', 'ioc', 'iub', 'iung', 'iect', 'iict')
+JSTEM = ('iac', 'iec', 'iug', 'iun', 'iur', 'ius', 'iuv', 'iud', 'ioc', 'iub', 'iung', 'iect', 'iict', 'iut', 'iux')
 I_VOWEL_INITIAL = ('iamb', 'iaspi', 'iason', 'iasi', 'iapy', 'iapet', 'ioni', 'iacch', 'iarb', 'iopa', 'ioll', 'iolc', 'iocast')
 I_VOWEL_WORDS = {'io', 'iulus', 'iule', 'iuli', 'iulo', 'iulum', 'ion', 'iones', 'ionas'}
 OE_SPLIT = ('poet', 'coea', 'coeg', 'coerc', 'coeo', 'coeu', 'coemp', 'coemi', 'coex', 'boet', 'noe', 'simoe', 'aloe', 'chloe')
 EU_WORDS = ('seu', 'neu', 'heu', 'eheu', 'ceu', 'heus')
 SU_GLIDE = ('suad', 'suav', 'sues', 'suet')
+GU_NAMES = ('laguat', 'ilagu', 'isagu', 'guenf', 'guent', 'guars', 'guariz')      # Laguatan, Ilaguas, Guenfan ...: the gu is a glide (Ilaguas at eighteen line-ends of the Iohannis forces it)
+CUI_TAIL = ('que', 'quam', 'cumque', 'cunque', 'libet', 'vis', 'dam', 'nam', 'piam')      # cuique, cuiquam, cuicumque ...: cui is one syllable in them as it is alone
+AER_SHORT_FINAL = {'aera', 'aere', 'aeris'}      # forms shared by aes (bronze: ae-ris) and aer (air: a-e-ris).  Their last syllable is short by nature in both words, so a reading that needs it long
+                                                 # without two consonants after it is refused; the line then fails as it stands and the other division is tried among the alternatives
 EUS_TWO = {'deus', 'epicureus', 'pythagoreus', 'cythereus', 'sophocleus', 'nazareus', 'hebreus', 'iudeus', 'pharisaeus'}      # capitalised words in -eus that are not Greek names in one syllable
 
 def strip_marks(s):
@@ -22,12 +26,13 @@ def strip_marks(s):
 def clean_word(w):
     w = strip_marks(w).replace('æ', 'ae').replace('œ', 'oe').replace('Æ', 'Ae').replace('Œ', 'Oe')
     w = re.sub(r'[^A-Za-z]', '', w)
+    if len(w) > 1 and w[0] == 'V' and w[1].lower() not in 'aeiouy': w = 'U' + w[1:]      # Vt, Vrbis: a copy that writes capital U as V
     return w.replace('j', 'i').replace('J', 'I')
 
 def segment(word, opt=frozenset()):
     """word (letters, original capitals) -> list of units: ('C', n_consonant_weight, text) and ('V', text, is_diphthong).  opt holds alternative choices to try when a line will not scan."""
     cap = word[:1].isupper(); w = word.lower()
-    if w == 'dehinc': w = 'deinc'                      # usually one syllable in verse
+    if w == 'dehinc' and ('join', 0) in opt: w = 'deinc'       # de-hinc as it stands; one syllable (as in Aen. 1.131) only as an alternative when the line will not scan
     n = len(w); units = []; i = 0
     def is_v(k): return 0 <= k < n and w[k] in VOW
     while i < n:
@@ -43,7 +48,7 @@ def segment(word, opt=frozenset()):
             if initial and not any(w.startswith(x) for x in I_VOWEL_INITIAL) and w not in I_VOWEL_WORDS: as_cons = True
             if intervoc and not cap and not w.startswith('isai'): as_cons = True
             if intervoc and w[:i] in ('co', 'prae', 'intro', 'retro', 'ante') and w[i + 1] in 'ei': as_cons = False      # coiere, praeiit: forms of ire, where the i is a vowel
-            if intervoc and cap and any(w.startswith(x) for x in ('troi', 'mai', 'grai', 'cai', 'ai', 'bai', 'pompei', 'tei', 'vei', 'boi')): as_cons = True
+            if intervoc and cap and any(w.startswith(x) for x in ('troi', 'mai', 'grai', 'cai', 'ai', 'bai', 'pompei', 'tei', 'vei', 'boi', 'ieiun')): as_cons = True
             if comp: as_cons = True
             if ('iflip', i) in opt: as_cons = not as_cons
             if as_cons:
@@ -51,9 +56,9 @@ def segment(word, opt=frozenset()):
         # ---- qu, ngu + vowel, su + vowel in a few words
         if c == 'q' and i + 1 < n and w[i + 1] == 'u':
             units.append(('C', 1, 'qu')); i += 2; continue
-        if c == 'g' and i + 2 < n and w[i + 1] == 'u' and is_v(i + 2) and i > 0 and w[i - 1] == 'n' and ('guflip', i) not in opt:
+        if c == 'g' and i + 2 < n and w[i + 1] == 'u' and is_v(i + 2) and ((i > 0 and w[i - 1] == 'n') or any(w.startswith(x) for x in GU_NAMES)) and ('guflip', i) not in opt:      # ngu; and gu in some Moorish names of Corippus
             units.append(('C', 1, 'gu')); i += 2; continue
-        if c == 's' and w[i:i + 4] in SU_GLIDE:
+        if c == 's' and (w[i:i + 4] in SU_GLIDE or (w[i:i + 4] == 'suas' and i + 4 < n and w[i + 4] in 'ieuo')) and ('dflip', i + 1) not in opt:
             units.append(('C', 1, 'su')); i += 2; continue
         if c in VOW:
             two = w[i:i + 2]; dip = False
@@ -62,7 +67,8 @@ def segment(word, opt=frozenset()):
                 elif two == 'au': dip = not ((cap and n > 5 and i == n - 3 and w.endswith('aus')) or (i == n - 3 and w.endswith('aum')))
                 elif two == 'oe': dip = not any(w.startswith(x) and x.find('oe') == i for x in OE_SPLIT)
                 elif two == 'eu': dip = (w[i:i + 3] != 'eun' or w.startswith('eunuch')) and ((w in EU_WORDS) or i == 0 or (i + 2 < n and w[i + 2] not in VOW and w[i + 2] not in 'ms') or (cap and i == n - 3 and w.endswith('eus') and w not in EUS_TWO))
-                elif two == 'ui': dip = w in ('cui', 'huic', 'hui')
+                elif two == 'oy': dip = w.startswith('moys')
+                elif two == 'ui': dip = w in ('cui', 'huic', 'hui') or (i == 1 and w[:3] == 'cui' and w[3:] in CUI_TAIL) or (i == n - 2 and w in ('alicui', 'necui', 'sicui'))
                 elif two == 'ei': dip = w in ('dein', 'deinde', 'deinceps', 'hei', 'deinc')
                 if ('dflip', i) in opt: dip = not dip
             if dip:
@@ -121,6 +127,7 @@ def build(words, opt=frozenset()):
                         if wgt >= 1: wgt += nxt[0][1]
                         # a final open vowel before two consonants of the next word is left unknown
                     if wgt >= 2: s.hard = 'L'
+                    elif lw in AER_SHORT_FINAL and not (wgt == 0 and nxt is not None and nxt[0][0] == 'C' and nxt[0][1] >= 2): s.hard = 'S'
             syls.append(s)
     return syls
 
@@ -156,6 +163,9 @@ def score(syls, q, lex):
         if s.hard == 'L':
             if x != 'L': hardbad += 1
             continue
+        if s.hard == 'S':
+            if x != 'S': hardbad += 1
+            continue
         p = lex.p_long(s) if lex is not None else 0.5
         if s.soft == 'S' and p == 0.5: p = 0.06
         sc += math.log(p if x == 'L' else 1 - p)
@@ -177,6 +187,7 @@ def options(words):
     for wi, w in enumerate(words):
         lw = w.lower()
         if wi + 1 < len(words) and re.search(r'[aeiouy]m?$', lw) and re.match(r'h?[aeiouy]', words[wi + 1].lower()): out.append(frozenset([('hiatus', wi, 0)]))
+        if lw == 'dehinc': out.append(frozenset([('join', wi, 0)]))
         for i in range(len(lw) - 1):
             if lw[i] in VOW and lw[i + 1] in VOW: out.append(frozenset([('dflip', wi, i)]))
             if lw[i] == 'i' and lw[i + 1] in VOW: out.append(frozenset([('iflip', wi, i)]))
