@@ -8,31 +8,90 @@ downloaded pages itself first. Its report is in `referee/report.md` and what it 
 number matched, and ten readings did not stand. I had run a checklist of my own first; it did not shorten the
 referee's list.*
 
+*Corrected on 26 November 2026, after a fresh reader with the web read the papers this page had known only
+through a search tool's summary (`prior-art-26nov.md`). That authors aim for the moment after the deadline was
+reported in 2008, with the motive and the share of papers in the first minute, and again in 2009 and 2010 with
+the smaller rush before the deadline and the near misses. What this page adds is how large the pile is now:
+counted as nearly as I can the way those papers counted, 3.2 to 8.5 times its size of 2002 to 2005, and much
+more of it in the first minute. The summary below is as it stands now, with what it said listed under it; the
+page follows as it was, with notes marked "(26 November: ...)". The reader then checked the corrections and
+found eleven things, two of them carried over from its own report: a range that left out my own table's
+largest figure, and "a reason in print" that was its inference and not the paper's. It read the mending once
+more and found nine smaller things. Those are mended, and that last mending has been read by nobody.*
+
 The arXiv cuts its mailings at 14:00 US Eastern time on weekdays. A paper stamped before then goes into the
 next mailing (that evening, Monday to Thursday); one stamped a second later waits for the mailing after. I
 sealed nine expectations about when papers arrive around that moment, then fetched every paper of half a year
 in seven groups of categories.
 
-**In short**
+**In short** (as it stands on 26 November)
 
 - **In five groups of physics a large share of weekday papers is stamped in the first minute after the
-  boundary:** 19.0% in hep-th, 15.5% in hep-ph, 14.2% in astro-ph, 6.5% in gr-qc, 5.8% in quant-ph. Papers
-  arriving evenly round the clock would put 0.07% in any minute.
-- **hep-th's share is the largest.** hep-ph and astro-ph cannot be told apart, and astro-ph's own six
-  categories run from 6.7% to 22.0%.
-- **Two thirds to four fifths of that minute's papers come in its first five seconds.** About five papers a
-  day, over the seven groups, carry the very second 14:00:00.
-- **In cs.CL and two categories of maths almost none does:** 0.16% and 0.14% in that minute.
+  boundary:** 19.0% in hep-th, 15.5% in hep-ph, 14.2% in astro-ph, 6.5% in gr-qc, 5.8% in quant-ph, in the
+  first half of 2025.
+- **The pile has been in print since 2008, and it is 3.2 to 8.5 times what it was** (least for the first five
+  minutes against 2005, most for the first minute against 2002). Dietrich (2008) found that in astro-ph 1.5%
+  "of all e-Prints" came in the first minute after the deadline in the second half of 2002, and 2.3% in the
+  second half of 2005. Counted as nearly his way as I can, it is 12.8% now. He writes "of all e-Prints",
+  though the delays he describes computing are for papers also published in seven named journals, timed from
+  the server's logs of first submission, and his text does not settle which the 1.5% rests on; I count every
+  paper whose primary category is in astro-ph, weekends included, by its final stamp. Haque and Ginsparg (2009) count 309 of
+  9,932 hep-th papers and 363 of 12,281 hep-ph papers in the first twenty minutes in 2002 to 2004, which is
+  3.1% and 3.0%; it is 20.2% and 16.9% now (`then.py` → `then.out`). For quant-ph a post of 2023 found "about
+  6%" in the first five minutes, cross-listed papers included; I find 6.2% without them. The deadline was
+  16:00 Eastern until 2 January 2017, and 14:00 since: two hours earlier in the European evening, which by
+  itself could have raised the share.
+- **The pile has narrowed.** Half of astro-ph's first five minutes fell in the first minute in 2002 and in
+  2005; 86% do now. Two thirds to four fifths of that minute's papers come in its first five seconds, and
+  about five papers a day, over the seven groups, carry the very second 14:00:00. Those counts by the second
+  I did not find in print.
+- **hep-th's share is now the largest.** In 2002 to 2007 the two hep archives were "not as high as
+  astro-ph". hep-ph and astro-ph cannot be told apart now, and astro-ph's own six categories run from 6.7%
+  to 22.0%.
+- **In cs.CL and two categories of maths almost none does:** 0.16% and 0.14% in that minute. A possible
+  reason, which is the reader's inference and mine and not any paper's: Haque and Ginsparg (2010) report
+  that in 2002 to 2004 roughly 75% of those who read mathematics on the arXiv's web pages, and 85% of those
+  who read computer science, took the daily lists in reverse order. They do not connect that with when those
+  fields submit.
 - **In six of the seven groups the last ten minutes before the boundary are busier than usual:** 2.2 to 3.0
   times what the rest of that morning leads up to. In cs.CL the last minute before the boundary holds 102
-  papers of the half-year and the first minute after it 12. In the two of maths the excess is within noise.
-- **The stamp is the clock the arXiv cuts on, and the pile is not the arXiv's machinery,** as far as the
-  pages can show. On the last weekday of a month every paper stamped from 14:00:00 carries the next month's
-  identifier. No other hour has a pile. And for three weeks in March, when the United States had changed
-  its clocks and Europe had not, a small pile appeared an hour off.
+  papers of the half-year and the first minute after it 12. The burst before the deadline is in the paper of
+  2010, for hep-th and hep-ph, as a "procrastination effect". For cs.CL there is a rival reading that I had
+  not thought of: a note of 2023 for machine-learning authors says a paper submitted "right before 14:00" is
+  more likely to be on the first page of a list ordered by recency.
+- **The stamp is the moment of the last click, and the pile is not the arXiv's machinery.** The arXiv's help
+  says the date stamp is "recorded as the time the submitter clicks 'Submit article'", and its news pages
+  give the rule for the month's identifier that the referee's test had found. No page says that the time I
+  read from the arXiv's interface is that stamp, or that the cut falls on it to the second; the identifiers
+  show that. No other hour has a pile. And for three weeks in March, when the United States had changed its
+  clocks and Europe had not, a small pile appeared an hour off. Some papers carry an earlier stamp than
+  their place among the identifiers implies: 0.7% to 2.4% of papers in physics and maths, and 7.9% in cs.CL;
+  of the 2,175 papers of the first minute, two. That those were held back by the moderators is a guess.
 - **Five of nine sealed lines held.** From the scorecard: marked remembered, 2 lines, 2 held; marked
   remembered loosely, 1 line, 1 held; marked guessed, 6 lines, 2 held.
 - **The time stamps say when a paper arrived, not why.**
+
+**What this summary said on the 22nd, and why it changed**
+
+- **"Papers arriving evenly round the clock would put 0.07% in any minute."** True, and the wrong yardstick.
+  The fair one is the share printed for the same minute twenty years ago: 1.5% to 2.3%.
+- **It named no paper in its summary,** and the body gave a search tool's account of two. The reader has now
+  read the second of them through and the first through its second section, and I have checked the sentences
+  quoted; Dietrich's two papers of 2008, which came first, the page had not known of.
+- **"hep-th's share is the largest."** Now. It was the other way round in 2002 to 2007.
+- **"The stamp is the clock the arXiv cuts on ... as far as the pages can show."** The arXiv's help says most
+  of it; the identifiers show the rest.
+- **Further down, "in one subcommunity"** of the burst before the deadline: the tool's summary had it wrong.
+  The paper shows the burst for hep-th and hep-ph; its "one subcommunity" is about citations.
+- **Further down, "which is my memory and not in the pages"**, of lists running in order of arrival: in
+  print, "in rough order of receipt" (Haque and Ginsparg 2009).
+- **Further down, "What neither reading covers".** One of its four items has an answer in print: for the
+  papers stamped a second or two early, "a premature submission effect: submitters with bad aim due to poor
+  clock synchronization". For another, why maths and computer science do not pile up, there is a possible
+  reason (above).
+- **The note of 23 November** quoted "few tens of submissions in that initial minute on a busy day" without
+  its "[at most]" and without saying that it is about the whole server. My seven groups alone average 16.7
+  papers in that minute on a weekday.
 
 ![cutoff](cutoff.png)
 
@@ -138,24 +197,101 @@ None was registered. `after.py`, `after2.py`; the referee's controls redone in `
   papers in first position in astro-ph, hep-th and hep-ph were cited and downloaded more, and that
   "'self-promotion' reflected the tendency of some submitters to aim their submissions for just after the
   deadline"; of their 2010 paper, that it found "a 'procrastination' effect associated to submissions made
-  within the 20 minute period just before the daily deadline" in one subcommunity.
+  within the 20 minute period just before the daily deadline" in one subcommunity. (26 November: the papers
+  have now been read; the "self-promotion" sentence is in the paper of 2010, not that of 2009, and the burst
+  before the deadline is shown for hep-th and hep-ph. See the top and "What was already in print".)
 
 ## The readings
 
 Nothing here shows why any paper arrived when it did. These are the two readings I had in mind when I wrote
 the sheet. The search summary attributes the first to Haque and Ginsparg for three archives of physics, and
-something like the second for one subcommunity.
+something like the second for one subcommunity. (26 November: for two archives, hep-th and hep-ph; "one
+subcommunity" was the tool's muddle.)
 
 - **Waiting to be first.** The pages show that identifiers run in the order of the stamps. If lists run in
   the order of identifiers, which is my memory and not in the pages, the first paper after the boundary
-  heads the next list. About five papers a day stamped in the same second, and hundreds a week in the same
+  heads the next list. (26 November: in print, "in rough order of receipt"; and a post of 2023 notes that a
+  paper stamped before the cutoff occasionally heads a list, "probably" after moderation.) About five papers a day stamped in the same second, and hundreds a week in the same
   minute, in the fields where the head of the list is said to be read and cited more, fit that.
 - **Hurrying to make the mailing.** A busier ten minutes just before the boundary fits authors who want
   their paper in that day's mailing.
 - **What neither reading covers.** Why three fields pile up more than a fourth and a fifth; why cs.CL and
   the two of maths have almost no pile after the boundary; why maths has fewer papers in the hour after
   14:00 than in the hour before (the pages cannot tell the boundary from the end of the European day); and
-  what the 28 astro-ph papers stamped in the last two seconds before the boundary were aiming at.
+  what the 28 astro-ph papers stamped in the last two seconds before the boundary were aiming at. (26
+  November: for the fourth of these the paper of 2010 has an answer, and for the second there is a possible
+  reason; see the top.)
+
+## What was already in print
+
+Added 26 November. A fresh reader with the web had 25 minutes and 35 requests; its report is
+`prior-art-26nov.md`. I have checked each quotation here against the text it fetched, and recomputed its
+comparison with my own script.
+
+- **The pile, first.** J. P. Dietrich, "The importance of being first: position dependent citation rates on
+  arXiv:astro-ph" (posted in December 2007, printed in 2008), says that "this temporal clustering close to the
+  submission deadline is conspicuous and suggests a peculiar form of self promotion", and gives as one
+  example among many the list "of Sep 24, 2007 headed by three articles
+  received within 20 s after this list was started". His second paper of that year, "Disentangling
+  visibility and self-promotion bias in the arXiv:astro-ph positional citation effect": "In the second half
+  of 2002 1.5% (2.9%) of all e-Prints were submitted within the first 60 s (300 s). In the second half of
+  2005 these numbers rose to 2.3% (4.6%)."
+- **The pile, by archive, and the motive.** Haque and Ginsparg, "Positional effects on citation and
+  readership in arXiv" (2009): 1,049 of 23,165 astro-ph papers of 2002 to 2004 in the ten minutes after the
+  deadline; 309 of 9,932 in hep-th and 363 of 12,281 in hep-ph in twenty. Of the two hep archives it says
+  the rates were "exceptionally high ... although not as high as astro-ph". Lists run "in rough order of
+  receipt". Of the whole server: "the [at most] few tens of submissions in that initial minute on a busy
+  day". And: "The server itself is not affected by any excessive operating load during the 16:00 period",
+  which is asserted there and not shown.
+- **The rush before, the near misses, and who reads backwards.** Haque and Ginsparg, "Last but not least:
+  additional positional effects on citation and readership in arXiv" (2010): "there is also evidence for a
+  smaller burst in submissions leading up to that time", which it calls a "procrastination effect"; "a
+  premature submission effect: submitters with bad aim due to poor clock synchronization"; and "roughly 75%
+  of mathematics, 85% of computer science, and 50% of condensed matter web interface users reading the arXiv
+  daily listings in reverse order". Dietrich's first paper has a famous near miss: a paper with "a
+  submission time 1 s before the deadline" that "appeared as 23rd and last paper" on its list.
+- **Since 2010.** E. Peters, "Early bird gets the worm: Analyzing quant-ph arXiv submission timing" (a post
+  of June 2023): "In the last 10 years the fraction of early bird submissions has gone from negligble to
+  about 6%." A note of January 2023 for machine-learning authors: "By default, arXiv orders submissions by
+  'recentness'. Therefore, if you submit right before 14:00, it is more likely to be listed on the first
+  page of the list". A chart of January 2026 (M. Tsinganis), which the reader read as an image and I have
+  not looked at, marks the peaks at 18:00 and 19:00 UTC.
+- **The arXiv's own pages.** "All submissions receive a 'date stamp', recorded as the time the submitter
+  clicks 'Submit article' at the end of the submission process." "Beginning January 2, 2017, the freeze time
+  will change to 14:00 US Eastern time (EST/EDT)." And, of one month's end: "articles submitted at or after
+  14:00 ET Tuesday, 31 December 2019 will receive arXiv:2001.NNNNN identifiers."
+- **Not found in print:** the sizes of the pile in 2025 for astro-ph and the hep archives; counts by the
+  second; the split among astro-ph's categories; the figures for cs.CL and maths; the three weeks in March.
+- **Not obtained, not read.** Ginsparg's "ArXiv at 20" was not fetched. The reader read through the paper of
+  2010, both of Dietrich's and the post of 2023; the paper of 2009 through its second section and the rest
+  by searching. I have read the passages quoted here and no more.
+
+## The half-year beside 2002 to 2005 (26 November)
+
+`then.py` → `then.out`. Shares of all of an archive's papers, weekends included, in a window after the
+deadline on a weekday, as the printed figures are counted.
+
+| archive, window | printed | first half of 2025 | ratio |
+|---|---|---|---|
+| astro-ph, first minute | 1.5% (2002), 2.3% (2005) | 12.8% (1,096 of 8,552) | 8.5, 5.6 |
+| astro-ph, first five minutes | 2.9% (2002), 4.6% (2005) | 14.8% | 5.1, 3.2 |
+| astro-ph, first ten minutes | 4.5% (2002 to 2004) | 15.6% | 3.4 |
+| hep-th, first twenty minutes | 3.1% (2002 to 2004) | 20.2% (372 of 1,840) | 6.5 |
+| hep-ph, first twenty minutes | 3.0% (2002 to 2004) | 16.9% (439 of 2,599) | 5.7 |
+| quant-ph, first five minutes | "about 6%" (a post of 2023, on data of 2022, cross-lists included) | 6.2% (primary category only) | not like for like |
+
+- The half-year is one half-year, and a first half set beside second halves; the printed figures are other
+  people's counts of other years, and Dietrich's times are from logs of first submission, perhaps for papers
+  also published in journals. astro-ph was one undivided archive then. Replacements and cross-lists are left
+  out on both sides, as far as their counts show. The deadline has moved from 22:00 to 20:00 in central Europe. Nothing here shows whether the
+  growth was steady, or came when the deadline moved in 2017, or is more aiming or only a kinder hour.
+- Not sealed beforehand: the reader had made the same comparison first and I knew its answer.
+
+## The field's words for these things
+
+The boundary is the submission deadline, or freeze time, or cutoff. The pile is a spike, or early-bird
+submissions; the motive the papers give is self-promotion, and the gain is a positional or visibility effect.
+The rush before is the procrastination effect. The stamp is the date stamp.
 
 ## What I expected, with the odds I gave
 
@@ -232,9 +368,11 @@ it does not say the list works.
 - **Why any paper arrived when it did.**
 - **That being first helps a paper.** Nothing here measures reading or citation.
 - **That lists run in the order of identifiers.** The pages show identifiers running in the order of the
-  stamps; the rest is my memory and one search summary.
+  stamps; the rest is my memory and one search summary. (26 November: in print since 2008, in Dietrich's first paper, and in 2009 as "in rough order of
+  receipt".)
 - **Whether the stamp is the first or the last press of a button,** or whether some weekday-only release
-  inside the arXiv treats fields differently. The referee could not exclude either.
+  inside the arXiv treats fields differently. The referee could not exclude either. (26 November: the last
+  press, by the arXiv's help.)
 - **Anything about other years, or other categories.** Half of 2025; seven groups; "maths" is two categories
   of thirty-odd.
 - **A paper's category at the time.** The primary category is the one the API gives today.
@@ -258,7 +396,12 @@ it does not say the list works.
 | `figures.py` → `cutoff.png` | `python -I figures.py profiles.json cutoff.png` |
 | `checklist.md` | the twenty-two questions asked before the referee, my answers, and what became of them |
 | `sources.md` | what I looked up, and when |
+| `then.py` → `then.out` | added 26 November: the half-year counted as the papers of 2008 and 2009 counted theirs, and the papers numbered later than their stamp implies (`python -I then.py records.csv`) |
+| `prior-art-26nov.md` | added 26 November: the fresh reader's report, as it came |
 | `referee-brief.md`, `referee/` | the brief, and the report word for word with the referee's scripts and outputs |
 
 *Added at 04:26 UTC on 23 November 2026. I looked up afterwards whether this study's main claim was already in print
 (`../agent2-prior/`, line W15). The class a blind referee gave: **found in part**. Haque and Ginsparg (2009), now read, have a spike in the ten minutes after the deadline and "few tens of submissions in that initial minute on a busy day".*
+
+*26 November: that note clipped its quotation. The sentence is about the whole server and reads "the [at most] few
+tens of submissions in that initial minute on a busy day". The papers are set out under "What was already in print".*
