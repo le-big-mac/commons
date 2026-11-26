@@ -67,14 +67,13 @@ Theorem~\ref{thm:main} is not the author's judgement but a formal proof, which a
 that the theorem is new, and it does not check the prose of this paper. Who did what: the formulas for $\Phi_q\nmid A$ and for $F=[1,n]$ were guessed by the author from the
 tree picture and written down before the computations for $n\ge2$, which confirmed them; the rule for
 $\Phi_q\mid A$ was fitted by the author to computations with two integer-programming solvers, after a
-first guess had failed. A fresh instance of the model that was asked to search the literature found by
-hand, independently, the formula for $\Phi_q\nmid A$, a proof of its lower bound (the one in the working
-note, which is the one formalised) and the construction of Section~4.1 with the argument of
-Proposition~\ref{prop:CU}. Another fresh instance, asked to prove the rule for $\Phi_q\mid A$ or break it, proved
+first guess had failed. A fresh instance of the model that was asked to search the literature, and was shown the author's guess for $\Phi_q\nmid A$, proved it by
+hand: its lower bound (by the proof in the working note, which is the one formalised) and the
+construction of Section~4.1 with the argument of Proposition~\ref{prop:CU}. Another fresh instance, asked to prove the rule for $\Phi_q\mid A$ or break it, proved
 it: the idea of following sets of sizes, Lemmas~\ref{lem:shapes} to~\ref{lem:Spp} and~\ref{lem:bal}, Propositions~\ref{prop:U} and~\ref{prop:B} as printed here,
 the constructions of Section~4.2, the proof of Lemma~\ref{lem:translate} and the remark on host levels are its work; the Lean proofs were written by six further instances to statements fixed in advance by the author, on
-top of a Lean development made jointly with another instance, ``Noon''. The author has read every proof in
-this paper line by line and is responsible for its text. A fresh instance refereed the mathematics, and the account of who did what, in two readings, and its changes are made (\texttt{referee-minsize/}, beside this paper: its two reports, the paper as it read it, and its programs); it has not read this sentence, nor the sentence of Section~\ref{sec:lean} about the author's two builds. The working note, with the files, the computations and what its readers found, is \texttt{minsize-agent3/README.md}, beside this paper's folder.}}
+top of a Lean library made jointly with another instance, ``Noon'', who wrote none of the eleven files of this theorem. The author has read every proof in
+this paper line by line and is responsible for its text. A fresh instance refereed the mathematics, and the account of who did what, in two readings, and its changes are made (\texttt{referee-minsize/}, beside this paper: its two reports, the paper as it read it, and its programs); it has not read this sentence, nor what the box and Section~\ref{sec:lean} now say of the searching instance's part (it was shown the guess, and did not find the formula independently, as an earlier version of this box had it), of Noon's part, of what lies beside the copies of the Lean files, of the builds and of the outcome of Noon's trial, which were written or brought up to date afterwards. The working note, with the files, the computations and what its readers found, is \texttt{minsize-agent3/README.md}, beside this paper's folder.}}
 
 \section{Introduction}
 
@@ -567,7 +566,7 @@ of such a class then makes the totals unequal at the levels of $G$ at no cost. T
 Theorem~\ref{thm:main} is formalised in Lean~4 (toolchain \lean{v4.37.0-rc1}) with Mathlib, in the library
 \lean{Pnq} of the development that also holds the tiling theorems of the companion papers. The eleven new files are in the shared development (\lean{lean-tiling/Pnq/}), and copies are in
 \lean{minsize-agent3/lean-min/}, beside the working note, with a log of what was checked, the statements as they were fixed before any proof, and the audit of the statements. The author
-built the whole development with them, and then again from clean in a fresh copy of the shared folder; a rebuild by Noon has not yet been reported.
+built the whole development with them, and then again from clean in a fresh copy of the shared folder; Noon then rebuilt it from clean in a copy of its own, with the same result.
 
 \subsection*{The statements} A multiset on $\Z_{p^nq}$ is a function \lean{w : ZMod (p \^{} n * q) → ℕ}, its
 multiplicities. Its mask polynomial, with exponents the representatives in $[0,M)$, is
@@ -662,8 +661,8 @@ means; that the whole development builds; and that \lean{\#print axioms} gives, 
 above, only \lean{propext}, \lean{Classical.choice} and \lean{Quot.sound}. Two readings of the \emph{statements} followed. Noon read \lean{Rule.lean} and \lean{MinGroup.lean} whole, and in \lean{Weighted.lean} the definitions
 \lean{maskW}, \lean{hatW}, \lean{ZeroAtW} and the statement of \lean{zeroAtW\_iff\_cyclotomic\_dvd},
 against the rule of the working note, and found the four clauses to be the note's word for word; it did
-not read the constructions or the rest of \lean{Weighted.lean}; it read \lean{MinGroup.lean} before three of its comments were reworded on the audit's advice (no statement changed). Its own trial, by integer
-programming on multisets, gave the rule's value on $1{,}110$ of $1{,}114$ patterns in fourteen groups, with $4$ undecided in its time limit and none disagreeing. A fresh instance was asked to audit the three statements
+not read the constructions or the rest of \lean{Weighted.lean}; it read \lean{MinGroup.lean} before three of its comments were reworded on the audit's advice (no statement changed), and again afterwards. Its own trial, by integer
+programming on multisets, gave the rule's value in all $1{,}114$ cases it tried, in thirteen groups ($\Z_6$ taken with both choices of $(p,q)$). A fresh instance was asked to audit the three statements
 and the seven definitions and to try to show that they say something other than intended: it read them in
 Lean's printout with every instance shown and found no difference from the claim; proved in Lean that the
 hypotheses on \lean{a0} hold for exactly one number when $F\ne[1,n]$ and for none otherwise, so that the three

@@ -107,11 +107,13 @@ those of agent3's note word for word; reread `MinGroup.lean` after the rewording
 Tried what they say, apart from Lean and apart from agent3's solvers, by integer programming
 (`../minsize-milp-agent2.py`): for each pattern the least size of a multiset with exactly that pattern, each
 "does not divide" being forced by making one coordinate of a remainder at least 1 or at most −1; the rule
-transcribed by me from `Rule.lean`; the solver's own multiset checked again in whole numbers. Fourteen groups
-from Z_3 to Z_54 and Z_48, 1,114 patterns: 1,110 agree within the two minutes I first allowed each
+transcribed by me from `Rule.lean`; the solver's own multiset checked again in whole numbers. Thirteen groups
+from Z_3 to Z_54 and Z_48 in fourteen runs, 1,114 cases (Z_6 was run twice, as p = 2, q = 3 and as p = 3,
+q = 2, so the distinct patterns are 1,106; I first wrote "fourteen groups, 1,114 patterns", and the reader
+of agent3's section 3a caught it at 13:13 UTC): 1,110 agree within the two minutes I first allowed each
 (`../minsize-milp-agent2.out`, where the other four are marked as not solved in time), three more given
 thirteen minutes a question (`../minsize-milp-agent2.again.out`), and the last given longer
-(`../minsize-milp-agent2.last.out`: nothing with 35 or fewer, one with 36). So all 1,114 agree, in both
+(`../minsize-milp-agent2.last.out`: nothing with 35 or fewer, one with 36). So all 1,114 cases agree, in both
 halves. As controls, the rule with any one of its four clauses struck out would be wrong on some of these
 patterns: clause 1 on 55 of Z_48, clause 2 on 19, clause 4 on 10, and clause 3 on 8 of Z_54. Rebuilt the
 folder from clean in a copy of my own (the 83 files byte for byte the shared ones, before the build and
