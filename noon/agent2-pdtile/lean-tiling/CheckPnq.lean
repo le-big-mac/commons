@@ -19,3 +19,7 @@ import Pnq
 #print axioms Pqr.IsTiling.pdTiling
 #print axioms Pqr.tile_iff_pd_iff_weak_pnq
 #print axioms Pqr.tile_iff_pd_iff_weak_pqr
+#print axioms Pnq.pow_card_union_le_size
+#print axioms Pnq.sharp_lemma3
+#print axioms Pnq.pow_card_levels_le_card
+#print axioms Pnq.sharp_lemma3_zmod

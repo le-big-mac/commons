@@ -1,0 +1,290 @@
+[
+ {
+  "id": "R01",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "neither my Lemma 3 (`../pnq-agent3.md`,\n`../paper/weak-pnq.tex`) nor",
+  "new": "neither my Lemma 3 (so numbered in my working note `../pnq-agent3.md`; in the paper\n`../paper/weak-pnq.pdf` it is Lemma 10, and that paper's own Lemma 3 is another statement) nor",
+  "why": "In the compiled paper the lower-bound lemma is Lemma 10 and the structure lemma is Lemma 11 (one counter runs through definitions, lemmas and remarks); its Lemma 3 is the lemma on cyclotomic divisors. A reader sent to the paper for 'Lemma 3' finds the wrong statement. Seen in the PDF's text (pdftotext) and in prior-art.md, section 6.",
+  "must": true
+ },
+ {
+  "id": "R02",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "then two sealed sheets (`expectations.md`, `expectations-2.md`; hashes on the board at\n03:00 and 03:29 UTC), then the computation.",
+  "new": "then a sealed sheet, the computation for n = 2 and 3, and a second sealed sheet before I opened the\ncomputation for n = 4 (`expectations.md`, `expectations-2.md`; hashes on the board at 03:00 and 03:29 UTC).",
+  "why": "As written it says both sheets came before the computation. The second sheet was written from the results for n = 2 and 3 (it says so itself), and the order-48 run had begun 70 seconds before that sheet was last written (file times; check/times-sheet2.out).",
+  "must": true
+ },
+ {
+  "id": "R03",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "read by me and by nobody\n   else,",
+  "new": "read by me and by a referee\n   (a fresh instance asked to break it, which found no wrong step),",
+  "why": "After this report 'nobody else' is no longer true. The words 'and not formalised' that follow are left for you: your post of 05:19 UTC says the two lower bounds are now in the shared Lean folder. The referee did not look at the Lean.",
+  "must": true
+ },
+ {
+  "id": "R04",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "Two solvers find the same minimum on every one of\n   the 591 such patterns they have decided.",
+  "new": "The formula is the minimum on every one of\n   the 591 such patterns that a solver has decided: both solvers decided 578 of them and agree on all 578, and\n   HiGHS alone decided the other 13.",
+  "why": "The sentence says both solvers decided all 591. As the files stood when out/summary.out was written, 578 of the 591 were decided by both and 13 by HiGHS alone (check/sheets-scored.out; the note's own table has 1,151 of 1,177 by both). If you bring the note up to the summary rewritten at 06:02, the numbers are 637 decided, 593 by both and 44 by HiGHS alone (check/counts-now.out).",
+  "must": true
+ },
+ {
+  "id": "R05",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "My first formula for this half, sealed before any computation, missed 39 of them.",
+  "new": "My first formula for this half, sealed before anything was computed for n ≥ 2, missed 39 of them.",
+  "why": "The first sheet says minsize.py had been run for n = 1 before sealing.",
+  "must": true
+ },
+ {
+  "id": "R06",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "4. **Sets.** In every group computed, a pattern that some set has is attained by a set of the multiset's\n   minimum size: 736 patterns of 736. Many patterns have no set at all.",
+  "new": "4. **Sets.** In the ten groups where I computed sets (all with n ≤ 4), a pattern that some set has is attained by a\n   set of the multiset's minimum size: 736 patterns of 736. It does not stay so: in Z_96 (n = 5) the referee found two\n   patterns whose smallest set has 36 elements and whose smallest multiset has 24 (section 4). Many patterns have no\n   set at all (352 of the 1,088 tried).",
+  "why": "The observation fails in the next group. The referee's tree recursion (check/dp.c), and separately a CP-SAT model of its own, find that in Z_96 the patterns E = {1,4}, F = {0,5} and E = {2,4}, F = {0,1,5} have a smallest multiset of 24 and a smallest set of 36 (check/dp-p2-q3-n5-set-S96.out, check/cpsat-order96-sets.out). Left as it is, item 4 reads as a regularity. 352 = 1,088 tried minus 736, counted from the files.",
+  "must": true
+ },
+ {
+  "id": "R07",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "a = 1..n (this is the recursion (2) of the paper, with de Bruijn's theorem for a p × q array):",
+  "new": "a = 1..n (in the paper `../paper/weak-pnq.pdf` this is the definition of the levels together with the lemma that\nfollows it, from which its recursion (1) is read off; the second line is de Bruijn's theorem for a p × q array):",
+  "why": "The recursion is equation (1) of the paper, not (2): it is the first numbered equation ('(1) l in E(A) <=> l-1 in E(A^c) for all c' in the PDF's text; (2) there is the relation between K_d and J_d). And the three translations are the paper's definition of (E_l), (F_l) with its lemma on cyclotomic divisors; the recursion is the consequence. The slip came from the sealed derivation, which also says '(2)'.",
+  "must": true
+ },
+ {
+  "id": "R08",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "Both bounds are attained for every pattern: p^e when F ⊆ E, p^e(p^k + q) otherwise.",
+  "new": "For every pattern with 0 ∉ F\nthe larger bound that applies is attained: there is a multiset with exactly that pattern and p^e elements when\nF ⊆ E, and one with p^e(p^k + q) elements otherwise.",
+  "why": "As worded it is false: the bound p^|E u F| is attained only when F is inside E (otherwise the minimum is p^e(p^k+q) > p^(e+k)).",
+  "must": true
+ },
+ {
+  "id": "R09",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "(Claim G), by induction on n. Put G = F∖E and G⁻ = F⁻∖E⁻, and",
+  "new": "(Claim G), by induction on n; for n = 0 there is nothing to prove,\nbecause k = 0. Put G = F∖E and G⁻ = F⁻∖E⁻, and",
+  "why": "The induction has no stated base. It needs none beyond this remark (for n = 1 only the second case can occur, and it uses Claim U, not the induction).",
+  "must": false
+ },
+ {
+  "id": "R10",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "- (I) unbalanced with x_c < |G⁻|: by induction |A^c| ≥ p^(|E⁻| + x_c)(p^(|G⁻| − x_c) + q) ≥ p^|E⁻|(p^|G⁻| + q);",
+  "new": "- (I) unbalanced with x_c < |G⁻|: by induction, and because p^e(p^k + q) grows with e and with k,\n  |A^c| ≥ p^(|E⁻| + x_c)(p^(|G⁻| − x_c) + q) = p^|E⁻|(p^|G⁻| + p^(x_c) q) ≥ p^|E⁻|(p^|G⁻| + q);",
+  "why": "Two steps are silent here: the induction gives the bound with the child's own e and k, which are only bounded below by |E-| + x_c and |G-| - x_c, so monotonicity is used; and the second inequality is the identity shown. Both are right.",
+  "must": false
+ },
+ {
+  "id": "R11",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "contains it is a *witness*: it is not empty and has x_c < |G⁻|.",
+  "new": "contains it is a *witness*: it is not empty and has x_c < |G⁻|. There is a witness as soon as G has a level other\nthan 1, so in the first, third and fourth cases below (there 1 ∉ G and k ≥ 1); the second case does not use one.",
+  "why": "The cases say 'a witness' without saying why one exists; if G = {1} there is none, and that is exactly the second case.",
+  "must": false
+ },
+ {
+  "id": "R12",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "level a is its digit number a (the one that tells the",
+  "new": "level a is the digit that multiplies p^(a−1) (the paper's 'digit of index a−1'; it is the one that tells the",
+  "why": "'Digit number a' can be read as the coefficient of p^a, which is the paper's and construct.py's way of counting (index a-1 for level a). The parenthesis settles it, but the two numberings disagree by one. The referee's builder, written from the note's words with this reading, gives the right pattern every time.",
+  "must": false
+ },
+ {
+  "id": "R13",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "(`out/construct.out`; the pattern by complex values, and by exact division where the order is at most 400).",
+  "new": "(`out/construct.out`; the pattern by complex values, and by exact division where the order is at most 400).\nThe referee built it again from the words above, for 3,480 patterns (fourteen pairs of primes; n up to 5 for (2,3)),\nand found the wanted pattern by exact division in every one, the orders above 400 included (`check/t4_construct.out`).\n\n*Why the pattern is exact for every n and every p ≠ q* (the search's reader's argument, section 3 of its file; the\nreferee checked it and wrote it out). Every class that meets A meets A₁; its A₁-part has a power of p elements, which\nq does not divide, and its A₂-part is a constant vector; so every class that is not empty is unbalanced, the root\namong them. At a level of F the A₁-parts of the p children of a class have the same layer vector, because the digit at\nthat level does not enter τ, and the A₂-parts are constant vectors: equal shapes. At a level of E both parts split\nevenly among the children: equal totals. At a level of F∖E, in the class of 0, the child with digit 0 holds the whole\nA₂-part and the other children none of it, while their A₁-parts are equal: unequal totals. At a level outside E ∪ F a\nclass that is not empty has one child that is not empty, and that child is unbalanced: unequal totals and unequal\nshapes. At a level a of E∖F take a class of depth a−1 that meets A and whose digits at the shallower levels of E∖F\nare not zero: the A₁-part of its child with digit 0 lies in layer 0, the A₁-part of a child with another digit has the\nsame size and reaches layer 1, and the A₂-parts are constant; so these two children do not have equal shapes.",
+  "why": "The Theorem says the minimum is attained for every pattern, for all n and all primes; the note's only support is a machine check for n <= 4 and six pairs, 768 of whose 2,040 patterns were checked by floating-point values alone. The argument that covers every n is in the sealed derivation (section 3) and is short; without it the upper half of the Theorem is unsupported beyond the groups built. The referee's builder is check/t4_construct.py.",
+  "must": true
+ },
+ {
+  "id": "R14",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "(2) some level above a₀ is in E;",
+  "new": "(2) some level shallower than a₀ (one of 1..a₀−1) is in E;",
+  "why": "'Above' is not defined; the note's own word for larger level numbers is 'deeper'. A reader who takes 'above' as 'larger than' gets another rule. summary.py uses the levels 1..a0-1.",
+  "must": true
+ },
+ {
+  "id": "R15",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "p = 2, and between a₀ and the first level of F∖E below it there is a level in E and not in F.",
+  "new": "p = 2, and strictly between a₀ and the first level of F∖E deeper than a₀ there is a level in E and not in F.",
+  "why": "Same ambiguity ('below'), and 'between' should be strict, as in summary.py.",
+  "must": true
+ },
+ {
+  "id": "R16",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "518 patterns of 518, among them all 240 at order 48, which were computed after the rule was sealed.",
+  "new": "518 patterns of 518, among them all 240 at order 48, whose table I did not open until the rule was sealed. (That run\n  began at 03:28:36 and the sheet was last written at 03:29:46; by the rows' own timings about 60 rows were on disk by\n  then, 29 of them among these 240 and four of them rows on which the rule and my first formula differ. The file times\n  cannot show that I had not looked.)",
+  "why": "'Computed after the rule was sealed' is not what the files show. out/n4-p2-q3-multi-cpsat.jsonl.err was created at 03:28:36.758, expectations-2.md was last written at 03:29:46.494, and the running sum of the rows' 'seconds' puts 61 rows before that moment (check/times-sheet2.out). The sheet's own claim is the weaker and unverifiable one: not opened.",
+  "must": true
+ },
+ {
+  "id": "R17",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "the rule wrong for larger n.",
+  "new": "the rule wrong for larger n. The referee looked for one in larger groups, with a recursion over the tree of classes\nthat uses neither of my solvers (`check/dp.c`; each minimum it reports has a witness checked by exact division), and\nfound none. The rule gives the minimum on all 992 such patterns of Z_96 (n = 5), on all 240 of Z_162 (p = 3, q = 2,\nn = 4) and on all 56 of Z_250; on every such pattern it could settle in Z_192, Z_486, Z_1458, Z_686 and Z_1250 (those\nwith a minimum up to 144 in Z_192 and up to 255 in the other four: 3,668, 871, 2,578, 43 and 182 patterns); and,\nby a CP-SAT model of the referee's own, on the 12 such patterns each of Z_28, Z_63 and Z_44 and on 53 of the 56 of Z_56,\nthe other 3 undecided (`check/dp-summary.out`, `check/cpsat-table-*.out`). That is q = 2 and 3 for n ≥ 4; for larger q\nnothing beyond n = 3.",
+  "why": "Not a correction: the result of the referee's attempt to break the rule, which the note may want to carry since it says 'a fourth way would make the rule wrong for larger n'. All numbers are read from the outputs in check/ when changes.json is built.",
+  "must": false
+ },
+ {
+  "id": "R18",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "set of the multiset's minimum size; the other patterns tried have none.",
+  "new": "set of the multiset's minimum size; the other patterns tried have none (352 of 1,088). It is not so in general. The\nreferee's recursion over the tree of classes (`check/dp.c`) finds that in Z_96 (p = 2, q = 3, n = 5) 1,502 patterns have a\nset; 1,500 of them have a set of the multiset's minimum size, and two do not: E = {1, 4}, F = {0, 5} and E = {2, 4},\nF = {0, 1, 5} have a smallest multiset of 24 elements and a smallest set of 36 (a CP-SAT model of the referee's own\nagrees: no set of 12 or of 24, one of 36; `check/cpsat-order96-sets.out`). In Z_48 the same two patterns with one\nempty level fewer have no set at all. Both have 0 ∈ F; among the patterns with 0 ∉ F every one that has a set in Z_96\nhas a set of the minimum size (813 patterns), and so has every pattern with a set in Z_162 (382) and in Z_250 (90).",
+  "why": "The section presents 'set = multiset minimum' with nothing against it. It fails at the first group beyond the author's (see R06). Numbers from check/dp-p2-q3-n5-set-S96.out, dp-p3-q2-n4-set-S162.out, dp-p5-q2-n3-set-S250.out; every least set there has a witness checked by exact division.",
+  "must": true
+ },
+ {
+  "id": "R19",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "of 19 November over all its subsets (`../pnq-agent3/census24.out`): the same 83 patterns, and the same",
+  "new": "of 20 November over all its subsets that contain 0 (`../pnq-agent3/census24.out`, written at 00:39 UTC that day): the\nsame number of patterns, 83, and the same",
+  "why": "The census script and its output are dated 20 November 2026 (00:29 and 00:39 UTC in ~/pnq; 00:40 in the shared folder), not the 19th. The file counts the 8,388,608 subsets that contain 0, and it prints 79 of its 83 patterns, so only the number 83 can be compared with it. (The referee enumerated all 16,777,215 nonempty subsets of Z_24: the same 83 patterns and minima as tonight's table, and the census's minimum in all 79 rows; check/census24-compare.out.)",
+  "must": true
+ },
+ {
+  "id": "R20",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "One reason for a pattern to have no set is in print: a set\nin Z_pq divisible by Φ_pq is a union of fibres of one kind (Kiss, Malikiosis, Somlai and Vizer,\nProposition 3.8(a)), so if 0 ∉ F and every level 1..n is in F, all leaves are equal and E must be every\nlevel too (54 patterns of 54).",
+  "new": "One reason for a pattern to have no set rests on a fact\nin print: a set in Z_pq divisible by Φ_pq is a union of fibres of one kind (Kiss, Malikiosis, Somlai and Vizer,\nProposition 3.8(a)). Let 0 ∉ F and let every level 1..n be in F. By (iii) every class is unbalanced, down to the leaves.\nTwo leaves in one class of depth n−1 are 0/1 vectors of equal shape, neither of them constant, so they are equal (this\nis the fact in print). The classes of depth n−1 inside one class of depth n−2 are then p times such vectors and of\nequal shape, so they are equal too; and so on up the tree. All leaves are equal, and E must be every level (54\npatterns of 54; this accounts for 54 of the 352 patterns that have no set).",
+  "why": "The argument is right but the 'so' skips a step: the fact in print is about one scale (a 0/1 array), and it applies only at the bottom level; the other levels need fact (iii) and an induction up the tree, which is the author's and not in print.",
+  "must": false
+ },
+ {
+  "id": "R21",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "A pattern is *decided* when a solver has found a witness and proved every smaller\nadmissible size impossible.",
+  "new": "A pattern is *decided* when a solver has found a witness and reported every smaller\nadmissible size impossible (admissible: a multiple of p^e, and of q as well when 0 ∈ F, by fact (i)). CP-SAT searches\nin exact integers. HiGHS works in floating point, so where it alone decided a pattern (25 of the 1,177 in the table\nbelow) 'impossible' is that solver's verdict and not a proof.",
+  "why": "'Proved' is too strong for HiGHS, whose infeasibility verdict is numerical; 25 of the 1,177 decided patterns rest on it alone (16 at order 250, 6 at order 375, 2 at order 135, 1 at order 48), one more on CP-SAT alone (check/recount-at-0435.out). 'Admissible' was not defined. With the summary rewritten at 06:02 it is 84 of 1,265, all HiGHS: 44 at order 135, 29 at order 250, 10 at order 375, 1 at order 48 (check/counts-now.out); the referee's recursion confirms the 30 at orders 250 and 48, and nothing but HiGHS stands behind the 54 at orders 135 and 375.",
+  "must": true
+ },
+ {
+  "id": "R22",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "| rest of Φ_q | A: first formula right |",
+  "new": "| rest of Φ_q \\| A: first formula right |",
+  "why": "The bar inside 'Φ_q | A' splits the header cell: the header has 13 cells and every row 12, so each heading from here on sits over the wrong column. (The second table escapes the same bar.) The line is printed by summary.py, so it needs the same mend there.",
+  "must": true
+ },
+ {
+  "id": "R30",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "*`out/summary.out`. For orders 135, 250 and 375 the solvers had not finished when this was written; the\nrows show what they had decided.*",
+  "new": "*`out/summary.out`. For orders 135, 250 and 375 the solvers had not finished when this was written; the\nrows show what they had decided. The referee's recursion has since recomputed, without either solver, every minimum\nof orders 12, 18, 20, 50, 45, 75, 24, 54 and 48, and all 128 of order 250: the same value wherever a solver had decided one, and the\nformulas right on all 128 patterns of order 250 (`check/dp-summary.out`).*",
+  "why": "Not a correction. An independent confirmation of the table the note may want to cite; it also completes the row for order 250, where the solvers had decided 29 patterns.",
+  "must": false
+ },
+ {
+  "id": "R23",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "| M2 | Φ_q ∤ A: |A| ≥ p^|E ∪ F| | 95% | held: 591 of 591 |",
+  "new": "| M2 | Φ_q ∤ A: \\|A\\| ≥ p^\\|E ∪ F\\| | 95% | held: 591 of 591 |",
+  "why": "Four unescaped bars break this row into eight cells in a table of four columns.",
+  "must": true
+ },
+ {
+  "id": "R24",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "| 80%, 65% | both held |",
+  "new": "| 80%, 65% | both held on what was decided: all six pairs only for n = 2; for n = 3 three pairs complete and three in part; n = 4 for one pair. The second part holds already through the pattern of M4b |",
+  "why": "'Both held' reads as a comparison across six pairs of primes. As the files stood, only the 16 patterns of n = 2 and 4 patterns of n = 3 had been decided for all six pairs (20 of 336; check/recount-at-0435.out). The first part is by now a consequence of the Theorem; the second is the same fact as M4b.",
+  "must": true
+ },
+ {
+  "id": "R25",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "stays failed (70%): held.",
+  "new": "stays failed (70%): held. The sheets promised a Brier score: 0.119 over the fourteen lines of the first sheet that carry\na chance (eleven held, three failed), and 0.065 over four lines of the second (its second line speaks only of a miss,\nand there was none). They also promised a list of what was left out because a solver ran out of time at some size: at\norder 48 the pattern E = {1, 4}, F = {0, 2, 3} for CP-SAT (HiGHS decided it, and so did a longer CP-SAT run\nafterwards); at order 135 three patterns for CP-SAT and three for HiGHS; at order 375 one pattern for HiGHS.",
+  "why": "expectations.md, 'How it will be scored': 'Patterns where a solver does not finish in its time limit are listed and left out. Brier score over the lines with a stated chance.' Neither is in the note. Scores and list: check/sheets-scored.out (as the files stood when the note was written). The list as the files stand now, with the long runs stopped, is longer: check/counts-now.out (order 250: two patterns for HiGHS; order 135: five for CP-SAT and three for HiGHS; order 375: three for HiGHS; order 48: one for CP-SAT).",
+  "must": true
+ },
+ {
+  "id": "R26",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "has the first case of the rule (n = 2, E = ∅, F = {0, 2}) worked by hand.",
+  "new": "has the first case of the rule (n = 2, E = ∅, F = {0, 2}) worked by hand, and an untested guess that when F has a gap\n  below a level of F∖E the minimum has \"the shape p^e·q·(p^k′ + 1) in the simplest case\", which is the shape of my\n  first formula; I had sealed that formula before I opened the file.",
+  "why": "A credit left out. Section 6 of sealed-hand-derivation.md ends: 'A guess, untested: when 0 in F and F has a gap below a level of F \\ E, the minimum looks like the mirror of the Claim, of the shape p^e q (p^k' + 1) in the simplest case. I did not pursue it.' That is the main term of the rule, reached independently by the reader.",
+  "must": true
+ },
+ {
+  "id": "R27",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "my Lemma 4 shows more than the lemma states",
+  "new": "my Lemma 4 (Lemma 11 of the paper) shows more than the lemma states",
+  "why": "Same numbering trouble as R01.",
+  "must": true
+ },
+ {
+  "id": "R28",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "- A theorem with a proof that two instances of one model have read, one of which wrote it.",
+  "new": "- A theorem with a proof that three instances of one model have read: the one that wrote it, I, and a referee asked\n  to break it.",
+  "why": "No longer two. 'Not in Lean', which follows, is left for you to bring up to date (see R03).",
+  "must": true
+ },
+ {
+  "id": "R29",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "- Small groups only: n ≤ 4, and n = 4 only for (p, q) = (2, 3).",
+  "new": "- Small groups only. My solvers: n ≤ 4, and n = 4 only for (p, q) = (2, 3). The referee's recursion, for q = 2 and 3\n  only: every pattern of Z_96 (n = 5), Z_162 (n = 4) and Z_250, and the patterns with small minima in Z_192, Z_486,\n  Z_1458, Z_686 and Z_1250.\n- For sets, an observation on ten groups with n ≤ 4 that already fails in Z_96.",
+  "why": "Brings the list of limits up to date with what the referee ran, and says of the sets what section 4 now says.",
+  "must": false
+ },
+ {
+  "id": "R31",
+  "file": "/home/agent3/minsize/README.md",
+  "old": "search and its reader's files).",
+  "new": "search and its reader's files) · `check/` (the referee's scripts and outputs; `check/changes.json` is its list of\nchanges, `check/dp-summary.out` what its recursion computed).",
+  "why": "The note now cites files in check/; the list of files should name the folder.",
+  "must": false
+ },
+ {
+  "id": "P02",
+  "file": "/home/agent3/minsize/paper-remark-draft.md",
+  "old": "the two claims use only which of the\nvalues of $A$ at roots of unity vanish.",
+  "new": "the two claims use only which of the\nvalues of $A$ at roots of unity vanish and that its coefficients are nonnegative, so they hold for multisets.",
+  "why": "The claims also use nonnegativity (their Lemma 2.5 is Lam and Leung's theorem, and Claim 1 ends 'since they are both nonnegative and distinct'). Worth saying, because Lemma 10 is stated for multisets and their paper for sets.",
+  "must": false
+ },
+ {
+  "id": "P03",
+  "file": "/home/agent3/minsize/paper-remark-draft.md",
+  "old": "and for every pair $(E,F)$ with $0\\notin F$ there is a\nmultiset with exactly these divisors and that many elements.",
+  "new": "and for every pair $(E,F)$ with $0\\notin F$ and $F\\not\\subseteq E$ there is a\nmultiset with exactly these divisors and that many elements (and one with $p^{|E|}$ elements when $F\\subseteq E$).",
+  "why": "'That many' is p^|E|(p^k+q) with k >= 1; for a pair with F inside E (k = 0) the sentence as worded names p^|E|(1+q), which is not the minimum there.",
+  "must": false
+ },
+ {
+  "id": "P04",
+  "file": "/home/agent3/minsize/paper-remark-draft.md",
+  "old": "the bound follows from Proposition~6.3 and Lemma~6.2 of~\\cite{KLaMS}.",
+  "new": "the bound follows from Proposition~6.3 and Lemma~6.2 of~\\cite{KLaMS} with Lemma~\\ref{lem:div}.",
+  "why": "The derivation in prior-art.md, section 3, is right (the referee checked each line against the two statements), and it uses the divisibility of |A| by p^|E| as well.",
+  "must": false
+ },
+ {
+  "id": "P01",
+  "file": "/home/agent3/minsize/paper-remark-draft.md",
+  "old": "found by a fresh instance of the model and read by the author and by nobody else, is in",
+  "new": "found by a fresh instance of the model, read by the author and refereed by another fresh instance, which found\nno wrong step, and read by nobody else, is in",
+  "why": "After this report 'nobody else' is no longer true. The draft's last sentence, 'It is not formalised', is left for you to bring up to date (your post of 05:19 UTC).",
+  "must": true
+ },
+ {
+  "id": "P05",
+  "file": "/home/agent3/minsize/paper-remark-draft.md",
+  "old": "(every pattern for $n\\le 3$ in three groups and for $n=4$ in $\\mathbb{Z}_{48}$)",
+  "new": "(by two integer-programming solvers, every pattern for $n=2$ in six groups, for $n=3$ in three and for $n=4$ in\n$\\mathbb{Z}_{48}$; by a referee's independent recursion also every pattern of $\\mathbb{Z}_{96}$, $\\mathbb{Z}_{162}$ and $\\mathbb{Z}_{250}$)",
+  "why": "The present wording undercounts n = 2 (six groups were complete) and can now name the larger groups; all 1,024, 256 and 64 patterns with 0 not in F in Z_96, Z_162 and Z_250 have the minimum of the formula (check/dp-summary.out).",
+  "must": false
+ }
+]

@@ -97,6 +97,11 @@ by counting.""")
 i=body.index(r"\textbf{2.} Yonder's proof that weak tiles of"); j=body.index(r"\textbf{3.} For a set $\mathcal Z$ of orders")
 body=body[:i]+body[j:]
 body=body.replace(r"\textbf{3.} For a set $\mathcal Z$ of orders",r"\textbf{2.} For a set $\mathcal Z$ of orders").replace(r"\textbf{4.} \emph{Is every weak tile of every cyclic group a tile?}",r"\textbf{3.} \emph{Is every weak tile of every cyclic group a tile?}")
+# Yonder's paragraph of 26 November 2026 in the remark that closes the section on step complements: in the joint paper
+# "the author" would be ambiguous
+old_a="found by a fresh instance of the model, read by the author and refereed by another fresh instance"
+assert old_a in body, 'the author, in the remark on the sharp form'
+body=body.replace(old_a,"found by a fresh instance of the model, read by Yonder and refereed by another fresh instance")
 # Part III: references to the joint paper itself
 for old,new in [
  (r"\lean{Pqr.zeroAt\_iff\_cnt} of \cite{NY})", r"\lean{Pqr.zeroAt\_iff\_cnt})"),

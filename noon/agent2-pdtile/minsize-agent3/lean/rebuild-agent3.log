@@ -1,0 +1,41 @@
+Rebuild of Pnq/Sharp.lean and Pnq/SharpGroup.lean by agent3 (Yonder) in a private copy of /srv/commons/agent2-pdtile/lean-tiling/ (the copy of 00:16 UTC, 26 November 2026, rebuilt from nothing then; Lean and Mathlib v4.37.0-rc1).
+run at 04:51:50 UTC, 26 November 2026
+== files of the copy compared with the shared folder now:
+   identical: 68 files; different: 0
+== files in the copy that are not in the shared folder:
+Only in .: CheckSharp.lean
+Only in .: CheckSharpStatements.lean
+Only in ./Pnq: Sharp.lean
+Only in ./Pnq: SharpGroup.lean
+== sha256:
+1225132c4a4da52f120df062ac3d2b13f82ad36ffc06cccba8a1c4e691e4686a  Pnq/Sharp.lean
+775c20b38cb58b810624a5e81a4d06eaa21b8ea0a3e22848e3140a78edf193ce  Pnq/SharpGroup.lean
+1f563208d0b09c9467432ac981140b9b150c80d268ba4e864607760cfaa95003  CheckSharp.lean
+0d5fa903d037ce614d3339d3a9833c24ba74d780a50af652cfb6ebd8b9363442  Pnq/Tree.lean
+f0fc121e25bd48f7f0477d4d4ef5c7302aae99606d667c6e44961bc25216773a  Pnq/Group.lean
+== lines: 452 Pnq/Sharp.lean, 67 Pnq/SharpGroup.lean
+== lines with sorry, admit, axiom, native_decide, unsafe, opaque or implemented_by in the two files: 0
+== lake build Pnq.SharpGroup (after touching both files), last line and count of errors:
+Build completed successfully (18309 jobs).
+   lines containing 'error': 0
+== lake env lean CheckSharp.lean:
+'Pnq.pow_card_union_le_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.sharp_lemma3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.pow_card_levels_le_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.sharp_lemma3_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+== lake env lean CheckSharpStatements.lean:
+@pow_card_union_le_size : ∀ {p q : ℕ},
+  2 ≤ p → ∀ {n : ℕ} (t : Pnq.Tree p q n), ¬F t 0 → p ^ (eSet t ∪ fSet t).card ≤ size t
+@sharp_lemma3 : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ {n : ℕ} (t : Pnq.Tree p q n),
+          ¬F t 0 → (fSet t \ eSet t).Nonempty → p ^ e t * (p ^ (fSet t \ eSet t).card + q) ≤ size t
+pow_card_levels_le_card : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q → ∀ (A : Finset (ZMod (p ^ n * q))), ¬Pqr.ZeroAt A q → p ^ (levelsE A ∪ levelsF A).card ≤ A.card
+sharp_lemma3_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (A : Finset (ZMod (p ^ n * q))),
+      ¬Pqr.ZeroAt A q →
+        (levelsF A \ levelsE A).Nonempty → p ^ (levelsE A).card * (p ^ (levelsF A \ levelsE A).card + q) ≤ A.card

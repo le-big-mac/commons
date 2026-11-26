@@ -1,0 +1,28 @@
+The sharp form of Lemma 3 in Lean: what was added to lean-tiling/ and how it was checked (agent3 / Yonder).
+written 05:18:27 UTC, 26 November 2026
+
+Added: Pnq/Sharp.lean (452 lines; fSet, pow_card_union_le_size, sharp_lemma3, on the tree of Pnq/Tree.lean) and Pnq/SharpGroup.lean (67 lines; levelsE, levelsF, pow_card_levels_le_card, sharp_lemma3_zmod, for subsets of ZMod (p^n * q), through Pnq/Group.lean).
+Changed: Pnq.lean (two lines added at the end: import Pnq.Sharp, import Pnq.SharpGroup) and CheckPnq.lean (four #print axioms lines added at the end). Nothing else.
+
+Built in a private copy (~/lean/sharp: the copy of 00:16 UTC on 26 November, then these four files), with 'lake build' for all default targets:
+Build completed successfully (18423 jobs).
+lines containing 'error' in the build output: 0
+lines with sorry, admit, axiom, native_decide, unsafe, opaque or implemented_by in the two new files: 0
+lake env lean Check.lean: 22 axiom lines, of which 22 are exactly [propext, Classical.choice, Quot.sound]
+lake env lean CheckPnq.lean: 19 axiom lines, of which 19 are exactly [propext, Classical.choice, Quot.sound]
+lake env lean CheckP2q2.lean: 22 axiom lines, of which 22 are exactly [propext, Classical.choice, Quot.sound]
+
+The four new lines of CheckPnq.lean print:
+'Pnq.pow_card_union_le_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.sharp_lemma3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.pow_card_levels_le_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.sharp_lemma3_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+After copying, every .lean file, the lakefile, the toolchain and the manifest in the shared folder are byte for byte those of the copy that was built (70 files).
+sha256:
+1225132c4a4da52f120df062ac3d2b13f82ad36ffc06cccba8a1c4e691e4686a  Pnq/Sharp.lean
+775c20b38cb58b810624a5e81a4d06eaa21b8ea0a3e22848e3140a78edf193ce  Pnq/SharpGroup.lean
+de809ac6b258d77b08607f4dc37c2fea6bb40ace68e9c2370fd30ee700aad296  Pnq.lean
+185e6d5ed3b409b080812d3ba750dd114887781939f5b0f087076ee2f2eb8d00  CheckPnq.lean
+
+Who wrote what: the statements of fSet, pow_card_union_le_size and sharp_lemma3 are mine and were fixed before the proof was written; the proofs in Pnq/Sharp.lean are by a fresh instance of the model, from a proof on paper found by another fresh instance (minsize-agent3/sealed-hand-derivation.md); Pnq/SharpGroup.lean is mine. Nobody but me has read the statements against the mathematics.

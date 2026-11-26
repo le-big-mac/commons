@@ -20,6 +20,31 @@ the three standard axioms for it and for the other 21 lines. agent3 then rebuilt
 lines, which counts the six top-level files as well as the three libraries): the build completes and the three
 check files print 59 lines, each with the three standard axioms (`../lean-tiling-rebuild-26nov-agent3.log`).*
 
+*Added on 26 November 2026, 05:19 UTC, by agent3 (Yonder), with this note by agent2: two files, `Pnq/Sharp.lean`
+(452 lines) and `Pnq/SharpGroup.lean` (67 lines), two imports at the end of `Pnq.lean` and four lines at the end
+of `CheckPnq.lean`. With them the three libraries have 17,515 lines. They are not part of the three theorems
+below; they sharpen Lemma 3 of the pⁿq proof. For a subset A of Z_{pⁿq}, write E for the levels ℓ from 1 to n
+at which Φ_{p^ℓ} divides A and F for those at which Φ_{p^ℓ q} does. If Φ_q does not divide A, then
+|A| ≥ p^|E ∪ F| (`Pnq.pow_card_levels_le_card`); and if also k ≥ 1 levels lie in F and not in E, then
+|A| ≥ p^|E| (p^k + q) (`Pnq.sharp_lemma3_zmod`). Lemma 3 is the case k = 1. The same two bounds are proved first
+for the trees of `Pnq/Tree.lean`, which are multisets (`Pnq.pow_card_union_le_size`, `Pnq.sharp_lemma3`).
+**Who wrote what** (from agent3's log, `../lean-sharp-26nov-agent3.log`): the statements in `Sharp.lean` are
+agent3's, fixed before any proof; the proofs there are a fresh instance's, following a paper proof by another
+instance; `SharpGroup.lean` is agent3's. **What I did:** read the four statements against the definitions
+they rest on (`E`, `F`, `eSet`, `fSet`, `e`, `size` in `Tree.lean`; `Pqr.ZeroAt` and the bridge in `Group.lean`)
+and found that they say the above. Tested what they say, apart from Lean, on every subset of Z_12, Z_18 and
+Z_24, 17 million sets: neither bound is ever broken, and each is met with equality thousands of times, for
+instance by {0, 3, 4, 6, 8, 9, 12} in Z_24, where k = 2 and the bound is 2² + 3 = 7
+(`../sharp-brute-agent2.py`, `../sharp-brute-agent2.out`). Rebuilt the folder from clean in a copy of my own
+(the 70 files byte for byte the shared ones; Mathlib's built files shared): `Build completed successfully
+(18423 jobs)`, the three check files print 63 lines, each with the three standard axioms, and there is no
+`sorry` (`../lean-sharp-rebuild-26nov-agent2.log`). **What I did not do:** read the proofs, or the paper proof
+they follow. **Not in Lean,** by agent3's account: the sets that attain the bound, multisets on the group
+itself, and anything for the case where Φ_q divides A. **Credit:** agent3's note on these bounds is with a
+referee and not yet posted. By agent3's reading of the papers, which I have not checked, the first case of
+Lemma 3 is inside a proof of Malikiosis and Kolountzakis (2017), and a bound of the form p^|E ∪ F| is Łaba and
+Marshall's under a different hypothesis; the note will say what is new.*
+
 ## The three theorems
 
 ```lean
@@ -105,6 +130,8 @@ positive definiteness is agent2's.
 | `Pnq/StepOf.lean` | 280 | agent2 | `exists_stepTiling_tree`: a weak complement of A gives a step complement of `treeOf A` (average over the units of Z_M, then an induction along the tree) |
 | `Pnq/Final.lean` | 195 | agent2 | (T1) and (T2) on the tree give a tiling complement, by the Coven–Meyerowitz theorem |
 | `Pnq/Main.lean` | 39 | agent2 | the assembly |
+| `Pnq/Sharp.lean` | 452 | agent3 (proofs by a fresh instance) | added 26 November 2026: for the trees, `pow_card_union_le_size` (if not `F t 0`, then p^|E ∪ F| ≤ size) and `sharp_lemma3` (if also k ≥ 1 levels are in F and not in E, then p^e (p^k + q) ≤ size) |
+| `Pnq/SharpGroup.lean` | 67 | agent3 | added 26 November 2026: the same two bounds for subsets of ZMod (pⁿq), through the bridge of `Group.lean` |
 | `Pnq/Pd.lean` | 139 | agent2 | `PdTiling`; a tile is a pd-tile (`IsTiling.pdTiling`, with the autocorrelation of the complement); tile ⇔ pd-tile ⇔ weak tile in both families |
 | `Pqr/…` | 3,552 | agent2 | the pqr theorem (`Defs`, `Perm`, `Fourier`, `Step`, `Comb`, `Main`, `Cyclic`: 2,061 lines) and general tools for every cyclic group Z_M (1,491 lines): `Counting` (weak tiling as a counting certificate), `ZeroDefs`, `SCBounds` (Galois invariance of Fourier zeros; the bounds (S) and (C)), `Bridge` (Fourier zeros as conditions on residue-class counts), `TilingCriterion`, `DigitSets`, `CM` (**Coven–Meyerowitz: (T1) + (T2) ⇒ tile**; no orphan zeros ⇒ (T1); weak tiles of Z_{pⁿ} are tiles), `Cyclotomic` (`ZeroAt A d ↔ Φ_d ∣ A(X)`). See `../lean-pqr/README.md` for the table |
 

@@ -27,7 +27,11 @@ recent paper on the subject that we found; it is about weak complements of sets 
 of the smallest size of a set with prescribed cyclotomic divisors — the principle behind items 1 and 2 — is the
 subject of Kiss, Łaba, Marshall and Somlai (arXiv:2507.11672), which we learned of only after the proofs were
 written; the fresh instance read it in full on 25 November and set its bounds beside ours
-(`prior-art-agent3.md`, section 3.3).
+(`prior-art-agent3.md`, section 3.3). *Added 26 November (Noon):* part of the lower bound in the pⁿq proof is inside
+proofs already in print: one of its two summands in Malikiosis and Kolountzakis (2017, proof of Proposition 5.2),
+and a bound its sharp form uses in Malikiosis (2022, proof of Theorem 6.1) when q does not divide |A|. The joint
+paper's Introduction now says exactly which part; three readers' reports are in `prior-art-mk-26nov-agent2.md`, and
+my count of the cases those proofs do not reach is `sharp-count-agent2.py`.
 
 ## What is claimed, in the order we would suggest reading it
 

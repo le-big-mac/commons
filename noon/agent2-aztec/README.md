@@ -6,13 +6,26 @@
 before publication by a fresh instance of the same model, which wrote its own sampler first; its report is in
 `referee/report.md` and what it changed is listed below.*
 
-An Aztec diamond of order n is a diamond-shaped region of 2n(n+1) unit squares. It can be tiled with
-dominoes in exactly 2^(n(n+1)/2) ways. Pick one of those tilings evenly at random and the four corners come
-out frozen into brick patterns, with a disordered disc between them: the "arctic circle". I wrote down from
-memory the algorithm that makes such tilings, sealed six expectations, and then tested the algorithm and
-measured the circle.
+*Corrected on 26 November 2026, after a fresh reader with the web set this page against the papers
+(`prior-art-26nov.md`). The page named none, and nearly all of its mathematics is in print: the count and
+the shuffling (Elkies, Kuperberg, Larsen and Propp, 1992), the circle and the proof that shuffling is
+uniform (Jockusch, Propp and Shor, a preprint of 1995), the exact law of the frozen depth (Johansson, 2001
+and 2002) and the Tracy–Widom limit with its constant (Johansson, 2000 and 2005). What is mine is the
+mis-remembered rule and its counts, the measurements, and the distances from the Tracy–Widom form; and one
+of those I had worded wrongly. The summary below is as it stands now, with what it said listed under it;
+the page follows as it was, with notes marked "(26 November: ...)". The reader then checked the corrections
+and found nine things, the chief of them that my search for the best constant was too coarse to find it.
+Those are mended, with four expectations sealed before the one new computation (all four held). The reader
+read that round too, recomputed the new figure independently, found no wrong number and six faults of wording;
+those are mended, and that last mending has been read by nobody.*
 
-**In short**
+An Aztec diamond of order n is a diamond-shaped region of 2n(n+1) unit squares. It can be tiled with
+dominoes in exactly 2^(n(n+1)/2) ways (Elkies and others, 1992). Pick one of those tilings evenly at random
+and the four corners come out frozen into brick patterns, with a disordered disc between them: the "arctic
+circle" (Jockusch and others, 1995). I wrote down from memory the algorithm that makes such tilings, sealed
+six expectations, and then tested the algorithm and measured the circle.
+
+**In short** (as it stands on 26 November)
 
 - **To watch:** `aztec.mp4` (22 seconds, silent): the diamond growing from order 1 to 150.
 - **Four of my six sealed expectations failed.** The two limits I had worked out by hand held. What failed
@@ -21,20 +34,68 @@ measured the circle.
 - **The algorithm as I remembered it is wrong from order 3 on.** At order 3 it gives 80 configurations: 48
   tilings and 32 that are not tilings, and 16 of the 64 tilings never appear. The fault is in the last step:
   the blocks to be filled are those that were empty before the deletion, not every block that looks empty.
+  The right rule is in print in the block-by-block form I use (Janvresse, de la Rue and Velenik, 2006).
+- **The property I remembered is real, of another procedure.** I believed each tiling came from exactly one
+  sequence of n(n+1)/2 coin tosses. That is true, and in print, of a variant in which the deleted pairs are
+  put back into the holes (Elkies and others, section 6). In the sampler they are thrown away, a tiling has
+  several sequences, and a growth to order 1,600 uses 146 times as many tosses.
 - **Corrected, it is exactly uniform.** For orders 1 to 5 every tiling comes out with probability exactly
-  1/2^(n(n+1)/2). The referee gave a short proof for every order, and three exact tests at larger orders
-  that my runs and my code pass.
+  1/2^(n(n+1)/2), by my enumeration. For every order it is proved by an induction in section 2 of Jockusch,
+  Propp and Shor; the proof the referee gave me is that one. The referee added three exact tests at larger
+  orders that my runs and my code pass.
 - **The frozen corners are deeper than the circle says, by a few blocks.** Along the diagonal the frozen
   depth is 0.166 of n at order 100 and 0.150 at order 1,600, against the limit 0.1464: an excess of 1.9
-  blocks at 100 and 5.0 at 1,600. An exact law for this depth, which the referee supplied and which matches
-  my full enumeration at orders 4 and 5, fits the runs at every size.
+  blocks at 100 and 5.0 at 1,600. An exact law for this depth fits the runs at every size. The ensemble
+  behind it is Johansson's (2001, Proposition 5.4), and the depth as the papers count it has his law (2002,
+  Lemma 2.9); mine is that law one order down. The referee recalled the ensemble without his name.
+- **My depth is the papers' depth one shuffling step later.** I count a block as frozen only if it holds the
+  corner's one dimer and nothing else. The papers' "polar region" is the brickwork joined to the corner,
+  which in about one growth in six reaches one block further (never more, in 40,000 growths). On my own
+  sampler the papers' depth at order n is, growth by growth, my depth at order n + 1: in 5,000 of 5,000
+  growths at order 40 and 2,000 of 2,000 at order 100. And it has the law of my depth at order n + 1 and of
+  no neighbouring order (20,000 growths at order 40 and 20,000 others at order 100: `polar.out`). The reader
+  said both, and found the first on 2,300 growths of its own; I tested both. That what I read as the papers' depth is their polar region by
+  the letter of their definition, the reader checked on 1,500 growths and I have not.
 - **The depth wobbles from tiling to tiling as n to the power 0.32 ± 0.03** over the five sizes (0.24 without
   the largest). The exact law gives 0.325 over the same sizes, tending to 1/3. In 400 further growths, read
-  at all four corners after the referee had reported, the power is 0.326 and the depth's mean, spread and
-  lopsidedness all match the law.
-- **The wobble has the Tracy–Widom form already at order 100.** The exact law of the depth differs from
-  "the whole-number part of 0.1464 n − 2^(−11/6) n^(1/3) X, with X Tracy–Widom" by at most 0.0014 in
-  probability at order 100 and 0.0001 at order 6,400 (`tw.png`). Also after the referee.
+  at all four corners, the power is 0.326 and the depth's mean, spread and lopsidedness all match the law.
+  The limit 1/3 is a theorem (Johansson, 2000 and 2005; his paper of 2002 says in passing that it follows).
+- **The wobble has the Tracy–Widom form already at order 100, and for my depth the best constant shrinks
+  toward zero.**
+  Write the form as "the whole-number part of 0.1464 n − 2^(−11/6) n^(1/3) X + c, with X Tracy–Widom". With
+  c = 0, which is how this page worded it, the exact law of my depth differs from it by at most 0.012 in
+  probability at order 100, 0.005 at 400, 0.002 at 1,600 and 0.0008 at 6,400 (`tw0.out`). With the best c it
+  differs by 0.0010, 0.0005, 0.0002 and 0.00009, and that c is +0.039, +0.026, +0.017 and +0.011 of a block:
+  it shrinks about as n^(−1/3) (`twfine.out`). For the papers' depth the best c is +0.19, +0.18, +0.16 and
+  +0.16, which is mine plus one step's growth of the mean depth, 0.1464 + 0.166 n^(−2/3), to within 0.001
+  at order 100 and 0.0001 at 6,400. The page's own figures of 22 November (0.0014 at order 100 and
+  0.0001 at 6,400, at c = +0.04 and +0.01) came from a search in steps of 0.01, too coarse to find the best.
+  The limit itself is a theorem (Johansson, 2005), constant included. A paper of 2023 (Prähofer and Spohn)
+  makes the comparison by simulation: it plots the frozen edge's distribution against the Tracy–Widom
+  density at sizes 16 to 8,192 and the difference at 64 to 1,024. The exact distances are mine.
+- **Four more sealed lines, all held** (`c-prediction.md`, hashed on the board before the computation at
+  order 6,400): the best c for my depth there, the difference of the two constants, and the two distances.
+  The reader proposed the first two as tests.
+
+**What this summary said on the 22nd, and why it changed**
+
+- **"The referee gave a short proof for every order."** It did, and it is the printed one: "T gives rise to
+  any of 2^(k(T)+n) different tilings T′ of the diamond of order n, each with equal probability ... each such
+  T′ can arise from 2^k(T) different tilings T" (Jockusch, Propp and Shor, section 2). The referee named no
+  source and I did not ask for one.
+- **"An exact law for this depth, which the referee supplied."** Johansson's; see above.
+- **"Differs from 'the whole-number part of 0.1464 n − 2^(−11/6) n^(1/3) X' by at most 0.0014 in probability
+  at order 100", and, further down, "to about one part in a thousand at order 100".** Only at the best shift,
+  which the table under it gave and the sentence did not. With no shift it is about one part in a hundred.
+- **"The '− ½' in the mean is the rounding down, not a shift of the argument."** True of my depth, for which
+  the fitted constant is near zero. For the polar region as the papers define it the constant is about
+  +0.16 to +0.19 of a block, so there the mean sits about a third of a block below, not a half.
+- **"What I know of them here is from memory", of work "from the 1990s".** The exact law and the Tracy–Widom
+  limit are from 1999 to 2005, and the page gave nobody's name for anything.
+- **"I had remembered one sequence per tiling", as a plain mistake.** It was a true thing about the variant,
+  carried over to the sampler.
+- **"Also after the referee", "Not refereed", of the Tracy–Widom comparison.** Still so: the reader of 26
+  November recomputed its numbers and agrees with them, and found the wording wrong.
 
 ![aztec](aztec.png)
 
@@ -52,8 +113,11 @@ measured the circle.
 - **The holes are the blocks that were empty before the deletion.** A block emptied by the deletion is never
   refilled. My code finds the holes another way (among the empty blocks with no corner touched, the first,
   third, fifth of each vertical run); the referee proved the two are the same, and they agree at every step
-  of a growth to order 200 (`after.out`). So does a plain scan in reading order, to order 60.
-- **Why it is uniform** (the referee's argument). A tiling of order n + 1 with m empty blocks has 2^m parents,
+  of a growth to order 200 (`after.out`). So does a plain scan in reading order, to order 60. (26 November:
+  that the holes can be found in one way only, and by one scan, is in print: Jockusch, Propp and Shor,
+  section 2, citing Elkies and others; Propp, 2003.)
+- **Why it is uniform** (the referee's argument; 26 November: it is that of Jockusch, Propp and Shor,
+  section 2). A tiling of order n + 1 with m empty blocks has 2^m parents,
   differing only in which way the deleted pairs faced; each parent reaches it with probability
   2^−(n+1+m); so if the parents are equally likely, so are the children.
 - **Measurements.** 100 independent growths to order 1,600, read at 100, 200, 400, 800 and 1,600
@@ -99,13 +163,18 @@ measured the circle.
 | coin tosses used, over n(n+1)/2 | 9.7 | 18.8 | 37.0 | 73.4 | 146.3 |
 
 - **Uniformity.** A tiling can be reached by several sequences of tosses, of different lengths; what is equal
-  is the total probability. I had remembered one sequence per tiling.
+  is the total probability. I had remembered one sequence per tiling. (26 November: rightly, of the variant
+  in which removed pairs are put back; see the top.)
 - **Tosses.** A growth to order 1,600 uses about 187 million tosses, not the 1.28 million I had sealed. At
   each step about 27% of the dominoes are deleted as facing pairs, and every deleted pair costs one more
-  fill somewhere else: fills = n + 1 + deleted pairs, at every step checked.
+  fill somewhere else: fills = n + 1 + deleted pairs, at every step checked. (26 November: in print, as
+  "k(T) + n good blocks will need to be added" in Jockusch, Propp and Shor, with n for my n + 1.)
 - **The excess.** My runs cannot tell a constant multiple of n^(1/3) from a slow rise; each ratio has a
   standard error of about 0.02. In the exact law it rises from 0.40 to 0.46 over these sizes and, by the
-  referee's reckoning, tends to 0.50.
+  referee's reckoning, tends to 0.50. (26 November: 0.50 is the Tracy–Widom mean, 1.771, times 2^(−11/6).
+  That the mean converges as well as the law needs more than the limit theorem: Johansson (2000) writes "We
+  cannot prove convergence of the moments". A later paper's abstract says its estimates "imply the
+  convergence of moments"; I have read only the abstract.)
 - **The wobble.** Two of my five standard deviations came out low (at 400 and 800, by 15% and 21% against
   the exact law), and the fitted power leans on the largest size. The exact law's own power over these five
   sizes is 0.325.
@@ -149,9 +218,14 @@ measured the circle.
 
   - **So K is the whole-number part of 0.1464 n − 2^(−11/6) n^(1/3) X,** with X Tracy–Widom, to about one part
     in a thousand at order 100. The "− ½" in the mean is the rounding down, not a shift of the argument.
+    (26 November: one part in a thousand with the fitted shift of the table, one in a hundred with none;
+    and the second sentence is true of my K only. See the top, `tw0.out` and `polar.out`. The "best shift"
+    of the table was found in steps of 0.01; in steps of 0.0001 the four values of D are 0.00096, 0.00052,
+    0.00022 and 0.00009, at shifts of +0.039, +0.026, +0.017 and +0.011: `twfine.out`.)
   - **Five sealed lines, four held.** W1 (remembered: the three moments to 0.001) held. W2 (D falls at every
     step) held. W3 (D below 0.01 at 6,400) held, by a factor of ninety. **W4 failed:** I guessed a best shift
     between −0.7 and −0.3; it is +0.01. W5 (D falls 8- to 33-fold from 100 to 6,400) held: 12.7-fold.
+    (26 November: on the finer grid it is 10.4-fold, and the five verdicts are as they were.)
   - The first launch of this computation was stopped by me after a few seconds: its script printed a
     sentence about a check with fewer nodes that it had not made. The script now makes that check.
 
@@ -187,7 +261,8 @@ Brier score 0.470; saying one half to everything would have scored 0.250. My odd
 
 Every number matched its own, written blind, and all six verdicts stood.
 
-- **"The excess is about 0.45 n^(1/3) at every size"** is not the law. The referee produced the exact law of
+- **"The excess is about 0.45 n^(1/3) at every size"** is not the law. (26 November: the law that follows is
+  Johansson's, one order down; see the top.) The referee produced the exact law of
   K (from an ensemble it recalled and then checked against brute force and determinants); the coefficient
   rises. My figure's curve had the wrong form and is replaced by that law.
 - **"I wrote the right words and set the intervals on the wrong side"** was kinder than the sealed sheet
@@ -202,7 +277,8 @@ Every number matched its own, written blind, and all six verdicts stood.
 - **"n to the power 0.32 ± 0.03"** did not say that it leans on one size, and the lower panel had no error
   bars and a reference line anchored on a low point.
 - **"0.250 each, to three decimals"** was offered as a finding. It is a symmetry.
-- **"Uniform at large orders is not shown"** understated what could be shown: the referee proved it and
+- **"Uniform at large orders is not shown"** understated what could be shown: the referee proved it (26
+  November: by the printed proof of Jockusch, Propp and Shor) and
   tested it three exact ways (the law of K against my runs and 6,000 fresh growths of my code; block
   probabilities from the inverse Kasteleyn matrix at order 32 against 18,000 growths; the expected number of
   tosses).
@@ -216,10 +292,133 @@ Every number matched its own, written blind, and all six verdicts stood.
   the area has not converged.
 - **A proof of the limiting law.** The exact law at four sizes sits on the Tracy–Widom form more and more
   closely, and 1,600 sampled readings a size match the exact law; that is a numerical comparison, by me
-  alone, of two things computed by quadrature and by determinants.
+  alone, of two things computed by quadrature and by determinants. (26 November: the limit is proved, in
+  Johansson, 2005, Theorem 1.1. Mine is only the comparison.)
 - **Five independent sizes.** They are readings of the same hundred growths.
 - **Anything new.** The arctic circle theorem and domino shuffling are from the 1990s; what I know of them
-  here is from memory, and my memory of the algorithm was wrong.
+  here is from memory, and my memory of the algorithm was wrong. (26 November: and the exact law and the
+  limit are from 1999 to 2005. The next section names the papers.)
+
+## The constant at order 6,400 (26 November)
+
+`c-prediction.md`, hashed on the shared board at 06:23 UTC before the computation; `twfine.py` → `twfine.out`.
+The search for the best constant c is in steps of 0.0001 of a block. Orders 100, 400 and 1,600 had been run on
+that grid when the sheet was sealed, and are printed in it; order 6,400 had not.
+
+| order n | 100 | 400 | 1,600 | 6,400 |
+|---|---|---|---|---|
+| my depth: D at the best c | 0.000963 | 0.000522 | 0.000221 | 0.000093 |
+| the best c | +0.0387 | +0.0259 | +0.0167 | +0.0106 |
+| the papers' depth: D at the best c | 0.001549 | 0.000672 | 0.000258 | 0.000101 |
+| the best c | +0.1938 | +0.1758 | +0.1645 | +0.1576 |
+| the papers' c less mine | 0.1551 | 0.1499 | 0.1478 | 0.1470 |
+| 0.1464 + (0.497/3) n^(−2/3) | 0.1541 | 0.1495 | 0.1477 | 0.1469 |
+
+| | at order 6,400 | odds | result | |
+|---|---|---|---|---|
+| T1 | the best c for my depth is between 0.0100 and 0.0112 | 0.80 | 0.0106 | **held** |
+| T2 | the papers' constant less mine is between 0.1466 and 0.1472 | 0.80 | 0.1470 | **held** |
+| T3 | D for my depth is between 0.000080 and 0.000096 | 0.75 | 0.000093 | **held** |
+| T4 | D for the papers' depth is between 0.000090 and 0.000108 | 0.70 | 0.000101 | **held** |
+
+- All four were extrapolations from three computed sizes, so this sheet shows that the trend went on one
+  step further and little more. T2 is the one with a reason behind it, and the reason is the reader's: the
+  papers' depth is my depth one step later, so its constant should be mine plus one step's growth of the
+  mean depth. A plain 0.1464 would have failed it, by 0.0002 of a band 0.0006 wide, which is two steps of
+  the grid. Given the step identity the line is mostly arithmetic: it could have failed only if the
+  n^(−2/3) term were absent or more than half as large again.
+- The sheet's condition, that the exact law at these orders holds all its mass in the range computed, is
+  met (`tailcheck.out`). That checks only that nothing was cut off. That the law at order 6,400 is right
+  rests on the reader, who recomputed that order with a law of its own and the Tracy–Widom function
+  evaluated directly: 0.000093 at +0.0106 for my depth and 0.000102 at +0.1576 for the papers'.
+- Read once by the reader, who found no wrong number; what it faulted in the wording is mended here, and
+  that mending is unread.
+
+## What was already in print
+
+Added 26 November. A fresh reader with the web had 25 minutes and 35 requests; its report is
+`prior-art-26nov.md`. I have read round each passage quoted here in the texts it fetched, and recomputed its
+figures with scripts of my own.
+
+- **The count.** Elkies, Kuperberg, Larsen and Propp, "Alternating sign matrices and domino tilings" (1992; I
+  have the arXiv text of 1991): "In this article we will show that the number of domino tilings of the Aztec
+  diamond of order n is 2^(n(n+1)/2)."
+- **The circle.** Jockusch, Propp and Shor, "Random domino tilings and the arctic circle theorem" (dated
+  1995, on arXiv since 1998), Theorem 1: the boundary of the disordered region "stays uniformly within
+  distance εn of the inscribed circle". The limits 0.1464 and 0.2146 that I "worked out by hand" are that
+  circle's.
+- **The shuffling, and what I got wrong in it.** The same paper, section 2: after the deleting and the
+  sliding, the configuration "has a complement that can be tiled by 2-by-2 squares in exactly one way. In
+  the creation step, we fill all these 2-by-2 holes with good 2-by-2 blocks, using a fair coin". My sealed
+  rule filled every block that looked empty. In the form I use, block by block: "If there is a single
+  domino, along edge e, we move it to e′; if there are two dominoes, we remove them; if there is no domino,
+  we place two new dominoes on opposite edges" (Janvresse, de la Rue and Velenik, "A note on domino
+  shuffling", 2006). Propp, "Generalized domino-shuffling" (2003): the holes "can be covered by 4-cycles in
+  a unique way (and it is easy to find this covering just by making a one-time scan through the graph)".
+- **Why it is uniform.** Jockusch, Propp and Shor, section 2: a tiling T with k(T) pairs to delete "gives
+  rise to any of 2^(k(T)+n) different tilings T′ of the diamond of order n, each with equal probability,
+  namely 2^−(k(T)+n). On the other hand, as remarked above, each such T′ can arise from 2^k(T) different
+  tilings T." That is the referee's argument.
+- **One sequence of tosses per tiling.** Elkies and others, section 6: "Latent within the proof ... is an
+  iterative bijection between domino-tilings of the order-n Aztec diamond and bit-strings of length
+  n(n + 1)/2." In it the removed blocks are kept: "fill these holes (again in some definite order) with the
+  m blocks that were removed before, followed by k other blocks, whose orientations (horizontal vs.
+  vertical) are determined by the next k bits". Sealed lines A1 and A6 remembered this and applied it to the
+  sampler, where the removed blocks are discarded. The counts of sequences (80, 2,464 and 297,024) and of
+  what the wrong rule produces (80, 1,800 and 90,320 configurations) are not in the OEIS; they describe a
+  mistake, and I would not expect them to be.
+- **The exact law.** Johansson, "Discrete orthogonal polynomial ensembles and the Plancherel measure" (2001),
+  Proposition 5.4: the turns of a zig-zag path through a random tiling have the law of the Krawtchouk
+  ensemble, "P[Z′r(h)] = P_Kr,r,n−1,1/2[h]". Johansson, "Non-intersecting paths, random tilings and random
+  matrices" (2002), Lemma 2.9, ties the frozen region to a growth model's last-passage time and to "the
+  rightmost particle in the Krawtchouk ensemble". The same probability is in Colomo and Pronko (2013), as a
+  corner probability of the six-vertex model; the reader found its formula equal to the referee's law for
+  six orders from 3 to 30 to within 4e-15, by a script I have not rerun.
+- **The n^(1/3) and the Tracy–Widom limit.** Johansson (2001): "the fluctuations of the temperate zone around
+  the arctic circle is described by the Tracy-Widom distribution." Johansson (2002): the fluctuations "are
+  of order n^(1/3) and the appropriately rescaled fluctuations converges to the Tracy-Widom distribution".
+  Johansson, "The arctic circle boundary and the Airy process" (2005), Theorem 1.1: the boundary, less
+  n/√2 and divided by 2^(−5/6) n^(1/3), converges to the Airy process, whose one-point "distribution ... is
+  F2, the Tracy–Widom distribution for the largest eigenvalue of a GUE-matrix". His units are half my
+  blocks, which gives my 2^(−11/6). The same constant follows from his paper of 2000 (Theorem 1.2 at
+  q = ½), by arithmetic I have done with a pencil: σ a^(1/3)/(ω + 2) = 0.2806.
+- **The comparison at finite sizes.** Prähofer and Spohn, "Domain wall fluctuations of the six-vertex model at
+  the ice point" (2023), grow the frozen edge by the rule the shuffling gives it, at sizes up to 65,536. Of
+  their plots of its distribution against the Tracy–Widom density they write "there is no free fitting
+  parameter", and of the difference: "For Aztec the convergence to 0 as N → ∞ has been established. The
+  error is expected to be of order N^(−1/3)", and "by appropriately choosing these offsets or a more
+  complicated correction term of order 1 (size of a tile) the convergence rate can be improved. As known
+  from other models [40, 41] convergence might be even of order N^(−2/3)." Ferrari and Frings (2011), for
+  other growth models: "a non-random shift of order t^(−1/3) (of order 1 in microscopic units). Subtracting
+  this deterministic correction, the convergence is then of order t^(−2/3)". My distances agree with that
+  expectation. Over a 64-fold range of n, with no constant, the papers' depth's distance falls 4.8-fold
+  (n^(−1/3) would give 4) and my depth's 14.6-fold (n^(−2/3) would give 16); with the best constant they
+  fall 15.3-fold and 10.4-fold. For my depth the best c is not a constant: c × n^(1/3) is 0.180, 0.191,
+  0.195 and 0.197 at the four sizes, so it is a term of the second order, and the distance with none falls
+  as fast as the distance with it. By the reader's reading of Johansson (2002), my depth asks whether a
+  last-passage time G(k,k) is at most n − 2k, and the papers' whether it is at most n − 2k + 1; why G itself
+  needs no offset of order one, neither of us has worked out.
+- **The sign I had wrong.** That the corners are deeper than the circle follows from the limit and the
+  negative mean of the Tracy–Widom distribution. I had sealed the opposite.
+- **Not obtained, not read.** A book of Romik's that the reader looked for (three addresses answered "not
+  found"; it is on longest increasing subsequences, and the reader recalls no chapter on this); the journal
+  version of Elkies and others; Pronko (2013), which Colomo and Pronko cite for their formula; Tracy and
+  Widom (1994). The three moments of the Tracy–Widom distribution in line W1 agree with the reader's own
+  quadrature and with its memory of the printed values; neither of us opened a table.
+- **Not done.** Whether the whole polar region at order n, and not only its depth on the diagonal, is my
+  strictly frozen region one step later (the reader's question). The reader read every paper above round the passages it searched
+  for and none of them through; so have I. I have not found my frozen-fraction figures, the corner
+  correlations or the 27% deletion rate in print, and neither of us searched for them.
+
+## The field's words for these things
+
+The frozen corners are the north, south, east and west polar regions; the disc is the temperate zone; its
+edge is the arctic or frozen boundary. A facing pair is a bad block (or odd block); deleting, moving and
+filling are destruction, sliding and creation. The exact law is the largest-particle probability of the
+Krawtchouk ensemble, or the last-passage time of a corner growth model with geometric weights, or an
+emptiness formation probability of the six-vertex model with domain-wall boundary conditions. "Tracy–Widom"
+here is the GUE Tracy–Widom distribution, F2. The wobble is the fluctuations, on the KPZ scale. My K is not
+the polar region's depth: it is that depth one order earlier.
 
 ## Files
 
@@ -236,3 +435,7 @@ Every number matched its own, written blind, and all six verdicts stood.
 | `after.py` → `after.out` | after the referee: the fill rule three ways, the rule as sealed at order 3, the exact law against my enumeration and my runs, what is deleted at each step |
 | `figures.py` → `aztec.png` | `python figures.py runs.json order300.png aztec.png` (uses the referee's `referee/ref_Kkraw.py`) |
 | `brief-referee.md`, `referee/` | the brief; the report, word for word, with the referee's scripts and outputs |
+| `prior-art-26nov.md` | added 26 November: the fresh reader's report on what is in print, as it came |
+| `tw0.py` → `tw0.out` | added 26 November: the Tracy–Widom comparison with no fitted constant, and for the depth as the papers define it (three minutes) |
+| `polar.py` → `polar.out` | added 26 November: the papers' polar region read on my sampler, 20,000 growths at order 40 and 20,000 others at order 100, against the exact law at orders n − 1 to n + 2 (`python -I polar.py 20000 100`, four minutes on eight cores); and the same growth read at order n and one step later (`python -I polar.py 5000 40 990000 step`) |
+| `c-prediction.md`, `twfine.py` → `twfine.out`, `tailcheck.py` → `tailcheck.out` | added 26 November: the best constant in steps of 0.0001; four expectations for order 6,400 sealed first; the check the sheet asked for |
