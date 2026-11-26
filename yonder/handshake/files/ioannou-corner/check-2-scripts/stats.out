@@ -1,0 +1,67 @@
+Exact 95% intervals for a count of 30:
+    0 of 30:  0.0 to  3.5 runs of 30  (0% to 12%)
+    1 of 30:  0.0 to  5.2 runs of 30  (0% to 17%)
+    9 of 30:  4.4 to 14.8 runs of 30  (15% to 49%)
+   20 of 30: 14.2 to 24.8 runs of 30  (47% to 83%)
+   11 of 30:  6.0 to 16.8 runs of 30  (20% to 56%)
+    7 of 30:  3.0 to 12.7 runs of 30  (10% to 42%)
+   18 of 30: 12.2 to 23.2 runs of 30  (41% to 77%)
+   19 of 30: 13.2 to 24.0 runs of 30  (44% to 80%)
+   22 of 30: 16.2 to 26.3 runs of 30  (54% to 88%)
+    5 of 30:  1.7 to 10.4 runs of 30  (6% to 35%)
+Fisher exact, two-sided:
+   p = 2.6e-06   1% all-defect: 1 (sealed, string mutation) against 18 (after, the study's mutation)
+   p = 2.3e-05   1% all-defect: 1 (sealed) against the first reader's 16
+   p = 0.019   2% all-defect: 9 (sealed) against his 19
+   p = 0.78   4% all-defect: 20 (sealed) against his 22
+   p = 0.037   2% all-defect: 9 (sealed) against 18 (after)
+   p = 0.0008   4% all-defect: 20 (sealed) against 30 (after)
+   p = 0.052   0% all-defect: 0 (sealed) against 5 (after)
+   p = 0.012   sealed, all-defect 1% against 2%: 1 against 9
+   p = 0.0092   sealed, all-defect 2% against 4%: 9 against 20
+   p = 0.00032   handshake-led at 1%: 11 (sealed) against 0 at 0%
+   p = 0.4   handshake-led at 1%: 11 (sealed) against 7 at 2%
+   p = 0.0025   handshake-led at 1%: 11 (sealed) against 1 at 4%
+   p = 0.14   handshake-led at 1%: 11 (sealed) against 5 (after)
+   p = 0.77   2%: handshake 7 against all-defect 9, as two counts of 30
+the first reader's own run (elitist.json), runs led by the handshake at any of its three entry states:
+   newcomers mutated with chance 1.0: 0%: 0 of 30, 1%: 7 of 30, 2%: 8 of 30, 4%: 0 of 30
+   newcomers mutated with chance 0.64: 0%: 0 of 30, 1%: 9 of 30, 2%: 5 of 30, 4%: 0 of 30
+elite_after.json, handshake at any entry: 0%: 0, 1%: 5, 2%: 5, 4%: 0
+
+the sealed design twice (sealed seeds, fresh seeds): all-defect [0, 1, 9, 20] [0, 2, 9, 17] ; handshake at an entry state [0, 11, 7, 1] [0, 8, 4, 2]
+   the two batches against each other, all-defect: p = 1, 1, 1, 0.6
+   both batches together against his: 2%: 18 of 60 against 19 of 30, p = 0.0033; 4%: 37 of 60 against 22 of 30, p = 0.35
+   both batches together against the study's mutation at 1%: 3 of 60 against 18 of 30, p = 1.8e-08
+   handshake-led at 1%, both batches: 19 of 60, 95% interval 20% to 45%; at 2%: 11 of 60
+   ties broken at random: all-defect [0, 2, 0, 19]; against the sealed design's two batches together, p at 1%, 2%, 4% = 1, 0.00044, 1; against his 19 and 22: p = 5.3e-08, 0.58
+   matches played out once: all-defect [0, 0, 6, 8]; against the sealed design's two batches together, p at 1%, 2%, 4% = 0.55, 0.45, 0.0033; against his 19 and 22: p = 0.0014, 0.00066
+   exactly 200 rounds, exact: all-defect [0, 2, 3, 21]; against the sealed design's two batches together, p at 1%, 2%, 4% = 1, 0.038, 0.49; against his 19 and 22: p = 3.3e-05, 1
+   winner of the pair's game: all-defect [0, 7, 10, 23]; against the sealed design's two batches together, p at 1%, 2%, 4% = 0.014, 0.81, 0.24; against his 19 and 22: p = 0.038, 1
+   exactly one element: all-defect [0, 0, 8, 23]; against the sealed design's two batches together, p at 1%, 2%, 4% = 0.55, 0.81, 0.24; against his 19 and 22: p = 0.0089, 1
+   8% an element: all-defect [0, 0, 4, 23]; against the sealed design's two batches together, p at 1%, 2%, 4% = 0.55, 0.12, 0.24; against his 19 and 22: p = 0.00014, 1
+   12% an element: all-defect [0, 0, 5, 20]; against the sealed design's two batches together, p at 1%, 2%, 4% = 0.55, 0.21, 0.82; against his 19 and 22: p = 0.00048, 0.78
+
+all-defect commonest, by batch, exact payoffs: [[0, 1, 9, 20], [0, 2, 9, 17], [0, 0, 8, 23], [0, 0, 4, 23], [0, 0, 5, 20], [0, 2, 0, 19], [0, 7, 10, 23], [0, 2, 3, 21], [0, 1, 7, 23]]
+all-defect commonest, by batch, matches played out once: [[0, 0, 6, 8], [0, 1, 5, 13], [0, 1, 3, 13], [0, 0, 1, 14], [0, 0, 4, 16]]
+   2%: exact 55 of 270 (batches from 0 to 10); played out once 19 of 150 (batches from 1 to 6); exact against played p = 0.061; his 19 of 30 against exact p = 2.2e-06, against played p = 2.3e-08
+   4%: exact 189 of 270 (batches from 17 to 23); played out once 64 of 150 (batches from 8 to 16); exact against played p = 5.4e-08; his 22 of 30 against exact p = 0.83, against played p = 0.0025
+   mean payoff at 0%: exact batches 2.63 to 2.87; played out once 2.71 to 2.86
+   mean payoff at 1%: exact batches 2.01 to 2.63; played out once 2.45 to 2.61
+   mean payoff at 2%: exact batches 1.85 to 2.47; played out once 2.16 to 2.45
+   mean payoff at 4%: exact batches 1.39 to 1.61; played out once 1.61 to 1.99
+   cooperation falls at each step of the error rate in every batch: True
+   handshake at an entry state, by batch, at 1%: [11, 8, 6, 8, 7, 11, 5, 10, 2, 6, 8, 2, 10, 5, 9] ; at 2%: [7, 4, 10, 3, 3, 10, 2, 11, 7, 4, 6, 3, 13, 4, 8]
+
+ties broken at random, two batches: [0, 2, 0, 19] [0, 1, 5, 19] ; matches played out once, two batches: [0, 0, 6, 8] [0, 2, 3, 11]
+   ties at 2%: 5 of 60 against the sealed design's 18 of 60, p = 0.0046; against all eight batches with exact payoffs and the listed-first rule, 55 of 240 (batches [3, 4, 5, 7, 8, 9, 9, 10]), p = 0.011
+   ties at 4%: 38 of 60 against 37 of 60, p = 1
+   played out once at 4%: 19 of 60 against the sealed design's 37 of 60, p = 0.0017; against his 22 of 30, p = 0.00027
+   played out once at 2%: 9 of 60 against the sealed design's 18 of 60, p = 0.079; against his 19 of 30, p = 6.4e-06
+   all batches played out once, 4%: [8, 11, 13, 13, 14, 16] = 75 of 180; all batches with exact payoffs, 4%: [17, 19, 19, 20, 20, 21, 23, 23, 23, 23] = 208 of 300; p = 3.8e-09
+   all batches, 2%: played out once [1, 3, 3, 4, 5, 6]; exact [0, 3, 4, 5, 5, 7, 8, 9, 9, 10]; five times a pair 3
+   batches of the string scheme in all: 17 ; all-defect at 2% from 0 to 10 ; at 1% from 0 to 7 ; at 0%: [0]
+   handshake at an entry state at 1%, all batches: [2, 2, 3, 5, 5, 6, 6, 6, 7, 8, 8, 8, 9, 10, 10, 11, 11]
+   cooperation falls at each step in every batch: True
+   mean payoff at 4%: played out once [1.61, 1.72, 1.81, 1.85, 1.89, 1.99] ; exact [1.39, 1.45, 1.46, 1.46, 1.5, 1.5, 1.57, 1.61, 1.61, 1.61]
+   last generation only: same or fewer all-defect runs than over the last 100, every batch and rate: True

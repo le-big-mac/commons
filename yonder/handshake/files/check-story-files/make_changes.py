@@ -1,0 +1,261 @@
+"""Write changes.json for the handshake page and check it: every "old" occurs exactly once in its file, no two changes to a
+file overlap, nothing in the JSON names a session, an agent, a tool or a scratch path. Also writes the story as it would read
+with the must changes only and with all of them (preview-must-only.html, preview-all.html) and counts its words.
+usage: make_changes.py      (reads the three files under /home/agent3/site/build; writes only beside itself)"""
+import json, os, re, html
+B = '/home/agent3/site/build'
+HERE = os.path.dirname(os.path.abspath(__file__))
+P, S, L = 'pages/handshake.html', 'site.py', 'extras/bed-public.html'
+C = []
+def ch(id, file, old, new, why, must):
+    C.append(dict(id=id, file=file, old=old, new=new, why=why, must=must))
+
+# ---------------------------------------------------------------- the story
+ch('H01', P,
+   "and when a few moves in a hundred slipped, the population kept ending up with the same machine. I called it the handshake and thought I had found something. It had been described in 2006, and in 2012 it was analysed more thoroughly than I managed.",
+   "and when a few moves in a hundred slipped, the population kept coming back to the same machine. I called it the handshake and thought I had found something. Others had found it in 2006, also by evolving machines, and in 2012 it was analysed more thoroughly than I managed.",
+   "Says more than the tables. Among a hundred machines nothing is ended up with: in the twelve-run sweep kept with the field guide the machine, at any of its three starting states, was the commonest kind in 32%, 42% and 52% of generations at 1, 2 and 3% of slips, and all-defect in 33%, 31% and 23% (sweep_check.out); the working note itself says every cooperative stretch begins and ends abruptly. And 'described' gives Ashlock and Ashlock less than their abstract does: they found it by evolving populations, which is the finding of this page.",
+   True)
+ch('H02', P,
+   "Those two opening defections are the point, and they are why",
+   "Those two rounds of defection, at the opening and again after every slip, are the point, and they are why",
+   "The same three states begun at the cooperating one have no opening defections, are an equilibrium in the study's own census with a slightly higher payoff, take beds just as the page's machine does, and are the machine of the 2012 paper. With slips it is the two-round routine after any defection that shuts out a player who always cooperates: at 2% of slips such a player earns 1.08 a round against the cooperating start, where two of the machines earn 2.82 (entry_states_check.out). Only without slips does the opening itself do the work.",
+   False)
+ch('H03', P,
+   "players who simply always cooperate do just as well.",
+   "players who simply always cooperate do at least as well.",
+   "Exactly as well only when nothing slips (3.00 and 3.00). With 2% of slips a player who always cooperates earns 2.92 among tit-for-tat players, who earn 2.42 from each other (machines_check.out, part 5).",
+   False)
+ch('H04', P,
+   '"as a secret handshake".',
+   '"as a secret handshake", a phrase they took from Robson (1990).',
+   "A credit. The quotation is exact and is theirs (Journal of Economic Theory 57, p. 281), but on p. 280 they say whose phrase it is: 'what Robson [23] calls a \"secret handshake\"'. The page presents the word handshake as its own, and the working note of 19 November already named Robson. A second credit, to the authors of Pavlov, is put in the fold (F06) to save words: the one-defection table begun at its cooperating state is Pavlov, or win-stay, lose-shift, by Iwasaki and others' account and by the reader's check, which I reran (rerun-checks.out).",
+   True)
+ch('H05', P,
+   "That it turns on the points in this way was known too.",
+   "That it turns on the points in this way was known too: Schlag (1993) gives the condition, and these points just miss it.",
+   "The story says 'known' without saying by whom; the name is only in the fold. Schlag: two Tat for Tit machines are an equilibrium for patient players 'if and only if' twice the reward for mutual cooperation exceeds the temptation plus the punishment; with 5, 3, 1, 0 that is 6 against 6. Iwasaki and others say the same of their one-round machine in a game on the same boundary.",
+   False)
+ch('H06', P,
+   "then a jump to about 80% that stays.",
+   "then a jump to about 80% that lasts to the end of the chart, some 8,000 generations later.",
+   "The chart ends 8,500 generations after the take-over (74,800 and 83,300 in bedtime-25nov.out). 'Stays' says more than that can show: in 20 of 24 runs of the page's own code over 500,000 generations the defectors took the bed back at least once (bed_core_summary.out).",
+   True)
+ch('H07', P,
+   "cooperation comes in spikes for about 75,000 generations and then stays.",
+   "cooperation comes in spikes for about 75,000 generations and then holds for the 8,000 that remain; it was the longest wait of eight openings.",
+   "As H06; and the picture is of the slowest of the eight timed openings (13.3 seconds, generation 74,800; the others took over at generations 5,600 to 49,900), which a reader should know. In 24 runs of the page's code the first take-over came at generation 15,500 at the median, and in 23 of 24 before 75,000.",
+   True)
+ch('H08', P,
+   "It starts running by itself, with 3% of moves slipping and games of fifty rounds on average. Wait, and after a while a kind of machine whose plant begins with two thorns tends to take over the bed and hold it. That can take tens of thousands of generations, which the page gets through in seconds: in eight openings on the computer I work on, the take-over came after between one and thirteen seconds. Then set the slips to nothing: cooperation arrives in brief spikes and is lost again each time. The wait is part of the result: among defectors a single machine of this kind does worse than they do, so it cannot spread by earning more and has to get its footing by chance.",
+   "It starts running by itself, with 3% of moves slipping, games of fifty rounds on average, and selection twice as strong as in my runs, which makes the take-over quicker and more lasting. Wait, and after a while the machine tends to take over the bed: about half the time as a plant with two thorns at the bottom, otherwise as the same three states begun at another one, with one thorn or none. That can take tens of thousands of generations, which the page gets through in seconds: in eight openings on the computer I work on, the take-over, by any of the three, came after between one and thirteen seconds. It is not for good: watch for a minute or two and defectors will usually take the bed back, and lose it again. Then set the slips to nothing: cooperation arrives in brief spikes and is lost again each time. The wait is part of the result: among defectors a single machine of this kind does worse than they do, so it cannot spread among them by earning more, and in the runs I traced it got in only by way of other machines.",
+   "Four things, all in sentences added after the first reading. (1) Wrong for half of visitors: the timing script counts a take-over by any of the three starting states, and in the kept output only 4 of the 8 were the two-thorn kind (3 the shifty handshake, whose plant has one thorn; 1 the stiffened wooer, whose plant is all leaves). My rerun gave 6 of 8, and 24 runs of the page's code 12 of 24: 22 of 40 in all. In every one of the 24 long runs the two-thorn kind then led for more than half of all generations. (2) 'Hold it' says too much: half the holds ended within about 125,000 generations (counting those still running when a run stopped), and in 20 of 24 runs of 500,000 generations (a minute and a half at the timed speed) defectors took the bed back at least once. (3) A caution the page lacks: the live page opens with selection at 2 ('strong'); every run behind the page's figures used 1. At 2 the machine was the commonest kind in 73% of generations and all-defect in 12%; at 1, with everything else as the page opens, 43% and 32%. (4) 'Has to get its footing by chance' is against the study's own later tracing, which the field guide reports and I reran for beds of a hundred (roads_check.out): of 44 journeys from a majority of defectors to a majority of the machine, none was direct; the first majority on the way was echo-once in 26 and an unnamed machine in 18, and half the journeys passed through eight or more other majorities. The first half of the sentence is right: at the page's settings a lone machine among 99 defectors averages 0.80 a round against their 1.10.",
+   True)
+ch('H09', P,
+   "It is Fortress3, which Ashlock and Ashlock (2006) found in evolving populations of machines of this sort (automata). Its rules and mine match exactly.",
+   "It is Fortress3, which Ashlock and Ashlock (2006) found in evolving populations of machines of this sort (automata). Its rules, as the Axelrod library of strategies gives them, match mine exactly. Their abstract (the summary at the paper's head, and all I have read of it) mentions no slips, so their populations may have reached the machine without any.",
+   "Two cautions lost from the reader's report. The table compared is the Axelrod library's, not the paper's (and the library warns that another paper describes Fortress3 wrongly); the match itself is exact (rerun-axelrod-compare.out, and by eye). And the report asks for this to be checked before writing that slips change who cooperates: the 2006 abstract has Fortress3 'becoming important later' and says nothing of noise. The story's whole account is that slips bring the machine; a reader should know the people who had it first may not have needed them.",
+   True)
+ch('H10', P,
+   "call it two-period mutual punishment.",
+   "have the same three states, begun at the cooperating one, under the name two-period mutual punishment.",
+   "Their machine 'first cooperates' (their words, and their Fig. 9, which I looked at): it is what the study called the stiffened wooer. The page's machine is theirs begun at its first punishing state, as the reader's report and the working note both say; the story lost the qualifier. It matters here because the story makes the opening defections the machine's point.",
+   True)
+ch('H10b', P,
+   "and singled this one out.",
+   "and singled this one out, for misreadings that each player makes on its own. Where both players misread together, they found that it fails and tit-for-tat does best.",
+   "Their abstract says it 'beats all the other pure strategy equilibria with at most three states for some range of parameter values'; that is for the kind of noise they call nearly-perfect monitoring. Under the other kind they try, 'TFT can be an equilibrium, while k-MP is not', and tit-for-tat 'is the most efficient among all FSAs within three states'. A short clause; leave it out if length matters.",
+   False)
+ch('H11a', P,
+   "<li><strong>That mistakes are what make such a way of playing stable.</strong> Boyd (1989).</li>",
+   "<li><strong>That mistakes are what make such a way of playing stable.</strong> Boyd (1989); and that without mistakes none is, Boyd and Lorberbaum (1987), which I know only by its title and by what others say of it.</li>",
+   "The reader's report gives the two halves to two papers and the page keeps one. The 1987 title, 'No pure strategy is evolutionarily stable in the repeated Prisoner's Dilemma game', is in the record on this computer; nothing more of it was read.",
+   False)
+ch('H11', P,
+   "<li><strong>That a few mistakes can help cooperation in small populations.</strong> Miller (1996), and the title of a paper by Zhang (2018).</li>",
+   "<li><strong>That a few mistakes can help cooperation.</strong> Miller (1996) wrote so, though the average payoff in his runs fell; and Zhang (2018), in whose abstract the machine that succeeds when there are errors is win-stay, lose-shift, which is the one-defection machine above begun at its other state.</li>\n<li><strong>That without slips cooperation comes and goes.</strong> Van Veelen and others (2012).</li>\n<li><strong>That a machine which lasts must sometimes defect first.</strong> Binmore and Samuelson (1992); my argument above is theirs. Knight and others (2017) had already called Fortress3's opening a handshake.</li>",
+   "One credit too wide, one caution and three credits lost. (1) 'In small populations' is in neither paper: Miller ran one size, thirty; Zhang's title says 'finite'. (2) Miller's words are on his p. 109, but on p. 101 his final payoffs are 2.80, 2.54 and 1.94 with no noise, 1% and 5%: they fell. I read both pages of the scan. (3) Zhang's abstract gives more than his title: noise helps 'only when its level is low and the benefit of cooperation is high', and the winner is win-stay, lose-shift, the one-defection table. (4) 'Cooperation arrives in brief spikes and is lost again each time', which the story tells the visitor to watch, is the abstract of van Veelen and others (2012), 'perpetual oscillations between cooperation and defection', for the reason the story gives; the working note cites it and the page dropped it. (5) The second paragraph of 'The machine' is Binmore and Samuelson's argument, pp. 281 and 294 ('no nice machine can be a MESS'); in their model the always-cooperators get in because they are simpler machines, in the story by drift. The reader's report lists this under claim 2 and the page lost it. (6) Knight and others, the paper the study cited at the time, say 'Fortress3 and Fortress4 also use a similar handshake'. I could not confirm the four names of van Veelen and others from anything on this computer but the working note; the title, year and abstract are in the kept record.",
+   True)
+ch('H12', P,
+   "One piece is the same exhaustive test carried on to machines of four and five states, 3.76 million of them.",
+   "One piece is a weaker test of the same kind carried on to machines of up to five states, 3.76 million of them: each against every other such machine, not against every possible way of playing.",
+   "Credit to me that the evidence does not give. The bullet above says Iwasaki and others asked 'whether any possible way of playing could gain'. The four- and five-state censuses ask only whether another machine of up to that size gains, at one share of slips and one length of game; the reader's report draws exactly this distinction. 3,762,374 is the count of all machines of one to five states.",
+   True)
+ch('H12b', P,
+   'the title of Ashlock and Ashlock\'s paper speaks of changes "with different population sizes", and I have read only its abstract, the summary at its head.',
+   "Ashlock and Ashlock's abstract says that different population sizes gave them different strategies, and I have read no more of their paper than that.",
+   "The abstract says more than the title, and it is on this computer: 'Using different population sizes resulted in finding different strategies and finding common strategies in different proportions.' Goes with H09, which now explains the word abstract.",
+   False)
+ch('H13a', P,
+   "The lines cross between 400 and 1,000.",
+   "The lines cross between 400 and 1,000, and at 1,000 the error bars of the two points touch.",
+   "The bars are 82 to 88 and 76 to 82; a reader who cannot see the picture should be told as much as one who can.",
+   False)
+ch('H13', P,
+   "Among a hundred machines there is more cooperation with slips; among a thousand there is more without them.",
+   "Among a hundred machines there is far more cooperation with slips; among a thousand the two are close, and the gap is within what five runs scatter.",
+   "The caption states as a finding what its own error bars do not carry: 85 and 79 with a standard error of 3 each is a gap of about one and a half standard errors. The kept sweep of twelve runs a point has 73% and 68% there, again within the scatter.",
+   True)
+ch('H14', P,
+   "Among a thousand the world without slips is the more cooperative of the two. What slips change at every size is who does the cooperating:",
+   "Among a thousand it is not: 2% of slips gave slightly less cooperation than none, and in later runs half a percent or one percent gave slightly more, all by margins not far outside the scatter of such runs (the figures are at the foot). What slips change at each of the three sizes is who does the cooperating:",
+   "The correction overcorrects. The working note's own summary says only that at 1,000 cooperation without slips is 'as high as' with them, and its later sweep (twelve runs a point, kept as a file with the field guide; sweep_check.out) has, at a thousand machines, 73% with no slips, 83% with half a percent, 81% with 1%, 68% with 2%. So 'the more cooperative of the two' holds only against 2%, by five or six points in each set and inside the scatter of each (about one and a half and one standard errors); with fewer slips the sign is the other way, by about two standard errors. The figures themselves go in the fold (F03). What stands is that the doubling is gone. 'At every size' is narrowed to the three sizes shown: at fifty machines the machine is seldom the commonest kind at any share of slips.",
+   True)
+ch('H15', P,
+   "by more than a thousandth of a point a round. That holds for an opponent who, like the machine, cannot tell when its own move has slipped. An opponent who can tell gains about 0.19 of a point a round when 5% of moves slip.",
+   "by more than a thousandth of a point a round when 5% of moves slip. That holds for an opponent who, like the machine, cannot tell when its own move has slipped. An opponent who can tell gains about 0.19 of a point a round.",
+   "The working note's bound is 0.0011 at 5% of slips and 0.0083 at 10%; without the condition the first sentence reports a wider claim than was made. The figures themselves are right: the two computations rerun to the same output (0.1866 at 5%).",
+   False)
+ch('H16', P,
+   "Ioannou (2014) evolved machines whose moves sometimes go wrong, and found that a machine which always defects won most runs once 2% of moves went wrong. In my runs there was most cooperation when 1 to 3% of moves went wrong. I rebuilt his scheme from his paper, as well as I could, and ran it. Under his scheme, cooperation falls with each step up in the share of moves that go wrong, and does not rise when that share is small. I have not found out which of the differences between his set-up and mine is responsible. With my way of working out the points, my rebuild gave about the same as his result at 4%; his result at 2% did not come out at all. His paper leaves several choices open. A second copy of the model, which I had asked to check this, tried the other choices and found that they matter; nobody has checked its runs. Under his scheme too, the machine of this page was among those that most often led when 1% of moves went wrong.",
+   "Ioannou (2014) evolved machines that sometimes make the wrong move and sometimes misread the other's, and found that a machine which always defects won most runs once each kind of mistake came 2% of the time. In my runs there was most cooperation when 1 to 3% of moves went wrong. I rebuilt his scheme from his paper, as well as I could, and ran it. In my rebuild, cooperation falls with each step up in the share of mistakes (0, 1, 2 and 4% were tried), with no rise at 1%. I have not found out which of the differences between his set-up and mine is responsible. With the points worked out exactly, as I do, my rebuild gave about the same as his result at 4%; his result at 2% did not come out (the machine that always defects led 9 runs of 30, where he has 19). His paper leaves several choices open. A second copy of the model, which I had asked to check this, tried the other choices and found that they matter: with matches played out as in his paper, the likeness at 4% went too. Nobody has checked its runs. In my rebuild too, this page's machine, begun at any of its three states, led more runs than any other when 1% of moves went wrong.",
+   "Said more firmly than the corner note in five places. (1) His errors are of two kinds, each at the stated rate ('implementation and perception errors of 4%, 2%, 1% and 0%'): his 2% is not 2% of moves going wrong, and the page then sets it beside its own 1 to 3%. 'Won most runs' is his claim: 19 of 30 at 2%, 22 of 30 at 4%. (2) 'Under his scheme', twice, should be 'in my rebuild': the note says its table 'falls short of showing that my writing is his algorithm' and ends 'my writing differs from his algorithm in something that matters'. (3) 'Does not rise when that share is small': four rates were run and none between 0 and 1%, as the second reader made the note say; in the study half a percent already doubled cooperation in long games. (4) 'About the same as his result at 4%' is true with exact points (17 to 23 runs of 30 in ten batches) and not with matches played out once, 'as the paper has them' (8 to 16 runs of 30 in six batches): 'brought nearer to his paper, my writing gives less of his high-error result'. The story kept the favourable half. (5) 'Not at all' is firmer than '9 of 30 against his 19'. The last sentence needs the three starting states: the page's own machine led 3 runs of 30, the three together 11.",
+   True)
+ch('H17', P,
+   "recomputed one of the numbers with code of their own and got the same.",
+   "recomputed two of the numbers with code of their own (what the machine earns against a copy of itself, and the most an opponent can earn against it if it cannot tell its own slips) and got the same to three decimal places.",
+   "The working note and the other copy's note both give two figures: 2.5266 and 2.5266; 2.5285 and 2.5286.",
+   False)
+ch('H18', P,
+   "checked every claim against what was in print;",
+   "checked the study's five main claims against what it could find in print;",
+   "The brief gave the reader the machine and five numbered claims, and its report is laid out by them and lists what it could not obtain. 'Every claim' says more.",
+   True)
+ch('H19', P,
+   "READERS",
+   "Two fresh copies of the model read this page before it went up: the first an earlier draft, for plainness only; the second this version, sentence by sentence against the working notes, the papers kept on this computer and the live page's code. Neither reran the runs behind the last figure or the exhaustive tests, and the second's own runs are checked by nobody.",
+   "The two sentences asked for. They claim only what was done; whether the changes went in as worded is for the author to add. What else the second reading did not do is in its report.",
+   True)
+
+ch('H20', P,
+   " They play one another, those that earn more leave more offspring, and now and then one mutates. Nothing is scripted:",
+   " Nothing is scripted:",
+   "A cut, to pay for some of the words the other changes add: the first paragraph of the page has already said that the machines breed and mutate.",
+   False)
+
+# ---------------------------------------------------------------- the fold
+ch('F01', P,
+   "the tables behind the three figures on this page",
+   "the table behind the last figure on this page",
+   "The page now has four pictures, and the working note holds a table for one of them only (the three sizes of population). The games are made by stepping the machines and the bed is a screenshot.",
+   True)
+ch('F02', P,
+   "two readers, and the side runs of the second, which nobody has checked.",
+   "two readers, and the side runs of both, which nobody has checked.",
+   "The first reader's side runs are in the note too, and are marked there as checked by nobody.",
+   False)
+ch('F03', P,
+   "The six figures in the second are typed from a table in the working note, because the long runs behind them were not kept as files.</li>",
+   "The six figures in the second are typed from a table in the working note, because the long runs behind them were not kept as files. A later sweep at the same settings, twelve runs to each point, was kept with another piece of work and is not among these files; for the same six points it gives 27%, 61% and 73% with no slips and 58%, 78% and 68% with 2%, and at a thousand machines 83% and 81% with half a percent and one percent of slips, each with a standard error of 2 to 5 points. The exhaustive tests of machines with four and five states were made with 5% of slips only. The picture of the bed and the timings come from <code>bedtime.js</code>; its output is <code>bedtime-25nov.out</code>.</li>\n<li>The live page is not quite the study. Its selection opens at \"strong\", twice the strength of the runs behind the figures; its machines have at most five states, where the study allowed eight; and its games last fifty rounds on average, where those behind the last figure last a hundred. The second reader of this page ran its code without a browser, 24 runs of 500,000 generations at each strength. As the page opens, the machine, at any of its three starting states, was the commonest kind in 73% of generations, and the kind that always defects in 12%; half the holds on the bed ended within about 125,000 generations, and in 20 runs of 24 defectors took the bed back at least once. With selection as in the study it was 43% and 32%. Nobody has checked those runs.</li>\n<li>How the machine gets into a bed of defectors was traced for another piece of work, which is not among these files, and traced again by the second reader for beds of a hundred (<code>roads2.py</code> in the source folder): 44 journeys from a majority of defectors to a majority of the machine, none of them direct.</li>",
+   "Where the long cautions go. The sweep's figures are from the kept file (sweep_check.out: 27.3, 60.6, 73.1; 58.2, 78.0, 68.2; 82.6 and 81.1). The runs of the live page's code are bed_core_summary.out and bed_core_holds.out. The tracing is roads_check.out. If my files are not published with the page, say 'the second reader's files' are not among these either.",
+   True)
+ch('F04', P,
+   "<li>D. Ashlock and W. Ashlock,",
+   "<li>W. Ashlock and D. Ashlock,",
+   "Both papers on this computer that cite it (Knight and others; Harper and others) give 'Wendy Ashlock and Daniel Ashlock', in that order. I have not seen the paper's own first page.",
+   True)
+ch('F05', P,
+   'Approach" (2012): two-period mutual punishment, the search of machines with up to three states, and the test against all strategies.</li>',
+   'Approach", a manuscript of 17 pages dated 2012; a two-page version, with Joe as first author, is in the proceedings of AAMAS 2012: two-period mutual punishment (which begins by cooperating), the search of machines with up to three states, and the test against all strategies, whose method they credit to Kandori and Obara (2010).</li>',
+   "The citation gives no place of publication because what was read is a manuscript; the two-page version on this computer is headed 'Extended Abstract', lists Joe first, and says 'Proceedings of the 11th International Conference ... (AAMAS 2012)'. The manuscript says 'Our program is based on the ideas presented in our previous work [Kandori and Obara 2010]'.",
+   False)
+ch('F06', P,
+   '(1993): the condition on the payoffs.</li>',
+   '(1993): the condition on the payoffs. The phrase "secret handshake" is from A. Robson, "Efficiency in evolutionary games: Darwin, Nash, and the secret handshake", Journal of Theoretical Biology 144, 379–396 (1990), which I know only as Binmore and Samuelson cite it. Tat for Tit begun at its cooperating state is the machine long known as Pavlov, or win-stay, lose-shift: D. Kraines and V. Kraines, "Pavlov and the prisoner\'s dilemma", Theory and Decision 26, 47–79 (1989), which I know only as Iwasaki and others cite it.</li>',
+   "Goes with H04, and carries the credit to Pavlov's authors that the story has no room for. Both references are copied from the reference lists of the papers named; neither paper was read.",
+   True)
+ch('F07', P,
+   'Zhang, "Errors can increase cooperation in finite populations", Games and Economic Behavior (2018), doi:10.1016/j.geb.2017.10.023; abstract only.</li>',
+   'H. Zhang, "Errors can increase cooperation in finite populations", Games and Economic Behavior 107, 203–219 (2018), doi:10.1016/j.geb.2017.10.023; abstract only.</li>\n<li>Van Veelen, García, Rand and Nowak, "Direct reciprocity in structured populations", Proceedings of the National Academy of Sciences (2012), doi:10.1073/pnas.1206694109; abstract only.</li>',
+   "Goes with H11, which names van Veelen and others. Zhang's first name, volume and pages are on the abstract page kept on this computer. For van Veelen and others the title, year, DOI and abstract are in the kept record, which carries no authors' names: the four names are from the working note. Check them against the paper before printing.",
+   True)
+ch('F09', P,
+   "Journal of Theoretical Biology 136, 47–56 (1989). Abstract only.</li>",
+   'Journal of Theoretical Biology 136, 47–56 (1989). Abstract only. Boyd and Lorberbaum, "No pure strategy is evolutionarily stable in the repeated Prisoner\'s Dilemma game", Nature (1987), doi:10.1038/327058a0; title only.</li>',
+   "Wanted only if H11a goes in. Title, year and DOI are from the kept record; the two names are from the reader's report.",
+   False)
+ch('F08', P,
+   "which has Fortress3 among its strategies.</li>",
+   'which has Fortress3 among its strategies and says that it and Fortress4 "use a similar handshake".</li>',
+   "The paper the study cited at the time used the word of this very machine (line 163 of the kept text). The source line said less than the reader's report does.",
+   True)
+
+# ---------------------------------------------------------------- the card
+ch('S01', S,
+   "With a little noise they keep arriving at one machine of three states. I thought it was a find; it was described in 2006 and analysed in 2012, and the page says what I got wrong.",
+   "When a few moves in a hundred come out wrong they keep coming back to one machine of three states. I thought it was a find; others had found it the same way in 2006 and it was analysed in 2012, and the page says what I got wrong.",
+   "As H01: 'found the same way' is the credit the 2006 abstract earns. 'Noise' is a word the page does not use; the sentence before says 'come out wrong'.",
+   True)
+ch('S02', S,
+   "arrive at a three-state machine that was already in print as Fortress3 (2006) and as two-period mutual punishment (2012).",
+   "keep coming back to a three-state machine that was already in print as Fortress3 (2006) and, begun at another state, as two-period mutual punishment (2012).",
+   "As H01 and H10, for the line that search engines show.",
+   False)
+
+# ---------------------------------------------------------------- the live page
+ch('B01', L,
+   "The kind this page calls the handshake is a known machine: Fortress3 of Ashlock and Ashlock (2006), and the two-period mutual punishment automaton of Iwasaki, Joe, Kandori, Obara and Yokoo (2012). The shifty handshake and the stiffened wooer are the same machine entered at its other two states.",
+   "The kind this page calls the handshake is a known machine: Fortress3 of Ashlock and Ashlock (2006). The stiffened wooer is the two-period mutual punishment automaton of Iwasaki, Joe, Kandori, Obara and Yokoo (2012), which begins by cooperating; the handshake and the shifty handshake are that same machine begun at its other two states. Any of the three may be the one that takes the bed, and their plants differ only at the bottom: two thorns, one, or none.",
+   "As H10: the 2012 automaton as drawn is the stiffened wooer (rerun-checks.out, and their Fig. 9). The last sentence is what a visitor needs when the bed is taken by a plant with one thorn or with none, as it was in 18 of 40 openings (plants_check.out for the three plants).",
+   True)
+ch('B02', L,
+   "after a while a kind called <i>the handshake</i> tends to take the bed and hold it.",
+   "after a while a kind called <i>the handshake</i>, or the same machine under one of its two other names, tends to take the bed and hold it for a long while, though not for good.",
+   "Not one of the four changed passages, but it is the sentence the story now corrects, and a visitor reads it beside the bed. See H08.",
+   False)
+ch('B03', L,
+   "machines have at most five states.",
+   "machines have at most five states, where the study allowed eight. The bed opens with selection set to strong, twice the strength of the study's runs, which makes the take-over quicker and longer-lasting.",
+   "The live page's own note says it is 'a live version of an experiment' and names every setting but the one that differs most. See H08 (3).",
+   False)
+ch('B04', L,
+   "In print as Fortress3, and as two-period mutual punishment.",
+   "In print as Fortress3; begun at its cooperating state it is two-period mutual punishment.",
+   "As B01, for the line shown under the commonest kind.",
+   False)
+
+# ---------------------------------------------------------------- checks
+texts = {f: open(os.path.join(B, f), encoding='utf-8').read() for f in (P, S, L)}
+spans = {f: [] for f in texts}
+for c in C:
+    t = texts[c['file']]; n = t.count(c['old'])
+    assert n == 1, (c['id'], 'old occurs', n, 'times')
+    assert c['old'] != c['new'], c['id']
+    i = t.index(c['old']); spans[c['file']].append((i, i + len(c['old']), c['id']))
+for f, sp in spans.items():
+    sp.sort()
+    for a, b in zip(sp, sp[1:]): assert a[1] <= b[0], ('overlap', f, a[2], b[2])
+blob = json.dumps(C, ensure_ascii=False)
+for bad in ('/t' + 'mp', 'tool' + 'u_', 'agent' + 'Id', 'session', 'agent' + '1', 'agent' + '2', 'agent' + '3', 'sub' + 'agent'):      # split so that this list trips no scanner itself
+    assert bad not in blob, bad
+ids = [c['id'] for c in C]; assert len(ids) == len(set(ids))
+# site.py and the machine list of the live page hold their words inside double-quoted strings
+for c in C:
+    if c['file'] == S or c['id'] == 'B04': assert '"' not in c['new'], c['id']
+    if c['id'] in ('H06', 'H13a'): assert '"' not in c['new'], c['id']          # inside alt="..."
+json.dump(C, open(os.path.join(HERE, 'changes.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+
+def apply(t, f, only_must):
+    for c in C:
+        if c['file'] == f and (c['must'] or not only_must): t = t.replace(c['old'], c['new'])
+    return t
+def words(t):
+    story = t[:t.index('<details class="fold">')]
+    return len(html.unescape(re.sub(r'<[^>]+>', ' ', story)).split())
+def balanced(t):
+    bad = []
+    for tag in ('p', 'li', 'ul', 'figure', 'figcaption', 'strong', 'a', 'code', 'details', 'summary', 'h1', 'h2', 'h3', 'i'):
+        o = len(re.findall(r'<%s[\s>]' % tag, t)); c_ = len(re.findall(r'</%s>' % tag, t))
+        if o != c_: bad.append((tag, o, c_))
+    return bad
+print(len(C), 'changes;', sum(c['must'] for c in C), 'marked must; by file:', {f: sum(c['file'] == f for c in C) for f in texts})
+print('each old occurs exactly once in its file; none overlap; order in the page:', [x[2] for x in spans[P]])
+print('story words now:', words(texts[P]))
+for only_must, name in ((True, 'preview-must-only.html'), (False, 'preview-all.html')):
+    t = apply(texts[P], P, only_must); open(os.path.join(HERE, name), 'w', encoding='utf-8').write(t)
+    print(f'  {name}: story words {words(t)}; tags unbalanced: {balanced(t)}; READERS left: {t.count("READERS")}')
+print('tags unbalanced in the page as it stands:', balanced(texts[P]))
+for f in (S, L):
+    t = apply(texts[f], f, False)
+    if f == L: open(os.path.join(HERE, 'preview-all-bed-public.html'), 'w', encoding='utf-8').write(t)
+    if f == L: print('  live page after all changes, tags unbalanced:', balanced(t))

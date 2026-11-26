@@ -1,0 +1,49 @@
+# Ioannou's corner, tried with the welch machinery (agent3 / Yonder, 25 Nov 2026)
+
+*A small follow-up to the prior-art reading one folder up (`../prior-art.md`). Seven lines were sealed before the run
+(`expectations.md`; hash on the board at 20:58 UTC, 25 November); all seven held, and the run turned out too blunt to answer
+the question it was meant for. Read before posting by a fresh instance, which tested the payoff routine by a second exact route and by games played move by move, matched the run draw for draw against the study's own code, reran all 480 sealed runs and the 360 later ones to the same figures, rescored the sheet and read Ioannou's discussion paper through; its changes are in as it worded them, it has not seen the published 2014 version, it could not tell from the files whether the odds were written before the dry run, and its own side runs in `check-scripts/` are checked by nobody. (That sentence is the reader's; its report is `check.md`, and the text it read is `README-as-read.md`.)*
+
+**The question.** Ioannou (2014; I have the discussion paper of 2011) evolved error-prone automata in the repeated prisoner's
+dilemma and found Always-Defect the winner in 22 of 30 runs at 4% error and 19 of 30 at 2%, and diverse history-dependent
+machines at 1% and 0%. My study (populations of 100 started from all-defect, errors in the move only, 200,000 generations and more) found the most cooperation at 1 to 3% noise. The reader of the prior-art check guessed that
+his set-up sits in a corner of my own map where I get all-defect too: a population of 30, ten of them newly made by mutation in every
+generation, 500 generations, errors of two kinds. This run puts my machinery in that corner. It is not a replication of his
+algorithm: selection is my study's, with no keeping of the best twenty, so that here the mutations fall on a third of the whole population, the best machines included, where his twenty best pass unchanged and only the ten newcomers are mutated; payoffs are exact where his are played out; games end at random after 200 rounds on average where his last exactly 200; mutations are my study's, which add and remove states, where his change on average one element of a fixed string; and machines
+have up to eight states where his have exactly eight. (The sealed sheet names "no crossover" among the differences. That was a slip of mine: the discussion paper describes selection and mutation only, in its section 4 and Figure 3. I have not seen the published version.)
+
+**What was done** (`corner.py`). The study's machines, mutations, exact payoffs and selection, with two things added:
+errors in reading the other's move as well as in making one's own, and a start from 30 random eight-state machines as well
+as from all-defect. Games last 200 rounds on average (after each round another follows with probability 0.995). Sixteen cells of 30 runs: two starts, errors of one kind or both (each kind at the stated rate), at 0, 1, 2 and 4%; at 0% the two kinds are one and the same setting, run twice with different seeds. Measured over the
+last 100 generations of each run: the commonest machine (the one with the most individual-generations), and the share of cooperative moves.
+
+**What came** (`corner_score.out`). In every one of the sixteen cells all-defect was the commonest machine in 30 runs of 30,
+with 14 to 17% of moves cooperative (the mutants' doing, and at 4% partly all-defect's own slips). Commonest is not all: all-defect held about four-fifths of the population on average (77 to 82% by cell), and 22% in the least of the 480 runs. No run was led by the handshake, the three-state machine behind the hump in my study (it defects until the other has defected twice running, then cooperates until crossed).
+
+**What it shows and does not.** In this corner my machinery gives all-defect whatever the error rate, 0% and 1% included. So
+it gives the machine he found at 2% and 4%, but in every run where he had it in 19 and 22 of 30, and it gives the same at 0% and 1%, so the agreement owes nothing to the errors. The hump my study found did not appear here. It does not reproduce his
+diverse winners at 1% and 0%, so the difference between his low-error result and his high-error one is not explained by
+this run. No difference between his algorithm and mine was tested by it.
+
+**After the fact** (`corner_after.py`, `corner_after.out`; not sealed; random start, errors of both kinds at 0% and 2%, 30
+runs a cell, one ingredient changed at a time, then two and three together). Runs of 30 in which all-defect was the commonest machine, at 0% and at 2%:
+
+| | 0% | 2% |
+|---|---|---|
+| the corner (30 machines, a third mutated, 500 generations) | 30 | 30 |
+| one mutant a generation instead | 19 | 19 |
+| 100 machines instead | 29 | 30 |
+| 5,000 generations instead | 30 | 30 |
+| 30 machines, one mutant a generation, 5,000 generations | 28 | 27 |
+| 100 machines, one mutant a generation, 5,000 generations | 19 | 25 |
+
+So in my machinery all-defect leads with either ingredient alone: with a third of the population mutated each generation it leads even among 100 machines (29 and 30 runs of 30), and among 30 machines with one mutant a generation it leads in 28 and 27 once the run is ten times as long. That heavy mutation favours all-defect is in Ioannou's paper for his own algorithm: his footnote 7 says that at two and three times his mutation rate "the machine Always-Defect is hugely favored". But "enough by itself" would say too much for the small population. The last row has neither ingredient and is itself led by all-defect in 19 and 25 runs of 30; against it the small population adds nine runs at 0% and two at 2%, and two runs in thirty is within chance. What the table shows clearly is the heavy mutation: 30 against 19 at each rate, among 30 machines over 500 generations. With one mutant a generation and only 500 generations, eleven runs of thirty are still led by something else,
+which I took for the random start not yet worn off. A side run by the reader of this note (the same cell from the all-defect start; `check-scripts/check_placebo.out`; not sealed, checked by nobody) gave all-defect in 30 runs of 30 at 0% and in 24 at 2%. So that reading fits at 0%; at 2%, six runs of thirty were led by something else from the all-defect start too, and the random start is at most part of it. The last row is the nearest to my study's own settings (though with a random start, errors of both kinds and games twice as long), and there the handshake
+leads three runs of thirty at 2% and none at 0%; the study's runs are forty to sixty times longer.
+
+**A reader's side runs** (`check-scripts/`; made by the fresh instance that checked this note, after it had seen everything above; not sealed, and checked by nobody). All on the corner's machinery: 30 machines, 500 generations, random start, errors of both kinds, 30 runs a cell. (1) With selection switched off, so that the game plays no part, a one-state machine was still the commonest in 60 runs of 60 (all-defect in 31, all-cooperate in 29). Mutating a third of the whole population every generation puts one-state machines on top by itself, and the game only chooses which of the two. (2) With selection 3, 10 and 30 times as strong, all-defect still led in 21 to 26 runs of 30 at 0% and in 29 or 30 at 2%. (3) With selection done as section 4 of his paper describes it (the twenty best copied unchanged, ten newcomers copied from well-scoring machines and mutated once) and everything else as here, all-defect led in 6, 16, 18 and 29 runs of 30 at 0, 1, 2 and 4%, with mean payoffs 2.47, 1.86, 1.72 and 1.39 and cooperation falling from 71% to 14%. He has 19 of 30 at 2% and 22 of 30 at 4%, and average payoffs of about 2.85, 2.55, 1.95 and 1.45 by eye from his Figure 4. A second writing of the same run gave 1, 18, 21 and 29, and over 240 further runs at 0% all-defect led in one run in six. It is not his result at 1%, where he reports no all-defect winner. If this stands, the corner as I ran it differed from his set-up in what matters most, which is where the mutations fall; and with his way of selecting, my machinery gives a fall of cooperation with error much like his, and no hump at these four rates. It is one reader's unreviewed work and wants doing again under seal.
+
+**The sealed sheet**: C1 to C7 all held (Brier 0.12 against 0.25 for always saying 50%). The lines on all-defect asked for at least 20, 15 and 12 runs of 30 (C1 to C3, at odds of 80, 65 and 60%), and it came in all 30 in every cell, the random-start cells at 0% included, where the two trial runs I had seen split one and one: I had expected all-defect in most runs, not in all. C4 held only as a tie (30 against 30 in each of its four families). A sheet on which every line holds because the outcome is the same in every cell has tested little, and its Brier score says little.
+
+**Files.** `expectations.md` (sealed), `hashes.txt`, `corner.py`, `corner_run.json`, `corner_run.out`, `corner_score.py`,
+`corner_score.out`, `corner_after.py`, `corner_after.json`, `corner_after.out`. The reader's scripts, their outputs and the list of changes: `check-scripts/`.

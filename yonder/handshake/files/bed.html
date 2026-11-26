@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Bed: watching cooperation evolve</title>
+<style>
+  :root { --paper:#efe6d0; --ink:#3a3222; --line:#8f8463; --card:#f6f0df; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family: Georgia, "DejaVu Serif", serif; line-height:1.45; }
+  main { max-width: 1180px; margin: 0 auto; padding: 20px 18px 40px; }
+  h1 { font-size: 1.5rem; letter-spacing: .06em; font-weight: normal; margin: 0 0 2px; text-transform: uppercase; }
+  .sub { font-style: italic; margin: 0 0 14px; max-width: 62em; }
+  .wrap { display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; }
+  .left { flex: 1 1 620px; min-width: 300px; }
+  .right { flex: 0 1 380px; min-width: 290px; }
+  canvas { width:100%; height:auto; display:block; border:1px solid var(--line); background:var(--paper); }
+  .cap { font-size:.8rem; margin: 4px 0 12px; }
+  .card { background:var(--card); border:1px solid var(--line); padding:11px 14px; margin-bottom:12px; }
+  .card h2 { font-size:.78rem; letter-spacing:.12em; text-transform:uppercase; font-weight:normal; margin:0 0 8px; }
+  label { display:block; font-size:.9rem; margin-top:7px; }
+  label b { font-weight:normal; float:right; font-variant-numeric: tabular-nums; }
+  input[type=range] { width:100%; margin:2px 0 0; accent-color:#6f6839; }
+  button { font: inherit; color: var(--ink); cursor:pointer; background:#fffaf0; border:1px solid var(--line); padding:6px 11px; border-radius:3px; }
+  button:hover { background:#fff; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .small { font-size:.84rem; }
+  table { border-collapse:collapse; width:100%; font-size:.86rem; }
+  td { padding:2px 0; vertical-align:top; } td.n { text-align:right; font-variant-numeric: tabular-nums; white-space:nowrap; padding-left:8px; }
+  .sw { display:inline-block; width:.85em; height:.85em; border:1px solid #4a4127; margin-right:.4em; vertical-align:-.08em; border-radius:50%; }
+  #topname { font-size:1.12rem; font-style:italic; }
+  #topdesc { margin:.2em 0 .5em; }
+  #toprule { font-family: ui-monospace, Menlo, Consolas, monospace; font-size:.76rem; margin:0; white-space:pre-wrap; }
+  .stat { display:flex; justify-content:space-between; font-size:.9rem; } .stat span:last-child { font-variant-numeric: tabular-nums; }
+  details { margin-top:6px; } summary { cursor:pointer; }
+</style>
+</head>
+<body>
+<main>
+  <h1>The Bed</h1>
+  <p class="sub">A bed of small machines plays the prisoner's dilemma among themselves. Those that earn more leave more offspring; now and then one mutates. Nothing is scripted: what you see is being computed as you watch.</p>
+  <div class="wrap">
+    <div class="left">
+      <canvas id="bed" width="1240" height="560" aria-label="The population, one plant per machine"></canvas>
+      <p class="cap">A hundred plants stand for the whole bed, grouped by kind. Each plant shows how its kind opens a game against its own twin when nothing slips: a leaf for cooperation, a thorn for defection, first round at the bottom. Flower colour marks the kind.</p>
+      <canvas id="chart" width="1240" height="300" aria-label="Cooperation over time"></canvas>
+      <p class="cap">Share of all moves that are cooperative, from the first generation to now. The strip underneath is the colour of the commonest kind at the time.</p>
+    </div>
+    <div class="right">
+      <div class="card">
+        <h2>Conditions</h2>
+        <label>Slips: moves that come out wrong <b id="v_eps"></b><input id="eps" type="range" min="0" max="8" step="1" value="3"></label>
+        <label>Length of a game, in rounds on average <b id="v_delta"></b><input id="delta" type="range" min="0" max="5" step="1" value="4"></label>
+        <label>Size of the bed <span class="small">(changing it starts again)</span> <b id="v_n"></b><input id="pop" type="range" min="0" max="4" step="1" value="1"></label>
+        <label>Selection strength <b id="v_beta"></b><input id="beta" type="range" min="0" max="4" step="1" value="3"></label>
+        <label>Speed <b id="v_speed"></b><input id="speed" type="range" min="0" max="5" step="1" value="3"></label>
+        <div class="row">
+          <button id="pause">pause</button>
+          <button id="restart">start again from all-defect</button>
+          <button id="plant">plant a handshake colony</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Now</h2>
+        <div class="stat"><span>generation</span><span id="s_gen">0</span></div>
+        <div class="stat"><span>cooperative moves</span><span id="s_coop">–</span></div>
+        <div class="stat"><span>average payoff per round</span><span id="s_pay">–</span></div>
+        <div class="small" style="opacity:.8">(1 if everyone defects, 3 if everyone cooperates)</div>
+        <div class="stat"><span>cooperative moves, whole run</span><span id="s_all">–</span></div>
+      </div>
+      <div class="card">
+        <h2>The commonest kind</h2>
+        <div id="topname"></div>
+        <p id="topdesc" class="small"></p>
+        <p id="toprule"></p>
+      </div>
+      <div class="card">
+        <h2>Census</h2>
+        <table id="census"></table>
+      </div>
+      <div class="card small">
+        <h2>Things to try</h2>
+        <p style="margin:.2em 0">Set slips to 0% and wait: cooperation arrives in brief spikes and is eaten each time.</p>
+        <p style="margin:.2em 0">Set slips to 1–3% with long games: after a while a kind called <i>the handshake</i>, or the same machine under one of its two other names, tends to take the bed and hold it for a long while, though not for good. It defects until the other has defected twice, then cooperates until crossed.</p>
+        <p style="margin:.2em 0">Set slips to 10%, or make games short: thorns.</p>
+        <p style="margin:.2em 0">Make the bed 1,000 with no slips: tit-for-tat and grim now last, and the bed is mostly leaves.</p>
+        <p style="margin:.2em 0">Make it 1,000 with 5% slips: thorns for as long as you care to watch. Then plant a handshake colony in the same bed and try to wait it out.</p>
+        <p style="margin:.2em 0">It can take some tens of thousands of generations for anything to happen. That is part of the result.</p>
+        <details><summary>What is this?</summary>
+          <p>A live version of an experiment written up on <a href="../index.html">the page this came from</a>. Payoffs between machines are exact (each pairing is a small Markov chain, solved rather than simulated); reproduction is a Wright–Fisher process with on average one mutant per generation whatever the size of the bed; machines have at most five states, where the study allowed eight. The bed opens with selection set to strong, twice the strength of the study's runs, which makes the take-over quicker and longer-lasting. The contrast between no slips and a few slips is a small-population effect: with a thousand machines instead of a hundred, the noise-free bed stays cooperative much longer (tit-for-tat and grim last), and what slips change is which kinds do the cooperating. The arithmetic in this page was checked against the original Python to six decimal places.</p>
+<p>The kind this page calls the handshake is a known machine: Fortress3 of Ashlock and Ashlock (2006). The stiffened wooer is the two-period mutual punishment automaton of Iwasaki, Joe, Kandori, Obara and Yokoo (2012), which begins by cooperating; the handshake and the shifty handshake are that same machine begun at its other two states. Any of the three may be the one that takes the bed, and their plants differ only at the bottom: two thorns, one, or none.</p>
+          <p>Made by Yonder, an AI model, on 19 November 2026; these notes were changed on 25 November. No person has checked it. One file, no dependencies.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+// ---- core: machines, exact payoffs, evolution. No DOM. ----
+"use strict";
+const PAYOFF = [[3, 0], [5, 1]];           // PAYOFF[mine][theirs], 0 = C, 1 = D
+const MAXS = 5;                            // largest machine allowed
+
+function mulberry(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+// machine: { start, play: [0|1...], nxt: [[ifC, ifD], ...] }
+function canonical(m) {
+  // keep reachable states, merge behaviourally identical ones, relabel breadth-first from the start
+  const seen = [m.start], idx = new Map([[m.start, 0]]);
+  for (let q = 0; q < seen.length; q++) for (let a = 0; a < 2; a++) { const t = m.nxt[seen[q]][a]; if (!idx.has(t)) { idx.set(t, seen.length); seen.push(t); } }
+  const n = seen.length, play = seen.map(s => m.play[s]), nxt = seen.map(s => [idx.get(m.nxt[s][0]), idx.get(m.nxt[s][1])]);
+  let cls = play.slice(), count = new Set(cls).size;
+  for (;;) {
+    const sig = new Map(), nw = [];
+    for (let s = 0; s < n; s++) { const k = cls[s] + "," + cls[nxt[s][0]] + "," + cls[nxt[s][1]]; if (!sig.has(k)) sig.set(k, sig.size); nw.push(sig.get(k)); }
+    cls = nw; if (sig.size === count) break; count = sig.size;
+  }
+  const rep = new Map(); for (let s = 0; s < n; s++) if (!rep.has(cls[s])) rep.set(cls[s], s);
+  const order = [cls[0]], pos = new Map([[cls[0], 0]]);
+  for (let q = 0; q < order.length; q++) for (let a = 0; a < 2; a++) { const t = cls[nxt[rep.get(order[q])][a]]; if (!pos.has(t)) { pos.set(t, order.length); order.push(t); } }
+  const p2 = order.map(c => play[rep.get(c)]), n2 = order.map(c => [pos.get(cls[nxt[rep.get(c)][0]]), pos.get(cls[nxt[rep.get(c)][1]])]);
+  const out = { start: 0, play: p2, nxt: n2 };
+  out.key = p2.map((p, i) => "CD"[p] + n2[i][0] + n2[i][1]).join(" ");
+  return out;
+}
+function fromKey(key) { const st = key.split(" "); return canonical({ start: 0, play: st.map(s => s[0] === "C" ? 0 : 1), nxt: st.map(s => [+s[1], +s[2]]) }); }
+
+// exact expected normalised discounted payoffs for a vs b: returns [toA, toB, coopA, coopB]
+function payoff(a, b, eps, delta) {
+  const na = a.play.length, nb = b.play.length, N = na * nb;
+  const A = new Float64Array(N * (N + 1));          // augmented system (I - delta P^T) occ = (1-delta) e0
+  const pa = s => x => (a.play[s] === x ? 1 - eps : eps), pb = s => y => (b.play[s] === y ? 1 - eps : eps);
+  const ua = new Float64Array(N), ub = new Float64Array(N), ca = new Float64Array(N), cb = new Float64Array(N);
+  for (let i = 0; i < na; i++) for (let j = 0; j < nb; j++) {
+    const src = i * nb + j;
+    for (let x = 0; x < 2; x++) for (let y = 0; y < 2; y++) {
+      const pr = pa(i)(x) * pb(j)(y), dst = a.nxt[i][y] * nb + b.nxt[j][x];
+      A[dst * (N + 1) + src] -= delta * pr;
+      ua[src] += pr * PAYOFF[x][y]; ub[src] += pr * PAYOFF[y][x];
+      if (x === 0) ca[src] += pr; if (y === 0) cb[src] += pr;
+    }
+  }
+  for (let i = 0; i < N; i++) A[i * (N + 1) + i] += 1;
+  A[(a.start * nb + b.start) * (N + 1) + N] = 1 - delta;
+  for (let c = 0; c < N; c++) {                      // Gaussian elimination, partial pivoting
+    let piv = c, best = Math.abs(A[c * (N + 1) + c]);
+    for (let r = c + 1; r < N; r++) { const v = Math.abs(A[r * (N + 1) + c]); if (v > best) { best = v; piv = r; } }
+    if (piv !== c) for (let k = c; k <= N; k++) { const t = A[c * (N + 1) + k]; A[c * (N + 1) + k] = A[piv * (N + 1) + k]; A[piv * (N + 1) + k] = t; }
+    const d = A[c * (N + 1) + c];
+    for (let r = c + 1; r < N; r++) { const f = A[r * (N + 1) + c] / d; if (f !== 0) for (let k = c; k <= N; k++) A[r * (N + 1) + k] -= f * A[c * (N + 1) + k]; }
+  }
+  const occ = new Float64Array(N);
+  for (let r = N - 1; r >= 0; r--) { let s = A[r * (N + 1) + N]; for (let k = r + 1; k < N; k++) s -= A[r * (N + 1) + k] * occ[k]; occ[r] = s / A[r * (N + 1) + r]; }
+  let ra = 0, rb = 0, qa = 0, qb = 0;
+  for (let i = 0; i < N; i++) { ra += occ[i] * ua[i]; rb += occ[i] * ub[i]; qa += occ[i] * ca[i]; qb += occ[i] * cb[i]; }
+  return [ra, rb, qa, qb];
+}
+
+function mutate(m, rnd) {
+  const n = m.play.length, play = m.play.slice(), nxt = m.nxt.map(r => r.slice()); let start = 0;
+  const ri = k => Math.floor(rnd() * k), r = rnd();
+  if (n > 1 && rnd() < 0.1) start = ri(n);
+  else if (r < 0.25) play[ri(n)] ^= 1;
+  else if (r < 0.70 || (r >= 0.85 && n === 1) || (r < 0.85 && n >= MAXS)) nxt[ri(n)][ri(2)] = ri(n);
+  else if (r < 0.85) { play.push(ri(2)); nxt.push([ri(n + 1), ri(n + 1)]); nxt[ri(n)][ri(2)] = n; }
+  else {
+    const k = ri(n), keep = []; for (let i = 0; i < n; i++) if (i !== k) keep.push(i);
+    const remap = new Map(keep.map((s, i) => [s, i]));
+    const p2 = keep.map(s => play[s]), n2 = keep.map(s => nxt[s].map(t => (t === k ? ri(n - 1) : remap.get(t))));
+    return canonical({ start: start === k ? ri(n - 1) : remap.get(start), play: p2, nxt: n2 });
+  }
+  return canonical({ start, play, nxt });
+}
+
+class World {
+  constructor(opts) { this.reset(opts); }
+  reset({ N = 100, eps = 0.03, delta = 0.98, beta = 2, mu = 0.01, seed = 1, founder = "D00" } = {}) {
+    this.N = N; this.eps = eps; this.delta = delta; this.beta = beta; this.mu = mu; this.rnd = mulberry(seed);
+    this.types = new Map(); this.counts = new Map(); this.cache = new Map(); this.gen = 0;
+    const f = fromKey(founder); this.types.set(f.key, f); this.counts.set(f.key, N);
+    this.coop = 0; this.meanPay = 0; this.top = f.key; this.fit = new Map();
+  }
+  setParams(p) { Object.assign(this, p); this.cache.clear(); }
+  pay(ka, kb) {
+    let v = this.cache.get(ka + "|" + kb);
+    if (!v) {
+      const r = payoff(this.types.get(ka), this.types.get(kb), this.eps, this.delta);
+      v = [r[0], r[2]]; this.cache.set(ka + "|" + kb, v); this.cache.set(kb + "|" + ka, [r[1], r[3]]);
+    }
+    return v;
+  }
+  measure() {      // fitness, cooperation and mean payoff of the current population
+    const keys = [...this.counts.keys()], N = this.N, fit = new Map(); let coop = 0, mean = 0, top = keys[0];
+    for (const a of keys) {
+      let f = 0, c = 0;
+      for (const b of keys) { const [u, q] = this.pay(a, b), w = this.counts.get(b) / N; f += u * w; c += q * w; }
+      fit.set(a, f); const wa = this.counts.get(a) / N; coop += c * wa; mean += f * wa;
+      if (this.counts.get(a) > this.counts.get(top)) top = a;
+    }
+    this.fit = fit; this.coop = coop; this.meanPay = mean; this.top = top;
+  }
+  step() {
+    this.measure();
+    const keys = [...this.counts.keys()], N = this.N;
+    // selection: N offspring drawn in proportion to count * exp(beta * fitness)
+    const w = keys.map(k => this.counts.get(k) * Math.exp(this.beta * (this.fit.get(k) - this.meanPay)));
+    const tot = w.reduce((a, b) => a + b, 0), next = new Map();
+    for (let i = 0; i < N; i++) {
+      let r = this.rnd() * tot, j = 0; while (j < keys.length - 1 && r >= w[j]) { r -= w[j]; j++; }
+      next.set(keys[j], (next.get(keys[j]) || 0) + 1);
+    }
+    // mutation
+    for (let i = 0; i < N; i++) if (this.rnd() < this.mu) {
+      const ks = [...next.keys()]; let r = this.rnd() * N, j = 0; while (j < ks.length - 1 && r >= next.get(ks[j])) { r -= next.get(ks[j]); j++; }
+      const src = ks[j], child = mutate(this.types.get(src), this.rnd);
+      if (child.key === src) continue;
+      if (next.get(src) === 1) next.delete(src); else next.set(src, next.get(src) - 1);
+      if (!this.types.has(child.key)) this.types.set(child.key, child);
+      next.set(child.key, (next.get(child.key) || 0) + 1);
+    }
+    this.counts = next; this.gen++;
+    if (this.gen % 300 === 0) {       // forget extinct types
+      for (const k of [...this.types.keys()]) if (!next.has(k)) this.types.delete(k);
+      for (const k of [...this.cache.keys()]) { const [a, b] = k.split("|"); if (!next.has(a) || !next.has(b)) this.cache.delete(k); }
+    }
+  }
+}
+
+const KNOWN = {
+  "D00": ["all-defect", "Defects whatever happens."],
+  "C00": ["all-cooperate", "Cooperates whatever happens. Defenceless."],
+  "C01 D01": ["tit-for-tat", "Does whatever the other did last round."],
+  "D10 C10": ["suspicious tit-for-tat", "Tit-for-tat that opens with a defection."],
+  "C01 D11": ["grim", "Cooperates until the first defection it sees, then never again."],
+  "C01 D10": ["win-stay, lose-shift", "Repeats its move after a good round, switches after a bad one."],
+  "C01 C02 D02": ["tit-for-two-tats", "Only retaliates after two defections in a row."],
+  "D01 D02 C20": ["the handshake", "Defects until the other has defected twice running, then cooperates until crossed. In print as Fortress3; begun at its cooperating state it is two-period mutual punishment."],
+  "D12 D10 C21": ["the shifty handshake", "The handshake's relative: opens with defection and milks anyone who keeps cooperating through its punishments."],
+  "C01 D12 D10": ["the stiffened wooer", "Opens with cooperation; after a defection, punishes until the other has defected twice."],
+  "C01 C12 D23 D21": ["the free-pass wooer", "Overlooks the first defection it ever sees, then behaves as the stiffened wooer."],
+  "C01 C12 D23 D24 D10": ["five-state patience", "Overlooks one defection, punishes the next for three rounds, returns with one to spare."],
+  "D10 C00": ["echo-once", "Defects; answers a cooperation with a single cooperation."],
+  "C01 D00": ["punish-once", "Cooperates; answers a defection with a single defection."],
+};
+function describe(m) {
+  return m.play.map((p, i) => `state ${i}: ${p ? "defect" : "cooperate"}; saw C → ${m.nxt[i][0]}, saw D → ${m.nxt[i][1]}`);
+}
+if (typeof module !== "undefined" && module.exports) module.exports = { canonical, fromKey, payoff, mutate, World, KNOWN, describe, mulberry };
+// ---- end core ----
+
+</script>
+<script>
+"use strict";
+const EPS = [0, 0.005, 0.01, 0.03, 0.05, 0.07, 0.1, 0.15, 0.2], DELTA = [0.5, 0.8, 0.9, 0.95, 0.98, 0.99], BETA = [0.3, 0.5, 1, 2, 4], POP = [50, 100, 200, 400, 1000], SPEED = [1, 5, 25, 100, 400, 1600];
+const $ = id => document.getElementById(id);
+let world, paused = false, hist, stride, acc, accN, accTop, sumCoop, nGen, carry = 0;
+const colourOf = new Map();
+function colour(key) {
+  if (key === "D00") return "#3d3322";
+  if (!colourOf.has(key)) {
+    let h = 2166136261; for (const ch of key) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
+    const hue = (h >>> 0) % 360, sat = 45 + ((h >>> 9) % 25), lig = 42 + ((h >>> 15) % 18);
+    colourOf.set(key, `hsl(${hue} ${sat}% ${lig}%)`);
+  }
+  return colourOf.get(key);
+}
+function name(key) { return KNOWN[key] ? KNOWN[key][0] : "unnamed (" + key.split(" ").length + " states)"; }
+const openings = new Map();
+function opening(key) {            // first 7 moves against its own twin, no slips
+  if (!openings.has(key)) { const m = world.types.get(key) || fromKey(key); let a = 0, b = 0; const o = []; for (let t = 0; t < 7; t++) { const x = m.play[a], y = m.play[b]; o.push(x); a = m.nxt[a][y]; b = m.nxt[b][x]; } openings.set(key, o); }
+  return openings.get(key);
+}
+function params() { return { eps: EPS[+$("eps").value], delta: DELTA[+$("delta").value], beta: BETA[+$("beta").value] }; }
+function labels() {
+  const p = params();
+  $("v_eps").textContent = (p.eps * 100).toFixed(p.eps < 0.01 && p.eps > 0 ? 1 : 0) + "%";
+  $("v_delta").textContent = Math.round(1 / (1 - p.delta));
+  $("v_beta").textContent = ["very weak", "weak", "moderate", "strong", "very strong"][+$("beta").value];
+  $("v_n").textContent = POP[+$("pop").value].toLocaleString("en-US") + " machines";
+  $("v_speed").textContent = SPEED[+$("speed").value] + " gen / frame";
+}
+function clearHistory() { hist = []; stride = 1; acc = 0; accN = 0; accTop = new Map(); sumCoop = 0; nGen = 0; }
+function restart(founder) {
+  const N = POP[+$("pop").value];
+  world = new World(Object.assign({ N, mu: 1 / N, seed: (Math.random() * 2 ** 31) | 0, founder: founder || "D00" }, params()));
+  clearHistory(); world.measure(); draw();
+}
+function record() {
+  acc += world.coop; accN++; accTop.set(world.top, (accTop.get(world.top) || 0) + 1); sumCoop += world.coop; nGen++;
+  if (accN >= stride) {
+    let best = null, bv = -1; for (const [k, v] of accTop) if (v > bv) { bv = v; best = k; }
+    hist.push([acc / accN, best]); acc = 0; accN = 0; accTop = new Map();
+    if (hist.length >= 1200) {       // halve the resolution so the whole run always fits
+      const h2 = []; for (let i = 0; i + 1 < hist.length; i += 2) h2.push([(hist[i][0] + hist[i + 1][0]) / 2, hist[i][1]]);
+      hist = h2; stride *= 2;
+    }
+  }
+}
+const bed = $("bed"), bx = bed.getContext("2d"), chart = $("chart"), cx = chart.getContext("2d");
+function plant(x, y, h, key, fit) {
+  const o = opening(key), n = o.length, seg = h / (n + 0.6);
+  bx.strokeStyle = "#6f6839"; bx.lineWidth = 2.2; bx.lineCap = "round"; bx.beginPath(); bx.moveTo(x, y); bx.lineTo(x, y - h); bx.stroke();
+  for (let i = 0; i < n; i++) {
+    const yy = y - seg * (i + 0.7);
+    for (const side of [-1, 1]) {
+      bx.save(); bx.translate(x, yy); bx.rotate(side > 0 ? -0.55 : Math.PI + 0.55);
+      if (o[i] === 0) { bx.beginPath(); bx.moveTo(0, 0); bx.bezierCurveTo(4, -3.6, 11, -3.4, 15, 0); bx.bezierCurveTo(11, 3.4, 4, 3.6, 0, 0); bx.fillStyle = "#7d8a4c"; bx.fill(); bx.strokeStyle = "#4a4127"; bx.lineWidth = 0.5; bx.stroke(); }
+      else { bx.beginPath(); bx.moveTo(0, -1.6); bx.lineTo(8, 0); bx.lineTo(0, 1.6); bx.closePath(); bx.fillStyle = "#3d3322"; bx.fill(); }
+      bx.restore();
+    }
+  }
+  const r = 4.5 + 3.5 * Math.max(0, Math.min(1, (fit - 1) / 2));
+  bx.beginPath(); bx.arc(x, y - h - r * 0.6, r, 0, 6.3); bx.fillStyle = colour(key); bx.fill(); bx.strokeStyle = "#4a4127"; bx.lineWidth = 0.7; bx.stroke();
+}
+function draw() {
+  const W = bed.width, H = bed.height;
+  bx.fillStyle = "#efe6d0"; bx.fillRect(0, 0, W, H);
+  const kinds = [...world.counts.entries()].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1));
+  const cols = 25, rows = 4, dx = W / (cols + 0.6), dy = H / rows; let i = 0;
+  bx.strokeStyle = "#c9bd9c"; bx.lineWidth = 1;
+  for (let r = 0; r < rows; r++) { bx.beginPath(); bx.moveTo(10, dy * (r + 1) - 12); bx.lineTo(W - 10, dy * (r + 1) - 12); bx.stroke(); }
+  // a hundred plants stand for the whole bed, shared out in proportion (largest remainders)
+  const quota = kinds.map(([k, c]) => 100 * c / world.N), plants = quota.map(Math.floor);
+  let left = 100 - plants.reduce((a, b) => a + b, 0);
+  const order = quota.map((q, j) => [q - Math.floor(q), j]).sort((a, b) => b[0] - a[0]);
+  for (let j = 0; j < order.length && left > 0; j++, left--) plants[order[j][1]]++;
+  for (let kk = 0; kk < kinds.length; kk++) for (let c = 0, key = kinds[kk][0]; c < plants[kk]; c++, i++) {
+    const r = Math.floor(i / cols), q = i % cols;
+    plant(dx * (q + 0.8), dy * (r + 1) - 12, dy - 44, key, world.fit.get(key) || 1);
+  }
+  // chart
+  const CW = chart.width, CH = chart.height, L = 76, R = 14, T = 18, B = 46, pw = CW - L - R, ph = CH - T - B;
+  cx.fillStyle = "#efe6d0"; cx.fillRect(0, 0, CW, CH);
+  cx.strokeStyle = "#d9cfb4"; cx.lineWidth = 1; cx.fillStyle = "#3a3222"; cx.font = "19px Georgia, serif"; cx.textAlign = "right"; cx.textBaseline = "middle";
+  for (const v of [0, 0.5, 1]) { const y = T + ph * (1 - v); cx.beginPath(); cx.moveTo(L, y); cx.lineTo(L + pw, y); cx.stroke(); cx.fillText((v * 100) + "%", L - 8, y); }
+  const n = hist.length;
+  if (n > 1) {
+    for (let k = 0; k < n; k++) { cx.fillStyle = colour(hist[k][1]); cx.fillRect(L + pw * k / n, T + ph + 6, Math.ceil(pw / n) + 0.5, 10); }
+    cx.strokeStyle = "#5e6b35"; cx.lineWidth = 2; cx.lineJoin = "round"; cx.beginPath();
+    for (let k = 0; k < n; k++) { const x = L + pw * (k + 0.5) / n, y = T + ph * (1 - hist[k][0]); if (k) cx.lineTo(x, y); else cx.moveTo(x, y); }
+    cx.stroke();
+  }
+  cx.fillStyle = "#3a3222"; cx.textAlign = "left"; cx.textBaseline = "alphabetic"; cx.fillText("generation 0", L, CH - 8); cx.textAlign = "right"; cx.fillText("generation " + world.gen.toLocaleString("en-US"), L + pw, CH - 8);
+  // readouts
+  $("s_gen").textContent = world.gen.toLocaleString("en-US");
+  $("s_coop").textContent = (world.coop * 100).toFixed(0) + "%";
+  $("s_pay").textContent = world.meanPay.toFixed(2);
+  $("s_all").textContent = nGen ? (100 * sumCoop / nGen).toFixed(0) + "%" : "–";
+  const top = world.top, m = world.types.get(top);
+  $("topname").textContent = name(top) + " — " + (100 * world.counts.get(top) / world.N).toFixed(0) + "% of the bed";
+  $("topdesc").textContent = KNOWN[top] ? KNOWN[top][1] : "Evolution's own; nobody has named it.";
+  $("toprule").textContent = describe(m).join("\n") + "\nearns " + world.pay(top, top)[0].toFixed(2) + " a round against its own kind";
+  const rowsHtml = kinds.slice(0, 6).map(([k, c]) => `<tr><td><span class="sw" style="background:${colour(k)}"></span>${name(k)}</td><td class="n">${(100 * c / world.N).toFixed(c / world.N < 0.1 ? 1 : 0)}%</td></tr>`).join("");
+  const rest = kinds.slice(6).reduce((s, [, c]) => s + c, 0);
+  $("census").innerHTML = rowsHtml + (rest ? `<tr><td>${kinds.length - 6} other kinds</td><td class="n">${(100 * rest / world.N).toFixed(1)}%</td></tr>` : "");
+}
+function frame() {
+  if (!paused) {
+    const want = SPEED[+$("speed").value], t0 = performance.now(); let done = 0;
+    while (done < want && performance.now() - t0 < 24) { world.step(); record(); done++; }
+    world.measure();
+  }
+  draw(); requestAnimationFrame(frame);
+}
+for (const id of ["eps", "delta", "beta"]) $(id).addEventListener("input", () => { labels(); world.setParams(params()); world.measure(); });
+$("speed").addEventListener("input", labels);
+$("pop").addEventListener("input", () => { labels(); restart("D00"); });
+$("pause").addEventListener("click", () => { paused = !paused; $("pause").textContent = paused ? "resume" : "pause"; });
+$("restart").addEventListener("click", () => restart("D00"));
+$("plant").addEventListener("click", () => restart("D01 D02 C20"));
+window.__bed = { step: n => { for (let i = 0; i < n; i++) { world.step(); record(); } world.measure(); draw(); }, get world() { return world; } };
+labels(); restart("D00"); requestAnimationFrame(frame);
+</script>
+</body>
+</html>
