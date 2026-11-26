@@ -207,6 +207,63 @@ its size. So Sedulius is nearest about four times in five.
 Arator's two books: 55.5% and 56.4% dactyls, DSDS first in both; 0.086 apart, where random splits of his
 lines into the same sizes give 0.068 on average and exceed 0.086 in 8% of draws. No detectable difference.
 
+## Added after the page went up (26 Nov): a published figure, and what he elides
+
+**Two published figures, at second hand.** S. D. Ross, *Establishing the authentic corpus of the Latin verse of
+Paul the Deacon* (PhD thesis, University of York, 2020; White Rose eTheses, open access), p. 69 n. 296,
+reporting A. Orchard, *The Poetic Art of Aldhelm* (1994), Table A4 at p. 295, which I have not seen: Aldhelm
+has "160 elisions in 4,170 lines, which is 3.84%. The frequencies of occurrence in the classical Latin poets
+ranged from near 50% (Virgil) to 10% (Arator)." (Read from the page image, PDF page 69.) The measure is
+mine, elisions per 100 lines; I have 51.0 and 55.1 for Virgil and 8.5 for Arator. Round figures at second
+hand, counting rules and edition unknown. The thesis does not say whether the Virgil-to-Arator range is from
+that table (its text cites Orchard pp. 79-82 for the comparison with classical poets), and on the same page it
+gives 22 cases in 4,170 lines as "5.28%". A count of 10 per 100 would be about 233 elisions in his 2,326
+lines against my 198. The second figure is in Heikkinen's article (next paragraph): "50.5 cases for every 100
+lines in the Aeneid", from L. P. Wilkinson, *Golden Latin Artistry* (1963), p. 131; I have 54.7 to 55.1. So
+the published counts and mine agree in size, mine higher for Virgil and lower for Arator; nothing finer can
+be said. (The third reader found the second figure, which I had passed over, and the right page number.)
+
+One thing does not fit: S. Heikkinen, "Elision and hiatus in early Anglo-Latin grammar and verse" (Studies in
+Variation, Contacts and Change in English 10, 2012, online), reports from Orchard p. 80 that Aldhelm "uses elision
+less than any previous Latin hexameter poet (except Claudian)". My count for the three poems of Claudian I
+read is 6.7 per 100 lines (138 places in 2,046 lines; one of them is a misprint of the copy, "1onge"), above
+Aldhelm's 3.84. The counting may differ (without words in -que, Claudian has 3.3 per 100), his other poems
+may have fewer, or one of the two reports at second hand may be loose. Not resolved.
+
+Two repositories that hold Heikkinen's dissertation on Bede's metre refused automated reading (a 403 and a
+bot check); I left them alone. I did not use document-sharing copies of Orchard's or Duckworth's books.
+
+**What he elides** (`elision_kinds.py`, `elision_kinds.out`; counted from the texts, no scanner; the classical
+texts are the reference's words). Places where a final vowel or vowel + m meets an initial vowel or h:
+
+| poem | lines | places | per 100 lines | word in -que | before est/es | vowel + m | other | -que and est as share of all | per 100 without est/es |
+|---|---|---|---|---|---|---|---|---|---|
+| Georgics | 2,187 | 1,116 | 51.0 | 292 | 28 | 273 | 523 | 28.7% | 49.7 |
+| Aeneid | 9,896 | 5,417 | 54.7 | 1,297 | 156 | 1,488 | 2,476 | 26.8% | 53.2 |
+| Metamorphoses | 11,978 | 3,041 | 25.4 | 1,253 | 644 | 324 | 820 | 62.4% | 20.0 |
+| Lucan | 8,057 | 1,260 | 15.6 | 553 | 209 | 193 | 305 | 60.5% | 13.0 |
+| Valerius Flaccus | 5,592 | 1,615 | 28.9 | 592 | 27 | 341 | 655 | 38.3% | 28.4 |
+| Thebaid | 9,750 | 3,812 | 39.1 | 1,173 | 69 | 999 | 1,571 | 32.6% | 38.4 |
+| Achilleid | 1,126 | 407 | 36.1 | 135 | 13 | 84 | 175 | 36.4% | 35.0 |
+| Juvenal | 3,878 | 1,390 | 35.8 | 182 | 100 | 462 | 646 | 20.3% | 33.3 |
+| Claudian | 2,046 | 138 | 6.7 | 71 | 5 | 21 | 41 | 55.1% | 6.5 |
+| Sedulius | 1,737 | 246 | 14.2 | 58 | 35 | 45 | 108 | 37.8% | 12.1 |
+| **Arator** | 2,326 | 198 | 8.5 | 89 | 58 | 9 | 42 | **74.2%** | 6.0 |
+
+Of Arator's 89 words in -que, 21 are atque, 4 namque and 1 neque; all 58 of the other class are before est
+(and ten of those 58 are words in vowel + m, two are words in -que: "before est" is taken first). So
+elisions of anything but a word in -que or before est come 51 times in his 2,326 lines (2.2 per 100; Aeneid
+40.1, Sedulius 8.8, Claudian 3.0), and of a word in vowel + m nine times. These counts take every such
+place for an elision; where a poet allows hiatus they run slightly high. They include all lines, so they
+differ a little from the scanner's figures above (Aeneid 54.7 here, 55.1 there; Claudian 6.7 and 6.6).
+
+**A misread line found by the third reader, not mended.** Line 89 of the file (row 89 of
+`arator_scans.tsv`), "Aeris in medio communi ut poneret hosti": the scanner has SDSSD with Aeris as two
+syllables (the genitive of aes); it is the genitive of aer, three syllables, and the line is DDSSD. One
+dactyl lost. The word form is in the classical poems, so the search of unfamiliar forms could not catch it.
+The scanner tries another division only when a line will not scan as it stands; a line that scans both ways
+with a homograph is read the default way without notice. The figures in this note include the misread line.
+
 ## What I expected, written before each result (in `~/journal.md` with clock times)
 
 Fourteen lines; eight held, six failed. Of the eleven given better than even odds, eight held; of the three
@@ -251,7 +308,8 @@ I had thought a follower of Virgil or Lucan likeliest. He is nearer to Statius, 
 `crosscheck.out` (the test, poem by poem), `arator.py`, `latinlib.py` (readers), `run_all.py` and
 `run_all.out` (everything above), `more_checks.py` and `more_checks.out` (the third reader's points recomputed
 from the saved scans), `capitals_test.py` and `capitals_test.out` (the test without the rule about capitals),
-`handcheck_late.py` and `handcheck_late.out` (the hand check of Sedulius and Claudian), `arator_scans.tsv` (Arator line by line: book, pattern, how it was read,
+`handcheck_late.py` and `handcheck_late.out` (the hand check of Sedulius and Claudian),
+`elision_kinds.py` and `elision_kinds.out` (elisions by kind), `arator_scans.tsv` (Arator line by line: book, pattern, how it was read,
 margin, number of admissible readings, lengths, text), `late_scans.tsv` (the same for Sedulius and Claudian),
 `metrics.json`, `plot_arator.py`. The reference pages are not copied here; the two files of scans carry the
 texts of Arator, Sedulius and Claudian as the scanner read them.
