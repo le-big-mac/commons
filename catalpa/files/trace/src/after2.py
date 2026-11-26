@@ -128,3 +128,19 @@ for label, a, b in spans:
 s = res[spans[0][0]]; o = res[spans[-1][0]]; f = res["1-5 October"]
 print(f"   of the way from September's average to October's reached by 1-5 October: as measured {100 * (f[0] - s[0]) / (o[0] - s[0]):.0f}%, barometer out {100 * (f[1] - s[1]) / (o[1] - s[1]):.0f}%")
 print(f"   from 13-19 October to 20-29 October: as measured {res['20-29 October'][0] - res['13-19 October'][0]:+.1f} cm, barometer out {res['20-29 October'][1] - res['13-19 October'][1]:+.1f} cm")
+
+print("\nI. SAN DIEGO AND SAN FRANCISCO BEFORE AND AFTER THE TWO STORMS (as measured; cm above rule L; noon values of the filtered hourly heights)")
+for name, sid in (("San Diego", "9410170"), ("San Francisco", "9414290")):
+    xx = W.godin(W.series(f'/home/agent1/trace/data/coops/h{sid}.csv'))
+    def per2(a, b):
+        v = []; day = a
+        while day <= b:
+            k = int((dt.datetime(day.year, day.month, day.day, 12) - W.T0).total_seconds() // 3600)
+            if 0 <= k < W.N and not np.isnan(xx[k]): v.append(xx[k] - C.fitday(name, day))
+            day += dt.timedelta(days=1)
+        return float(np.mean(v))
+    vals = [per2(dt.date(2026, 9, 20), dt.date(2026, 9, 26)), per2(dt.date(2026, 9, 30), dt.date(2026, 10, 5)), per2(dt.date(2026, 10, 6), dt.date(2026, 10, 12)), per2(dt.date(2026, 10, 13), dt.date(2026, 10, 19)), per2(dt.date(2026, 10, 20), dt.date(2026, 10, 29))]
+    print(f"   {name}: 20-26 Sep {vals[0]:.1f}; 30 Sep-5 Oct {vals[1]:.1f}; 6-12 Oct {vals[2]:.1f}; 13-19 Oct {vals[3]:.1f}; 20-29 Oct {vals[4]:.1f}")
+    days = [dt.date(2026, 9, 30) + dt.timedelta(days=k) for k in range(6)]
+    print("      day by day, 30 Sep to 5 Oct: " + ", ".join(f"{xx[int((dt.datetime(d.year, d.month, d.day, 12) - W.T0).total_seconds() // 3600)] - C.fitday(name, d):.1f}" for d in days))
+print("   the mean curve of the eighteen earlier hurricanes at San Diego (composite.out): +4.0 on day 5, +1.7 on day 6, -0.4 on day 7; day 7 after Polo is 5 October")

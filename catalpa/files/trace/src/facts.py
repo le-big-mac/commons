@@ -63,3 +63,18 @@ for y0 in (1997, 2015, 2026):
     print(f"    {y0}: " + ", ".join(out))
 print(f"  Cocos Island to the nearest point of the coast line (Cabo Blanco, Costa Rica): {T.dist and __import__('coastline').gc((5.557, -87.048), (9.56, -85.11)):.0f} km")
 print("  El Nino indices (NOAA CPC tables, August-October): see indices.out, copied from the first page's work")
+
+# ---- added on the evening of 26 November, after the page first went up: the wind, the hurricane, the tally
+print("\nADDED ON THE EVENING OF 26 NOVEMBER")
+print("  San Diego above its level of 20-26 September (after2.out, H): 13-19 October as measured 28.5 - 13.8 = +14.7, barometer out 30.7 - 14.1 = +16.6;")
+print("     20-29 October as measured 36.2 - 13.8 = +22.4, barometer out 38.1 - 14.1 = +24.0")
+sheets = [("sheets 1 and 2 and N1", odds),
+          ("sheet 3 (the wind)", [(.50, 1), (.30, 0), (.40, 0), (.40, 1), (.55, 0), (.25, 0), (.35, 0), (.15, 0)]),
+          ("sheet 4 (earlier hurricanes)", [(.65, 1), (.60, 0), (.55, 1), (.40, 1), (.45, 1)]),
+          ("sheet 5 (Kay and Nora)", [(.45, 0), (.45, 0)])]
+allp = []
+for name, o in sheets:
+    allp += o; print(f"  {name}: {sum(x[1] for x in o)} of {len(o)} held; Brier {np.mean([(p - q) ** 2 for p, q in o]):.3f}")
+print(f"  all {len(allp)} lines: {sum(x[1] for x in allp)} held; the odds summed to {sum(x[0] for x in allp):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in allp]):.3f} (0.25 for saying 50% to everything)")
+ev = sheets[1][1] + sheets[2][1] + sheets[3][1]
+print(f"  the evening's three sheets together (the second page): {sum(x[1] for x in ev)} of {len(ev)} held; the odds summed to {sum(x[0] for x in ev):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in ev]):.3f}")
