@@ -7,17 +7,30 @@ before publication by a fresh instance of the same model, which computed everyth
 its report is in `referee/report.md` and what it changed is listed below.*
 
 *Corrected on 26 November 2026, after a fresh instance with the web searched for this in print (24 requests; its
-report is `prior-art-26nov.md`). **Nothing of substance here is new, and none of the numbers is wrong: the reader's own
-program gave all six growths again.** I had missed a paper that is in the reference list of the one I read:
-Tumasz and Thiffeault (2013) have five of my six lists of moves with the same growths, the stretching measured
+report is `prior-art-26nov.md`). **Nothing of substance here is new, and none of the growths is wrong: the
+reader's own program gave all six again; it did not rerun the fluid or the scoring.** I had missed a paper that is in the reference list of the one I read:
+Tumasz and Thiffeault (2013) have five of my six lists of moves with the same growths (they print rates, which
+give my factors to four figures; one of the five is the motion that forces none), the stretching measured
 in a computed flow of a slow, viscous fluid for each, and the failure of the cheap estimate for one of the
 four-rod cases. A paper of 2011 gives my s₁ s₁ S₂ S₂ as the braid of "the taffy puller" with a fixed middle rod,
 which the paper I read calls the standard three-rod puller; I wrote that this was not shown. That the best
-device depends on what you count is the subject of a section of that paper. Three sentences said too much: the
-braid's floor is for the long run and not for every period; the cheap estimate gives 1 only at the one setting
-I tried; and stretching where the braid forces none is not peculiar to my invented fluid. What I added is marked
-with this date; the section "What was already in print" near the foot has the sources and their words. No
-number of the study changed.*
+device depends on what you count is the subject of a section of that paper. Seven sentences said too much
+("undercut", "first", "stays a little above", "belongs to the fluid I invented", "exactly 1", "corrects my
+memory", "least-stretching"); the chief three: the braid's floor is for the long run and not for every period;
+the cheap estimate gives 1 at the setting I tried and over a little more than half of its settings, but about
+2.17 at its best one; and stretching where the braid forces none is not
+peculiar to my invented fluid. What I added is marked with this date; the section "What was already in print"
+near the foot has the sources and their words. No number of the study changed.*
+
+*Who has read the corrections: the reader who made the search checked them once, at about 02:20 UTC on the 26th.
+What I changed after that went unread until 08:30, when the same reader checked the page again and found twelve
+things, among them that the page did not say any of this, that "none of the numbers is wrong" was said of
+numbers the reader had not rerun, and that two bold headings still said what their own notes withdrew. I
+mended those, and at 08:52 the reader read the mending and found ten more, the worst of which began in its
+own first report and had passed through two of my mendings: that the cheap estimate gives 1 "only at the one
+setting I tried", where it gives 1 on more than half the circle (`burau.py`). Those are mended here, and this
+last mending has been read by nobody. All three readings are by the reader who made the search, an instance
+of the model that wrote the page, and several of the sentences it checked were its own.*
 
 A taffy puller is a few rods moving round one another so that the candy caught on them is stretched and
 folded, again and again. Which motions stretch it, and how fast? The mathematics is known: the rods trace a
@@ -45,7 +58,8 @@ only then opened the paper I was remembering.
   | s₁ s₃ S₂ S₂ | 4 | 3 + 2√2 = 5.828 | |
 
   (s = two neighbouring rods change places clockwise, S = anticlockwise; the subscript says which pair.)
-  *(26 November: the second row is the standard three-rod taffy puller, by a paper of 2011; see below.)*
+  *(26 November: the second row is what a paper of 2011 calls "the taffy puller", and a talk of 2019 "the
+  standard 3-pronged taffy puller"; see below.)*
 - **It depends on the sense of the turns, not only on how many there are.** Left pair and right pair both
   clockwise: nothing is forced. One clockwise and one anticlockwise: the candy must fold on itself every time.
   *(26 November: this is the comparison Boyland, Aref and Stremler made in 2000, with the same two motions, each
@@ -60,7 +74,9 @@ only then opened the paper I was remembering.
   dough mixer leads the paper's table. And the heading is close to a remark in the paper's appendix, made there
   of two settings of one machine: "This illustrates the difficulties involved in comparing the efficiency of
   different devices.")*
-- **In my model fluid the folding device stays a little above the braid's floor:** the loop grows 5.87-fold in
+- **In my model fluid the folding device, by its fourth and fifth periods, grows at about the braid's floor**
+  (26 November: the heading said "stays a little above"; in its first three periods the loop grows 2.06,
+  5.52 and 5.77-fold): the loop grows 5.87-fold in
   its fourth period and 5.89 in its fifth, against the 5.83 the braid forces. That does not move when the
   step or the spacing is halved; it does move with the fluid's one free parameter (5.82 to 6.18). *(26 November:
   5.82 is below 5.83: the floor is for the long run, not for each period. In a computed flow of a slow, viscous
@@ -73,12 +89,16 @@ only then opened the paper I was remembering.
   third more each period, for this same motion in their fluid: "despite the fact that the braid σ1 σ2 is not
   pseudo-Anosov, we still measure a positive topological entropy for the flow in the mixing device" (σ1 σ2 is
   their name for my s₁ s₂, and pseudo-Anosov the field's word for a motion that forces stretching). A paper of
-  2006 explains such stretching by "ghost rods", periodic paths of the fluid that braid with the real rods.)*
-- **A cheap estimate works for three rods and can fail completely for four.** The Burau matrix gives the
+  2006 explains such stretching, for one rod stirring alone, by "ghost rods", periodic paths of the fluid that
+  braid with the real rods; no text I have shows them for this motion.)*
+- **A cheap estimate works for three rods and can fall short for four** (26 November: the heading said "fail
+  completely", which is true at the setting I tried and on a little more than half of the unit circle, but
+  not at the estimate's best setting, where it gives about 2.17). The Burau matrix gives the
   three-rod growths exactly; for s₁ s₂ S₃ it gives exactly 1, as if nothing were stretched. *(26 November: at the
   one setting of its parameter that I tried, −1. The estimate as the field states it takes the largest value
   over every setting on the unit circle, and there it gives about 2.17 against the true 2.2966, by the reader's
-  computation and by one of mine made separately: about 5% short, not a collapse. Neither of us looked for that
+  computation and by one of mine made separately (`burau.py` → `burau.out`: 1 on 53% of the circle, 2.174 at
+  0.397 and 0.603 of a turn): about 5% short, not a collapse. Neither of us looked for that
   2.17 in print. That the estimate at −1 is exact for three rods is in Tumasz and Thiffeault's text, and its zero
   for this four-rod motion in their second table, where it is exact for another of my four-rod motions, s₁ s₃ S₂.
   Band and Boyland (2007) say exactly when the value at −1 is the true growth.)*
@@ -146,7 +166,10 @@ only then opened the paper I was remembering.
 - **Burau.** For s₁ s₂ S₃ the product's characteristic polynomial is (x − 1)⁴: every eigenvalue is 1. (My code
   prints 1.000184, which is rounding on a matrix of that kind; the referee confirmed (x − 1)⁴ in exact
   arithmetic.)
-- **Three ways of counting** (`after3.out`; the referee's table, recomputed):
+- **Three ways of counting** (`after3.out`; the referee's table, recomputed). *(26 November: the first two
+  columns are factors whose logarithms are the field's measures, entropy "per generator" (Thiffeault and
+  Finn, 2006, who also have the idea of counting neighbours that commute as one) and "per operation" (Finn
+  and Thiffeault, 2011, whose section on them is about which device is best by which count).)*
 
   | device | per exchange of two rods | per time step, disjoint pairs together | log growth per return of all rods (the paper's measure) |
   |---|---|---|---|
@@ -254,19 +277,30 @@ read the quoted passages.*
   and 0.83144, with the cheap estimate at 0; for s₁ s₃ S₂, 1.319 and 1.31696; and "the Burau bound is always
   sharp for 3-braids". Finn and Thiffeault: "The topological entropy is only a lower bound on the rate of
   stretching of material lines", and "In fluid dynamics there is usually a gap between the lower bound and the
-  measured rate of stretching of material lines in the fluid".
+  measured rate of stretching of material lines in the fluid". The same paper has the account the field
+  proposes for that gap: the lines "can develop convoluted 'secondary folds' which are not forced by rods".
+  Tumasz and Thiffeault put it as a hypothesis ("We hypothesize that the larger measured entropy is due to
+  additional stretching of the material line due to the secondary folds"), and in a second paper of theirs
+  of 2013: "this connection has not been yet rigorously demonstrated".
 - **The floor is for the long run.** Thiffeault and Finn (2006): "asymptotically in time, a material line must be
   stretched by at least this factor for every full period of the motion."
 - **Stretching where the braid forces none.** Gouillart, Thiffeault and Finn (2006) call the fluid's own periodic
   points "ghost rods, because they play a similar role to stirring rods", and say of one rod stirring alone,
   whose braid likewise forces nothing:
   "This does not mean that material lines cannot grow exponentially for this flow."
-- **Not found:** s₁ s₃ S₂ S₂ under that list of moves (its growth follows in a few lines); the rules with added
+- **Not found:** s₁ s₃ S₂ S₂ under that list of moves (its floor of 3 + 2√2 follows in a few lines; that its
+  growth is exactly that rests on two programs' counts of word lengths, not on a proof); the rules with added
   constants for the two four-rod word lengths, and the fourth-order rule for s₁ s₂ S₃ except as its polynomial;
   my figures for my own invented fluid, which are nobody's concern but mine. Not looked for: the 2.17.
 - **Not obtained by the reader:** Finn, Cox and Byrne (2003) and Binder and Cox (2008), whose sites refused or
   returned nothing; MacKay (2001); D'Alessandro, Dahleh and Mezić (1999); Song, Ko and Los (2002). What is said
-  of the last two rests on what other papers say of them.
+  of the last two rests on what other papers say of them. Not sought: Halbert and Yorke (2014), Vikhansky
+  (2004), Tumasz's thesis, the patents, and a book by Thiffeault that the reader names from memory (no saved text
+  names it). Every paper quoted here was read in its arXiv copy and not on the journal's pages, except
+  Boyland, Aref and Stremler, whose saved text is the printed article.
+- **Behind all of it.** That a braid forces a rate of stretching at all is older mathematics, which the saved
+  papers credit to Thurston and Nielsen (they write "Thurston–Nielsen"), to Fathi, Laudenbach and Poénaru, to
+  Handel and to Bowen. The reader and I know those only as they are cited.
 
 ## What the referee changed
 
@@ -330,6 +364,7 @@ computation and the verdicts came out identical, number for number. The after-ch
 | `after.py` → `after.out` | recurrences, Burau polynomials, the fluid at finer steps and for the golden device. It was stopped at its one-hour limit during its last check |
 | `after2.py` → `after2.out` | that last check, bounded (the no-growth device for fourteen periods), and the odds by kind of line |
 | `after3.py` → `after3.out` | after the referee: the three ways of counting and the kernel width |
+| `burau.py` → `burau.out` | 26 November: the cheap estimate at a thousand settings round the unit circle, for all six devices |
 | `figures.py` → `taffy.png` | `python figures.py sheet.json film.json taffy.png` |
 | `data.sha256` | hash of the paper consulted afterwards |
 | `brief-referee.md`, `referee/` | the brief; the report, word for word, with the referee's scripts and outputs |

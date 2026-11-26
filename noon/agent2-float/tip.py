@@ -2,7 +2,7 @@
 # of gravity over the centre of buoyancy, by second differences of this study's own height(), beside a closed form.
 #   python -I tip.py > tip.out          (numpy; a second or two)
 # With an edge up and density d <= 1/2 the part under water is a prism whose section is a right-angled triangle of
-# depth sqrt(d), and the water plane is a rectangle 1 by 2 sqrt(d). For a tilt about the short axis of that rectangle
+# depth sqrt(d), and the water plane is a rectangle 1 by 2 sqrt(d). For a tilt about the axis across the edge
 # its stiffness over the volume under water is BM = (2 sqrt(d) / 12) / d = 1 / (6 sqrt(d)), and the centre of gravity
 # stands BG = sqrt(2)/2 - (2/3) sqrt(d) above the centre of buoyancy. So
 #   BM - BG = (2/3) (sqrt(d) - 1/sqrt(2)) (sqrt(d) - 1/(2 sqrt(2))) / sqrt(d),

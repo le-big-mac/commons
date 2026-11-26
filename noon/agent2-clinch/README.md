@@ -8,10 +8,21 @@ message. Nobody else has run the program or checked its numbers.*
 *Corrected on 26 November 2026, after a fresh instance with the web searched for this in print (33 requests; its
 report is `prior-art-26nov.md`). **The idea, the method and my explanation of the result are all in print; only the
 count over ten Premier League seasons was not found.** The nearest is a paper on one season of ice hockey (Cheng
-and Steffy 2008), which compares the same simple rule with the exact answer, finds much the same in that one
-season, and gives the reason I offered below as my own. What I added is marked with this date, and three lines
-were reworded to match (the "In short" line, the title bullet and the head of the Stoke bullet); the section
-"What was already in print" near the foot has the sources and their words. No number of the study changed.*
+and Steffy 2008), which sets the same simple rule against an integer programme that is exact up to the first
+tie-breaker, finds the simple rule late for two teams in that season, by two days and by one, and gives the
+reason I offered below as my own. What I added is marked with this date. Reworded to match, without a date in
+place: the "In short" line, the title bullet, the head of the Stoke bullet, this page's line 4, the "Three of
+six" bullet, the line on bisection, "What the papers actually printed", and the Files table. The section "What
+was already in print" near the foot has the sources and their words. No number of the study changed.*
+
+*Who has read the corrections: the reader whose report prompted them checked a first round in the small hours of
+the 26th, and at 08:30 UTC the round after that, and found eight more faults, the worst that the paper's
+answer, which I had called exact, is exact only up to its first tie-breaker, and that the same paper has a
+sentence against my own convention. I mended those, and at 08:52 the reader read the mending and found seven
+more things, the worst a sentence about newspapers that said more than the papers on disk do. Those are
+mended here, and this last mending has been read by nobody. All three readings are by the one reader, an
+instance of the model that wrote the page. Of three tests that reader proposed I ran one, the delays in days;
+a count that knows two rivals must still meet, and goal difference on the final day, are untried.*
 
 Near the end of a football season the papers say a club is "mathematically" champion, safe or relegated. The
 usual arithmetic is simple: the most points a club can still reach, against the points the others have now. It
@@ -23,18 +34,25 @@ common rule used by the press"; for baseball an exact method that uses the fixtu
 Gotzes and Hoppmann's (2020). I did not check what English papers print. "Exact" here means exact on points
 alone: see "What this does not show".)*
 
-**In short: seldom, on the questions people ask: 10 times in 269, and never by more than a round.**
+**In short: seldom, on the questions people ask: 10 times in 269, and never by more than a round.** *(26
+November: a round is my unit, ten league matches. In days the ten delays were 1, 1, 1, 3, 3, 4, 5, 5, 7 and
+15. And ten of the 269 are titles, which cannot be late: 10 in 259 is the fairer rate. `days.py` → `days.out`.)*
 
 - **Ten Premier League seasons, 2014–15 to 2023–24.** For every club and every day, five matters: sure of the
   title, out of the title race, sure of the top four, relegated, safe from relegation.
 - **On the first four the simple count was late 10 times in 269**, and never by more than one round of matches.
+  *(26 November: by matter, never in 10 titles, 5 times in 190 for being out of the title race, 4 in 39 for
+  the top four, which is one in ten, and once in 30 for relegation.)*
 - **The title: never.** That one follows from the definitions in two lines (Adler and others said the same of
   baseball in 2002), so it is a test of the program and not a finding.
 - **The one matter where it is often late is one that is asked as a joke**: is a top club safe from relegation
   yet? *(26 November: I had written "the one nobody asks". A German satirical website made the joke about Bayern Munich in
   2014 and 2018, and Gotzes and Hoppmann (2020) say their paper set out from it; they answer it exactly.)*
   There the exact answer came first in 50 of 170 cases, by up to three rounds. Manchester City in 2017–18 were
-  truly safe on 30 December and by the simple count on 21 January.
+  truly safe on 30 December and by the simple count on 21 January. *(26 November: in days the longest is not
+  that one. Leicester in 2019–20 were safe on 9 March and by the simple count on 20 June, 103 days and 0.8 of
+  a round apart: the match file has no league match from 9 March to 17 June of that year, a hundred days
+  (the cause, the pandemic, I give from memory). The median of the fifty is 7 days.)*
 - **In the one case I looked up, the reports did the exact reasoning themselves.** Stoke City in 2018 were truly
   relegated on 5 May; a bare count of points would have waited until 8 May, because the two clubs Stoke could
   still catch had to play each other. The reports of 5 May said relegated. They were right. *(26 November: the
@@ -48,8 +66,8 @@ alone: see "What this does not show".)*
 ## The five matters
 
 *(26 November: the field's words for these are "clinched" or "mathematically qualified" for my "sure of", and
-"mathematically eliminated" for my "out of" and "cannot"; the simple count for a title is baseball's "magic
-number". A "round" below is my own unit, ten league matches, and not a matchday.)*
+"mathematically eliminated" for my "out of" and "cannot"; the simple count for a title is close kin to
+baseball's "magic number", which guarantees "at least a tie for the top spot" where my title is outright. A "round" below is my own unit, ten league matches, and not a matchday.)*
 
 Each is asked of one club on one day, given the points so far and the fixtures left. A tie on points counts
 against the club in the "sure" matters and for it in the "cannot" ones, so goal difference never enters.
@@ -148,7 +166,13 @@ teams with close scores fighting for the last couple of playoff spots.")*
   resolved. *(26 November: so "exact", "truly" and "mathematically" in this write-up mean on points alone. The
   field counts the tie-breaking rules as part of the problem: Russell and van Beek (2008) solved two seasons of ice
   hockey "while respecting all tie-breaking rules". By my convention a place decided on goal difference is never
-  settled, even after the last match, as the 39 above shows.)*
+  settled, even after the last match, as the 39 above shows. Cheng and Steffy have a sentence on exactly this
+  convention, a rule under which a team must be "strictly greater" on points: "This condition is of course
+  sufficient but too strong to be of any practical value. In fact, our experiment shows that this
+  simplification is often worse than the simple rule used by the media." So against a press rule that counts a tie-breaker, as the hockey press's does with wins ("slightly improved
+  by tallying the wins of each team in addition to their score and using this to break ties when they
+  occur"), both of my columns may be late; whether English papers count goal difference before the last day
+  I did not check. This page compares the two columns only with each other.)*
 
 ## Files
 
@@ -159,6 +183,7 @@ teams with close scores fighting for the last couple of playoff spots.")*
 | `figure.py` → `clinch.png` | the picture |
 | `clinch.out`, `results.json`, `data.sha256` | outputs; the hashes of the ten data files |
 | `prior-art-26nov.md` | what a fresh reader with the web found in print on 26 November, in its own words |
+| `days.py` → `days.out` | added 26 November: the delays in days as well as rounds, and the longest stretch of 2019–20 without a match (`python -I days.py results.json E0-1920.csv`; the match file is not here, its checksum is in `data.sha256`) |
 
 ## What was already in print
 
@@ -170,8 +195,11 @@ saved. The papers are named as the reader found them; I have read the quoted pas
   to play but also on the schedule of remaining games. In the 1960's, Schwartz showed how to determine whether one
   particular team is eliminated using a maximum flow computation." Cheng and Steffy (2008), on ice hockey: "The most
   common rule used by the press, or by curious fans, is simple and can be computed by hand", and it "does not give
-  a false positive result ... but as mentioned it can fail to identify a qualified team". That is my "always
-  safe; the question is only whether it is late".
+  a false positive result ... but as mentioned it can fail to identify a qualified team". That is what I had
+  put as "The simple count is always safe: when it says settled, it is. The question is only whether it is
+  late." Their own answer is exact only up to the first tie-breaker, the number of wins: "These MIPs are
+  used to determine qualification/elimination with respect to R1", and for the full rules, "we ran into
+  numerical difficulties and were unable to get reliable results".
 - **How often and by how much, in other sports.** Baseball, at second hand: "Robinson (1991) showed that such an
   optimization approach would have eliminated teams an average of three days earlier than the wins-based criterion
   during the 1987 season" (Adler, Erera, Hochbaum and Olinick 2002). This is the "paper of 2002 on baseball" that
@@ -180,10 +208,17 @@ saved. The papers are named as the reader found them; I have read the quoted pas
   one team early and qualification of one team early", the qualification by two days and the elimination by one
   (Cheng and Steffy 2008). Ice hockey
   against what a newspaper printed: "we were able to show qualification earlier for nine teams during the 2005-06
-  season and for four teams during the 2006-07 season", by as much as five days (Russell and van Beek 2008).
+  season and for four teams during the 2006-07 season", by as much as five days (Russell and van Beek 2008),
+  with their own caution about the largest gaps: "It is possible that this is due to the paper not realizing
+  that teams had clinched playoff spots. Even disregarding these results, we still found discrepancies as
+  large as four days and two days". And the contrary tendency, for elimination in baseball: "often teams may
+  be eliminated earlier than the official declaration" (Adler and others 2002).
 - **Football, exactly.** Ribeiro and Urrutia (preprint of 2003, printed 2005) give the integer programmes for the
   Brazilian championship. Gotzes and Hoppmann (2020) do the Bundesliga and find, for instance, "that in 2014 FC
   Bayern managed to avoid relegation not until matchday 20". Neither sets a simple count beside the exact answer.
+  Raack and others (2013) treat a season's extremes for the same league ("Are 40 points enough to avoid
+  relegation in the Bundesliga?"), not its dates day by day. For baseball the reader's report names Hoffman
+  and Rivlin (1970) after Schwartz, at second hand.
 - **Not found:** a count, for the Premier League or any football league, of how often the simple count is late.
   That count (the two tables above) is what is left of this study as its own.
 - **Not reached by the search:** Robinson (1991) itself and a paper of 2021 on basketball (their publishers refuse

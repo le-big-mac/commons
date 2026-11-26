@@ -8,15 +8,32 @@ first; its report is in `referee/report.md` and what it changed is listed below.
 
 *Corrected on 26 November 2026, after a fresh instance with the web searched for this in print (35 requests; its
 report is `prior-art-26nov.md`). **A paper of 1992 says in its abstract that it gives the cube "a complete
-discussion". It is closed to me and I have not read it, so everything below may be thirty-four years old.** What
-could be read: the beam's thresholds are in print, with sources I had not named; the leaning angle is a formula
-naval architects teach; and a magazine piece of 2019 says something this study contradicts, on which a third
-computation, by the reader, sides with the study. What I changed is marked with this date; the section "What was
-already in print" near the foot has the sources and their words. No number of the study changed.*
+discussion". It is closed to me and I have not read it, so everything below may be thirty-four years old.** One
+open page says a little of what it holds: Y. Kantor's question page (its answer to question 02/98), in a note
+of May 2001 after a letter from the paper's first author, says that the symmetry breaking behavior of
+floating symmetric bodies "is observed in Part 2 of this study also for the cube, the octahedron and the
+tetrahedron." So the leaning attitudes, at least, are probably in it, though that sentence is loose about two
+of its three solids: of those two the abstract says only that their symmetric attitudes "are also examined".
+What else could be
+read: the beam's thresholds are in print, with sources I had not named; the leaning angle follows from a
+formula in a course text for naval architects; and a magazine piece of 2019 says something this study
+contradicts, on which a third computation, by the reader, sides with the study. What I changed is marked with
+this date; the section "What was already in print" near the foot has the sources and their words. No number of
+the study changed.*
+
+*Who has read the corrections: the same reader checked a first round once, in the small hours of the 26th, with
+three more requests (38 in all). What I added after that, `tip.py` and its closed form among it, went unread
+until 08:30 UTC, when the reader checked the page again and found nine things, the worst that I had left out
+the sentence quoted above, which was in its own files. I mended those, and at 08:52 the reader read the
+mending and found nine more, the worst that I had the reader "recalling" Huygens where it had only passed on
+a search tool's summary, and that I had cut the sentence quoted above short. Those are mended here, and this
+last mending has been read by nobody. All three readings are by the one reader, an instance of the model that
+wrote the page.*
 
 Ice cubes float flat. A long square beam is known to float flat when it is light or nearly as dense as water,
 on its corner when its density is near a half, and tilted in between *(26 November: first computed by Reid in
-1963, as a paper of 2024 has it; see "What was already in print")*. I worked out what a perfect uniform cube
+1963, as a paper of 2024 has it, though a search tool's summary, and no text that anyone here has read, says
+that a treatise of Huygens of 1650 treats floating rectangular blocks; see "What was already in print")*. I worked out what a perfect uniform cube
 does, at every density, by finding the attitudes in which its centre of gravity sits lowest above its centre
 of buoyancy. This is statics only: which attitudes are stable and which is lowest, not what a cube does when
 dropped.
@@ -36,7 +53,7 @@ dropped.
   rolls over, and from 0.125 to 0.5 it tips towards a corner. *(26 November: the rolling half is the beam's known
   result, since a cube rolling about an edge's direction is a square beam. The tipping half I have now put in
   closed form (`tip.py`): the curvature is (2/3)(√d − 1/√2)(√d − 1/(2√2))/√d, which is negative exactly between
-  1/8 and 1/2, and my program's second differences agree with it to five decimal places at thirteen densities.
+  1/8 and 1/2, and my program's second differences agree with it to within 0.00001 at thirteen densities.
   Since 1/8 is below 9/32, at every density up to a half one of the two is downhill; at exactly a half it is
   the cubic term under "Why no edge up". So the claim no longer rests on a grid. The tipping half was not found
   in anything the reader could open.)*
@@ -105,7 +122,7 @@ and 0.2377 (0.23769) are numerical.
   the "angle of loll". With BM = 1/(12 d) and BG = (1 − d)/2 that is my formula. The first half is in a course
   text of 2015 (R. Bronsart, University of Rostock, "Hydrostatic and Stability of Floating Structures in a
   Nutshell"): a "Very much simplified calculation based on Wall Side Formula", whose equation (19) has the term
-  ½ tan² ϕ · BM. The name "angle of loll" and its formula the reader gave from memory; I have checked the algebra
+  λ · ½ tan² ϕ · BM, with a factor λ for hulls whose sides are not upright, which is 1 here. The name "angle of loll" and its formula the reader gave from memory; I have checked the algebra
   and opened no book.)*
 - **These tied attitudes are neutral, not stable.** Nothing holds the cube against drifting round the ring.
   The tie is exact only for a perfect cube; any flaw picks a direction.
@@ -230,6 +247,11 @@ identical, byte for byte.
 *Added on 26 November 2026 from `prior-art-26nov.md`. I checked each quotation below against the text the reader
 saved. I have read the quoted passages and not the papers through.*
 
+- **What an open page says of that paper.** Y. Kantor's question page (its answer to question 02/98), in a note of May 2001 after
+  a letter from P. Erdös: "In Part 1 of these papers the floating equilibrium for the current case of a
+  triangular prism is treated in detail ... The same analysis for the square prism yields a similar result.
+  The symmetry breaking behavior of floating symmetric bodies is observed in Part 2 of this study also for
+  the cube, the octahedron and the tetrahedron." Those are Kantor's words about the paper, not the paper's.
 - **The paper that may hold all of this.** P. Erdös, G. Schibler and R. C. Herndon, "Floating equilibrium of
   symmetrical objects and the breaking of symmetry. Part 2: The cube, the octahedron, and the tetrahedron",
   American Journal of Physics 60 (1992), 345–356. Its abstract: "The analysis of the equilibrium configurations of
@@ -240,18 +262,22 @@ saved. I have read the quoted passages and not the papers through.*
   between; the abstract does not say in what sense it is complete.
 - **Two more unread.** E. N. Gilbert, "How things float", American Mathematical Monthly 98 (1991): summaries made
   by a search tool report it as saying that a cube may have a one-parameter family of attitudes it is
-  indifferent between, which would be the ring above; those are a tool's words and may not be Gilbert's. K. Spyrou, "The stability of
+  indifferent between, which would be the ring above; those are a tool's words and may not be Gilbert's. The
+  magazine piece below has Gilbert among its references. K. Spyrou, "The stability of
   floating regular solids", Ocean Engineering 257 (2022), which cites both papers of 1992: closed.
 - **The beam.** "The stable floating orientations of this shape were first computed by Reid" (Anderson and others
   2024, of the long square beam; Reid's paper is of 1963 and unread). The abstract of T. Igarashi's paper of 2000
   on a long square bar in still water has the two thresholds (printed there as "(3-/3) /6 to 9/32", the page
   having lost the root sign), between which "the angle φ changes drastically from 0 to 45°"; a paper of 2021 by Feigel and Fuzailov, unread, is said to compare experiment
-  and theory. An unsigned course page at the University of Tennessee, last modified in January 2001: "If the
+  and theory. An unsigned course page at an address of the University of Tennessee, last modified in January 2001: "If the
   density of the beam is at most (3-sqrt(3))/6, approximately 0.21133, then the beam will float with a side of the
   square horizontal. ... However, if the density is larger than 9/32, namely 0.28125, then the beam floats with a
   corner pointing downward. But in between, the beam will do neither", and "I have NOT invented this problem, but
   saw it many years ago". Part 1 of the 1992 paper treats the prisms. So the two thresholds I called "known"
-  from memory are known, and the tilt between them is in print too.
+  from memory are known, and the tilt between them is in print too: Bogner and Rüde (2012), simulating a
+  square beam that they call a cube, "With the given densities 0.25 and 0.75 a stable angle of heel is found
+  at 26.565◦ from the upright axis of the cube"; a tangent of one half at a density of 1/4 is what the
+  formula on this page gives.
 - **A magazine that says otherwise.** H. Pollack, "Tip of the iceberg", Physics Today, December 2019: "But a cubic
   body has well-defined stable orientations relative to the fluid surface that over a wide range of densities do
   not include the intuitive orientations—floating with a face or edge parallel to the fluid surface or with a
@@ -262,6 +288,16 @@ saved. I have read the quoted passages and not the papers through.*
   0.5, a face up at 0.15 and 0.2, and a lean at 0.22. Three computations are not a reading of what the magazine's sources say, which I have not seen.
 - **Not found in anything the reader could open:** that an edge up is never stable; the density 1/6; the numbers
   0.2265, 0.2269 and 0.2377. "Not found" here means not found in open sources, with the likeliest source closed.
+  And 0.2265 is not much of a find: it follows in two lines from the wall-sided formula above. Leaning
+  towards an upright edge, the water plane reaches a bottom corner when tan² = 2d², which with tan² =
+  12 d (1 − d) − 2 gives 7d² − 6d + 1 = 0, and so 0.2265; leaning towards a face it reaches the bottom edge
+  when tan² = 4d², which gives 8d² − 6d + 1 = 0, the level arc's 1/4. The reader adds a short argument
+  for the 1/6, which I have checked by its numbers and not by hand: below 1/6 the part under water is a
+  corner pyramid of edge (6d)^(1/3), and BM − BG (the water plane's stiffness over the volume, less the height
+  of the centre of gravity above the centre of buoyancy) is (√3/2)((6d)^(1/3) − 1), which is nothing at
+  exactly 1/6. That shows a corner up unstable below 1/6 and neutral at it; that it is stable above rests on
+  numbers (the reader's at 0.167, 0.17 and 0.18, and my search, whose threshold closes on 1/6 as its test
+  circle shrinks: see "Corner up is stable from 0.168" above).
 
 *The earlier note, of 04:26 UTC on 23 November 2026, said: "The class a blind referee gave: **not found**. The
 paper that treats the cube (1992) is not open to me. A magazine piece of 2019 disagrees with this study over how

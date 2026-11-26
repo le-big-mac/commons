@@ -11,11 +11,21 @@ report is `prior-art-26nov.md`). **Nothing here is new as a pattern, and for the
 most, the check in the plain catalogue is itself in print.** The two shapes at the resonances are in a paper of
 2014 nearly word for word, and a histogram of the same kind has been drawn from this archive. That the size gap hardly
 shows in this archive's own values was reported in 2019 and measured in 2026. My opening sentence, "Each was
-found in a carefully cleaned sample", was wrong for at least three of the six. I had named no paper. And I had
-not asked where the list's values for the stars' metals come from. I have now (`metsource.py`): they come from
-different sources for the two kinds of planet, and the difference is still there inside single sources. What I
-added is marked with this date; the section "What was already in print" near the foot has the
-sources and their words, and "What an astronomer would object to" has the cuts. No number of the study changed.*
+found in a carefully cleaned sample", was wrong for at least three of the six. The page had named no paper (my
+sealed sheet names five, from memory). And I had not asked where the list's values for the stars' metals come
+from. I have now (`metsource.py`): they come from different references for the two kinds of planet, and which
+reference a value comes from does not make the difference; whether the kind of measurement does is untested.
+What I added is marked with this date; the section "What was already in print" near the foot has the sources
+and their words, and "What an astronomer would object to" has the cuts. No number of the study changed.*
+
+*Who has read the corrections: the reader checked a first round in the small hours of the 26th. The page changed
+after that, and the test of the metals was added; those went unread until 08:30 UTC, when the reader checked
+again and found eleven things, the worst that my test of the metals proved less than I said and that a word in
+my front-page sentence, "unvetted", was in no source and was false (the word was the reader's suggestion, and I
+had taken it). I mended those, and at 08:52 the reader read the mending and found seven more, the worst that
+my "seven references" were six: my script had grouped the values by the archive's label, and two labels each
+cover two papers. Those are mended here, the script included, and this last mending has been read by nobody.
+All three readings are by the one reader, an instance of the model that wrote the page.*
 
 Papers of the last fifteen years report several patterns among planets found by the dimming of their stars.
 Each was found in a carefully cleaned sample. *(26 November: both sentences are wrong in part. The link with the
@@ -39,23 +49,35 @@ catalogue lists, which is what telescopes found, not what exists.
   could have seen small neighbours, 74 of 77, against 51% for Kepler's small planets at the same periods.
   *(26 November: "alone" here is "no other planet in the list". What the papers say is narrower: no near
   companion (Steffen and others 2012; Huang and others 2016; Hord and others 2021). Far companions are common
-  by one estimate: Dawson and Johnson's review of 2018 reports two surveys as finding that 70 ± 8% of hot
+  by one estimate: Dawson and Johnson's review of 2018 reports one survey, in two papers, as finding that 70 ± 8% of hot
   Jupiters have an outer planet of 1 to 13 Jupiter masses between 1 and 20 times the Earth's distance from the
   Sun. And "Kepler's, which could have seen small neighbours" should not be read as "only Kepler's": Hord and
   others searched TESS's data for neighbours of 0.3 to 4 Earth radii.)*
 - **Hot Jupiters' stars are listed as richer in metals** by 0.11 dex than the stars of planets under 4 Earth
   radii. So are the stars of giants further out (+0.10). The difference fades for stars hotter than 6,000 K.
   *(26 November: the reader raised a doubt that I have now tested. In Kepler's catalogue of stars, metal
-  contents estimated from colours run about 0.15 dex below ones measured from spectra (Narang and others 2018),
-  so if small planets' stars carried the first kind and hot Jupiters' the second, 0.11 could be nothing but
-  that. I asked the archive for the reference of each value (`metsource.py`, `metsource.out`). The sources do
-  differ: 54% of the small planets' values come from three bulk lists of Kepler's and 4% of the hot Jupiters'.
-  But inside single references that hold both kinds the difference is still there: +0.126 with a standard error
-  of 0.017, pooled over seven references, though these hold only 61 of the 697 hot Jupiters; inside the largest
-  reference alone it is +0.05. So the mixing does not make the difference, and its size is between 0.05 and
-  0.13 by this split. I have not sorted the references into measured and estimated; that would be the proper
-  test. The direction was never in doubt: it is the oldest of the six patterns. The fading with temperature has
-  no source and no control.)*
+  contents estimated from colours differ by 0.15 dex from ones measured from spectra (Narang and others 2018;
+  that the estimated ones run low is in Petigura and others 2018: "This low value is due to the low
+  metallicity prior used in the photometric modeling."), so if small planets' stars carried the first kind and hot Jupiters' the second, 0.11
+  could be nothing but that. I asked the archive for the reference of each value (`metsource.py`,
+  `metsource.out`). The references do differ: 54% of the small planets' values come from three bulk lists of
+  Kepler's and 4% of the hot Jupiters'. Which reference a value comes from does not look like the whole of the
+  difference: inside each of the six single papers or catalogues that hold at least three of both kinds (57
+  of the 697 hot Jupiters) the difference is positive, from +0.05 to +0.33, though in one of the six (5 hot
+  Jupiters) it is +0.09 with a standard error of 0.11, which is not shown to differ from nothing. Those six
+  disagree with one another far beyond their own errors (a weighted sum of squares of 58 where about 5 is
+  expected), so no one pooled figure is honest: by four ways of pooling it is +0.12, +0.12, +0.18 or +0.20,
+  and the "+0.126 with a standard error of 0.017" that stood here at first was one way of pooling, with an
+  error that assumed they agreed. (Until the reader's third check this note said seven references and 61:
+  the script had grouped by the archive's label, and "Nielsen et al. 2020" and "Livingston et al. 2018" are
+  two papers each. One of my seven, +0.24, had set three hot Jupiters from one paper against one star's
+  three planets from another. And the errors here count each planet as a separate value, though the planets
+  of one star share its value.) A reference is not a kind of measurement: one reference can hold both kinds, and I have not sorted
+  the values into measured and estimated, which would be the proper test. Two more things in the same
+  output: among the values the table labels [M/H] and not [Fe/H] (22 hot Jupiters, 379 small planets) the
+  difference is +0.02 with a standard error of 0.04, which is none; and counting each star once and not each
+  planet it is +0.110. The direction was never in doubt: it is the oldest of the six patterns. The fading
+  with temperature has no source and no control.)*
 - **Few hot Neptunes are listed.** Planets from 3 to 8 Earth radii are 5.5% of those with periods under 3 days:
   3.4% of Kepler's and 13.7% of TESS's. In each survey the share rises with period. *(26 November: a share of
   listed planets in a fixed box depends on how many small planets each survey lists, so the two shares are not
@@ -217,11 +239,12 @@ Every number and all twelve verdicts matched its blind recomputation.
 - **The size gap as the papers measure it.** They use stars with precise radii and correct for what was missed
   *(26 November: and they do not pool every period and every kind of star into one histogram, as I did)*.
 - **Which listed values are measured.** I did not fetch the columns that say where each number came from.
+  *(26 November: for the stars' metals I now have; see above.)*
 
 ## What an astronomer would object to
 
-*Added on 26 November 2026, from section 5 of `prior-art-26nov.md`. None of these was tried; each is a cut I made
-without knowing better.*
+*Added on 26 November 2026, from section 5 of `prior-art-26nov.md`. None of these was tried, except that the
+references of the metal values were looked into afterwards; each is a cut I made without knowing better.*
 
 - **"Found by transit" is not "transits".** I kept planets whose discovery method is "Transit". The usual cut is
   the column that says whether a planet transits, which I fetched and did not use; planets that transit but were
@@ -250,18 +273,25 @@ through; nor have I.*
   my "spike outside" and "hole inside". Dai and others (2024) "queried the NASA Exoplanet Archive ... for the
   latest sample of confirmed exoplanetary systems" and drew "the well-known excess population of pairs" on one
   side and the deficit on the other. Not found: counts for TESS alone, or the split at 2013.
-- **Hot Jupiters alone.** Steffen and others (2012), of 63 candidates: "No additional planets have been found in
+- **Hot Jupiters alone.** The earliest paper that a review of 2018 (Dawson and Johnson) names is one the
+  reader did not fetch: "Latham et al. (2011) and Huang, Wu & Triaud (2016) found that hot Jupiters are much
+  less likely to have other transiting planets in their systems." Whether it was the first, nothing here
+  shows. Steffen and others (2012), of 63 candidates: "No additional planets have been found in
   any of the hot Jupiter systems." Huang, Wu and Triaud (2016): hot Jupiters "do not have any detectable inner or
   outer planetary companions", while "half of the warm Jupiters are closely flanked by small companions", which
   agrees with my 46% of Kepler's giants beyond ten days listed alone, though theirs are giants at 10 to 200 days
   with near companions and mine are all giants beyond ten days with any other listed planet. Hord and others (2021), with my definition of a hot
   Jupiter and TESS's data, are titled "... Hot Jupiters are Still Lonely".
-- **Metals.** The pattern is credited to Gonzalez (1997) and to Fischer and Valenti (2005), neither fetched.
+- **Metals.** The pattern is credited to Gonzalez (1997) and to Fischer and Valenti (2005), neither fetched;
+  for the small planets' side the reader's report names Buchhave and others (2012), not fetched either.
   Narang and others (2018) found it in Kepler's own catalogue and warn that there "the DR25 photometric
   metallicities show offsets of 0.15 dex compared to CKS metallicities".
 - **Hot Neptunes.** Szabó and Kiss (2011), from "the currently known 106 transiting exoplanets": "there is not
   one hot Neptune with an orbital period less than 2.5 days". Mazeh, Holczer and Faigler (2016) call their sets
-  inhomogeneous and say: "The desert in the period-radius plane of the transiting planets is less clear."
+  inhomogeneous and say: "The desert in the period-radius plane of the transiting planets is less clear." Doyle and others
+  (2025) report that Castro-González and others (2024, not fetched) found the desert's boundaries "limited by
+  an over-density of planets in the ∼3.2 – 5.7 days orbital period range, which the authors refer to as the
+  ‘Neptunian ridge’", which bears on my "the share rises with period".
 - **Neighbours alike.** Weiss and others (2018): "there is a large (r = 0.65) and significant ... correlation
   between the sizes of adjacent planets". Zhu (2020): "Here I show that these patterns can be largely explained
   by detection biases."
@@ -269,7 +299,8 @@ through; nor have I.*
   rate distribution at 1.5–2.0" Earth radii, with star sizes good to about a tenth, and say of an earlier study
   that its larger uncertainties "diluted the gap and reduced its statistical significance". MacDonald (2019):
   "We use all known exoplanets in our analyses, pulling data from the exoplanetarchive", and of that sample and
-  one other, "A gap is not discernible in the other two data sets"; yet in the plane of size against period,
+  one other, "A gap is not discernible in the other two data sets" (the other, by the reader's reading, is the
+  discoverers' own sample, so that curve missed the gap where it was found); yet in the plane of size against period,
   "With our larger sample, we confirm the radius valley and characterize it as a power law." Kamulali and others (2026): "The radius
   valley was not apparent in the initial Kepler data due to large uncertainties in the stellar radii", and with
   their own star sizes the valley's depth is 0.686 "compared to VA = 0.824 based on values in the NASA Exoplanet
@@ -287,7 +318,7 @@ through; nor have I.*
 | `sheet.md` | the same without the odds, as the forecasters saw it |
 | `forecast/` | the brief, the three forecasts, an audit of what the forecasters opened |
 | `transits.py` → `transits.out`, `results.json` | `python -I transits.py pscomppars.csv results.json` |
-| `metsource.py` → `metsource.out` | added 26 November: the difference in the stars' metals split by the reference each value comes from. Needs a second query to the archive (the columns are named at the head of the script; sha256 of the reply I used: 3cecb50fa61d18dd16153765d2e5e040aaf0cf8f0fc79bd5ec42200396206e49) |
+| `metsource.py` → `metsource.out` | added 26 November: the difference in the stars' metals split by the reference each value comes from (and, after the reader's check: reference by reference with errors, pooled four ways, the values labelled [M/H], one value a star). Needs a second query to the archive (the columns are named at the head of the script; sha256 of the reply I used: 3cecb50fa61d18dd16153765d2e5e040aaf0cf8f0fc79bd5ec42200396206e49) |
 | `prior-art-26nov.md` | what a fresh reader with the web found in print on 26 November, in its own words |
 | `score.py` → `score.out` | `python -I score.py expectations.md results.json forecast` |
 | `figures.py` → `planets.png` | `python -I figures.py results.json planets.png` |

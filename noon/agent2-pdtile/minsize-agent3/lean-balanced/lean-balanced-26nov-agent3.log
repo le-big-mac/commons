@@ -1,0 +1,89 @@
+The two lower bounds of the balanced half in Lean: what is proposed for lean-tiling/ and how it was checked (agent3 / Yonder).
+written 09:21:05 UTC, 26 November 2026
+
+NOT YET in the shared Lean folder: these files sit here until Noon has said they may go in.
+New: Pnq/Balanced.lean (958 lines; gBeyond, balanced_base, balanced_plus, on the tree) and Pnq/BalancedGroup.lean (77 lines; levelsBeyond, balanced_base_zmod, balanced_plus_zmod, for subsets of ZMod (p^n * q)).
+Changed (proposed): Pnq.lean (two imports added at the end) and CheckPnq.lean (four #print axioms lines added at the end):
+9a10,11
+> import Pnq.Balanced
+> import Pnq.BalancedGroup
+25a26,29
+> #print axioms Pnq.balanced_base
+> #print axioms Pnq.balanced_plus
+> #print axioms Pnq.balanced_base_zmod
+> #print axioms Pnq.balanced_plus_zmod
+
+Built in a private copy (~/lean/sharp) whose other files are those of the shared folder:
+   differs from shared: ./CheckPnq.lean
+   differs from shared: ./Pnq.lean
+   identical to the shared folder: 68 files; different: 2 (the two named above)
+lake build (all default targets): Build completed successfully (18427 jobs).
+lines containing 'error' in the build output: 0
+lines with sorry, admit, axiom, native_decide, unsafe, opaque or implemented_by in the two new files: 0
+lake env lean Check.lean: 22 axiom lines, of which 22 are exactly [propext, Classical.choice, Quot.sound]
+lake env lean CheckPnq.lean: 23 axiom lines, of which 23 are exactly [propext, Classical.choice, Quot.sound]
+lake env lean CheckP2q2.lean: 22 axiom lines, of which 22 are exactly [propext, Classical.choice, Quot.sound]
+
+The four new lines of CheckPnq.lean print:
+'Pnq.balanced_base' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.balanced_plus' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.balanced_base_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.balanced_plus_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+The statements as Lean has them:
+@gBeyond : {p q n : ℕ} → Pnq.Tree p q n → ℕ → Finset ℕ
+@balanced_base : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ {n : ℕ} (t : Pnq.Tree p q n) (a0 : ℕ),
+          F t 0 →
+            (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → F t ℓ) →
+              1 ≤ a0 → a0 ≤ n → ¬F t a0 → q * p ^ (e t + (gBeyond t a0).card) ≤ size t
+@balanced_plus : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ {n : ℕ} (t : Pnq.Tree p q n) (a0 : ℕ),
+          F t 0 →
+            (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → F t ℓ) →
+              1 ≤ a0 →
+                a0 ≤ n →
+                  ¬F t a0 →
+                    (gBeyond t a0).Nonempty →
+                      (∀ ℓ < a0, ¬E t ℓ) →
+                        (¬E t a0 ∨ p = 2 ∧ ∀ (b : ℕ), a0 < b → (∀ g ∈ gBeyond t a0, b < g) → E t b → F t b) →
+                          q * p ^ e t * (p ^ (gBeyond t a0).card + 1) ≤ size t
+def Pnq.gBeyond : {p q n : ℕ} → Pnq.Tree p q n → ℕ → Finset ℕ :=
+fun {p q n} t a0 => {ℓ ∈ fSet t \ eSet t | a0 < ℓ}
+balanced_base_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (A : Finset (ZMod (p ^ n * q))) (a0 : ℕ),
+      Pqr.ZeroAt A q →
+        (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → Pqr.ZeroAt A (p ^ ℓ * q)) →
+          1 ≤ a0 → a0 ≤ n → ¬Pqr.ZeroAt A (p ^ a0 * q) → q * p ^ ((levelsE A).card + (levelsBeyond A a0).card) ≤ A.card
+balanced_plus_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (A : Finset (ZMod (p ^ n * q))) (a0 : ℕ),
+      Pqr.ZeroAt A q →
+        (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → Pqr.ZeroAt A (p ^ ℓ * q)) →
+          1 ≤ a0 →
+            a0 ≤ n →
+              ¬Pqr.ZeroAt A (p ^ a0 * q) →
+                (levelsBeyond A a0).Nonempty →
+                  (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → ¬Pqr.ZeroAt A (p ^ ℓ)) →
+                    (¬Pqr.ZeroAt A (p ^ a0) ∨
+                        p = 2 ∧
+                          ∀ (b : ℕ),
+                            a0 < b →
+                              b ≤ n →
+                                (∀ g ∈ levelsBeyond A a0, b < g) → Pqr.ZeroAt A (p ^ b) → Pqr.ZeroAt A (p ^ b * q)) →
+                      q * p ^ (levelsE A).card * (p ^ (levelsBeyond A a0).card + 1) ≤ A.card
+
+sha256:
+1b28f483d108bc379dd2e1c8f111736e59bae914ee2c8ce3ffd4c71736233b18  Pnq/Balanced.lean
+d0b4aa30d2b07d2b2079aca443e87a5643a74ac227dd82e71ea821d97a638fc0  Pnq/BalancedGroup.lean
+6f71f46b048da2e4da5527005f773250c78eaef716b18929d44683c7b813fe4a  Pnq.lean
+89fdd1c8c64f2402b96c97a59bf21ee1d9ecfe2881678f7973d4e0f98ecd9c56  CheckPnq.lean
+
+Who wrote what: the statements of gBeyond, balanced_base and balanced_plus are mine and were fixed before the proof was written; the proofs in Pnq/Balanced.lean are by a fresh instance of the model, following sections 1 to 5 of balanced-half/proof.md (another fresh instance's proof, which I have read line by line); Pnq/BalancedGroup.lean is mine. Nobody but me has read the statements against the mathematics.

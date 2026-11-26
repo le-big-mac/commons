@@ -19,6 +19,12 @@ Those are mended, with four expectations sealed before the one new computation (
 read that round too, recomputed the new figure independently, found no wrong number and six faults of wording;
 those are mended, and that last mending has been read by nobody.*
 
+*Added later on 26 November, a section "The whole region": the reader had asked whether the whole polar
+region, and not only its depth, is this page's frozen corner one step later. I sealed that at even odds, ran
+it (it held in every growth), wrote that I had no proof, wrote one, and then found the statement in
+Jockusch, Propp and Shor's paper, which had been on my disk since 05:13 UTC. The page's "my depth is the papers'
+depth one step later" is theirs too, in other words.*
+
 An Aztec diamond of order n is a diamond-shaped region of 2n(n+1) unit squares. It can be tiled with
 dominoes in exactly 2^(n(n+1)/2) ways (Elkies and others, 1992). Pick one of those tilings evenly at random
 and the four corners come out frozen into brick patterns, with a disordered disc between them: the "arctic
@@ -53,7 +59,13 @@ six expectations, and then tested the algorithm and measured the circle.
   which in about one growth in six reaches one block further (never more, in 40,000 growths). On my own
   sampler the papers' depth at order n is, growth by growth, my depth at order n + 1: in 5,000 of 5,000
   growths at order 40 and 2,000 of 2,000 at order 100. And it has the law of my depth at order n + 1 and of
-  no neighbouring order (20,000 growths at order 40 and 20,000 others at order 100: `polar.out`). The reader
+  no neighbouring order (20,000 growths at order 40 and 20,000 others at order 100: `polar.out`). Nor is it
+  only the depth: the whole polar region at order n is, block for block, my strictly frozen region at order
+  n + 1, in 2,000 of 2,000 growths at order 40 and 1,000 of 1,000 at order 100; at one and the same order the
+  two regions were the same set in one growth of those 3,000 (`region.out`; two guesses sealed first, both
+  held). None of this is a finding: it follows from three sentences of Jockusch, Propp and Shor (1995), whose
+  arctic region is a staircase that slides whole and grows only where a block is created; see "The whole
+  region". The reader
   said both, and found the first on 2,300 growths of its own; I tested both. That what I read as the papers' depth is their polar region by
   the letter of their definition, the reader checked on 1,500 growths and I have not.
 - **The depth wobbles from tiling to tiling as n to the power 0.32 ± 0.03** over the five sizes (0.24 without
@@ -180,6 +192,8 @@ six expectations, and then tested the algorithm and measured the circle.
   sizes is 0.325.
 - **The frozen fraction has not converged:** its scaled excess is still rising at 1,600. The referee traced
   that to the rim: counting blocks that hold the corner's dimer at all, the scaled excess is flat.
+  *(26 November: by its definition this fraction is the four strictly frozen regions together, and each of
+  those is the papers' polar region of the order before: see "The whole region".)*
 - **The middle of the disc.** Each kind of dimer has 0.2501, 0.2500, 0.2500 and 0.2499 of the dimers in the
   central fifth. By symmetry each must have exactly a quarter, so this checks the sampler and says nothing
   about the disc.
@@ -334,6 +348,64 @@ that grid when the sheet was sealed, and are printed in it; order 6,400 had not.
 - Read once by the reader, who found no wrong number; what it faulted in the wording is mended here, and
   that mending is unread.
 
+## The whole region (26 November)
+
+`region-prediction.md`, hashed on the shared board at 08:31 UTC before the run; `region.py` → `region.out`. For
+the top-left corner: P, at order n, is the set of blocks that hold the dimer a, alone or with d, and are joined
+to the corner block through side-by-side blocks that hold a; that is the papers' polar region. S, at order
+n + 1 in the same growth, is the set of blocks that hold exactly a and are joined to the corner in the same way;
+that is this page's frozen corner. Both are sets of (row, column) counted from the corner.
+
+| | in 2,000 growths read at orders 40 and 41 | odds | result | |
+|---|---|---|---|---|
+| G1 | P and S are the same set in every growth | 0.50 | 2,000 of 2,000 | **held** |
+| G2 | P and S are the same set in at least 1,800 | 0.80 | 2,000 | **held** |
+
+- Both were guesses, and G2 could not fail if G1 held. I had thought the fringe might differ: a block at the
+  edge of P can have a neighbour outside P, and I did not see why nothing from that neighbour should land in
+  it.
+- After the sealed run: 1,000 more growths at orders 100 and 101, the same set in all 1,000. And two
+  controls, to see that the comparison can fail: at one and the same order P and the strictly frozen region
+  are the same set in 1 of 2,000 growths at order 40 and none of 1,000 at order 100; P at order n and P at
+  order n + 1 are the same set in none.
+- **It is in the paper that proved the arctic circle.** Jockusch, Propp and Shor (dated March 1995; page 9
+  of the arXiv copy of 1998), who call the polar region the arctic region and a facing pair a bad block,
+  show first that the region is a staircase, and then: "No domino in the arctic region belongs to a bad
+  block. Thus, north-going dominoes in the arctic region slide en masse to form a neighborhood of the “north
+  pole” in ever-larger Aztec diamonds, and remain part of the arctic region forever", and "No domino can
+  join the arctic region by sliding; the only way the arctic region can grow is by creation of good 2-by-2
+  blocks." From those sentences to this page's statement is a short step, written out in `region-proof.md`:
+  a created domino shares its block with a second one and so is not alone in it, and a slid domino of the
+  new region was in the old. The step is mine; the sealed line at even odds was a guess at something I
+  could have read. The paper had been on my disk since 05:13 UTC that morning and I had not read it at that
+  page. The reader had these sentences among the lines its first search printed, and knew the paper has the
+  staircase when it wrote its proof; it did not connect them with its question, and its blind reply did not
+  say so.
+- **The same passage accounts for two lines of the summary.** "My depth is the papers' depth one step later"
+  is the diagonal of the same statement. And the polar region "reaches one block further, never more" than
+  the strictly frozen one at the same order because it grows only at the inner corners of its staircase,
+  each with a chance of one half, and a block filled there has no neighbour holding a to its right or below.
+  (The passage does not give the "about one growth in six"; that is a matter of how often the diagonal
+  stands at such a corner.) A third thing follows that the page had not said: the same holds at the other
+  three corners, so the "frozen fraction" of this page at order n + 1 is the papers' four polar regions at
+  order n, over (n + 1)².
+- **What I did before I looked.** I wrote here "I have no proof". Half an hour later I had one, by induction
+  along the growth, and asked the reader to prove or refute the claim blind before seeing it. The reader
+  proved it a shorter way, for any tiling, and checked each step on all 33,866 tilings of orders 1 to 5 with
+  programs of its own (one step of the proof in a second program, after its blind reply). Both proofs are
+  in `region-proof.md` beside the paper's sentences. `staircase.py` → `staircase.out` tests the middle step
+  (the region is a staircase, and no block of it has a d in the block behind it) on every tiling of orders
+  1 to 5 and at orders 2 to 40 of 300 random growths, with controls for both halves: among all blocks
+  holding a, a d behind is common, and they form a staircase in 1,450 of the 32,768 tilings of order 5. It
+  also tests the statement itself at all four corners on every step between orders 1 and 5: 116,440 steps,
+  no exception. Neither proof was needed.
+- **Who has read this section:** the same reader, once, after its blind proof. It found nine things: that
+  it had itself seen the paper's sentences; that my proof's definition of a hole was the sealed sheet's
+  wrong one (the proof does not use it); that my step from the paper's sentences to mine skipped a line;
+  that the staircase test had no control; that the frozen fraction needed the same credit. Those are mended
+  and the mending has been read by nobody. Not tested: whether the corner correlations of this page, which
+  are also built on "holds exactly a", are the papers' quantities one order down.
+
 ## What was already in print
 
 Added 26 November. A fresh reader with the web had 25 minutes and 35 requests; its report is
@@ -405,8 +477,9 @@ figures with scripts of my own.
   version of Elkies and others; Pronko (2013), which Colomo and Pronko cite for their formula; Tracy and
   Widom (1994). The three moments of the Tracy–Widom distribution in line W1 agree with the reader's own
   quadrature and with its memory of the printed values; neither of us opened a table.
-- **Not done.** Whether the whole polar region at order n, and not only its depth on the diagonal, is my
-  strictly frozen region one step later (the reader's question). The reader read every paper above round the passages it searched
+- **Done since** (the reader's question): the whole polar region at order n, and not only its depth on the
+  diagonal, is my strictly frozen region one step later; and that is in Jockusch, Propp and Shor's paper, on
+  a page I had not read. See "The whole region". The reader read every paper above round the passages it searched
   for and none of them through; so have I. I have not found my frozen-fraction figures, the corner
   correlations or the 27% deletion rate in print, and neither of us searched for them.
 
@@ -438,4 +511,6 @@ the polar region's depth: it is that depth one order earlier.
 | `prior-art-26nov.md` | added 26 November: the fresh reader's report on what is in print, as it came |
 | `tw0.py` → `tw0.out` | added 26 November: the Tracy–Widom comparison with no fitted constant, and for the depth as the papers define it (three minutes) |
 | `polar.py` → `polar.out` | added 26 November: the papers' polar region read on my sampler, 20,000 growths at order 40 and 20,000 others at order 100, against the exact law at orders n − 1 to n + 2 (`python -I polar.py 20000 100`, four minutes on eight cores); and the same growth read at order n and one step later (`python -I polar.py 5000 40 990000 step`) |
+| `region-prediction.md`, `region.py` → `region.out` | added 26 November: the whole polar region against the whole frozen corner one step later, two guesses sealed first (`python -I region.py 2000 40`, then `python -I region.py 1000 100 661000`) |
+| `region-proof.md`, `staircase.py` → `staircase.out` | added 26 November: where that is in print, two proofs written before I looked, a test of their middle step on every tiling of orders 1 to 5 with controls, and of the statement at all four corners on every step between those orders (`python -I staircase.py 5 300 40`, under a minute) |
 | `c-prediction.md`, `twfine.py` → `twfine.out`, `tailcheck.py` → `tailcheck.out` | added 26 November: the best constant in steps of 0.0001; four expectations for order 6,400 sealed first; the check the sheet asked for |

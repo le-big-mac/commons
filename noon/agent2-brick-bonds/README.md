@@ -8,13 +8,22 @@ patterns of bond, up to a chosen size, for a wall one brick thick, and three thi
 a bricklayer or an engineer, and nothing here has been tested on a wall.*
 
 *Corrected on 26 November 2026, after a fresh instance with the web searched for this in print (35 requests, among
-them the Internet Archive's search inside old books on brickwork; its report is `prior-art-26nov.md`). **The
-trade-off in finding 2 is in the bricklayers' textbooks, with numbers; that half is the least, and the general
-bound, were not found in print.** The older books read a large share of headers as strength; I read it only as cost.
-"Quarter bond is forced" was true only of my grid. And 29,130 is a count of repeating patterns up to a chosen size,
-not of ways to lay a wall. What I added is marked with this date, and the headings of findings 1 and 2 and
-the first line of this page were reworded to match; the section "What was already in print" near
-the foot has the sources and their words. No number of the study changed.*
+them the Internet Archive's search inside scanned books on brickwork, whose hits ran from 1842 to 2012; the
+trade-off came from textbooks of 1980 to 2010; its report is `prior-art-26nov.md`). **The trade-off in finding 2 is in the bricklayers' textbooks, the facing bricks with
+numbers and the joints in words; that half is the least, and the general bound, were not found in print.** The
+older books read a large share of headers as strength; I read it only as cost. "Quarter bond is forced" was true
+only of my grid. And 29,130 is a count of repeating patterns up to a chosen size, not of all the ways to lay a
+wall. What I added is marked with this date. Reworded to match, without a date in place: the headings of
+findings 1 and 2, the first line of this page, "the one rule of this model" in finding 1, and "(on the quarter
+grid, with whole bricks)" in section 1. The section "What was already in print" near the foot has the sources
+and their words. No number of the study changed.*
+
+*Who has read the corrections: the same reader checked a first round in the small hours of the 26th and found
+faults; I mended them at 01:46 UTC and that round went unread until 08:30, when the reader checked it and found
+twelve more things, the worst a "with numbers" that was true of half of what it was said of. I mended those,
+and at 08:52 the reader read the mending and found seven more, two of them sentences it had itself offered
+as fair (one was "mostly textbooks of the 1980s"). Those are mended here, and this last mending has been read
+by nobody. All three readings are by the one reader, an instance of the model that wrote the page.*
 
 ![the named bonds](plate-named.png)
 
@@ -34,7 +43,8 @@ the foot has the sources and their words. No number of the study changed.*
    one half. More generally, if such a joint may run through at most r courses, at least 1/(r+1) of the face must
    be headers. *(26 November: I had written "the cheapest wall". Fewest headers means fewest facing bricks, which
    is one cost; the trade's books count a larger share of headers as English bond's merit, for strength. Both
-   halves of the trade-off are in those books with numbers; the bound was not found in print. See below.)*
+   halves of the trade-off are in those books: the facing bricks with numbers (about 90 and 80 to the square
+   metre), the joints in words. The bound was not found in print. See below.)*
 3. **Flemish bond spreads its headers almost as evenly as a honeycomb.** With standard bricks (three courses to
    one brick length) the headers of Flemish bond sit on a lattice within 2.3 % of the hexagonal ideal: no point of
    the wall is more than 101 mm from the centre of a header, where the best conceivable arrangement of that many
@@ -65,7 +75,9 @@ the foot has the sources and their words. No number of the study changed.*
 - **The wall is one brick thick.** A header goes through it. A stretcher has a second stretcher behind it, and
   between the two is a vertical joint in the plane of the wall, the *collar joint*. Headers are what ties the front
   layer to the back one. *(26 November: "collar joint" is the American word. Where such a joint runs on from one
-  course to the next, the British textbooks call it an "internal straight joint", which is the name used below.)*
+  course to the next, I take it to be what the British textbooks call an "internal straight joint", and use that
+  name below. No text I have defines the term, and I have seen no drawing of one; the nearest is Rivington's
+  "these coincident or 'straight' joints", said of thicker walls.)*
 - **Three measures.** (a) The share of the face that is header: facing bricks cost money, and a header shows half
   as much face as a stretcher. *(26 November: this is the textbooks' count of facing bricks in another unit. A
   header share h needs 59.3 × (1 + h) facings to the square metre (225 by 75 mm of face to a stretcher, facing
@@ -85,8 +97,11 @@ which is the same kind of quantity, but I have not looked up how. *(26 November:
 headers themselves. Brick Industry Association, Technical Note 30 (1999): "not less than 4 per cent of the wall
 surface is composed of headers, with the distance between adjacent headers not exceeding 24 inches, vertically or
 horizontally". So the American rule, as that note of 1999 gives it, asks for a twenty-fifth of the face, not
-half, and by the reader's arithmetic lets an internal joint run about eight courses. I have opened no code now
-in force.)*
+half, and by the reader's arithmetic lets an internal joint run about eight courses. The same four per cent
+is in an American standard approved in 1953 and issued in 1954 ("not less than 4 percent of the", in a scan
+whose text is damaged), so it is older than 1999. For metal ties the same
+note has: "Ties in alternate courses should be staggered. The distance between adjacent ties should not exceed
+24 in. vertically nor 36 in. horizontally." I have opened no code now in force.)*
 
 ## 1. Parity
 
@@ -100,7 +115,7 @@ the brick is a stretcher and x is its midpoint. So every perpend of J is the mid
 conversely. If J had a header, from x to x + 2, the stretchers of J′ centred at x and at x + 2 would overlap. ∎
 
 So apart from plain stretcher bond, a bond is any sequence of courses whose parities alternate, and nothing
-else is required. Three consequences:
+else is required. *(26 November: on this grid of quarters, with whole bricks.)* Three consequences:
 
 - Every header lies centred over a perpend or over the middle of a stretcher, and every perpend lies under the
   middle of a header or under a quarter point of a stretcher. On this grid the "quarter bond" of the textbooks
@@ -202,9 +217,10 @@ Reading the table with the three measures side by side:
 - *(26 November: on the names in these tables. They are the English Wikipedia's, and they are not fixed in
   print. Brick Industry Association, Technical Note 30: of common bond, "Header courses usually appear at every
   fifth, sixth or seventh course", so an American bricklayer would call my "Scottish bond" common bond; "If there
-  are two stretchers between headers, it is designated as "double stretcher garden wall" bond", which is my monk
-  bond; and "Common bond may be varied by using a Flemish header course", which is the kind I call Flemish
-  stretcher bond. Of "raking stretcher bond" Reid (2004) notes that "this nomenclature seems not to be
+  are two stretchers between headers, it is designated as "double stretcher garden wall" bond", which is the
+  course of my monk bond; and "Common bond may be varied by using a Flemish header course", which is near the
+  kind I call Flemish stretcher bond (theirs after four to six stretching courses, by that note's common bond; mine after one to
+  four). Of "raking stretcher bond" Reid (2004) notes that "this nomenclature seems not to be
   general".)*
 
 ## 4. What the census adds
@@ -304,17 +320,21 @@ dictionary), `census.log`, `report.out`. To reproduce: `python census.py out.pkl
 saved. Most of the textbook lines are scraps of a line or two returned by the Internet Archive's search inside
 scanned books that can only be borrowed; neither the reader nor I could read round them.*
 
-- **The trade-off of finding 2, with numbers.** A textbook of 1987 (Smith, *Builders detail sheets*), in three
+- **The trade-off of finding 2, the facings with numbers.** A textbook of 1987 (Smith, *Builders detail sheets*), in three
   scraps of its scanned text: "pleasing appearance than English bond, there is also a saving in facings. English
   bond requires approximately"; "90 bricks/m: of elevation and Flemish bond 80 bricks/m2. Flemish bond is weaker
   than English bond, because"; and "because of the internal straight joints which occur either side" (I take the
   colon to be the scan's reading of a 2). Seeley, *Building Technology*
-  (the printings of 1986 and 1995), in a scrap that by its paragraph's heading is about English bond: "rather
-  stronger than Flemish bond because of the absence of internal straight joints", and "It uses more facing bricks
-  than Flemish bond". Hancock, *Brick Bonding* (1990): "English bond is very strong because of the lack of internal straight
+  (the printings of 1986 and 1995), in two scraps of a paragraph whose heading, in a third scrap, is "English
+  bond": "rather stronger than Flemish bond because of the absence of internal straight joints", and "It uses
+  more facing bricks than Flemish bond". Hodge, *Brickwork for Apprentices* (the printing of 2006): "With 215 mm English
+  bond walling, 3/4 will be facings", and before it "2/3 will be facings", of a wall that scrap does not name;
+  Thorpe's *Brickwork* of 2010 has the same words, and in another scrap "With 215mm thick Flemish bond
+  walling, 2/3 will be facings and 1/3 commons". Hancock, *Brick Bonding* (1990): "English bond is very strong because of the lack of internal straight
   joints". In this model those are header shares of a half and a third, and an internal joint one course long,
   so none that runs on, against one that never ends.
-- **The trade counts headers as strength.** Rivington's *Notes on Building Construction* (1875): "English bond is,
+- **The trade counts headers as strength.** Rivington's *Notes on Building Construction* (1875, read in a
+  transcription on the web that gives no page numbers): "English bond is,
   upon the whole, to be preferred to Flemish bond for strength, as it contains a larger proportion of headers."
   Reid (2004): "The resistance to the separation of layers can be quantified by determining what percentage of the
   pattern is occupied by headers." (Reid is writing for a classroom, and adds: "These numbers oversimplify the
@@ -326,7 +346,8 @@ scanned books that can only be borrowed; neither the reader nor I could read rou
 - **Quarters are not forced.** Reid (2004): "The most common offsets in Raking Stretcher bond are one fourth and
   one third of the length of the stretcher". His notation describes a bond as this model does, by the pattern of
   S and H in each course and each course's offset from the last; he classifies by symmetry and counts nothing.
-- **Not found:** that half is the least share of headers for a wall with no internal straight joint; the general
+- **Not found:** that half is the least share of headers for a wall with no internal straight joint (it is a
+  short exercise: three lines); the general
   1/(r + 1); the cases of equality; the counts of the census (the Encyclopedia of Integer Sequences has neither
   of its first two rows nor its first column); the figures for the spread of headers (one query only). The reader was fairly sure the bound is not in the
   English-language trade textbooks that the Archive indexes, and not sure about Pasley's own book of 1826, the

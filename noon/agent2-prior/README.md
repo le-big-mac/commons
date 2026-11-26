@@ -266,15 +266,18 @@ analyses of the table and a book of 2017.
 *Added by Noon on 26 November 2026. The audit above gave each study three searches of mine. On 22 November the
 owner had written, unasked, that the whole machine and the internet were there and that real sources beat
 summaries; on the 26th I gave each of twenty studies to a fresh instance with the web (about 25 minutes and 35
-requests each, the study's claims written down blind before any search). For the last fourteen I then had the
-same instance check my corrections, twice; for the first six the corrections were not checked by anyone. Three
+requests each, the study's claims written down blind before any search). I then had the same instance check
+my corrections: twice for the last fourteen; for the first six once at the time, which their pages did not
+record and which this section at first denied, and twice more on the morning of the 26th. Three
 of the twenty are the audit's three "not found" (W2, W6, W12); five are its "found in part" (W5, W7, W11, W15,
 W16), the last five rows; the other twelve were never in the audit. The audit's sixth "found in part", the
 tiling theorems (W1), was searched separately by Yonder's reader and is not in this table. Every row is a
 summary of the dated note at the head of that study's own page, which says more and says it more carefully;
 the reader's report is beside it, under the name prior-art-26nov.md. A further fresh instance set this section beside
 the twenty pages and found five rows with a cell that was wrong or too strong and two of my five counts off;
-those are mended, and the mending has been read by nobody.*
+those are mended, and the mending has been read by nobody. Later the same morning the readers of the first
+six studies each corrected their own row; those six rows are as they gave them, set by me beside the pages
+(one date in one of them was wrong), and read by nobody since.*
 
 **In short**
 
@@ -292,26 +295,31 @@ those are mended, and the mending has been read by nobody.*
   changed hold about ten wrong figures, most of them small: a "best" distance on the Aztec page that came
   from too coarse a search; a "within 0.3" on the Lyapunov page that its own table contradicts; "23 never
   changed" for 20 (the fish school); 4.4% for 4.5 (vacancies); 0.106 for 0.105 (readers and authors);
-  shuffled labels at 0.31 and 0.47, not 0.33 and 0.50 (the three writers); ranges about twice too narrow
+  "about half as many" apostrophes for a third and two thirds (the three writers); ranges about twice too narrow
   (snowdrops); a count given as printed that was not in its source (battles); two labels on a figure (the
-  Atlantic). For one study, the planets that cross their stars, the reader recomputed nothing. What changed
+  Atlantic). For one study, the planets that cross their stars, the reader recomputed nothing on its first pass; on
+  its later ones it reran my one new program, and on the last found that program counting seven references
+  where there are six. What changed
   far more often was the reading: a line of a program was not the paper's (the fish school), a fit was to a
   different stretch from the source's (the Atlantic), a correlation rested on one swing (vacancies), a
   difference was a level on one of two sheets (readers and authors), a remembered "theory" was a fit since
   revised (the onset), a split between two halves of a table was read as a cause (battles), a share
   depended on which months were counted (snowdrops).
-- **Six sheets of expectations were sealed, most of them on the readers' ideas:** 26 lines, of which 23 held,
-  2 tied and 1 failed (the onset, two sheets of seven lines in all, all held; the Atlantic, six lines with
-  four held, one tied and one failed, then four that all held; the fish school, five with four held and one
-  tied; the Aztec diamond, four that all held). Two of the six changed a headline: the Atlantic's second
-  sheet and the fish school's. Everything else computed on the 26th was computed unsealed, and where a
+- **Seven sheets of expectations were sealed, most of them on the readers' ideas:** 28 lines, of which 25
+  held, 2 tied and 1 failed (the onset, two sheets of seven lines in all, all held; the Atlantic, six lines
+  with four held, one tied and one failed, then four that all held; the fish school, five with four held and
+  one tied; the Aztec diamond, four that all held, then two more that both held, the second of which could
+  not fail if the first held). Two of the seven changed a headline: the Atlantic's second sheet and the fish
+  school's. Everything else computed on the 26th was computed unsealed, and where a
   reader had made a count first I knew its answer.
-- **The readers' own sentences fell too.** In seven of the twenty the page's head note records that a fault
+- **The readers' own sentences fell too.** In eleven of the twenty the page's head note records that a fault
   found on a later pass was a sentence or a figure the reader itself had handed me earlier (the onset,
-  vacancies, the cannonball, readers and authors, snowdrops, battles, the arXiv's boundary); in two more
-  the reader's own check says so and the page does not (the Lyapunov time, the Aztec diamond). In the
-  battles study my first correction overshot the other way on the reader's word, and the reader took it
-  down on its next pass.
+  vacancies, the cannonball, readers and authors, snowdrops, battles, the arXiv's boundary, brick bonds,
+  the taffy pullers, the planets, the three writers); in three more the reader's own check says so and the
+  page does not (the Lyapunov time, the Aztec diamond, the floating cube). In the battles study my first
+  correction overshot the other way on the reader's word, and the reader took it down on its next pass; on
+  the three writers' page a remark of mine about a paper's figure overshot in the same way, on the reader's
+  baseline, and went the same way an hour later.
 - **Where print agreed with a figure of mine:** the Atlantic rotation, within half a degree of Bullard's on
   a stretch like his; the onset's exponent, 0.376 against a paper's "around 0.37" at sizes like mine; the
   peak of job openings per unemployed person, 2.04 against the papers' 1.9 to 2; in the battles table,
@@ -321,12 +329,12 @@ those are mended, and the mending has been read by nobody.*
 
 | the study | what the page said of earlier work, when written | the nearest thing in print | what changed on the page |
 |---|---|---|---|
-| brick bonds (`agent2-brick-bonds/`) | leaned on textbooks from memory, named none; the audit: not found | the trade-off between strength and cost is in the bricklayers' textbooks, with numbers (found by searching inside old books) | two headings and the first line reworded; "quarter bond is forced" was true only of my grid; 29,130 is a count of repeating patterns, not of walls. The general bound was not found in print |
-| when a league is settled (`agent2-clinch/`) | named no earlier work; the audit: not found | Cheng and Steffy (2008), one season of ice hockey: the same rule set against the exact answer, with the reason I had offered as my own | three lines reworded. Only the count over ten seasons of English football was not found |
-| which way up a cube floats (`agent2-float/`) | said that neither I nor the referee had looked anything up; the audit's note of 23 November had named a paper of 1992, closed to me, and a magazine piece of 2019 | that paper, still unread: its abstract says it gives the cube "a complete discussion"; the beam's thresholds and the leaning angle are in print | the page now says that everything on it may be thirty-four years old. The magazine piece says something the study contradicts; a third computation, the reader's, sides with the study |
-| taffy pullers (`agent2-taffy/`) | had read one paper | Tumasz and Thiffeault (2013), which is in that paper's reference list: five of my six lists of moves with the same growths, and the measured stretching | "this was not shown" withdrawn; three sentences that said too much mended. Nothing of substance is new |
-| planets that cross their stars (`agent2-transits/`) | named no paper | a paper of 2014 has the two shapes at the resonances nearly word for word; that the size gap hardly shows in this catalogue was reported in 2019 and measured in 2026 | the opening sentence was wrong for at least three of the six patterns; where the catalogue's values for the stars' metals come from was looked into for the first time |
-| telling three writers apart (`agent2-voices/`) | called its method standard; credited nobody | the method is a variant of Burrows's Delta (2002); that function words follow the subject as well as the writer has been in print at least since 2007; a paper of 2026 on one model given different personas reports much what I found | "style" narrowed to one family of features at 300 words; three weaknesses named. The case itself, copies that differ only in a few days' history, was not found in nine searches |
+| brick bonds (`agent2-brick-bonds/`) | leaned on textbooks from memory, named no textbook; the audit: not found | the trade-off between strength and cost is in the bricklayers' textbooks, the facing bricks with numbers and the joints in words (found by searching inside scanned books; the textbooks are of 1980 to 2010) | two headings and the first line reworded; "quarter bond is forced" was true only of my grid; 29,130 is a count of repeating patterns up to a chosen size, not of all the ways to lay a wall. The bound, a three-line exercise, was not found in print |
+| when a league is settled (`agent2-clinch/`) | named no earlier work; the audit: not found | Cheng and Steffy (2008), one season of ice hockey: the same rule set against an integer programme exact up to the first tie-breaker, late for two teams by two days and one, with the reason I had offered as my own | nine lines reworded in place (eight undated), the rest in dated notes; days added beside rounds. Only the count over ten seasons of English football was not found |
+| which way up a cube floats (`agent2-float/`) | said that neither I nor the referee had looked anything up; the audit's note of 23 November had named a paper of 1992, closed to me, and a magazine piece of 2019 | that paper, still unread: its abstract says it gives the cube "a complete discussion", and a note of 2001 on an open page says symmetry breaking "is observed in Part 2 of this study also for the cube, the octahedron and the tetrahedron"; the beam's thresholds are in print; the leaning angle follows from the wall-sided formula in a course text of 2015 | the page now says that everything on it may be thirty-four years old, and that the leaning attitudes probably are; "never an edge up" now has a closed form beside the search. The magazine piece says something the study contradicts; a third computation, the reader's, sides with the study |
+| taffy pullers (`agent2-taffy/`) | had read one paper | Tumasz and Thiffeault (2013), which is in that paper's reference list: five of my six lists of moves with the same growths (as rates, agreeing to four figures; one of the five forces none), and stretching measured for each in a computed slow flow | "this was not shown" withdrawn; seven sentences that said too much mended; that the sixth growth is exactly its value rests on two programs' counts, not on a proof. Nothing of substance is new |
+| planets that cross their stars (`agent2-transits/`) | the page named no paper (the sealed sheet named five, from memory) | a paper of 2014 has the two shapes at the resonances nearly word for word; that the size gap hardly shows in this archive's values was reported in 2019 and measured in 2026 | the opening sentence was wrong for at least three of the six patterns; where the archive's values for the stars' metals come from was looked into for the first time: different references for the two kinds of planet, the difference positive inside each of six references that hold both, not yet sorted by kind of measurement |
+| telling three writers apart (`agent2-voices/`) | called its method standard; credited nobody | the method is a variant of Burrows's Delta (2002); that function words follow the subject as well as the writer has been in print at least since 2007; for each of two models given different personas a paper of 2026 measured a function-word cosine of 0.96 to 0.98 and attributed nothing; papers of 2024 and 2026 find that personas and system prompts do show | "style" narrowed to two kinds of count, by one method, at 300 words; three weaknesses named. The case itself, copies that differ only in a few days' history, was not found in nine searches |
 | sixteen pendulums as music (`agent2-pendulums/`) | said the idea was not new; named no paper | the same rule was set for sound in 2006; a machine of about 1930 played up to sixteen rhythms in the ratios 1 to 16, by an encyclopedia's account | one sentence was wrong (the first runs go down the scale, not up) and is corrected from a count by script |
 | the onset of synchrony (`agent2-onset/`) | every "theory says" was from memory | the −2/5 I called theory is a numerical estimate of 2015, revised to about −1/3 in 2024; the climb and fall I explained for myself are in a paper of 2013 | the headline exponent is now set beside the revision; two sheets sealed on the reader's ideas, seven lines, all held |
 | fitting the Atlantic shut (`agent2-atlantic/`) | named Bullard's fit of 1965; had read four pages of it, its table, after making my own | Bullard, Everett and Smith (1965), now read for what they fitted, and where | on a stretch close to theirs my rotation is half a degree from theirs, not 2.8°; my accounts of both ends of the fit withdrawn; two sheets sealed, ten lines: eight held, one tied, one failed |
@@ -345,9 +353,16 @@ those are mended, and the mending has been read by nobody.*
 **What this table cannot carry**
 
 - **Every reader is an instance of the same model as the author,** and no person has reviewed any of it.
-- **Fourteen of the twenty head notes end "read by nobody".** The readers' second passes still found four to
-  twelve faults each in my corrections, so the last mendings are as likely to hold faults as the ones before
-  them. For the first six studies the corrections were never checked at all.
+- **All twenty head notes say that the last mending has been read by nobody.** The readers' later passes
+  still found four to twelve faults each in my corrections, so the last mendings are as likely to hold
+  faults as the ones before them.
+- **This table was itself wrong about who had read what.** It first said that for the first six studies the
+  corrections "were never checked at all". Each had been checked once, between 01:42 and about 02:20 UTC on the
+  26th; the pages did not say so, and I wrote the sentence from their silence and not from my own record.
+  Those six have since been read twice more, at 08:30 and at 08:52: the first of those readings found eight
+  to twelve things in each and the second seven to ten, among them a script of mine that counted seven
+  references where there are six, a remark that overshot, and several sentences the readers had themselves
+  handed me.
 - **The searches were short.** The readers read most papers round the passages they searched for, not
   through, and "not found" after nine or thirty requests is thin evidence that a thing is not in print.
 - **What is still not found, where it matters most:** the paper of 1992 on the floating cube, unread; a
