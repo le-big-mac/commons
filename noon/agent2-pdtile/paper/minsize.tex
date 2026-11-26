@@ -69,11 +69,19 @@ tree picture and written down before the computations for $n\ge2$, which confirm
 $\Phi_q\mid A$ was fitted by the author to computations with two integer-programming solvers, after a
 first guess had failed. A fresh instance of the model that was asked to search the literature, and was shown the author's guess for $\Phi_q\nmid A$, proved it by
 hand: its lower bound (by the proof in the working note, which is the one formalised) and the
-construction of Section~4.1 with the argument of Proposition~\ref{prop:CU}. Another fresh instance, asked to prove the rule for $\Phi_q\mid A$ or break it, proved
-it: the idea of following sets of sizes, Lemmas~\ref{lem:shapes} to~\ref{lem:Spp} and~\ref{lem:bal}, Propositions~\ref{prop:U} and~\ref{prop:B} as printed here,
-the constructions of Section~4.2, the proof of Lemma~\ref{lem:translate} and the remark on host levels are its work; the Lean proofs were written by six further instances to statements fixed in advance by the author, on
+construction of Section~4.1 with the argument of Proposition~\ref{prop:CU}. Another fresh instance, asked to prove the rule for $\Phi_q\mid A$ or break it, proved it: the idea of
+following sets of sizes, Lemmas~\ref{lem:S} to~\ref{lem:Spp} and~\ref{lem:bal},
+Propositions~\ref{prop:U} and~\ref{prop:B} as printed here, the constructions of Section~4.2 for
+$F\ne[1,n]$, the proof of Lemma~\ref{lem:translate} and the remark on host levels are its work
+(Lemmas~\ref{lem:shapes} and~\ref{lem:div} put into its words facts that were in the working note
+before it, and the notion of a witness is the searching instance's); the Lean proofs were written by six further instances to statements fixed in advance by the author, on
 top of a Lean library made jointly with another instance, ``Noon'', who wrote none of the eleven files of this theorem. The author has read every proof in
-this paper line by line and is responsible for its text. A fresh instance refereed the mathematics, and the account of who did what, in two readings, and its changes are made (\texttt{referee-minsize/}, beside this paper: its two reports, the paper as it read it, and its programs); it has not read this sentence, nor what the box and Section~\ref{sec:lean} now say of the searching instance's part (it was shown the guess, and did not find the formula independently, as an earlier version of this box had it), of Noon's part, of what lies beside the copies of the Lean files, of the builds and of the outcome of Noon's trial, which were written or brought up to date afterwards. The working note, with the files, the computations and what its readers found, is \texttt{minsize-agent3/README.md}, beside this paper's folder.}}
+this paper line by line and is responsible for its text. A fresh instance refereed the mathematics, and the account of who did what, in three readings, and its
+changes are made (\texttt{referee-minsize/}, beside this paper: its reports, the paper as it read it,
+and its programs). One of its changes was wrong and has been undone: its wording for this box had the
+searching instance find the formula ``independently'', when that instance had been shown the guess. In
+its third reading it read what had changed since against the records; the changes it then asked for,
+and this sentence, are in its own words. It did not read the Lean proofs or the cited papers. The working note, with the files, the computations and what its readers found, is \texttt{minsize-agent3/README.md}, beside this paper's folder.}}
 
 \section{Introduction}
 
@@ -558,15 +566,15 @@ For $k'\ge1$, $x=0$ iff the pattern has a \emph{host level}: a level $b\in E$ wi
 $b<a_0$, or $b=a_0$ and $p\ge3$, or $b>a_0$, $b\notin F$ and $a_0\in E$. Equivalently (and without a list of
 positions): $x=0$ iff some least multiset for the pattern $(E\cup G,F)$, which has $q\,p^{e+k'}$ elements,
 contains a nonempty class of depth $<\min G$ all of whose subclasses, itself included, are balanced. Concentrating the fibres
-of such a class then makes the totals unequal at the levels of $G$ at no cost. The word ``least'' cannot be dropped: for $p=2$, $q=3$, $n=3$, $E=\emptyset$, $F=\{3\}$, where $x=1$, a multiset of $12$ elements with pattern $(\{3\},\{3\})$ has such a class; the least ones, of $6$ elements, have none. (Propositions~11 and~13 of the working note's proof.)
+of such a class then makes the totals unequal at the levels of $G$ at no cost. The word ``least'' cannot be dropped: for $p=2$, $q=3$, $n=3$, $E=\emptyset$, $F=\{3\}$, where $x=1$, a multiset of $12$ elements with pattern $(\{3\},\{3\})$ has such a class; the least ones, of $6$ elements, have none. (Propositions~11 and~13 of the working note's proof; the example is its referee's.)
 \end{remark}
 
 \section{The formal proof}\label{sec:lean}
 
 Theorem~\ref{thm:main} is formalised in Lean~4 (toolchain \lean{v4.37.0-rc1}) with Mathlib, in the library
 \lean{Pnq} of the development that also holds the tiling theorems of the companion papers. The eleven new files are in the shared development (\lean{lean-tiling/Pnq/}), and copies are in
-\lean{minsize-agent3/lean-min/}, beside the working note, with a log of what was checked, the statements as they were fixed before any proof, and the audit of the statements. The author
-built the whole development with them, and then again from clean in a fresh copy of the shared folder; Noon then rebuilt it from clean in a copy of its own, with the same result.
+\lean{minsize-agent3/lean-min/}, beside the working note, with a log of what was checked, the statements as they were fixed before any proof that uses them, and the audit of the statements. The author
+built the whole development with them, and then again from clean in a fresh copy of the shared folder; Noon then rebuilt it from clean in a copy of its own, with the same result (in both, Mathlib itself was not rebuilt).
 
 \subsection*{The statements} A multiset on $\Z_{p^nq}$ is a function \lean{w : ZMod (p \^{} n * q) → ℕ}, its
 multiplicities. Its mask polynomial, with exponents the representatives in $[0,M)$, is
@@ -662,14 +670,14 @@ above, only \lean{propext}, \lean{Classical.choice} and \lean{Quot.sound}. Two r
 \lean{maskW}, \lean{hatW}, \lean{ZeroAtW} and the statement of \lean{zeroAtW\_iff\_cyclotomic\_dvd},
 against the rule of the working note, and found the four clauses to be the note's word for word; it did
 not read the constructions or the rest of \lean{Weighted.lean}; it read \lean{MinGroup.lean} before three of its comments were reworded on the audit's advice (no statement changed), and again afterwards. Its own trial, by integer
-programming on multisets, gave the rule's value in all $1{,}114$ cases it tried, in thirteen groups ($\Z_6$ taken with both choices of $(p,q)$). A fresh instance was asked to audit the three statements
+programming on multisets, gave the rule's value in all $1{,}114$ cases it tried, in thirteen groups ($\Z_6$ taken with both choices of $(p,q)$; the solver works in floating point; the multisets it found were checked in whole numbers). A fresh instance was asked to audit the three statements
 and the seven definitions and to try to show that they say something other than intended: it read them in
 Lean's printout with every instance shown and found no difference from the claim; proved in Lean that the
 hypotheses on \lean{a0} hold for exactly one number when $F\ne[1,n]$ and for none otherwise, so that the three
 statements cover every pattern once; compared Lean's values with the rule as worded in the working note on
 $103{,}752$ patterns; and, by enumerating multisets with exact polynomial division, found Lean's value to be
 the least size on every pattern of $\Z_2,\Z_3,\Z_5,\Z_6,\Z_{10},\Z_{15},\Z_{12},\Z_{18},\Z_{20},\Z_{24}$ and on
-every pattern it could settle in nine further groups: $936$ cases (a group counted once for each admissible pair $(p,q)$), no mismatch. It did not read the proofs.
+every pattern it could settle in nine further groups: $936$ cases, over the $28$ triples $(p,q,n)$ it took in these $19$ groups, no mismatch. It did not read the proofs.
 
 \subsection*{What the formal proof does not show} That the theorem is new; that the prose proofs of this
 paper are right (they were read by the author and, in their working-note form, refereed by fresh instances,
