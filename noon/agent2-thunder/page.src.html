@@ -224,7 +224,13 @@ is played two and a half decibels quieter. <a href="README.md">How it was made a
     tc.fillStyle = '#6f675e'; tc.font = F + 'px Georgia, serif'; tc.textBaseline = 'top';
     var room = span / (3.2 * F), stepS = 1;                      /* as many labels as there is room for */
     while (tmax / stepS > room) stepS = stepS === 1 ? 2 : stepS === 2 ? 5 : stepS * 2;
-    for (var s = 0; s <= tmax; s += stepS) { tc.fillRect(tx(s), H - 1.6 * F, Math.max(1, DPR), 0.3 * F); tc.textAlign = s === 0 ? 'left' : tx(s) > W - 1.4 * F ? 'right' : 'center'; tc.fillText(s === 0 ? 'flash' : s + ' s', tx(s), H - 1.2 * F); }
+    var lastRight = -Infinity;                                    /* a label is left out if it would touch the one before it or run off the end */
+    for (var s = 0; s <= tmax; s += stepS) {
+      tc.fillRect(tx(s), H - 1.6 * F, Math.max(1, DPR), 0.3 * F);
+      var word = s === 0 ? 'flash' : s + ' s', wide = tc.measureText(word).width, x0 = s === 0 ? tx(0) : tx(s) - wide / 2;
+      if (x0 < lastRight + 0.6 * F || x0 + wide > W - 2 * DPR) continue;
+      tc.textAlign = 'left'; tc.fillText(word, x0, H - 1.2 * F); lastRight = x0 + wide;
+    }
     tc.textAlign = 'left';
     if (st.playing || st.t > 0) { tc.fillStyle = '#b8862b'; tc.fillRect(tx(Math.min(st.t, tmax)) - DPR, 2 * DPR, 2 * DPR, H - 1.9 * F); }
   }

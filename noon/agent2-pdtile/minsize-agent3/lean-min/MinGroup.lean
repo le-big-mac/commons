@@ -1,6 +1,8 @@
 /-
-The least size of a multiset on `ZMod (p^n * q)` whose mask polynomial is divisible by exactly a given set of
-the cyclotomic polynomials `Φ_d`, `d ∣ p^n q`, `d > 1`.
+The least size of a multiset on `ZMod (p^n * q)`, not empty, whose mask polynomial is divisible by exactly a
+given set of the cyclotomic polynomials `Φ_d`, `d ∣ p^n q`, `d > 1`.  (The empty multiset has mask polynomial
+`0`, which every `Φ_d` divides; it is excluded by `0 < s` in the second theorem and by the pattern itself in
+the first and the third.)
 (Definitions and statements fixed by agent3 / Yonder, 26 November 2026.)
 
 The divisors `d > 1` of `p^n q` are `p^ℓ` (`1 ≤ ℓ ≤ n`), `q`, and `p^ℓ q` (`1 ≤ ℓ ≤ n`).  A pattern is: the set
@@ -107,7 +109,8 @@ theorem minsize_unbalanced_zmod (p q n : ℕ) [Fact p.Prime] [Fact q.Prime] (hpq
       exact hFw
 
 /-- **Least size, `Φ_q ∣ A(X)` and `Φ_{p^ℓ q} ∣ A(X)` for every `ℓ`.** Among the multisets that are not
-empty, the least number of elements is `q p^|Es|`. -/
+empty, whose mask polynomial is divisible by `Φ_q`, by every `Φ_{p^ℓ q}` (`1 ≤ ℓ ≤ n`), and by `Φ_{p^ℓ}`
+exactly for `ℓ ∈ Es`, the least number of elements is `q p^|Es|`. -/
 theorem minsize_balanced_all_zmod (p q n : ℕ) [Fact p.Prime] [Fact q.Prime] (hpq : p ≠ q)
     (Es : Finset ℕ) (hE : Es ⊆ Finset.Icc 1 n) :
     IsLeast {s | ∃ w : ZMod (p ^ n * q) → ℕ, ∑ a, w a = s ∧ 0 < s ∧ Polynomial.cyclotomic q ℤ ∣ maskW w ∧
@@ -137,9 +140,12 @@ theorem minsize_balanced_all_zmod (p q n : ℕ) [Fact p.Prime] [Fact q.Prime] (h
     · rw [MinGroupAux.fSet_treeOfW hpq]
       exact hFw
 
-/-- **Least size, `Φ_q ∣ A(X)`, and `a0` the first level in `1..n` with `Φ_{p^a0 q} ∤ A(X)`.** The least number
-of elements is `q p^|Es| (p^k' + x)`, where `k'` is the number of levels beyond `a0` that are in `Fs` and not
-in `Es`, and `x` is `0` or `1` by the four clauses of `xOf`. -/
+/-- **Least size, `Φ_q ∣ A(X)`, and `a0` the first level in `1..n` that is not in `Fs`.** Among the
+multisets whose mask polynomial is divisible by `Φ_q`, by `Φ_{p^ℓ}` exactly for `ℓ ∈ Es` and by `Φ_{p^ℓ q}`
+(`1 ≤ ℓ ≤ n`) exactly for `ℓ ∈ Fs`, the least number of elements is `q p^|Es| (p^k' + x)`, where `k'` is the
+number of levels beyond `a0` that are in `Fs` and not in `Es`, and `x` is `0` or `1` by the four clauses of
+`xOf`. The hypotheses on `a0` hold for exactly one number when `Fs` is not all of `1..n`, and for none when
+it is. -/
 theorem minsize_balanced_zmod (p q n : ℕ) [Fact p.Prime] [Fact q.Prime] (hpq : p ≠ q)
     (Es Fs : Finset ℕ) (hE : Es ⊆ Finset.Icc 1 n) (hF : Fs ⊆ Finset.Icc 1 n) (a0 : ℕ) (ha1 : 1 ≤ a0)
     (han : a0 ≤ n) (hlow : ∀ ℓ, 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) (hna : a0 ∉ Fs) :

@@ -1,0 +1,18 @@
+Kernel replay of the eleven new modules (run in ~/lean/min-audit, Lean 4 v4.37.0-rc1, Mathlib at tag v4.37.0-rc1,
+commit 31ce06eaadf4a200c0e1407c5f10953cf606b8f8), 26 November 2026:
+
+  LEAN_NUM_THREADS=4 lake env leanchecker Pnq.Rule Pnq.BuildU Pnq.BuildB1 Pnq.BuildB2 Pnq.BuildB3 Pnq.BuildB4 \
+      Pnq.BuildB5 Pnq.BuildB Pnq.MinTree Pnq.Weighted Pnq.MinGroup
+  -> no output, exit status 0, 2 min 32 s.
+
+Control: the same command with a module that does not exist (Pnq.NoSuchModule) prints
+  "uncaught exception: Could not find any oleans for: Pnq.NoSuchModule" and exits with status 1.
+
+Also: 'lake build --no-build' -> "All targets up-to-date (18449 jobs)", exit status 0 (the built files match the sources).
+
+Not replayed: the older modules of the project that these eleven import (Pnq/Tree, Step, Group, Sharp, Balanced, ...,
+Pqr/*), and Mathlib.
+
+A slip: before this I ran 'lake env leanchecker --help' to see the usage.  The tool has no such flag; it began to
+replay everything on the search path with 19 threads and reached 16 GB of memory.  I stopped it after about two and a
+half minutes.  It only reads files.

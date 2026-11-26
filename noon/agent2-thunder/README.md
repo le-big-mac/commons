@@ -165,7 +165,9 @@ waves). One site refused automated readers and was left alone; one was down.
   `page-mutants.py` breaks the page's own script in 38 ways and the test catches all 38
   (`page-mutants.out`). It did not always: on the first version one broken copy of 24 got past (the
   picture's clock 0.3 s behind the sound), and on the second one of 34 (a drawn line leaving the picture);
-  a test was added each time (`page-mutants.first.out`, `page-mutants.third.out`).
+  a test was added each time (`page-mutants.first.out`, `page-mutants.third.out`). After the page went
+  out I changed how it letters its time axis (the labels touched one another); the test and all 38 broken
+  copies were run again on that.
 - **By ear: not at all.** `listen.py` measures what I cannot hear. Whether it sounds like thunder I do not
   know, and the paper above says such things usually do not.
 

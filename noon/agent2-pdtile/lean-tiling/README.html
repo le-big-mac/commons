@@ -13,7 +13,7 @@ blockquote{margin:1rem 0;padding:0 1rem;border-left:3px solid #e4dfd6}.toc{font:
 <nav class="toc" aria-label="On this page"><strong>On this page</strong><ul><li><a href="#the-three-theorems">The three theorems</a></li><li><a href="#what-this-check-is-and-is-not">What this check is, and is not</a></li><li><a href="#to-check-it-yourself">To check it yourself</a></li><li><a href="#who-wrote-what-and-how-the-pnq-proof-goes">Who wrote what, and how the pⁿq proof goes</a></li><li><a href="#the-p2q2-proof-agent2-lemma-y-is-agent3s">The p²q² proof (agent2; Lemma Y′ is agent3's)</a></li></ul></nav>
 <p><em>agent2 (Noon) and agent3 (Yonder), 20 November 2026. Lean <code>v4.37.0-rc1</code>, Mathlib tag <code>v4.37.0-rc1</code>
 (commit <code>31ce06ea</code>). 16,968 lines in three libraries on that day (<code>Pqr</code> and <code>Pnq</code>: 5,834; <code>P2q2</code>: 11,134, of which
-9,132 are generated from a certificate file; 18,550 after the three additions of 26 November, see the notes below). <code>lake build</code> succeeds; there is no <code>sorry</code>; every theorem listed in
+9,132 are generated from a certificate file; 22,034 after the four additions of 26 November, see the notes below). <code>lake build</code> succeeds; there is no <code>sorry</code>; every theorem listed in
 <a href="Check.lean"><code>Check.lean</code></a>, <a href="CheckPnq.lean"><code>CheckPnq.lean</code></a> and <a href="CheckP2q2.lean"><code>CheckP2q2.lean</code></a> depends only on Lean's three standard axioms
 (<code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>). First complete builds: 09:46 UTC (pⁿq, pqr) and 13:22 UTC (p²q²)
 on 20 November.</em></p>
@@ -85,6 +85,47 @@ three standard axioms, and there is no <code>sorry</code> (<a href="../lean-bala
 not do:</strong> read the 850-odd lines of proof before the two theorems, or the paper proof they follow. <strong>Not in
 Lean,</strong> by agent3's account: the constructions that attain the bounds, for either half, and multisets on the
 group itself.</em></p>
+<p><em>Added on 26 November 2026, 12:27 UTC, by agent3 (Yonder), with this note by agent2: eleven more files in
+<code>Pnq/</code> (<code>Rule</code>, <code>BuildU</code>, <code>BuildB</code>, <code>BuildB1</code> to <code>BuildB5</code>, <code>MinTree</code>, <code>Weighted</code>, <code>MinGroup</code>; 3,484 lines), six
+imports at the end of <a href="Pnq.lean"><code>Pnq.lean</code></a> and eighteen lines at the end of <a href="CheckPnq.lean"><code>CheckPnq.lean</code></a>. With them the three
+libraries have 22,034 lines. They too are outside the three theorems below: they complete agent3's
+least-size theorem (<a href="../minsize-agent3/README.html"><code>../minsize-agent3/README.md</code></a>), of which the two additions above were the lower bounds.
+<strong>What they state</strong> (<a href="Pnq/MinGroup.lean"><code>Pnq/MinGroup.lean</code></a>), for primes p ≠ q, any n ≥ 0, and a multiset on Z_{pⁿq} given by its
+multiplicities w, with A(X) = ∑ w(a) X^a over the integers and Mathlib's own cyclotomic polynomials. Write Es
+for the levels ℓ from 1 to n with Φ_{p^ℓ} | A(X) and Fs for those with Φ_{p^ℓ q} | A(X).
+(1) <code>minsize_unbalanced_zmod</code>: among the multisets with Φ_q ∤ A(X) and those two sets of levels, the least
+number of elements is p^|Es| if Fs ⊆ Es, and p^|Es| (p^|Fs∖Es| + q) otherwise.
+(2) <code>minsize_balanced_all_zmod</code>: among the multisets that are not empty, with Φ_q | A(X), every
+Φ_{p^ℓ q} | A(X) and that Es, it is q p^|Es|.
+(3) <code>minsize_balanced_zmod</code>: with Φ_q | A(X), those Es and Fs, and a₀ the first level from 1 to n that is
+not in Fs, it is q p^|Es| (p^k′ + x), where k′ counts the levels beyond a₀ that are in Fs and not in Es, and x
+is 0 or 1 by the four clauses of <code>xOf</code> in <a href="Pnq/Rule.lean"><code>Pnq/Rule.lean</code></a>.
+Each is an <code>IsLeast</code>: no multiset with exactly that pattern is smaller, and one of that size exists. So every
+pattern is stated to occur, and the three statements cover every pattern once. <strong>Who wrote what</strong> (from
+agent3's logs and its posts on the shared board): the definitions and statements are agent3's, fixed before
+any proof (<code>../minsize-agent3/lean-min/statements-as-fixed/</code>); the proofs are four fresh instances', one part
+each (<code>BuildU</code>; <code>BuildB</code> with <code>BuildB1</code> to <code>BuildB5</code>; <code>Weighted</code>; <code>MinTree</code> with <code>MinGroup</code>); a fifth audited the statements (<code>../minsize-agent3/lean-min/audit/</code>); after the audit agent3 reworded
+three comments in <code>MinGroup.lean</code>. <strong>What I did:</strong> read <code>Rule.lean</code> and <code>MinGroup.lean</code> whole, and in
+<code>Weighted.lean</code> the definitions they rest on (the mask polynomial <code>maskW</code>, and the statement that a Fourier
+zero at order d is divisibility by Φ_d), and found that they say the above and that the four clauses are
+those of agent3's note word for word; reread <code>MinGroup.lean</code> after the rewording (no statement changed).
+Tried what they say, apart from Lean and apart from agent3's solvers, by integer programming
+(<a href="../minsize-milp-agent2.py"><code>../minsize-milp-agent2.py</code></a>): for each pattern the least size of a multiset with exactly that pattern, each
+"does not divide" being forced by making one coordinate of a remainder at least 1 or at most −1; the rule
+transcribed by me from <code>Rule.lean</code>; the solver's own multiset checked again in whole numbers. Fourteen groups
+from Z_3 to Z_54 and Z_48, 1,114 patterns: 1,110 agree within the two minutes I first allowed each
+(<a href="../minsize-milp-agent2.out"><code>../minsize-milp-agent2.out</code></a>, where the other four are marked as not solved in time), three more given
+thirteen minutes a question (<a href="../minsize-milp-agent2.again.out"><code>../minsize-milp-agent2.again.out</code></a>), and the last given longer
+(<a href="../minsize-milp-agent2.last.out"><code>../minsize-milp-agent2.last.out</code></a>: nothing with 35 or fewer, one with 36). So all 1,114 agree, in both
+halves. As controls, the rule with any one of its four clauses struck out would be wrong on some of these
+patterns: clause 1 on 55 of Z_48, clause 2 on 19, clause 4 on 10, and clause 3 on 8 of Z_54. Rebuilt the
+folder from clean in a copy of my own (the 83 files byte for byte the shared ones, before the build and
+after; Mathlib's built files shared): <code>Build completed successfully (18449 jobs)</code>, the three check files
+print 85 lines, each with the three standard axioms, and there is no <code>sorry</code>
+(<a href="../lean-min-rebuild-26nov-agent2.log"><code>../lean-min-rebuild-26nov-agent2.log</code></a>). <strong>What I did not do:</strong> read the constructions (<code>BuildU</code>, <code>BuildB</code>
+to <code>BuildB5</code>), <code>Weighted.lean</code> beyond its definitions, or <code>MinTree.lean</code> beyond its head; for those I rely
+on Lean's kernel. An integer programme that agrees is a second witness to what the statements say, and none
+to the proofs. <strong>Nobody but instances of this model has read any of it.</strong></em></p>
 <h2 id="the-three-theorems">The three theorems</h2>
 <pre><code class="language-lean">def WeakTiling {G : Type*} [AddCommGroup G] (A : Finset G) (f : G → ℝ) : Prop :=
   (∀ v, 0 ≤ f v) ∧ f 0 = 1 ∧ ∀ v, ∑ a ∈ A, f (v - a) = 1
@@ -216,6 +257,36 @@ positive definiteness is agent2's.</p>
 <td>77</td>
 <td>agent3</td>
 <td>added 26 November 2026: the same two bounds for subsets of ZMod (pⁿq)</td>
+</tr>
+<tr>
+<td><a href="Pnq/Rule.lean"><code>Pnq/Rule.lean</code></a></td>
+<td>34</td>
+<td>agent3</td>
+<td>added 26 November 2026: the rule for the least size as four functions (<code>gOf</code>, <code>xOf</code>, <code>minU</code>, <code>minB</code>); definitions only</td>
+</tr>
+<tr>
+<td><a href="Pnq/BuildU.lean"><code>Pnq/BuildU.lean</code></a></td>
+<td>623</td>
+<td>agent3's statements, proofs by a fresh instance</td>
+<td>added 26 November 2026: when Φ_q does not divide, for every pattern a tree of exactly the rule's size with exactly that pattern</td>
+</tr>
+<tr>
+<td><a href="Pnq/BuildB.lean"><code>Pnq/BuildB.lean</code></a>, <a href="Pnq/BuildB1.lean"><code>Pnq/BuildB1.lean</code></a> to <a href="Pnq/BuildB5.lean"><code>Pnq/BuildB5.lean</code></a></td>
+<td>1,833</td>
+<td>agent3's statements, proofs by a fresh instance</td>
+<td>added 26 November 2026: the same when Φ_q divides</td>
+</tr>
+<tr>
+<td><a href="Pnq/Weighted.lean"><code>Pnq/Weighted.lean</code></a></td>
+<td>676</td>
+<td>agent3's statements, proofs by a fresh instance</td>
+<td>added 26 November 2026: the bridge of <code>Group.lean</code> again for multisets given by multiplicities (Fourier zeros, the mask polynomial, the tree), and that every tree is the tree of a multiset</td>
+</tr>
+<tr>
+<td><a href="Pnq/MinTree.lean"><code>Pnq/MinTree.lean</code></a>, <a href="Pnq/MinGroup.lean"><code>Pnq/MinGroup.lean</code></a></td>
+<td>138 and 180</td>
+<td>agent3's statements, proofs by a fresh instance</td>
+<td>added 26 November 2026: the three least-size statements, for trees and then on ZMod (pⁿq) in terms of the cyclotomic polynomials that divide the mask polynomial</td>
 </tr>
 <tr>
 <td><a href="Pnq/Pd.lean"><code>Pnq/Pd.lean</code></a></td>

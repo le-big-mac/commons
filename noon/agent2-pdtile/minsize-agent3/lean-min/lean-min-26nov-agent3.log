@@ -211,3 +211,22 @@ minsize_balanced_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : 
                       (minB p q Es Fs a0)
 
 Not done: nobody but me and the four instances has read the statements against the mathematics. The three theorems of MinGroup.lean, with the definitions maskW (Weighted.lean), levelsEW, levelsFW (MinGroup.lean) and gOf, xOf, minU, minB (Rule.lean), are what a reader has to trust; everything else is checked by Lean.
+
+ADDED 12:10:06 UTC, 26 November 2026, after two readings of the statements.
+
+1. Noon (agent2) read Rule.lean and MinGroup.lean whole, the definitions maskW, hatW, ZeroAtW and the statement of zeroAtW_iff_cyclotomic_dvd in Weighted.lean, and the head of MinTree.lean, against the rule of the note (its post of 11:37 UTC on the shared board): the three statements say the note's rule, the four clauses word for word; it did not read the constructions or the rest of Weighted.lean. Its own trial by integer programming on multisets is Noon's to report.
+
+2. A fresh instance audited the statements (audit/audit.md: my brief and its report; its scripts, outputs and scratch Lean files are in audit/). In its words: it has read the three statements and the seven definitions against the claim, in Lean's printout with every instance shown, derived from them in Lean one statement for every pattern with 'not empty' in each case, compared Lean's values with the note's rule on 103,752 patterns, and found by enumeration that Lean's value is the least size on every pattern of Z_2, Z_3, Z_5, Z_6, Z_10, Z_15, Z_12, Z_18, Z_20 and Z_24 and on every pattern it could settle in nine further groups (936 in all, no mismatch); it did not read the proofs or rebuild from clean.
+
+3. On the audit's advice three comments in MinGroup.lean were reworded (the file's header and the docstrings of minsize_balanced_all_zmod and minsize_balanced_zmod: they now say 'not empty', name E in the second, and say when the hypotheses on a0 can be met). No definition or statement changed: check_fixed.py again reports
+   Pnq/MinGroup.lean: 5 fixed declarations, 5 stand character for character, each once
+   Pnq/MinGroup.lean: 180 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   and '#print'/'#check' of the fixed names still give the skeleton's output; 'lake build' again: Build completed successfully (18449 jobs).; CheckPnq.lean: 41 of 41 axiom lines standard. Noon read the file before this rewording. The new hash:
+   e3ea30c5967c2d5dbc0988d5e007ee2f2a1dc4bbca73188dfc5edc9ba68b41bd  Pnq/MinGroup.lean
+   (the hash of MinGroup.lean printed further up is the file as Noon and the audit read it).
+
+4. Clause (4) of xOf, a gloss from the audit (the docstring in Rule.lean is left as it is, so that the file's hash stands): as coded it says: some b in Es \ Fs with a0 < b and b < g for every level g beyond a0 that is in Fs and not in Es. When there is such a g this says b lies strictly between a0 and the first of them, as in the note; when there is none, clause (1) holds already.
+
+5. What a reader has to trust, more exactly (the audit's wording): the three theorems of MinGroup.lean with maskW, levelsEW, levelsFW, gOf, xOf, minU, minB, together with Mathlib's definitions that they use (ZMod, ZMod.val, Polynomial.cyclotomic, divisibility in Polynomial ℤ, Finset.Icc, Finset.filter, Finset.sum, IsLeast) and the instance NeZero (p ^ n * q) of Pnq/Group.lean, which enters the statements only as the proof that the modulus is not zero. Lean 4 v4.37.0-rc1; Mathlib at the tag of the same name.
+
+This supersedes the last paragraph of the log above ('Not done: nobody but me and the four instances ...'). Still not done by anybody: a reading by a person.

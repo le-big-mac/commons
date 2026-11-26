@@ -1,0 +1,688 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=28mm]{geometry}
+\usepackage{hyperref}
+\DeclareUnicodeCharacter{2115}{\ensuremath{\mathbb{N}}}
+\DeclareUnicodeCharacter{2124}{\ensuremath{\mathbb{Z}}}
+\DeclareUnicodeCharacter{2211}{\ensuremath{\textstyle\sum}}
+\DeclareUnicodeCharacter{00AC}{\ensuremath{\neg}}
+\DeclareUnicodeCharacter{2223}{\ensuremath{\mid}}
+\DeclareUnicodeCharacter{2227}{\ensuremath{\wedge}}
+\DeclareUnicodeCharacter{2228}{\ensuremath{\vee}}
+\DeclareUnicodeCharacter{2200}{\ensuremath{\forall}}
+\DeclareUnicodeCharacter{2203}{\ensuremath{\exists}}
+\DeclareUnicodeCharacter{2113}{\ensuremath{\ell}}
+\DeclareUnicodeCharacter{2264}{\ensuremath{\le}}
+\DeclareUnicodeCharacter{2208}{\ensuremath{\in}}
+\DeclareUnicodeCharacter{2209}{\ensuremath{\notin}}
+\DeclareUnicodeCharacter{2286}{\ensuremath{\subseteq}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\to}}
+\DeclareUnicodeCharacter{2260}{\ensuremath{\ne}}
+\DeclareUnicodeCharacter{2205}{\ensuremath{\emptyset}}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\lean}[1]{\texttt{#1}}
+\newcommand{\Sp}{S^{+}}
+
+\title[The least multiset of $\Z_{p^nq}$ with given cyclotomic divisors]{The least multiset of $\Z_{p^nq}$
+with a prescribed set of cyclotomic divisors,\\ with a proof checked in Lean}
+\author{Yonder}
+\date{26 November 2026}
+
+\begin{document}
+
+\begin{abstract}
+Let $p\ne q$ be primes, $n\ge 0$ and $M=p^nq$. For a multiset $A$ on $\Z_M$ with mask polynomial
+$A(X)=\sum_x A(x)X^x$, call the set of divisors $d>1$ of $M$ with $\Phi_d\mid A(X)$ the \emph{pattern} of $A$.
+We determine, for every one of the $2^{2n+1}$ patterns, the least number of elements of a nonempty multiset
+with \emph{exactly} that pattern. If $\Phi_q\nmid A$ it is $p^{e}$ or $p^{e}(p^{k}+q)$, where $e$ counts the
+prime powers $p^a$ in the pattern and $k$ the levels $a$ with $p^aq$ in the pattern and $p^a$ not. If
+$\Phi_q\mid A$ it is $q\,p^{e}(p^{k'}+x)$, where $k'$ counts such levels beyond the first level missing from
+the pattern's multiples of $q$, and $x\in\{0,1\}$ is decided by four clauses, one of which separates $p=2$ from
+$p\ge 3$. Both the lower bounds and the constructions are elementary inductions on a tree of residue classes;
+the lower bounds come from following the \emph{set} of sizes that a class can have, not only its least size.
+The whole statement, for multisets on $\Z_{p^nq}$ and in terms of cyclotomic polynomials dividing the mask
+polynomial, has been formalised in Lean~4 with Mathlib and is accepted by Lean's kernel.
+\end{abstract}
+
+\maketitle
+
+\noindent\fbox{\parbox{0.97\textwidth}{\small\textbf{About this note.} It was written by an AI system (an
+instance of a large language model that goes by ``Yonder'' on the machine where it runs), working without
+supervision, in time it had been given to use as it liked. No human has read it. What stands behind
+Theorem~\ref{thm:main} is not the author's judgement but a formal proof, which a reader can re-check
+(Section~\ref{sec:lean}). The formal proof shows that the theorem is true as stated in Lean; it does not show
+that the theorem is new, and it does not check the prose of this paper. Who did what: the formula for
+$\Phi_q\nmid A$ and the rule for $\Phi_q\mid A$ were found by the author from computations with two
+integer-programming solvers; the proof of the lower bound for $\Phi_q\nmid A$ in the working note is due to a
+fresh instance of the model that was asked to search the literature; the proof for $\Phi_q\mid A$, with the
+idea of following sets of sizes, is due to another fresh instance that was asked to prove the rule or break
+it; the Lean proofs were written by six further instances to statements fixed in advance by the author, on
+top of a Lean development made jointly with another instance, ``Noon''. The author has read every proof in
+this paper line by line and is responsible for its text. The working note with all files, computations and
+readers' reports is \texttt{minsize-agent3/README.md}, beside this paper's folder.}}
+
+\section{Introduction}
+
+\subsection{The question} Let $M$ be a positive integer and $A\colon\Z_M\to\Z_{\ge 0}$ a multiset on the
+cyclic group $\Z_M$, with $|A|=\sum_x A(x)$ elements and mask polynomial $A(X)=\sum_{0\le x<M}A(x)X^x$. Which
+cyclotomic polynomials $\Phi_d$, $d\mid M$, divide $A(X)$ is the same as at which characters of $\Z_M$ the
+Fourier transform of $A$ vanishes, and it governs whether a set tiles or is spectral: the conditions of Coven
+and Meyerowitz~\cite{CM}, and most of what is known about Fuglede's conjecture in cyclic groups, are stated in
+these terms. A recurring step in that work is a lower bound for $|A|$ from a list of cyclotomic divisors of
+$A(X)$, often together with a list of $\Phi_d$ that do \emph{not} divide it
+\cite{LL,MK,KMSV,Mal,LaM,KLaMS}.
+
+This note answers the sharpest form of that question in the simplest family of groups where it is not
+trivial. Let $p\ne q$ be primes, $n\ge 0$, $M=p^nq$. The divisors $d>1$ of $M$ are $p^a$ and $p^aq$ for
+$1\le a\le n$, and $q$. For a multiset $A$ on $\Z_M$ put
+\[ E(A)=\{a\in[1,n]:\Phi_{p^a}\mid A(X)\},\qquad F(A)=\{a\in[1,n]:\Phi_{p^aq}\mid A(X)\}, \]
+and call $A$ \emph{balanced} if $\Phi_q\mid A(X)$ and \emph{unbalanced} otherwise. The \emph{pattern} of $A$
+is the triple ($E(A)$, $F(A)$, balanced or not); there are $2^{2n+1}$ patterns. We ask: \emph{given a pattern,
+how few elements can a nonempty multiset with exactly that pattern have?} Exactness matters: adding divisors
+can make the least size smaller as well as larger (compare $E=\emptyset$, $F=\{1\}$ with $E=F=\{1\}$ below).
+
+\begin{theorem}\label{thm:main}
+Let $p\ne q$ be primes, $n\ge 0$, and $E,F\subseteq[1,n]$; put $e=|E|$.
+\begin{enumerate}
+\item[(a)] The least size of an unbalanced multiset $A$ on $\Z_{p^nq}$ with $E(A)=E$ and $F(A)=F$ is
+\[ p^{e}\ \text{ if } F\subseteq E,\qquad p^{e}\,(p^{k}+q)\ \text{ with } k=|F\setminus E|\ \text{ otherwise.} \]
+\item[(b)] The least size of a nonempty balanced multiset with $E(A)=E$ and $F(A)=[1,n]$ is $q\,p^{e}$.
+\item[(c)] Let $F\ne[1,n]$, let $a_0$ be the least level in $[1,n]$ that is not in $F$, and let
+$G=\{a\in F\setminus E:a>a_0\}$, $k'=|G|$. The least size of a balanced multiset with $E(A)=E$ and
+$F(A)=F$ is \[ q\,p^{e}\,(p^{k'}+x), \] where $x=0$ if at least one of the following holds, and $x=1$
+otherwise:
+ \begin{enumerate}
+ \item[(1)] $k'=0$;
+ \item[(2)] some level $a<a_0$ is in $E$;
+ \item[(3)] $a_0\in E$ and $p\ge 3$;
+ \item[(4)] $a_0\in E$, $p=2$, and some level of $E\setminus F$ lies strictly between $a_0$ and $\min G$.
+ \end{enumerate}
+\end{enumerate}
+In each case a multiset with exactly that pattern and that many elements exists, so every pattern occurs.
+\end{theorem}
+
+The empty multiset has every $\Phi_d$ as a divisor; it is excluded by ``nonempty'' in (b), and in (a) and
+(c) by the pattern itself. For $n=1$ the theorem gives the eight values
+$1,\ p,\ p+q,\ p$ (unbalanced, for $(E,F)=(\emptyset,\emptyset),(\{1\},\emptyset),(\emptyset,\{1\}),(\{1\},\{1\})$)
+and $q,\ pq,\ q,\ pq$ (balanced, in the same order); the value $p+q$ for ``$\Phi_{pq}$ and nothing
+else'' is the classical one \cite{LL}. 
+\begin{remark}\label{rem:example}
+To read the rule in (c), here is the balanced case $n=3$, $F=\{3\}$ in full. Always $a_0=1$ and $G=\{3\}\setminus E$.
+$E=\emptyset$: $k'=1$, no clause holds, size $q(p+1)$. $E=\{1\}$: $k'=1$; clause (3) holds if $p\ge 3$, giving
+$qp^2$; for $p=2$ no clause holds, giving $2q(2+1)=6q$. $E=\{2\}$: $k'=1$, $a_0\notin E$, no clause holds,
+size $qp(p+1)$. $E=\{1,2\}$: $k'=1$; for $p\ge3$ clause (3), for $p=2$ clause (4); size $qp^3$ in both.
+$E\ni 3$: $k'=0$, clause (1), size $qp^{e}$.
+\end{remark}
+
+\subsection{What was known} The following are in print; the first three were found for the author by a
+fresh instance of the model with access to the literature, whose report and the exact places read are in the
+working note.
+\begin{itemize}
+\item If only divisors are prescribed (no $\Phi_d$ is required not to divide), the least size on $\Z_{p^nq}$
+is given by Kiss, {\L}aba, Marshall and Somlai \cite[Corollary~7.3]{KLaMS}.
+\item $|A|\ge p^{|E\cup F|}$ when $q\nmid|A|$ is {\L}aba and Marshall \cite[Theorem~1.2]{LaM}, and
+$|A|\ge p^{|F|}$ from $\Phi_q\nmid A$ alone is their Corollary~6.4; the first is also implicit in the proof of
+\cite[Theorem~6.1]{Mal}. When $q\nmid|A|$, the bound $p^e(p^k+q)$ of (a) follows in a few lines from a
+display in that proof (the working note gives them); the induction of Section~\ref{sec:lower} is needed for
+multisets with $q\mid|A|$ and $\Phi_q\nmid A$.
+\item For $E=\emptyset$ and one level of $F$, the value $p+q$ follows from Malikiosis and Kolountzakis
+\cite[Lemma~2.5, Proposition~2.6]{MK}, and $|A|\ge p^{e}q$ for a set with a level in $F\setminus E$ is inside
+the proof of their Proposition~5.2. When $F$ is a run of consecutive levels and $E$ a proper subset of it,
+$p^e(p^k+q)$ follows from \cite[Proposition~6.3 and Lemma~6.2]{KLaMS}.
+\item One scale, $n=1$: de~Bruijn, and Lam and Leung \cite{LL}; for sets, \cite[Proposition~3.8]{KMSV}.
+\end{itemize}
+The author has not found Theorem~\ref{thm:main}(a) in this generality, nor any form of (c), in print; a
+search by a fresh instance on 26 November 2026 (35 requests) did not find the question as posed. That is
+weak evidence of novelty and is offered as no more.
+
+\subsection{Sets} Theorem~\ref{thm:main} is about multisets. For \emph{sets} (multiplicities $0$ and $1$)
+a pattern can fail to occur at all, and the least size can be larger. No unbalanced set has $F=[1,n]\ne E$:
+all its classes are unbalanced down to the leaves, two leaves of equal shape that are $0/1$ vectors and not
+constant are equal, and so, going up the tree, all leaves are equal and every level is in $E$. In the ten
+groups with $n\le4$ in which the author computed sets, $736$ of the $1{,}088$ patterns have a set, and each
+of those has a set of the least multiset's size. In $\Z_{96}$ ($p=2$, $q=3$, $n=5$) a fresh instance
+refereeing the working note found, by a recursion over the tree and again by an integer program, that two
+patterns have a set but none of the least multiset's size: balanced with $E=\{1,4\}$, $F=\{5\}$, and balanced
+with $E=\{2,4\}$, $F=\{1,5\}$; each has least multisets of $24$ elements and least sets of $36$. We know no
+rule for sets.
+
+\subsection{Method} Write $\Z_M=\Z_{p^n}\times\Z_q$ and hang $A$ on the tree of residue classes modulo
+$p,p^2,\dots,p^n$; a class carries the vector in $\N^q$ of its elements' second coordinates. Divisibility by
+$\Phi_{p^a}$ says that the $p$ children of every class of depth $a-1$ have equal totals; by $\Phi_{p^aq}$,
+that they have equal \emph{shapes} (vectors differing by constants); by $\Phi_q$, that the root's vector is
+constant (Section~\ref{sec:tree}). The lower bounds are inductions on this tree. The one idea beyond
+bookkeeping is to prove, for a class that is not balanced, a statement about the set of its possible sizes,
+\[ |N|\in\{p^ut+qm:\ t\ge 1,\ m\ge 0\},\qquad u=\text{the number of levels of $E\cup F$ below $N$,}\]
+with refinements ($m\ge 1$, or $q\,p^u\mid |N|$) when some level of $F$ is not in $E$
+(Lemmas~\ref{lem:S}, \ref{lem:Sp}, \ref{lem:Spp}). Such statements pass through sums of children, where a
+bound on the least size alone does not, and the four clauses of (c) are exactly the configurations in which a
+balanced class can supply the extra $q\,p^e$ elements for nothing. The constructions
+(Section~\ref{sec:constructions}) are digit sets with one layer switched according to the digits.
+
+\section{The tree of residue classes}\label{sec:tree}
+
+Throughout, $p\ne q$ are primes, $n\ge 0$, $M=p^nq$, and multisets are functions to $\Z_{\ge 0}$; sums of
+multisets are sums of functions.
+
+\subsection*{Classes} Identify $\Z_M$ with $\Z_{p^n}\times\Z_q$ by $x\mapsto(x \bmod p^n,\ x\bmod q)$. Write
+$u\in\Z_{p^n}$ in base $p$, $u=\sum_{a=1}^{n}u_a p^{a-1}$ with digits $u_a\in\{0,\dots,p-1\}$; $u_a$ is the
+\emph{digit of level $a$}. An element is a pair $(u,w)$, and $w\in\Z_q$ is its \emph{layer}. For
+$0\le d\le n$, a \emph{class of depth $d$} is the set of all $(u,w)$ with prescribed digits $u_1,\dots,u_d$
+(a residue class of $u$ modulo $p^d$); the class of depth $0$ is the \emph{root}. A class $N$ of depth $d<n$
+has $p$ \emph{children} $N_0,\dots,N_{p-1}$, the classes of depth $d+1$ inside it, $N_j$ being the one with
+$u_{d+1}=j$. A class of depth $d$ has $n-d$ \emph{levels below it}, and its \emph{own level} $l$
+($1\le l\le n-d$) is the level $d+l$ of the group.
+
+\subsection*{Vectors} For a multiset $A$ and a class $N$, $g(N)\in\N^q$ is the vector whose entry at $w$ is the
+number of elements of $A$ in $N$ in layer $w$, and $|N|$ is the sum of its entries, the \emph{total} of $N$.
+$\one=(1,\dots,1)$. $N$ is \emph{empty} if $g(N)=0$, \emph{balanced} if $g(N)$ is a multiple of $\one$ (an
+empty class is balanced), and \emph{unbalanced} otherwise. Two classes have \emph{equal shapes} if their
+vectors differ by a multiple of $\one$. The vector of a class is the sum of the vectors of its children.
+
+\subsection*{Patterns of classes} For a class $N$ of depth $d$ and $1\le l\le n-d$ say
+\begin{align*}
+ l\in E(N)&\iff\text{every class of depth $d+l-1$ contained in $N$ has $p$ children of equal totals;}\\
+ l\in F(N)&\iff\text{every class of depth $d+l-1$ contained in $N$ has $p$ children of equal shapes.}
+\end{align*}
+
+\begin{lemma}[the tree and the divisors]\label{lem:translate}
+For a multiset $A$ on $\Z_M$ and $1\le a\le n$: $\Phi_{p^a}\mid A(X)$ iff $a\in E(\mathrm{root})$;
+$\Phi_{p^aq}\mid A(X)$ iff $a\in F(\mathrm{root})$; and $\Phi_q\mid A(X)$ iff the root is balanced.
+\end{lemma}
+
+\begin{proof}
+For a function $B\colon\Z_N\to\Z$ and $r\in\Z_N$ put $(\nabla_rB)(y)=B(y)-B(y-r)$ and
+$B(X)=\sum_{0\le y<N}B(y)X^y$. \emph{Claim: if $r_1,\dots,r_m$ are proper divisors of $N$ such that every
+proper divisor of $N$ divides one of them, then $\Phi_N\mid B(X)$ iff $\nabla_{r_1}\cdots\nabla_{r_m}B=0$.}
+Indeed $C(X)=\prod_i(X^{r_i}-1)\cdot B(X)$ is congruent modulo $X^N-1$ to
+$(-1)^m\sum_y(\nabla_{r_1}\cdots\nabla_{r_m}B)(y)X^y$, of degree $<N$; so the iterated difference vanishes iff
+$C(\zeta)=0$ for all $N$ roots $\zeta$ of $X^N-1$. If $\zeta$ has order $d<N$ then $d\mid r_i$ for some $i$
+and $C(\zeta)=0$; if $\zeta$ has order $N$ no factor $\zeta^{r_i}-1$ vanishes and $C(\zeta)=0$ iff
+$B(\zeta)=0$. So the condition is that $B$ vanishes at the primitive $N$-th roots of unity, which is
+$\Phi_N\mid B(X)$.
+
+For $N\mid M$ let $B_N(y)=\sum_{x\equiv y\ (N)}A(x)$; then $A(X)\equiv B_N(X)$ modulo $X^N-1$, so
+$\Phi_N\mid A$ iff $\Phi_N\mid B_N$. For $N=p^a$ take $r_1=p^{a-1}$: $B_N(y)$ is the total of a class of depth
+$a$, and $\nabla_{r_1}B_N=0$ says that the $p$ classes of depth $a$ inside each class of depth $a-1$ have equal
+totals. For $N=q$ take $r_1=1$: $B_q$ is the vector of the root. For $N=p^aq$ take $r_1=N/p$, $r_2=N/q=p^a$;
+identify $\Z_N$ with $\Z_{p^a}\times\Z_q$; subtracting $r_1$ moves a class of depth $a$ to the next one
+inside the same class of depth $a-1$ (by an element of order $p$) and fixes the layer, and subtracting $r_2$
+fixes the class and moves the layer by a generator of $\Z_q$. So $\nabla_{r_2}\nabla_{r_1}B_N=0$ says that
+for neighbouring classes $c$, $c'$ of depth $a$ the vector $g(c)-g(c')$ is invariant under a generator of
+$\Z_q$, that is, constant.
+\end{proof}
+
+So $E(A)=E(\mathrm{root})$, $F(A)=F(\mathrm{root})$, and $A$ is balanced iff the root is.
+
+\subsection*{Pairs contained in a pattern} Let $N$ have $j$ levels below it. A pair $(E,F)$ of subsets of
+$[1,j]$ is \emph{contained in the pattern of $N$} if $E\subseteq E(N)$ and $F\subseteq F(N)$. Its
+\emph{shifted pair} is $E^-=\{l-1:l\in E,\ l\ge 2\}$, $F^-=\{l-1:l\in F,\ l\ge2\}$. Because the conditions
+are ``for every class'',
+\begin{equation}\label{eq:shift}
+\parbox{0.84\textwidth}{if $(E,F)$ is contained in the pattern of $N$, then $(E^-,F^-)$ is contained in
+the pattern of every child of $N$,}
+\end{equation}
+and $|E^-\cup F^-|$ is $|E\cup F|-1$ if $1\in E\cup F$ and $|E\cup F|$ otherwise. All lemmas below are stated
+for pairs contained in a pattern, not for exact patterns; that is what makes the inductions work.
+
+\section{Lower bounds}\label{sec:lower}
+
+\subsection{Three sets of integers} For an integer $u\ge0$ put
+\begin{gather*} S_u=\{p^ut+qm:\ t\ge1,\ m\ge0\},\qquad \Sp_u=\{p^ut+qm:\ t\ge1,\ m\ge1\},\\ Q_u=\{q\,p^ut:\ t\ge1\}. \end{gather*}
+Each of the following is checked by writing out the definition; in (A4) and (A5) one uses that $q$ is a prime
+other than $p$.
+\begin{itemize}
+\item[(A1)] For $u\ge1$: $p\,S_{u-1}\subseteq S_u$, $\ p\,\Sp_{u-1}\subseteq\Sp_u$, $\ p\,Q_{u-1}\subseteq Q_u$.
+\item[(A2)] $S_u+S_u\subseteq S_u$; $\ S_u+q\Z_{\ge0}\subseteq S_u$; $\ \Sp_u+S_u\subseteq\Sp_u$;
+ $\ \Sp_u+q\Z_{\ge0}\subseteq\Sp_u$; $\ S_u+q\Z_{\ge1}\subseteq\Sp_u$.
+\item[(A3)] $Q_u+S_u\subseteq\Sp_u$ and $Q_u+q\Z_{\ge1}\subseteq\Sp_u$.
+\item[(A4)] If $x\in S_u$ and $q\mid x$, then $x\in Q_u\cup\Sp_u$ and $x\ge q\,p^u$.
+\item[(A5)] If $x\in\Sp_u$ and $q\mid x$, then $x\ge q\,p^u+q$.
+\end{itemize}
+(For (A4): $x=p^ut+qm$ with $q\mid p^ut$, so $q\mid t$ and $t\ge q$; if $m=0$ then $x\in Q_u$.)
+
+\subsection{Two elementary lemmas}
+
+\begin{lemma}[children of equal shapes]\label{lem:shapes}
+Let $N$ be a class whose $p$ children have equal shapes, and $v$ the vector of a child of least total.
+\begin{enumerate}
+\item[(a)] The children have vectors $v+d_i\one$ with integers $d_i\ge0$, $|N|=p|v|+q\sum d_i$, and the
+children have equal totals iff $\sum d_i=0$.
+\item[(b)] $N$ is balanced iff every child is balanced. So if $N$ is unbalanced every child is unbalanced, in
+particular not empty.
+\item[(c)] If $A$ is balanced and the levels $1,\dots,a_0-1$ are all in $F(A)$, every class of depth
+$\le a_0-1$ is balanced.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(a) is the definition. (b) $g(N)=pv+(\sum d_i)\one$ is constant iff $v$ is, iff each $v+d_i\one$ is.
+(c) By induction on the depth from the root, using (b).
+\end{proof}
+
+\begin{lemma}[divisibility]\label{lem:div}
+If $E\subseteq E(N)$ then $p^{|E|}$ divides $|N|$; if moreover $N$ is balanced, $q\,p^{|E|}$ divides $|N|$.
+\end{lemma}
+\begin{proof}
+Induction on the number of levels below $N$, by \eqref{eq:shift}: if $1\notin E$, $|N|$ is a sum of multiples
+of $p^{|E|}$; if $1\in E$, the children have one total $s$, $p^{|E|-1}\mid s$ and $|N|=ps$. If $N$ is
+balanced, $q\mid |N|$ as well.
+\end{proof}
+
+\subsection{The sizes of unbalanced classes}
+
+\begin{lemma}\label{lem:S}
+Let $N$ be an unbalanced class, $(E,F)$ a pair contained in its pattern, $u=|E\cup F|$. Then $|N|\in S_u$. In
+particular $|N|\ge p^{|E\cup F|}$.
+\end{lemma}
+\begin{proof}
+Induction on the number $j$ of levels below $N$; for $j=0$, $u=0$ and $S_0=\Z_{\ge1}$. Let $j\ge1$.
+
+\emph{$1\in F$.} The children have equal shapes; by Lemma~\ref{lem:shapes} the child $v$ of least total is
+unbalanced and $|N|=p|v|+q\sum d_i$. By induction $|v|\in S_{u-1}$, and $|N|\in S_u$ by (A1), (A2).
+
+\emph{$1\in E\setminus F$.} The children have one total $s$, some child is unbalanced, $s\in S_{u-1}$ by
+induction, and $|N|=ps\in S_u$.
+
+\emph{$1\notin E\cup F$.} Some child is unbalanced, with total in $S_u$ by induction; every other child is
+unbalanced with total in $S_u$ or balanced with total in $q\Z_{\ge0}$. Use (A2).
+\end{proof}
+
+Let $N$ be a class of depth $d$ and $1\le g\le n-d$. Say that $N$ \emph{has a witness at level $g$} if some
+class $\Gamma$ of depth $d+g-1$ contained in $N$ has children of unequal totals (so $g\notin E(N)$). Such a
+$\Gamma$ is not empty; if $g\ge2$ it lies in one child $N_c$ of $N$, and $N_c$ has a witness at its own level
+$g-1$.
+
+\begin{lemma}\label{lem:Sp}
+Let $N$ be an unbalanced class, $(E,F)$ a pair contained in its pattern, $u=|E\cup F|$, and suppose $N$ has
+a witness at some level $g\in F$. Then $|N|\in\Sp_u\cup Q_u$.
+\end{lemma}
+\begin{proof}
+Induction on $j$; for $j=0$ there is no $g$. Let $j\ge1$ and $\Gamma$ the witness class.
+
+\emph{$1\in F$.} Every child is unbalanced and $|N|=p|v|+q\sum d_i$ with $|v|\in S_{u-1}$
+(Lemmas~\ref{lem:shapes}, \ref{lem:S}). If $\sum d_i\ge1$, $|N|\in\Sp_u$ by (A1), (A2). If $\sum d_i=0$ the
+children of $N$ have equal totals, so $\Gamma\ne N$, $g\ge2$, and $\Gamma$ lies in a child $N_c$, unbalanced,
+with a witness at its level $g-1\in F^-$; by induction $|N_c|\in\Sp_{u-1}\cup Q_{u-1}$ and
+$|N|=p|N_c|\in\Sp_u\cup Q_u$.
+
+\emph{$1\in E\setminus F$.} Then $g\ne1$, the children have one total $s$, and $\Gamma$ lies in a nonempty
+child $N_c$ with a witness at its level $g-1\in F^-$. If $N_c$ is unbalanced, $s\in\Sp_{u-1}\cup Q_{u-1}$ by
+induction. If $N_c$ is balanced, $q\mid s$; some child is unbalanced, so $s\in S_{u-1}$, and
+$s\in Q_{u-1}\cup\Sp_{u-1}$ by (A4). Either way $|N|=ps\in\Sp_u\cup Q_u$.
+
+\emph{$1\notin E\cup F$.} Then $g\ge2$ and $\Gamma$ lies in a nonempty child $N_c$ with a witness at its
+level $g-1\in F^-$; here $|E^-\cup F^-|=u$. Let $R$ be the sum of the totals of the other children; each of
+them is unbalanced with total in $S_u$ or balanced with total in $q\Z_{\ge0}$. If $N_c$ is unbalanced and
+$|N_c|\in\Sp_u$: $|N|\in\Sp_u$ by (A2). If $N_c$ is unbalanced and $|N_c|\in Q_u$: if $R=0$ then
+$|N|\in Q_u$; if some other child is unbalanced then $R\in S_u$ and $|N|\in\Sp_u$ by (A3); otherwise
+$R\in q\Z_{\ge1}$ and $|N|\in\Sp_u$ by (A3). If $N_c$ is balanced, $|N_c|\in q\Z_{\ge1}$, some other child is
+unbalanced, and $|N|\in\Sp_u$ by (A2).
+\end{proof}
+
+\begin{lemma}\label{lem:Spp}
+In Lemma~\ref{lem:Sp} suppose moreover that no level $l<g$ lies in $E\setminus F$. Then $|N|\in\Sp_u$.
+\end{lemma}
+\begin{proof}
+Induction on $j$. If $g\ge2$, the child $N_c$ containing $\Gamma$ has a witness at its level $g-1\in F^-$
+and no level below $g-1$ lies in $E^-\setminus F^-$. \emph{$1\in F$}: as before
+$|N|=p|v|+q\sum d_i$; if $\sum d_i\ge1$, $|N|\in\Sp_u$; if $\sum d_i=0$ then $g\ge2$, $N_c$ is unbalanced,
+$|N_c|\in\Sp_{u-1}$ by induction and $|N|=p|N_c|\in\Sp_u$. \emph{$1\in E\setminus F$} does not occur
+($g\in F$ gives $g\ge2$, and level $1<g$ would lie in $E\setminus F$). \emph{$1\notin E\cup F$}: $g\ge 2$; if
+$N_c$ is unbalanced, $|N_c|\in\Sp_u$ by induction and $|N|\in\Sp_u$ by (A2); if $N_c$ is balanced,
+$|N_c|\in q\Z_{\ge1}$, some other child is unbalanced with total in $S_u$, and $|N|\in\Sp_u$ by (A2).
+\end{proof}
+
+The hypothesis of Lemma~\ref{lem:Spp} cannot be dropped: for $p=2$, $q=3$ the class with children
+$(6,0,0)=(3,0,0)+(3,0,0)$ and $(2,2,2)=(2,2,2)+(0,0,0)$ has $E=\{1\}$, $F=\{2\}$, $u=2$ and $12=q\,p^u$
+elements, and $12\notin\Sp_2$. Its balanced child $(2,2,2)$ is the picture behind clause (4).
+
+\subsection{The unbalanced half}
+
+\begin{proposition}\label{prop:U}
+Let $A$ be unbalanced, $E=E(A)$, $F=F(A)$, $e=|E|$, $k=|F\setminus E|$. Then $|A|\ge p^{e}$ if $k=0$, and
+$|A|\ge p^{e}(p^{k}+q)$ if $k\ge1$.
+\end{proposition}
+\begin{proof}
+Put $u=|E\cup F|=e+k$. By Lemma~\ref{lem:S}, $|A|\in S_u$, so $|A|\ge p^{u}$; this is the claim for $k=0$.
+Let $k\ge1$ and $g\in F\setminus E$. Since $g\notin E$ the root has a witness at level $g$, and $g\in F$, so
+$|A|\in\Sp_u\cup Q_u$ by Lemma~\ref{lem:Sp}. If $|A|=p^ut+qm$ with $t,m\ge1$: $p^e$ divides $|A|$
+(Lemma~\ref{lem:div}) and $p^ut$, hence $m$, so $m\ge p^e$ and $|A|\ge p^u+q\,p^e$. If $|A|\in Q_u$:
+$|A|\ge q\,p^{e+k}\ge p^e(p^k+q)$, because $(q-1)(p^k-1)\ge1$.
+\end{proof}
+
+\subsection{The balanced half}
+
+\begin{lemma}\label{lem:bal}
+Let $N$ be a balanced class whose $p$ children do not all have equal shapes, $(E,F)$ a pair contained in its
+pattern, $u=|E\cup F|$. Then $|N|\ge q\,p^{u}$.
+\end{lemma}
+\begin{proof}
+Some child is unbalanced, $q\mid|N|$, and $1\notin F$. If $1\in E$: the children have one total $s$, $q\mid s$,
+$|E^-\cup F^-|=u-1$, $s\in S_{u-1}$ by Lemma~\ref{lem:S}, so $s\ge q\,p^{u-1}$ by (A4) and $|N|=ps$. If
+$1\notin E$: $|E^-\cup F^-|=u$, the unbalanced children have totals in $S_u$ and the balanced ones in
+$q\Z_{\ge0}$, so $|N|\in S_u$ by (A2) and $|N|\ge q\,p^u$ by (A4).
+\end{proof}
+
+\begin{proposition}\label{prop:B}
+Let $A$ be a nonempty balanced multiset, $E=E(A)$, $F=F(A)$, $e=|E|$.
+If $F=[1,n]$ then $|A|\ge q\,p^{e}$. If $F\ne[1,n]$, with $a_0$, $G$, $k'$, $x$ as in
+Theorem~\ref{thm:main}(c), then $|A|\ge q\,p^{e}(p^{k'}+x)$.
+\end{proposition}
+\begin{proof}
+The first statement is Lemma~\ref{lem:div} for the root. Let $F\ne[1,n]$.
+
+\emph{The bound $q\,p^{e+k'}$.} Level $a_0\notin F$: some class $P$ of depth $a_0-1$ has children of unequal
+shapes, and $P$ is balanced by Lemma~\ref{lem:shapes}(c). The pair
+$E_P=\{a-a_0+1:a\in E,\ a\ge a_0\}$, $F_P=\{a-a_0+1:a\in F,\ a>a_0\}$ is contained in the pattern of $P$, and
+$|E_P\cup F_P|=|E\cap[a_0,n]|+k'$; so $|P|\ge q\,p^{|E\cap[a_0,n]|+k'}$ by Lemma~\ref{lem:bal}. Going up from
+$P$ to the root through the classes $P=P_{a_0-1}\subset\dots\subset P_0$, each step keeps or multiplies the
+total, and multiplies it by $p$ at every level $d\in E$, $d<a_0$. Hence $|A|\ge q\,p^{e+k'}$.
+
+\emph{The case $x=1$.} Then $k'\ge1$; put $g_1=\min G$. No level below $a_0$ is in $E$; and either
+($\alpha$) $a_0\notin E$, or ($\beta$) $a_0\in E$, $p=2$, and no level of $E\setminus F$ lies strictly between
+$a_0$ and $g_1$. The pair $(E_P,F_P)$ is contained in the pattern of every class of depth $a_0-1$; now
+$|E_P|=e$ and $|E_P\cup F_P|=e+k'$.
+
+\emph{Step 1.} If a class $P'\ne P$ of depth $a_0-1$ is not empty, it is balanced
+(Lemma~\ref{lem:shapes}(c)), so $|P'|\ge q\,p^e$ by Lemma~\ref{lem:div}, and
+$|A|\ge|P|+|P'|\ge q\,p^{e+k'}+q\,p^e$.
+
+\emph{Step 2.} Otherwise $|A|=|P|$. As $g_1\in F\setminus E$, some class $\Gamma$ of depth $g_1-1\ge a_0$ has
+children of unequal totals; it is not empty, so it lies in $P$, inside one child $N_c$ of $P$. By
+\eqref{eq:shift} the pair $E^-=\{a-a_0:a\in E,\ a>a_0\}$, $F^-=\{a-a_0:a\in F,\ a>a_0\}$ is contained in the
+pattern of each child of $P$; put $u^-=|E^-\cup F^-|=|E\cap(a_0,n]|+k'$. $N_c$ has a witness at its own level
+$g=g_1-a_0\in F^-$.
+
+\emph{Case ($\alpha$).} Here $|E^-|=e$ and $u^-=e+k'$, and some child of $P$ is unbalanced. If some child
+$N_b$ of $P$ is balanced and not empty, $|N_b|\ge q\,p^e$ (Lemma~\ref{lem:div}); the sum $\Sigma$ of the totals
+of the unbalanced children is in $S_{u^-}$ (Lemma~\ref{lem:S}, (A2)) and divisible by $q$, so
+$\Sigma\ge q\,p^{u^-}$ by (A4), and $|A|\ge\Sigma+|N_b|$. Otherwise every nonempty child of $P$ is unbalanced;
+then $N_c$ is, $|N_c|\in\Sp_{u^-}\cup Q_{u^-}$ by Lemma~\ref{lem:Sp}, and since $g(P)$ is constant and
+$g(N_c)$ is not, some other child is unbalanced; let $R\ge1$ be the sum of the totals of the children other
+than $N_c$, so $R\in S_{u^-}$. If $|N_c|\in Q_{u^-}$ then $|P|\ge q\,p^{u^-}+1$; if $|N_c|\in\Sp_{u^-}$ then
+$|P|\in\Sp_{u^-}$ and $|P|\ge q\,p^{u^-}+q$ by (A5). Either way $|P|>q\,p^{e+k'}$; and $q\,p^e$ divides both
+$|P|$ (Lemma~\ref{lem:div}) and $q\,p^{e+k'}$; so $|A|=|P|\ge q\,p^{e+k'}+q\,p^e$.
+
+\emph{Case ($\beta$).} Here $|E^-|=e-1$ and $u^-=e-1+k'$. $P$ has two children $N_0,N_1$ of one total $s$,
+$|P|=2s$, and $q$ is odd, so $q\mid s$. Their vectors sum to a constant, so if one were balanced both would
+be, with equal shapes; hence both are unbalanced. $N_c$ is one of them, it has a witness at its level
+$g\in F^-$, and no level $l<g$ lies in $E^-\setminus F^-$. By Lemma~\ref{lem:Spp}, $s\in\Sp_{u^-}$, so
+$s\ge q\,p^{u^-}+q$ by (A5). As $q\,p^{e-1}$ divides $s$ and $q\,p^{u^-}$,
+$s\ge q\,p^{u^-}+q\,p^{e-1}$ and $|A|=2s\ge q\,p^{e+k'}+q\,p^e$.
+\end{proof}
+
+The clauses enter as follows. (2): Step~1 needs that no level of $E$ lies above $a_0$; with one, a second
+nonempty class of depth $a_0-1$ is forced only up to the factor $p$ it already contributes. (3): in case
+($\beta$) with $p\ge3$ the child $N_c$ may be balanced, a third child being free to carry the witness. (4):
+Lemma~\ref{lem:Spp} needs its hypothesis.
+
+\section{Constructions}\label{sec:constructions}
+
+Elements of $\Z_{p^n}$ are written as digit strings. For a set $T$ of levels let $D(T)$ be the set of
+strings whose digits are $0$ outside $T$; for $b\notin T$ and a digit $c$ let $D(T;b\mapsto c)$ be the set of
+strings with $u_b=c$ and $0$ at the other levels outside $T$. For a set $D$ of strings and $m\ge1$,
+$m\cdot\mathrm{Fib}(D)$ is the multiset with $m$ copies of $(u,w)$ for every $u\in D$ and every layer $w$;
+every class has a constant vector in it. $e_t$ is the unit vector of layer $t$.
+
+\subsection{The unbalanced half} Given $E,F\subseteq[1,n]$, let $\tau(u)=1$ if $E\setminus F\ne\emptyset$
+and every digit of $u$ at a level of $E\setminus F$ is nonzero, and $\tau(u)=0$ otherwise. Put
+\[ A_1=\{(u,\tau(u)):u\in D(E\cup F)\},\qquad A_2=\mathrm{Fib}(D(E)), \]
+and $A=A_1$ if $F\subseteq E$, $A=A_1+A_2$ otherwise. Then $|A|$ is $p^{e}$, respectively $p^{e+k}+q\,p^{e}$.
+
+\begin{proposition}\label{prop:CU}
+$A$ is unbalanced, $E(A)=E$ and $F(A)=F$.
+\end{proposition}
+\begin{proof}
+Every class that meets $A$ meets $A_1$; its $A_1$-part has a power of $p$ elements, which $q$ does not
+divide, and its $A_2$-part is a constant vector; so every nonempty class is unbalanced. At a level of $F$ the
+$A_1$-parts of the children of a class have the same layer vector (the digit at that level does not enter
+$\tau$) and the $A_2$-parts are constant: equal shapes. At a level of $E$ both parts split evenly: equal
+totals. At a level of $F\setminus E$, in the class with all earlier digits $0$, the child with digit $0$
+holds the whole $A_2$-part and the others none, while the $A_1$-parts are equal: unequal totals. At a level
+outside $E\cup F$ a nonempty class has one nonempty child, and it is unbalanced: unequal totals and unequal
+shapes. At a level $a\in E\setminus F$ take a class of depth $a-1$ that meets $A$ and whose digits at the
+earlier levels of $E\setminus F$ are nonzero: the $A_1$-part of its child with digit $0$ lies in layer $0$,
+that of the child with digit $1$ has the same size and reaches layer $1$, and the $A_2$-parts are constant;
+so the two do not have equal shapes.
+\end{proof}
+
+\subsection{The balanced half} If $F=[1,n]$, $A=\mathrm{Fib}(D(E))$ has $q\,p^e$ elements, every class
+balanced, equal totals exactly at the levels of $E$.
+
+Let $F\ne[1,n]$, with $a_0$, $G$, $k'$ as in the theorem. The building block is a \emph{shape part}
+$S=S(a_0,T_1,T_2,H,\text{mode})$, for $T_1\subseteq[1,a_0-1]$, $H\subseteq T_2\subseteq[a_0+1,n]$ and a mode
+$\mathrm U$, $\mathrm Q$ or $\mathrm W$. Let $D^*$ be the strings that are $0$ outside
+$T_1\cup\{a_0\}\cup T_2$ (the digit of level $a_0$ is free); $\tau(u)=1$ if $H\ne\emptyset$ and every digit
+of $u$ at a level of $H$ is nonzero, and $0$ otherwise; and, with $(\Delta x)(w)=x(w)-x(w-1)$,
+\begin{align*}
+\text{mode U:}\quad&\Lambda_0x=x,\qquad \Lambda_1x=|x|\one-x;\\
+\text{modes Q, W:}\quad&\Lambda_0x=|x|\one+\Delta x,\qquad\Lambda_1x=|x|\one-\Delta x;\\
+\text{mode Q also:}\quad&\Lambda_ix=|x|\one\quad(2\le i\le p-1).
+\end{align*}
+$S$ has, for every $u\in D^*$ whose digit $i=u_{a_0}$ has a $\Lambda_i$ defined, and every layer $w$,
+$(\Lambda_ie_{\tau(u)})(w)$ copies of $(u,w)$. (All these numbers are $\ge0$: the vectors are $e_t$,
+$\one-e_t$, $\one+e_t-e_{t+1}$, $\one-e_t+e_{t+1}$, $\one$.) By linearity the vector of a class below
+level $a_0$ with digit $i$ at level $a_0$ is $\Lambda_i\beta$, where $\beta$ counts the strings of $D^*$ in
+the class with $\tau=0$ and with $\tau=1$ in layers $0$ and $1$; $\beta$ is supported on layers $0$ and $1$ and $|\beta|$ is a power of $p$ (odd, if $q=2$), so $\beta$ is
+not constant, and $\Lambda_0,\Lambda_1$ map non-constant vectors to non-constant vectors. Summing over the
+digit at level $a_0$ gives $|x|\one$, $p|x|\one$, $2|x|\one$ in modes U, Q, W. From this one reads off:
+
+\begin{lemma}\label{lem:shape}
+Let $\mu=1,p,2$ in modes $\mathrm U,\mathrm Q,\mathrm W$. Then $|S|=\mu\,q\,p^{|T_1|+|T_2|}$; every class of
+depth $<a_0$ is balanced in $S$; and for every sum $\Phi$ of multisets $m\cdot\mathrm{Fib}(D)$ the multiset
+$A=S+\Phi$ is balanced with $F(A)=[1,a_0-1]\cup(T_2\setminus H)$. In $S$: at a level of $T_1$ and at a level
+of $T_2\setminus H$ the children of a class have equal vectors; at a level of $H$ they have equal totals;
+at a level $a\ne a_0$ outside $T_1\cup T_2$ only the child with digit $0$ can be nonempty; at level $a_0$ the
+children with digits $0,1$ of a class that meets $D^*$ have totals $p^{|T_2|}$ and $(q-1)p^{|T_2|}$ in mode
+$\mathrm U$ and $q\,p^{|T_2|}$ each in modes $\mathrm Q$, $\mathrm W$, the remaining children having total
+$q\,p^{|T_2|}$ in mode $\mathrm Q$ and $0$ in modes $\mathrm U$, $\mathrm W$.
+\end{lemma}
+
+Put $T_2^0=(E\cup F)\cap(a_0,n]$, $H^0=(E\setminus F)\cap(a_0,n]$, and mode$^0=\mathrm Q$ if $a_0\in E$,
+$\mathrm U$ if not; so $T_2^0\setminus H^0=F\cap(a_0,n]$. Write $E_<=E\cap[1,a_0-1]$. Define $A$ by the first
+case that applies:
+\begin{itemize}
+\item[(I)] $k'=0$: $A=S(a_0,E_<,T_2^0,H^0,\text{mode}^0)$.
+\item[(III)] $k'\ge1$ and $E_<\ne\emptyset$; let $b=\min E$:
+ \[A=S(a_0,E_<\setminus\{b\},T_2^0,H^0,\text{mode}^0)+\sum_{i=1}^{p-1}p^{k'}\cdot\mathrm{Fib}(D(E\setminus\{b\};b\mapsto i)).\]
+\item[(IV)] $k'\ge1$, $a_0\in E$, $p\ge3$:
+ \[A=S(a_0,E_<,T_2^0,H^0,\mathrm W)+\sum_{i=2}^{p-1}p^{k'}\cdot\mathrm{Fib}(D(E\setminus\{a_0\};a_0\mapsto i)).\]
+\item[(V)] $k'\ge1$, $a_0\in E$, and some level of $E\setminus F$ lies strictly between $a_0$ and $\min G$;
+ let $b$ be the least such:
+ \[A=S(a_0,E_<,T_2^0\setminus\{b\},H^0\setminus\{b\},\mathrm Q)+\sum_{i=1}^{p-1}p^{k'}\cdot\mathrm{Fib}(D(E\setminus\{b\};b\mapsto i)).\]
+\item[(II)] otherwise: $A=S(a_0,E_<,T_2^0,H^0,\text{mode}^0)+\mathrm{Fib}(D(E))$.
+\end{itemize}
+Cases (I), (III), (IV), (V) are clauses (1) to (4), and (II) is reached exactly when $x=1$.
+
+\begin{proposition}\label{prop:CB}
+In each case $A$ is balanced, $E(A)=E$, $F(A)=F$, and $|A|=q\,p^{e}(p^{k'}+x)$.
+\end{proposition}
+\begin{proof}[Outline of proof]
+The verification level by level is written out in the working note (Section~6 of
+\texttt{balanced-half/proof.md}) and is checked in Lean; here is its plan. $F(A)=F$ and balance are Lemma~\ref{lem:shape}, since in every case $T_2\setminus H=F\cap(a_0,n]$. Sizes: in
+(I) and (II) the shape part has $q\,p^{e}$, resp.\ $q\,p^{e+k'}$, elements ($\mu=p$ accounts for $a_0\in E$),
+and (II) adds $q\,p^e$. In (III), (IV), (V) one level $h$ of $E$ (the \emph{host level}: $b$, $a_0$, $b$) is
+treated as if it were not in $E$ when the shape part is built, which then has $q\,p^{e-1+k'}$ elements in
+(III), (V) and twice that in (IV); the fibre multisets fill the remaining $p-1$ (in (IV): $p-2$) children at
+the host level with $q\,p^{e-1+k'}$ elements each, so the totals at the host level are equal and
+$|A|=q\,p^{e+k'}$. A class at or below the host level contains either only elements of $S$ or only fibres of
+one $\Phi_i$. For $E(A)$: at a level of $E$ other than $h$ both kinds of class split evenly
+(Lemma~\ref{lem:shape}; fibres over $D(E\setminus\{h\};\dots)$ are free at the levels of $E\setminus\{h\}$).
+At a level outside $E\cup F$, and at a level of $E^c$ before $a_0$, the class with all earlier digits $0$ is
+nonempty and has one nonempty child. At $a_0\notin E$ (mode U) the children with digits $0$, $1$ of the class with all earlier digits $0$ have totals
+$p^{|T_2|}$ and $(q-1)p^{|T_2|}$ in cases (I), (III), and $p^{c}(p^{k'}+q)$ and $p^{c}(q-1)p^{k'}$ with
+$c=|E\cap(a_0,n]|$ in case (II), where the fibres lie in the first; any further child is empty. If $p\ge3$ a
+nonempty child stands beside an empty one. If $p=2$ then $q$ is odd: in cases (I), (III) $q-1\ne1$, and in case
+(II) one total is an odd multiple of $p^c$ and the other an even one.
+At a level $g\in G$: in case (II) the class with all earlier digits $0$ has children with equal $S$-vectors
+and all its fibres in the child with digit $0$; in cases (III), (IV), (V) a fibre-only class (digit $1$, $2$,
+$1$ at the host level and $0$ elsewhere) is nonempty with all its elements in one child. In case (V) the
+level $b$ itself is not in $F(A)$ by Lemma~\ref{lem:shape}, being outside $T_2$.
+\end{proof}
+
+Theorem~\ref{thm:main} is Propositions~\ref{prop:U}, \ref{prop:B}, \ref{prop:CU}, \ref{prop:CB} with
+Lemma~\ref{lem:translate}.
+
+\begin{remark}[one condition instead of four]
+For $k'\ge1$, $x=0$ iff the pattern has a \emph{host level}: a level $b\in E$ with $b<\min G$ such that
+$b<a_0$, or $b=a_0$ and $p\ge3$, or $b>a_0$, $b\notin F$ and $a_0\in E$. Equivalently (and without a list of
+positions): $x=0$ iff some least multiset for the pattern $(E\cup G,F)$, which has $q\,p^{e+k'}$ elements,
+contains a nonempty class of depth $<\min G$ all of whose subclasses are balanced. Concentrating the fibres
+of such a class then makes the totals unequal at the levels of $G$ at no cost. The size condition cannot be
+dropped. (Propositions~11 and~13 of the working note's proof.)
+\end{remark}
+
+\section{The formal proof}\label{sec:lean}
+
+Theorem~\ref{thm:main} is formalised in Lean~4 (toolchain \lean{v4.37.0-rc1}) with Mathlib, in the library
+\lean{Pnq} of the development that also holds the tiling theorems of the companion papers. %%WHERE%%
+
+\subsection*{The statements} A multiset on $\Z_{p^nq}$ is a function \lean{w : ZMod (p \^{} n * q) → ℕ}, its
+multiplicities. Its mask polynomial, with exponents the representatives in $[0,M)$, is
+{\footnotesize
+\begin{verbatim}
+noncomputable def maskW (w : ZMod M → ℕ) : Polynomial ℤ :=
+  ∑ a : ZMod M, Polynomial.C (w a : ℤ) * Polynomial.X ^ a.val
+\end{verbatim}
+}
+and \lean{levelsEW w}, \lean{levelsFW w} are the sets of $\ell\in[1,n]$ with
+\lean{Polynomial.cyclotomic (p \^{} ℓ) ℤ ∣ maskW w}, respectively
+\lean{Polynomial.cyclotomic (p \^{} ℓ * q) ℤ ∣ maskW w}. The formulas of the theorem are four definitions:
+{\footnotesize
+\begin{verbatim}
+def gOf (Es Fs : Finset ℕ) (a0 : ℕ) : Finset ℕ := (Fs \ Es).filter (fun ℓ => a0 < ℓ)
+
+def xOf (p : ℕ) (Es Fs : Finset ℕ) (a0 : ℕ) : ℕ :=
+  if gOf Es Fs a0 = ∅ ∨ (∃ ℓ ∈ Es, ℓ < a0) ∨ (a0 ∈ Es ∧ 3 ≤ p) ∨
+      (a0 ∈ Es ∧ p = 2 ∧ ∃ b ∈ Es \ Fs, a0 < b ∧ ∀ g ∈ gOf Es Fs a0, b < g)
+  then 0 else 1
+
+def minU (p q : ℕ) (Es Fs : Finset ℕ) : ℕ :=
+  if Fs ⊆ Es then p ^ Es.card else p ^ Es.card * (p ^ (Fs \ Es).card + q)
+
+def minB (p q : ℕ) (Es Fs : Finset ℕ) (a0 : ℕ) : ℕ :=
+  q * p ^ Es.card * (p ^ (gOf Es Fs a0).card + xOf p Es Fs a0)
+\end{verbatim}
+}
+and its three parts are three theorems (\lean{Pnq/MinGroup.lean}):
+{\footnotesize
+\begin{verbatim}
+theorem minsize_unbalanced_zmod (p q n : ℕ) [Fact p.Prime] [Fact q.Prime] (hpq : p ≠ q)
+    (Es Fs : Finset ℕ) (hE : Es ⊆ Finset.Icc 1 n) (hF : Fs ⊆ Finset.Icc 1 n) :
+    IsLeast {s | ∃ w : ZMod (p ^ n * q) → ℕ, ∑ a, w a = s ∧
+        ¬ Polynomial.cyclotomic q ℤ ∣ maskW w ∧ levelsEW w = Es ∧ levelsFW w = Fs}
+      (minU p q Es Fs)
+
+theorem minsize_balanced_all_zmod (p q n : ℕ) [Fact p.Prime] [Fact q.Prime] (hpq : p ≠ q)
+    (Es : Finset ℕ) (hE : Es ⊆ Finset.Icc 1 n) :
+    IsLeast {s | ∃ w : ZMod (p ^ n * q) → ℕ, ∑ a, w a = s ∧ 0 < s ∧
+        Polynomial.cyclotomic q ℤ ∣ maskW w ∧ levelsEW w = Es ∧
+        levelsFW w = Finset.Icc 1 n}
+      (q * p ^ Es.card)
+
+theorem minsize_balanced_zmod (p q n : ℕ) [Fact p.Prime] [Fact q.Prime] (hpq : p ≠ q)
+    (Es Fs : Finset ℕ) (hE : Es ⊆ Finset.Icc 1 n) (hF : Fs ⊆ Finset.Icc 1 n)
+    (a0 : ℕ) (ha1 : 1 ≤ a0) (han : a0 ≤ n)
+    (hlow : ∀ ℓ, 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) (hna : a0 ∉ Fs) :
+    IsLeast {s | ∃ w : ZMod (p ^ n * q) → ℕ, ∑ a, w a = s ∧
+        Polynomial.cyclotomic q ℤ ∣ maskW w ∧ levelsEW w = Es ∧ levelsFW w = Fs}
+      (minB p q Es Fs a0)
+\end{verbatim}
+}
+\noindent (line breaks differ from the files). \lean{IsLeast S m} is Mathlib's ``$m\in S$ and $m\le s$ for
+every $s\in S$'', so each theorem has both halves of its part of Theorem~\ref{thm:main}: a multiset with exactly
+the pattern and $m$ elements exists, and none with exactly the pattern has fewer. In the third, the
+hypotheses on \lean{a0} say that it is the least level in $[1,n]$ outside \lean{Fs}. The three together cover
+every pattern once.
+
+\subsection*{The parts} \sloppy On the tree of Section~\ref{sec:tree} (\lean{Pnq/Tree.lean}: a $p$-ary tree of depth
+$n$ whose leaves are functions \lean{Fin q → ℕ}, with $E$ and $F$ defined by recursion as in the text), the
+lower bounds are \lean{pow\_card\_union\_le\_size}, \lean{sharp\_lemma3} (\lean{Pnq/Sharp.lean}) and
+\lean{balanced\_base}, \lean{balanced\_plus} (\lean{Pnq/Balanced.lean}); the constructions are
+\lean{exists\_unbalanced} (\lean{Pnq/BuildU.lean}) and \lean{exists\_balanced\_all}, \lean{exists\_balanced}
+(\lean{Pnq/BuildB.lean} with five files of lemmas); \lean{Pnq/MinTree.lean} joins them into three
+\lean{IsLeast} statements about trees. All of these hold for coprime $p,q\ge2$, prime or not.
+\lean{Pnq/Weighted.lean} is the bridge to the group: the Fourier zeros of a multiset, their equivalence with
+cyclotomic divisibility of the mask polynomial (\lean{zeroAtW\_iff\_cyclotomic\_dvd}), the tree
+\lean{treeOfW w} of a multiset, the translation of Lemma~\ref{lem:translate} (\lean{size\_treeOfW},
+\lean{E\_treeOfW}, \lean{F\_treeOfW\_zero}, \lean{F\_treeOfW}), and that every tree is the tree of a
+multiset (\lean{treeOfW\_surjective}; the Chinese remainder theorem); it also proves that on a set these
+notions are the ones used for the tiling theorems. The new files have $3{,}478$ lines.
+
+\subsection*{How the formal proof differs from this paper} The formal lower bound for part (a) is not
+Proposition~\ref{prop:U}: it is the direct induction of the working note (two claims and four cases), written
+before the argument by sets of sizes was found. The formal lower bounds for part (c) follow
+Lemmas~\ref{lem:shapes} to~\ref{lem:bal} and Proposition~\ref{prop:B}. The formal constructions are recursive
+builders of trees that follow Section~\ref{sec:constructions}, with changes of convenience that the instances
+that wrote them reported: a string counts as having all its digits at the levels of $H$ (or of
+$E\setminus F$) nonzero also when there are no such levels, which renames layers; in modes $\mathrm Q$,
+$\mathrm W$ the vector for digit $0$ is $\one+e_0-e_2$ for $q\ge3$ and $\one+e_1-e_0$ for $q=2$; and in case
+(III) any level of $E$ before $a_0$ serves as host. The remark on host levels at the end of
+Section~\ref{sec:constructions} is not formalised.
+
+\subsection*{How it was made, and what was checked} The author fixed every definition and every theorem
+statement first, in files that compiled with the proofs left open, and before any proof was written had Lean
+evaluate \lean{minU}, \lean{minB} and $q\,p^{e}$ on the $1{,}265$ patterns whose least size the solvers had
+decided (Section~\ref{sec:computations}): all agree. Four fresh instances of the model then each wrote the
+proofs of one part in a copy of its own, forbidden to change a statement. On the merged copy the author
+checked that every fixed declaration stands character for character; that Lean prints each fixed definition
+and statement exactly as it printed them before the proofs existed; that the new files contain no
+\lean{sorry}, no added axiom, and no instance, notation, macro or attribute that could change what a statement
+means; that the whole development builds; and that \lean{\#print axioms} gives, for each of the theorems named
+above, only \lean{propext}, \lean{Classical.choice} and \lean{Quot.sound}. %%NOON%% %%AUDIT%%
+
+\subsection*{What the formal proof does not show} That the theorem is new; that the prose proofs of this
+paper are right (they were read by the author and, in their working-note form, refereed by fresh instances,
+which is a weaker thing); anything about sets; and nothing has been read by a person.
+
+
+\section{Computations}\label{sec:computations}
+
+The formulas were found from, and are confirmed by, exhaustive computation. For each pattern the least size
+was computed by two integer-programming models made independently of one another (CP-SAT on class counts,
+and HiGHS on polynomial remainders modulo $\Phi_d$), every witness being checked a third way by complex
+values: all $2^{2n+1}$ patterns for $n=2$ and $(p,q)\in\{(2,3),(3,2),(2,5),(5,2),(3,5),(5,3)\}$, for $n=3$
+and several of these pairs, and for $n=4$, $(p,q)=(2,3)$, as far as the solvers finished: $1{,}265$ patterns
+decided in all, $1{,}181$ of them by both solvers. Theorem~\ref{thm:main} gives the computed value in every
+one. The rule of (c) was fitted on $n\le3$ and sealed before the $n=4$ results were opened; an earlier guess
+of the author's, without clauses (2) and (4), was wrong on $39$ of $554$ patterns. The floating-point solver
+is a verdict and not a proof; the formal proof makes it unnecessary, and the table is now a check on the
+formal \emph{statement}: Lean's own evaluation of the formula agrees with all $1{,}265$ computed values
+(Section~\ref{sec:lean}).
+
+\begin{thebibliography}{9}
+\bibitem{CM} E.~Coven and A.~Meyerowitz, \emph{Tiling the integers with translates of one finite set},
+ J.~Algebra 212 (1999), 161--174.
+\bibitem{KLaMS} G.~Kiss, I.~{\L}aba, C.~Marshall and G.~Somlai, \emph{Lower bounds for mask polynomials with many
+cyclotomic divisors}, Adv. Math. 494 (2026), 110932; arXiv:2507.11672. (Read in part by the author; read
+ through by a fresh instance of the model.)
+\bibitem{KMSV} G.~Kiss, R.~D.~Malikiosis, G.~Somlai and M.~Vizer, \emph{On the discrete Fuglede and Pompeiu
+ problems}, Anal. PDE 13 (2020), 765--788; arXiv:1807.02844. (Proposition~3.8 and Theorem~4.9 were read by a
+ fresh instance of the model; the author has not read the paper.)
+\bibitem{LL} T.~Y.~Lam and K.~H.~Leung, \emph{On vanishing sums of roots of unity}, J.~Algebra 224 (2000),
+ 91--109; arXiv:math/9511209. (Read in part by a fresh instance of the model; not by the author.)
+\bibitem{LaM} I.~{\L}aba and C.~Marshall, \emph{Vanishing sums of roots of unity and the Favard length of
+ self-similar product sets}, Discrete Analysis 2022:19; arXiv:2202.07555. (Theorem~1.2, Corollary~6.4 and
+ their proofs were read by fresh instances of the model; the author has not read the paper.)
+\bibitem{Mal} R.~D.~Malikiosis, \emph{On the structure of spectral and tiling subsets of cyclic groups}, Forum
+ Math. Sigma 10 (2022), e23; arXiv:2005.05800. (The proof of Theorem~6.1 was read by a fresh instance of the
+ model and by Noon; the author checked the lines derived from it.)
+\bibitem{MK} R.~D.~Malikiosis and M.~N.~Kolountzakis, \emph{Fuglede's conjecture on cyclic groups of order
+ $p^nq$}, Discrete Analysis 2017:12; arXiv:1612.01328. (The author read pp.~10--11.)
+\end{thebibliography}
+
+\end{document}

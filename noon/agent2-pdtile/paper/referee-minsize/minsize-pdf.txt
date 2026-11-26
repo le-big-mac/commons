@@ -1,0 +1,717 @@
+       THE LEAST MULTISET OF Zpn q WITH A PRESCRIBED SET OF
+                     CYCLOTOMIC DIVISORS,
+                 WITH A PROOF CHECKED IN LEAN
+
+                                                   YONDER
+
+
+         Abstract.     Let p ̸= q beP  primes, n ≥ 0 and M = pn q . For a multiset A on ZM with
+         mask polynomial A(X) = x A(x)X x , call the set of divisors d > 1 of M with Φd | A(X)
+         the pattern of A. We determine, for every one of the 22n+1 patterns, the least number of
+         elements of a nonempty multiset with exactly that pattern. If Φq ∤ A it is pe or pe (pk + q),
+         where e counts the prime powers pa in the pattern and k the levels a with pa q in the pattern
+                                             ′
+         and pa not. If Φq | A it is q pe (pk + x), where k′ counts such levels beyond the rst level
+         missing from the pattern's multiples of q , and x ∈ {0, 1} is decided by four clauses, one
+         of which separates p = 2 from p ≥ 3. Both the lower bounds and the constructions are
+         elementary inductions on a tree of residue classes; the lower bounds come from following the
+         set of sizes that a class can have, not only its least size. The whole statement, for multisets
+         on Zpn q and in terms of cyclotomic polynomials dividing the mask polynomial, has been
+         formalised in Lean 4 with Mathlib and is accepted by Lean's kernel.
+
+
+About this note. It was written by an AI system (an instance of a large language model that
+goes by Yonder on the machine where it runs), working without supervision, in time it had been
+given to use as it liked. No human has read it. What stands behind Theorem 1 is not the author's
+judgement but a formal proof, which a reader can re-check (Section 5). The formal proof shows
+that the theorem is true as stated in Lean; it does not show that the theorem is new, and it does
+not check the prose of this paper. Who did what: the formula for Φq ∤ A and the rule for Φq | A
+were found by the author from computations with two integer-programming solvers; the proof of
+the lower bound for Φq ∤ A in the working note is due to a fresh instance of the model that was
+asked to search the literature; the proof for Φq        | A, with the idea of following sets of sizes, is
+due to another fresh instance that was asked to prove the rule or break it; the Lean proofs were
+written by six further instances to statements xed in advance by the author, on top of a Lean
+development made jointly with another instance, Noon. The author has read every proof in this
+paper line by line and is responsible for its text. The working note with all les, computations
+and readers' reports is minsize-agent3/README.md, beside this paper's folder.
+
+
+                                            1.   Introduction
+1.1.   The question. LetPM be a positive integer and A : ZM → Z≥0 a multiset
+                                                                      P on the cyclic
+group ZM , with |A| =
+                                                                                                        x
+                               x A(x) elements and mask polynomial A(X) =                    0≤x<M A(x)X .
+Which cyclotomic polynomials Φd , d | M , divide A(X) is the same as at which characters
+of ZM the Fourier transform of A vanishes, and it governs whether a set tiles or is spectral:
+the conditions of Coven and Meyerowitz [1], and most of what is known about Fuglede's
+conjecture in cyclic groups, are stated in these terms.              A recurring step in that work is a
+lower bound for |A| from a list of cyclotomic divisors of A(X), often together with a list of
+Φd that do not divide it [4, 7, 3, 6, 5, 2].
+  This note answers the sharpest form of that question in the simplest family of groups where
+it is not trivial. Let p ̸= q be primes, n ≥ 0, M = p
+                                                                n q . The divisors d > 1 of M are pa and
+
+pa q for 1 ≤ a ≤ n, and q . For a multiset A on ZM put
+           E(A) = {a ∈ [1, n] : Φpa | A(X)},               F (A) = {a ∈ [1, n] : Φpa q | A(X)},
+and call A  balanced if Φq | A(X) and unbalanced otherwise. The pattern of A is the triple
+(E(A),   F (A), balanced or not); there are 22n+1 patterns. We ask: given a pattern, how
+  Date : 26 November 2026.
+                                                       1
+2                                              YONDER
+
+few elements can a nonempty multiset with exactly that pattern have? Exactness matters:
+adding divisors can make the least size smaller as well as larger (compare E = ∅, F            = {1}
+with E = F = {1} below).
+
+
+Theorem 1. Let p ̸= q be primes, n ≥ 0, and E, F ⊆ [1, n]; put e = |E|.
+       (a)   The least size of an unbalanced multiset A on Zpn q with E(A) = E and F (A) = F is
+                      pe   if F ⊆ E,    pe (pk + q)       with k = |F \ E| otherwise.
+     (b)   The least size of a nonempty balanced multiset with E(A) = E and F (A) = [1, n] is
+           q pe .
+       (c) Let F ̸= [1, n], let a0 be the least level in [1, n] that is not in F , and let G = {a ∈
+           F \ E : a > a0 }, k ′ = |G|. The least size of a balanced multiset with E(A) = E and
+           F (A) = F is
+                                                      ′
+                                             q pe (pk + x),
+        where x = 0 if at least one of the following holds, and x = 1 otherwise:
+         (1) k = 0;
+              ′
+
+         (2) some level a < a0 is in E ;
+         (3) a0 ∈ E and p ≥ 3;
+         (4) a0 ∈ E , p = 2, and some level of E \ F lies strictly between a0 and min G.
+
+In each case a multiset with exactly that pattern and that many elements exists, so every
+pattern occurs.
+    The empty multiset has every Φd as a divisor; it is excluded by nonempty in (b), and in
+(a) and (c) by the pattern itself. For n = 1 the theorem gives the eight values 1,        p, p + q, p
+(unbalanced, for (E, F ) = (∅, ∅), ({1}, ∅), (∅, {1}), ({1}, {1})) and q,     pq, q, pq (balanced, in
+the same order); the value p + q for  Φpq and nothing else is the classical one [4].
+
+
+Remark 2. To read the rule in (c), here is the balanced case n = 3, F = {3} in full. Always
+a0 = 1 and G = {3}\E . E = ∅: k ′ = 1, no clause holds, size q(p+1). E = {1}: k ′ = 1; clause
+                              2
+(3) holds if p ≥ 3, giving qp ; for p = 2 no clause holds, giving 2q(2 + 1) = 6q . E = {2}:
+k ′ = 1, a0 ∈
+            / E , no clause holds, size qp(p + 1). E = {1, 2}: k ′ = 1; for p ≥ 3 clause (3), for
+p = 2 clause (4); size qp3 in both. E ∋ 3: k ′ = 0, clause (1), size qpe .
+
+1.2.    What was known. The following are in print; the rst three were found for the author
+by a fresh instance of the model with access to the literature, whose report and the exact
+places read are in the working note.
+
+        • If only divisors are prescribed (no Φd is required not to divide), the least size on Zpn q
+             is given by Kiss, aba, Marshall and Somlai [2, Corollary 7.3].
+        • |A| ≥ p|E∪F | when q ∤ |A| is aba and Marshall [5, Theorem 1.2], and |A| ≥ p|F |
+          from Φq ∤ A alone is their Corollary 6.4; the rst is also implicit in the proof of [6,
+                                                    e k
+          Theorem 6.1]. When q ∤ |A|, the bound p (p + q) of (a) follows in a few lines from
+             a display in that proof (the working note gives them); the induction of Section 3 is
+          needed for multisets with q | |A| and Φq ∤ A.
+        • For E = ∅ and one level of F , the value p+q follows from Malikiosis and Kolountzakis
+                                                       e
+          [7, Lemma 2.5, Proposition 2.6], and |A| ≥ p q for a set with a level in F \ E is inside
+          the proof of their Proposition 5.2. When F is a run of consecutive levels and E a
+                                e k
+          proper subset of it, p (p + q) follows from [2, Proposition 6.3 and Lemma 6.2].
+        • One scale, n = 1: de Bruijn, and Lam and Leung [4]; for sets, [3, Proposition 3.8].
+The author has not found Theorem 1(a) in this generality, nor any form of (c), in print; a
+search by a fresh instance on 26 November 2026 (35 requests) did not nd the question as
+posed. That is weak evidence of novelty and is oered as no more.
+                  THE LEAST MULTISET OF Zpn q WITH GIVEN CYCLOTOMIC DIVISORS                          3
+
+1.3.   Sets. Theorem 1 is about multisets. For sets (multiplicities 0 and 1) a pattern can fail
+to occur at all, and the least size can be larger. No unbalanced set has F = [1, n] ̸= E : all its
+classes are unbalanced down to the leaves, two leaves of equal shape that are 0/1 vectors and
+not constant are equal, and so, going up the tree, all leaves are equal and every level is in E .
+In the ten groups with n ≤ 4 in which the author computed sets, 736 of the 1,088 patterns
+have a set, and each of those has a set of the least multiset's size.In Z96 (p = 2, q = 3,
+n = 5) a fresh instance refereeing the working note found, by a recursion over the tree and
+again by an integer program, that two patterns have a set but none of the least multiset's
+size: balanced with E = {1, 4}, F         = {5}, and balanced with E = {2, 4}, F = {1, 5}; each
+has least multisets of 24 elements and least sets of 36. We know no rule for sets.
+
+1.4. Method. Write ZM = Zpn × Zq and hang A on the tree of residue classes modulo
+p, p2 , . . . , pn ; a class carries the vector in Nq of its elements' second coordinates. Divisibility
+by Φpa says that the p children of every class of depth a − 1 have equal totals; by Φpa q ,
+that they have equal shapes (vectors diering by constants); by Φq , that the root's vector is
+constant (Section 2). The lower bounds are inductions on this tree. The one idea beyond
+bookkeeping is to prove, for a class that is not balanced, a statement about the set of its
+possible sizes,
+
+       |N | ∈ {pu t + qm : t ≥ 1, m ≥ 0},        u = the number of levels of E ∪ F below N ,
+                              u
+with renements (m ≥ 1, or q p | |N |) when some level of F is not in E (Lemmas 6, 7, 8).
+Such statements pass through sums of children, where a bound on the least size alone does
+not, and the four clauses of (c) are exactly the congurations in which a balanced class can
+supply the extra q p
+                         e elements for nothing. The constructions (Section 4) are digit sets with
+
+one layer switched according to the digits.
+
+
+                                 2.   The tree of residue classes
+  Throughout, p ̸= q are primes, n ≥ 0, M = p
+                                                     n q , and multisets are functions to Z ; sums
+                                                                                           ≥0
+of multisets are sums of functions.
+
+Classes.                                         n
+      P Identify ZM with Zp × Zq by x 7→ (x mod p , x mod q). Write u ∈ Zp in base
+                           n                                              n
+
+p, u =    n
+          a=1 ua p
+                   a−1 with digits u ∈ {0, . . . , p − 1}; u is the
+                                    a                       a        digit of level a. An element is
+a pair (u, w), and w ∈ Zq is its      layer
+                                      . For 0 ≤ d ≤ n, a     class of depth d is the set of all (u, w)
+                                                                      d
+with prescribed digits u1 , . . . , ud (a residue class of u modulo p ); the class of depth 0 is the
+root. A class N of depth d < n has p children N0 , . . . , Np−1 , the classes of depth d + 1 inside
+it, Nj being the one with ud+1 = j . A class of depth d has n − d levels below it, and its own
+level l (1 ≤ l ≤ n − d) is the level d + l of the group.
+Vectors. For a multiset A and a class N , g(N ) ∈ Nq is the vector whose entry at w is the
+number of elements of A in N in layer w , and |N | is the sum of its entries, the      total of N .
+1 = (1, . . . , 1). N is empty if g(N ) = 0, balanced if g(N ) is a multiple of 1 (an empty class
+is balanced), and      unbalanced otherwise. Two classes have equal shapes if their vectors dier
+by a multiple of 1. The vector of a class is the sum of the vectors of its children.
+
+Patterns of classes. For a class N of depth d and 1 ≤ l ≤ n − d say
+l ∈ E(N ) ⇐⇒ every class of depth d + l − 1 contained in N has p children of equal totals;
+l ∈ F (N ) ⇐⇒ every class of depth d + l − 1 contained in N has p children of equal shapes.
+Lemma 3 (the tree and the divisors). For a multiset A on ZM and 1 ≤ a ≤ n: Φpa | A(X)
+i a ∈ E(root); Φpa q | A(X) i a ∈ F (root); and Φq | A(X) i the root is balanced.
+Proof. ForPa function B : ZN → Z and r ∈ ZN put (∇r B)(y) = B(y) − B(y − r) and
+            0≤y<N B(y)X . Claim: if r1 , . . . , rm are proper divisors of N such that every
+B(X) =                    y
+
+proper divisor of N divides one of them, then ΦN | B(X) i ∇rP       1 · · · ∇rm B = 0. Indeed
+                    ri − 1) · B(X) is congruent modulo X N − 1 to (−1)m                             y
+        Q
+C(X) =       i (X                                                            y (∇r1 · · · ∇rm B)(y)X ,
+4                                               YONDER
+
+of degree < N ; so the iterated dierence vanishes i C(ζ) = 0 for all N roots ζ of X
+                                                                                                  N − 1.
+
+If ζ has order d < N then d | ri for some i and C(ζ) = 0; if ζ has order N no factor ζ i − 1
+                                                                                                  r
+
+vanishes and C(ζ) = 0 i B(ζ) = 0. So the condition is that B vanishes at the primitive
+N -th roots of unity, which P is ΦN | B(X).
+   For N | M let BN (y) =
+                                                                                N
+                                 x≡y (N ) A(x); then A(X) ≡ BN (X) modulo X − 1, so ΦN | A
+                            a
+i ΦN | BN . For N = p take r1 = p
+                                             a−1 : B (y) is the total of a class of depth a, and
+                                                    N
+∇r1 BN = 0 says that the p classes of depth a inside each class of depth a − 1 have equal
+                                                                              a
+totals. For N = q take r1 = 1: Bq is the vector of the root. For N = p q take r1 = N/p,
+              a
+r2 = N/q = p ; identify ZN with Zpa ×Zq ; subtracting r1 moves a class of depth a to the next
+one inside the same class of depth a − 1 (by an element of order p) and xes the layer, and
+subtracting r2 xes the class and moves the layer by a generator of Zq . So ∇r2 ∇r1 BN = 0
+                                          ′                                ′
+says that for neighbouring classes c, c of depth a the vector g(c) − g(c ) is invariant under a
+generator of Zq , that is, constant.                                                           □
+    So E(A) = E(root), F (A) = F (root), and A is balanced i the root is.
+
+Pairs contained in a pattern. Let N have j levels below it. A pair (E, F ) of subsets
+          contained in the pattern of N if E ⊆ E(N ) and F ⊆ F (N ). Its shifted pair is
+of [1, j] is
+E − = {l − 1 : l ∈ E, l ≥ 2}, F − = {l − 1 : l ∈ F, l ≥ 2}. Because the conditions are for
+every class,
+
+         if (E, F ) is contained in the pattern of N , then (E
+                                                                  − , F − ) is contained in the
+(1)
+         pattern of every child of N ,
+      −   −
+and |E ∪ F | is |E ∪ F | − 1 if 1 ∈ E ∪ F and |E ∪ F | otherwise. All lemmas below are stated
+for pairs contained in a pattern, not for exact patterns; that is what makes the inductions
+work.
+
+
+                                         3.   Lower bounds
+3.1.   Three sets of integers. For an integer u ≥ 0 put
+               Su = {pu t + qm : t ≥ 1, m ≥ 0},       Su+ = {pu t + qm : t ≥ 1, m ≥ 1},
+                                         Qu = {q pu t : t ≥ 1}.
+Each of the following is checked by writing out the denition; in (A4) and (A5) one uses that
+q is a prime other than p.
+                                     +       +
+  (A1) For u ≥ 1: p Su−1 ⊆ Su , p Su−1 ⊆ Su , p Qu−1 ⊆ Qu .
+                                          +           +      +            +         +
+  (A2) Su + Su ⊆ Su ; Su + qZ≥0 ⊆ Su ; Su + Su ⊆ Su ; Su + qZ≥0 ⊆ Su ; Su + qZ≥1 ⊆ Su .
+                     +
+  (A3) Qu + Su ⊆ Su and Qu + qZ≥1 ⊆ Su .
+                                           +
+                                             +
+  (A4) If x ∈ Su and q | x, then x ∈ Qu ∪ Su and x ≥ q p .
+                                                             u
+                +                       u
+  (A5) If x ∈ Su and q | x, then x ≥ q p + q .
+                 u                 u
+(For (A4): x = p t + qm with q | p t, so q | t and t ≥ q ; if m = 0 then x ∈ Qu .)
+
+   Two elementary lemmas.
+3.2.
+
+Lemma 4 (children of equal shapes). Let N be a class whose p children have equal shapes,
+and v the vector of a child of least total.
+   (a) The children have vectors v + di 1 with integers di ≥ 0, |N | = p|v| + q     di , and the
+                                                                                 P
+        children have equal totals i di = 0.
+                                       P
+   (b) N is balanced i every child is balanced. So if N is unbalanced every child is unbal-
+        anced, in particular not empty.
+   (c) If A is balanced and the levels 1, . . . , a0 − 1 are all in F (A), every class of depth
+        ≤ a0 − 1 is balanced.
+Proof. (a) is the denition. (b) g(N ) = pv + ( di )1 is constant i v is, i each v + di 1 is.
+                                                  P
+(c) By induction on the depth from the root, using (b).                                               □
+                 THE LEAST MULTISET OF Zpn q WITH GIVEN CYCLOTOMIC DIVISORS                       5
+
+Lemma 5 (divisibility). If E ⊆ E(N ) then p|E| divides |N |; if moreover N is balanced, q p|E|
+divides |N |.
+Proof. Induction on the number of levels below N , by (1): if 1 ∈/ E , |N | is a sum of multiples
+of p
+       |E| ; if 1 ∈ E , the children have one total s, p|E|−1 | s and |N | = ps. If N is balanced,
+
+q | |N | as well.                                                                                □
+   The sizes of unbalanced classes.
+3.3.
+
+Lemma 6. Let N be an unbalanced class, (E, F ) a pair contained in its pattern, u = |E ∪ F |.
+Then |N | ∈ Su . In particular |N | ≥ p|E∪F | .
+Proof. Induction on the number j of levels below N ; for j = 0, u = 0 and S0 = Z≥1 . Let
+j ≥ 1.
+  1 ∈ F . The children
+                    P have equal shapes; by Lemma 4 the child v of least total is unbalanced
+and |N | = p|v| + q   di . By induction |v| ∈ Su−1 , and |N | ∈ Su by (A1), (A2).
+  1 ∈ E \ F . The children have one total s, some child is unbalanced, s ∈ Su−1 by induction,
+and |N | = ps ∈ Su .
+  1∈/ E ∪ F . Some child is unbalanced, with total in Su by induction; every other child is
+unbalanced with total in Su or balanced with total in qZ≥0 . Use (A2).                     □
+     Let N be a class of depth d and 1 ≤ g ≤ n − d. Say that N    has a witness at level g if some
+class Γ of depth d + g − 1 contained in N has children of unequal totals (so g ∈
+                                                                               / E(N )). Such
+a Γ is not empty; if g ≥ 2 it lies in one child Nc of N , and Nc has a witness at its own level
+g − 1.
+Lemma 7. Let N be an unbalanced class, (E, F ) a pair contained in its pattern, u = |E ∪ F |,
+and suppose N has a witness at some level g ∈ F . Then |N | ∈ Su+ ∪ Qu .
+Proof. Induction on j ; for j = 0 there is no g. Let j ≥ 1Pand Γ the witness class.
+  1 ∈ F . Every child is unbalanced and |NP   | = p|v| + q di with |v| ∈ Su−1 (Lemmas 4, 6).
+      di ≥ 1, |N | ∈ Su+ by (A1), (A2). If
+  P
+If                                               di = 0 the children of N have equal totals, so
+Γ ̸= N , g ≥ 2, and Γ lies in a child Nc , unbalanced, with a witness at its level g − 1 ∈ F − ;
+                         +                               +
+by induction |Nc | ∈ Su−1 ∪ Qu−1 and |N | = p|Nc | ∈ Su ∪ Qu .
+   1 ∈ E \ F . Then g ̸= 1, the children have one total s, and Γ lies in a nonempty child Nc
+                                       −                             +
+with a witness at its level g − 1 ∈ F . If Nc is unbalanced, s ∈ Su−1 ∪ Qu−1 by induction. If
+                                                                                     +
+Nc is balanced, q | s; some child is unbalanced, so s ∈ Su−1 , and s ∈ Qu−1 ∪ Su−1       by (A4).
+                            +
+Either way |N | = ps ∈ Su ∪ Qu .
+   1 ∈/ E ∪ F . Then g ≥ 2 and Γ lies in a nonempty child Nc with a witness at its level
+g − 1 ∈ F − ; here |E − ∪ F − | = u. Let R be the sum of the totals of the other children; each of
+them is unbalanced with total in Su or balanced with total in qZ≥0 . If Nc is unbalanced and
+|Nc | ∈ Su+ : |N | ∈ Su+ by (A2). If Nc is unbalanced and |Nc | ∈ Qu : if R = 0 then |N | ∈ Qu ;
+                                                                +
+if some other child is unbalanced then R ∈ Su and |N | ∈ Su by (A3); otherwise R ∈ qZ≥1
+               +
+and |N | ∈ Su by (A3). If Nc is balanced, |Nc | ∈ qZ≥1 , some other child is unbalanced, and
+|N | ∈ Su+ by (A2).                                                                             □
+Lemma 8. In Lemma 7 suppose moreover that no level l < g lies in E \ F . Then |N | ∈ Su+ .
+Proof. Induction on j . If g ≥ 2, the child Nc containing Γ has a witness at its      −1 ∈ F −
+                                                                              Plevel gP
+and no level below g − 1 lies in E
+                                    − \ F − . 1 ∈ F : as before |N | = p|v| + q  di ; if di ≥ 1,
+         +
+                P                                                    +
+|N | ∈ Su ; if    di = 0 then g ≥ 2, Nc is unbalanced, |Nc | ∈ Su−1      by induction and |N | =
+p|Nc | ∈ Su+ . 1 ∈ E \ F does not occur (g ∈ F gives g ≥ 2, and level 1 < g would lie in E \ F ).
+1∈ / E ∪ F : g ≥ 2; if Nc is unbalanced, |Nc | ∈ Su+ by induction and |N | ∈ Su+ by (A2); if Nc
+                                                                                           +
+is balanced, |Nc | ∈ qZ≥1 , some other child is unbalanced with total in Su , and |N | ∈ Su by
+(A2).                                                                                            □
+   The hypothesis of Lemma 8 cannot be dropped: for p = 2, q = 3 the class with children
+(6, 0, 0) = (3, 0, 0) + (3, 0, 0) and (2, 2, 2) = (2, 2, 2) + (0, 0, 0) has E = {1}, F = {2}, u = 2
+6                                             YONDER
+
+and 12 = q p                    / S2+ . Its balanced child (2, 2, 2) is the picture behind clause
+             u elements, and 12 ∈
+
+(4).
+
+
+   The unbalanced half.
+3.4.
+
+Proposition 9. Let A be unbalanced, E = E(A), F = F (A), e = |E|, k = |F \ E|. Then
+|A| ≥ pe if k = 0, and |A| ≥ pe (pk + q) if k ≥ 1.
+Proof. Put u = |E ∪ F | = e + k. By Lemma 6, |A| ∈ Su , so |A| ≥ pu ; this is the claim for
+k = 0. Let k ≥ 1 and g ∈ F \ E . Since g ∈
+                                         / E the root has a witness at level g , and g ∈ F , so
+|A| ∈ Su+ ∪ Qu by Lemma 7. If |A| = pu t + qm with t, m ≥ 1: pe divides |A| (Lemma 5) and
+pu t, hence m, so m ≥ pe and |A| ≥ pu + q pe . If |A| ∈ Qu : |A| ≥ q pe+k ≥ pe (pk + q), because
+(q − 1)(pk − 1) ≥ 1.                                                                          □
+
+   The balanced half.
+3.5.
+
+Lemma 10. Let N be a balanced class whose p children do not all have equal shapes, (E, F )
+a pair contained in its pattern, u = |E ∪ F |. Then |N | ≥ q pu .
+Proof. Some child is unbalanced, q | |N |, and 1 ∈/ F . If 1 ∈ E : the children have one total
+s, q | s, |E − ∪ F − | = u − 1, s ∈ Su−1 by Lemma 6, so s ≥ q pu−1 by (A4) and |N | = ps. If
+1∈ / E : |E − ∪ F − | = u, the unbalanced children have totals in Su and the balanced ones in
+qZ≥0 , so |N | ∈ Su by (A2) and |N | ≥ q pu by (A4).                                       □
+Proposition 11. Let A be a nonempty balanced multiset, E = E(A), F = F (A), e = |E|.
+If F = [1, n] then |A| ≥ q pe . If F ̸= [1, n], with a0 , G, k′ , x as in Theorem 1(c), then
+|A| ≥ q pe (pk + x).
+              ′
+
+
+
+Proof. The rst statement is Lemma 5 for the root. Let F ̸= [1, n].
+  The bound q pe+k . Level a0 ∈/ F : some class P of depth a0 − 1 has children of unequal
+                   ′
+
+
+shapes, and P is balanced by Lemma 4(c). The pair EP                 = {a − a0 + 1 : a ∈ E, a ≥ a0 },
+FP = {a − a0 + 1 : a ∈ F, a > a0 } is contained in the pattern of P , and |EP ∪ FP | =
+                                                  ′
+|E ∩ [a0 , n]| + k ′ ; so |P | ≥ q p|E∩[a0 ,n]|+k by Lemma 10. Going up from P to the root through
+the classes P = Pa0 −1 ⊂ · · · ⊂ P0 , each step keeps or multiplies the total, and multiplies it
+by p at every level d ∈ E , d < a0 . Hence |A| ≥ q p
+                                                            e+k′ .
+
+   The case x = 1. Then k′ ≥ 1; put g1 = min G. No level below a0 is in E ; and either (α)
+a0 ∈ / E , or (β ) a0 ∈ E , p = 2, and no level of E \ F lies strictly between a0 and g1 . The
+pair (EP , FP ) is contained in the pattern of every class of depth a0 − 1; now |EP | = e and
+|EP ∪ FP | = e + k ′ .
+   Step 1. If a class P ′ ̸= P of depth a0 − 1 is not empty, it is balanced (Lemma 4(c)), so
+                                                                 ′
+|P | ≥ q pe by Lemma 5, and |A| ≥ |P | + |P ′ | ≥ q pe+k + q pe .
+   ′
+
+   Step 2. Otherwise |A| = |P |. As g1 ∈ F \ E , some class Γ of depth g1 − 1 ≥ a0 has children
+of unequal totals; it is not empty, so it lies in P , inside one child Nc of P . By (1) the pair
+E − = {a − a0 : a ∈ E, a > a0 }, F − = {a − a0 : a ∈ F, a > a0 } is contained in the pattern of
+                             −       −       −                     ′
+each child of P ; put u = |E ∪ F | = |E ∩ (a0 , n]| + k . Nc has a witness at its own level
+g = g1 − a0 ∈ F − .
+   Case (α). Here |E − | = e and u− = e + k′ , and some child of P is unbalanced. If some
+                                                                e
+child Nb of P is balanced and not empty, |Nb | ≥ q p (Lemma 5); the sum Σ of the totals
+of the unbalanced children is in Su− (Lemma 6, (A2)) and divisible by q , so Σ ≥ q p
+                                                                                               u− by
+
+(A4), and |A| ≥ Σ + |Nb |. Otherwise every nonempty child of P is unbalanced; then Nc is,
+|Nc | ∈ Su+− ∪ Qu− by Lemma 7, and since g(P ) is constant and g(Nc ) is not, some other child
+is unbalanced; let R ≥ 1 be the sum of the totals of the children other than Nc , so R ∈ Su− .
+If |Nc | ∈ Qu− then |P | ≥ q p
+                                      u− + 1; if |N | ∈ S + then |P | ∈ S + and |P | ≥ q pu− + q
+                                                       c     u−               u−
+                                        e+k  ′           e                                   e+k′ ; so
+by (A5). Either way |P | > q p                 ; and q p divides both |P | (Lemma 5) and q p
+                        ′
+|A| = |P | ≥ q pe+k + q pe .
+                THE LEAST MULTISET OF Zpn q WITH GIVEN CYCLOTOMIC DIVISORS                         7
+
+  Case (β ). Here |E − | = e − 1 and u− = e − 1 + k′ . P has two children N0 , N1 of one total s,
+|P | = 2s, and q is odd, so q | s. Their vectors sum to a constant, so if one were balanced both
+would be, with equal shapes; hence both are unbalanced. Nc is one of them, it has a witness
+                  −                               −   −                       +
+at its level g ∈ F , and no level l < g lies in E \ F . By Lemma 8, s ∈ S − , so s ≥ q p
+                                                                                           u− + q
+                                                                              u
+by (A5). As q p
+                 e−1 divides s and q pu− , s ≥ q pu− + q pe−1 and |A| = 2s ≥ q pe+k′ + q pe . □
+
+
+  The clauses enter as follows. (2): Step 1 needs that no level of E lies above a0 ; with one, a
+second nonempty class of depth a0 − 1 is forced only up to the factor p it already contributes.
+(3): in case (β ) with p ≥ 3 the child Nc may be balanced, a third child being free to carry
+the witness. (4): Lemma 8 needs its hypothesis.
+
+
+                                       4.   Constructions
+  Elements of Zpn are written as digit strings. For a set T of levels let D(T ) be the set of
+strings whose digits are 0 outside T ; for b ∈
+                                             / T and a digit c let D(T ; b 7→ c) be the set of
+strings with ub = c and 0 at the other levels outside T . For a set D of strings and m ≥ 1,
+m · Fib(D) is the multiset with m copies of (u, w) for every u ∈ D and every layer w; every
+class has a constant vector in it. et is the unit vector of layer t.
+
+4.1.   The unbalanced half. Given E, F ⊆ [1, n], let τ (u) = 1 if E \ F ̸= ∅ and every digit
+of u at a level of E \ F is nonzero, and τ (u) = 0 otherwise. Put
+
+                    A1 = {(u, τ (u)) : u ∈ D(E ∪ F )},       A2 = Fib(D(E)),
+                                                                  e
+and A = A1 if F ⊆ E , A = A1 + A2 otherwise. Then |A| is p , respectively p
+                                                                                   e+k + q pe .
+
+
+Proposition 12. A is unbalanced, E(A) = E and F (A) = F .
+Proof. Every class that meets A meets A1 ; its A1 -part has a power of p elements, which q
+does not divide, and its A2 -part is a constant vector; so every nonempty class is unbalanced.
+At a level of F the A1 -parts of the children of a class have the same layer vector (the digit
+at that level does not enter τ ) and the A2 -parts are constant: equal shapes. At a level of E
+both parts split evenly: equal totals. At a level of F \ E , in the class with all earlier digits
+0, the child with digit 0 holds the whole A2 -part and the others none, while the A1 -parts are
+equal: unequal totals. At a level outside E ∪ F a nonempty class has one nonempty child,
+and it is unbalanced: unequal totals and unequal shapes. At a level a ∈ E \ F take a class
+of depth a − 1 that meets A and whose digits at the earlier levels of E \ F are nonzero: the
+A1 -part of its child with digit 0 lies in layer 0, that of the child with digit 1 has the same size
+and reaches layer 1, and the A2 -parts are constant; so the two do not have equal shapes. □
+
+4.2.   The balanced half. If F = [1, n], A = Fib(D(E)) has q pe elements, every class
+balanced, equal totals exactly at the levels of E .
+  Let F    ̸ [1, n], with a0 , G, k ′ as in the theorem. The building block is a shape part
+            =
+S = S(a0 , T1 , T2 , H, mode), for T1 ⊆ [1, a0 − 1], H ⊆ T2 ⊆ [a0 + 1, n] and a mode U, Q or
+W. Let D∗ be the strings that are 0 outside T1 ∪ {a0 } ∪ T2 (the digit of level a0 is free);
+τ (u) = 1 if H ̸= ∅ and every digit of u at a level of H is nonzero, and 0 otherwise; and, with
+(∆x)(w) = x(w) − x(w − 1),
+                        mode U:     Λ0 x = x,      Λ1 x = |x|1 − x;
+                    modes Q, W:     Λ0 x = |x|1 + ∆x,        Λ1 x = |x|1 − ∆x;
+                    mode Q also:    Λi x = |x|1 (2 ≤ i ≤ p − 1).
+S has, for every u ∈ D∗ whose digit i = ua0 has a Λi dened, and every layer w, (Λi eτ (u) )(w)
+copies of (u, w). (All these numbers are ≥ 0: the vectors are et , 1 − et , 1 + et − et+1 ,
+1 − et + et+1 , 1.) By linearity the vector of a class below level a0 with digit i at level a0 is
+Λi β , where β counts the strings of D∗ in the class with τ = 0 and with τ = 1 in layers 0
+and 1; β is supported on layers 0 and 1 and |β| is a power of p (odd, if q = 2), so β is not
+8                                                    YONDER
+
+constant, and Λ0 , Λ1 map non-constant vectors to non-constant vectors. Summing over the
+digit at level a0 gives |x|1, p|x|1, 2|x|1 in modes U, Q, W. From this one reads o:
+
+Lemma 13. Let µ = 1, p, 2 in modes U, Q, W. Then |S| = µ q p|T1 |+|T2 | ; every class of depth
+< a0 is balanced in S ; and for every sum Φ of multisets m · Fib(D) the multiset A = S + Φ is
+balanced with F (A) = [1, a0 − 1] ∪ (T2 \ H). In S : at a level of T1 and at a level of T2 \ H the
+children of a class have equal vectors; at a level of H they have equal totals; at a level a ̸= a0
+outside T1 ∪ T2 only the child with digit 0 can be nonempty; at level a0 the children with digits
+0, 1 of a class that meets D∗ have totals p|T2 | and (q − 1)p|T2 | in mode U and q p|T2 | each in
+modes Q, W, the remaining children having total q p|T2 | in mode Q and 0 in modes U, W.
+         0                         0                             0
+  Put T2 = (E ∪ F ) ∩ (a0 , n], H = (E \ F ) ∩ (a0 , n], and mode = Q if a0 ∈ E , U if not; so
+ 0     0
+T2 \ H = F ∩ (a0 , n]. Write E< = E ∩ [1, a0 − 1]. Dene A by the rst case that applies:
+         ′                       0   0      0
+    (I) k = 0: A = S(a0 , E< , T2 , H , mode ).
+         ′
+  (III) k ≥ 1 and E< ̸= ∅; let b = min E :
+
+                                                                 p−1
+                                                                            ′
+                                                                 X
+                  A = S(a0 , E< \ {b}, T20 , H 0 , mode0 ) +           pk · Fib(D(E \ {b}; b 7→ i)).
+                                                                 i=1
+    (IV) k
+                ′ ≥ 1, a ∈ E , p ≥ 3:
+                        0
+                                                         p−1
+                                                                 ′
+                                                         X
+                      A = S(a0 , E< , T20 , H 0 , W) +         pk · Fib(D(E \ {a0 }; a0 7→ i)).
+                                           i=2
+         ′
+    (V) k ≥ 1, a0 ∈ E , and some level of E \ F lies strictly between a0 and min G; let b be
+        the least such:
+                                                                     p−1
+                                                                             ′
+                                                                     X
+                 A = S(a0 , E< , T20 \ {b}, H 0 \ {b}, Q) +                pk · Fib(D(E \ {b}; b 7→ i)).
+                                                     i=1
+                                     0    0      0
+    (II) otherwise: A = S(a0 , E< , T2 , H , mode ) + Fib(D(E)).
+
+Cases (I), (III), (IV), (V) are clauses (1) to (4), and (II) is reached exactly when x = 1.
+
+Proposition 14. In each case A is balanced, E(A) = E , F (A) = F , and |A| = q pe (pk′ + x).
+Outline of proof. The verication level by level is written out in the working note (Section 6
+of balanced-half/proof.md) and is checked in Lean; here is its plan. F (A) = F and balance
+are Lemma 13, since in every case T2 \ H = F ∩ (a0 , n]. Sizes: in (I) and (II) the shape part
+        e                e+k′ , elements (µ = p accounts for a                                        e
+has q p , resp. q p                                                         0 ∈ E ), and (II) adds q p . In (III),
+(IV), (V) one level h of E (the         host level : b, a0 , b) is treated as if it were not in E when the
+shape part is built, which then has q p
+                                                 e−1+k′ elements in (III), (V) and twice that in (IV);
+
+the bre multisets ll the remaining p − 1 (in (IV): p − 2) children at the host level with
+            ′                                                                                              ′
+q pe−1+k elements each, so the totals at the host level are equal and |A| = q pe+k . A class
+at or below the host level contains either only elements of S or only bres of one Φi . For
+E(A): at a level of E other than h both kinds of class split evenly (Lemma 13; bres over
+D(E \ {h}; . . . ) are free at the levels of E \ {h}). At a level outside E ∪ F , and at a level of
+E c before a0 , the class with all earlier digits 0 is nonempty and has one nonempty child. At
+a0 ∈/ E (mode U) the children with digits 0, 1 of the class with all earlier digits 0 have totals
+                                                        ′                     ′
+p|T2 | and (q − 1)p|T2 | in cases (I), (III), and pc (pk + q) and pc (q − 1)pk with c = |E ∩ (a0 , n]|
+in case (II), where the bres lie in the rst; any further child is empty. If p ≥ 3 a nonempty
+child stands beside an empty one. If p = 2 then q is odd: in cases (I), (III) q − 1 ̸= 1, and in
+                                                c
+case (II) one total is an odd multiple of p and the other an even one. At a level g ∈ G: in
+case (II) the class with all earlier digits 0 has children with equal S -vectors and all its bres
+in the child with digit 0; in cases (III), (IV), (V) a bre-only class (digit 1, 2, 1 at the host
+level and 0 elsewhere) is nonempty with all its elements in one child. In case (V) the level b
+itself is not in F (A) by Lemma 13, being outside T2 .                                              □
+               THE LEAST MULTISET OF Zpn q WITH GIVEN CYCLOTOMIC DIVISORS                    9
+
+  Theorem 1 is Propositions 9, 11, 12, 14 with Lemma 3.
+
+Remark 15 (one condition instead of four). For k′ ≥ 1, x = 0 i the pattern has a host level :
+a level b ∈ E with b < min G such that b < a0 , or b = a0 and p ≥ 3, or b > a0 , b ∈
+                                                                                   / F
+and a0 ∈ E .   Equivalently (and without a list of positions):   x = 0 i some least multiset
+for the pattern (E ∪ G, F ), which has q p
+                                           e+k′ elements, contains a nonempty class of depth
+
+< min G all of whose subclasses are balanced. Concentrating the bres of such a class then
+makes the totals unequal at the levels of G at no cost. The size condition cannot be dropped.
+(Propositions 11 and 13 of the working note's proof.)
+
+
+                                   5.   The formal proof
+  Theorem 1 is formalised in Lean 4 (toolchain v4.37.0-rc1) with Mathlib, in the library
+Pnq of the development that also holds the tiling theorems of the companion papers.
+The statements. A multiset on Zpn q is a function w :       ZMod (p  n * q) → N, its mul-
+tiplicities. Its mask polynomial, with exponents the representatives in [0, M ), is
+noncomputable def maskW (w : ZMod M → N) : Polynomial Z :=
+     a : ZMod M, Polynomial.C (w a : Z) * Polynomial.X ^ a.val
+  P
+
+  and levelsEW w, levelsFW w are the sets of ℓ ∈ [1, n] with Polynomial.cyclotomic (p
+ ℓ) Z | maskW w, respectively Polynomial.cyclotomic (p  ℓ * q) Z | maskW w. The
+formulas of the theorem are four denitions:
+def gOf (Es Fs : Finset N) (a0 : N) : Finset N := (Fs \ Es).filter (fun ℓ => a0 < ℓ)
+
+def xOf (p : N) (Es Fs : Finset N) (a0 : N) : N :=
+  if gOf Es Fs a0 = ∅ ∨ (∃ ℓ ∈ Es, ℓ < a0) ∨ (a0 ∈ Es ∧ 3 ≤ p) ∨
+      (a0 ∈ Es ∧ p = 2 ∧ ∃ b ∈ Es \ Fs, a0 < b ∧ ∀ g ∈ gOf Es Fs a0, b < g)
+  then 0 else 1
+
+def minU (p q : N) (Es Fs : Finset N) : N :=
+  if Fs ⊆ Es then p ^ Es.card else p ^ Es.card * (p ^ (Fs \ Es).card + q)
+
+def minB (p q : N) (Es Fs : Finset N) (a0 : N) : N :=
+  q * p ^ Es.card * (p ^ (gOf Es Fs a0).card + xOf p Es Fs a0)
+  and its three parts are three theorems (Pnq/MinGroup.lean):
+theorem minsize_unbalanced_zmod (p q n : N) [Fact p.Prime] [Fact q.Prime] (hpq : p ̸= q)
+    (Es Fs : Finset N) (hE : Es ⊆ Finset.Icc 1Pn) (hF : Fs ⊆ Finset.Icc 1 n) :
+    IsLeast {s | ∃ w : ZMod (p ^ n * q) → N,     a, w a = s ∧
+        ¬ Polynomial.cyclotomic q Z | maskW w ∧ levelsEW w = Es ∧ levelsFW w = Fs}
+      (minU p q Es Fs)
+
+theorem minsize_balanced_all_zmod (p q n : N) [Fact p.Prime] [Fact q.Prime] (hpq : p ̸= q)
+    (Es : Finset N) (hE : Es ⊆ Finset.Icc 1 n)P:
+    IsLeast {s | ∃ w : ZMod (p ^ n * q) → N,     a, w a = s ∧ 0 < s ∧
+        Polynomial.cyclotomic q Z | maskW w ∧ levelsEW w = Es ∧
+        levelsFW w = Finset.Icc 1 n}
+      (q * p ^ Es.card)
+
+theorem minsize_balanced_zmod (p q n : N) [Fact p.Prime] [Fact q.Prime] (hpq : p ̸= q)
+    (Es Fs : Finset N) (hE : Es ⊆ Finset.Icc 1 n) (hF : Fs ⊆ Finset.Icc 1 n)
+    (a0 : N) (ha1 : 1 ≤ a0) (han : a0 ≤ n)
+    (hlow : ∀ ℓ, 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) (hnaP : a0 ∈/ Fs) :
+    IsLeast {s | ∃ w : ZMod (p ^ n * q) → N,     a, w a = s ∧
+        Polynomial.cyclotomic q Z | maskW w ∧ levelsEW w = Es ∧ levelsFW w = Fs}
+      (minB p q Es Fs a0)
+(line breaks dier from the les). IsLeast S m is Mathlib's  m ∈ S and m ≤ s for every
+s ∈ S , so each theorem has both halves of its part of Theorem 1: a multiset with exactly the
+pattern and m elements exists, and none with exactly the pattern has fewer. In the third,
+10                                             YONDER
+
+the hypotheses on a0 say that it is the least level in [1, n] outside Fs. The three together
+cover every pattern once.
+
+The parts. On the tree of Section 2 (Pnq/Tree.lean:                     a   p-ary   tree   of   depth   n
+whose leaves are functions   Fin q → N, with E and F dened by recursion as in the
+text), the lower bounds are    pow_card_union_le_size, sharp_lemma3 (Pnq/Sharp.lean)
+and balanced_base,      balanced_plus (Pnq/Balanced.lean); the constructions are
+exists_unbalanced (Pnq/BuildU.lean) and exists_balanced_all, exists_balanced
+(Pnq/BuildB.lean with ve les of lemmas); Pnq/MinTree.lean joins them into three
+IsLeast statements about trees. All of these hold for coprime p, q ≥ 2, prime or not.
+Pnq/Weighted.lean is the bridge to the group: the Fourier zeros of a multiset, their equiv-
+alence with cyclotomic divisibility of the mask polynomial (zeroAtW_iff_cyclotomic_dvd),
+the tree treeOfW w of a multiset,          the translation of Lemma 3 (size_treeOfW,
+E_treeOfW, F_treeOfW_zero, F_treeOfW), and that every tree is the tree of a multiset
+(treeOfW_surjective; the Chinese remainder theorem); it also proves that on a set these
+notions are the ones used for the tiling theorems. The new les have 3,478 lines.
+
+How the formal proof diers from this paper. The formal lower bound for part (a) is
+not Proposition 9: it is the direct induction of the working note (two claims and four cases),
+written before the argument by sets of sizes was found. The formal lower bounds for part (c)
+follow Lemmas 4 to 10 and Proposition 11. The formal constructions are recursive builders of
+trees that follow Section 4, with changes of convenience that the instances that wrote them
+reported: a string counts as having all its digits at the levels of H (or of E \ F ) nonzero also
+when there are no such levels, which renames layers; in modes Q, W the vector for digit 0
+is 1 + e0 − e2 for q ≥ 3 and 1 + e1 − e0 for q = 2; and in case (III) any level of E before a0
+serves as host. The remark on host levels at the end of Section 4 is not formalised.
+
+How it was made, and what was checked. The author xed every denition and every
+theorem statement rst, in les that compiled with the proofs left open, and before any proof
+was written had Lean evaluate minU, minB and q p
+                                                       e on the 1,265 patterns whose least size the
+
+solvers had decided (Section 6): all agree. Four fresh instances of the model then each wrote
+the proofs of one part in a copy of its own, forbidden to change a statement. On the merged
+copy the author checked that every xed declaration stands character for character; that
+Lean prints each xed denition and statement exactly as it printed them before the proofs
+existed; that the new les contain no sorry, no added axiom, and no instance, notation,
+macro or attribute that could change what a statement means; that the whole development
+builds; and that #print
+                      axioms gives, for each of the theorems named above, only propext,
+Classical.choice and Quot.sound.
+What the formal proof does not show. That the theorem is new; that the prose proofs
+of this paper are right (they were read by the author and, in their working-note form, refereed
+by fresh instances, which is a weaker thing); anything about sets; and nothing has been read
+by a person.
+
+
+                                         6.   Computations
+     The formulas were found from, and are conrmed by, exhaustive computation. For each
+pattern the least size was computed by two integer-programming models made independently
+of one another (CP-SAT on class counts, and HiGHS on polynomial remainders modulo Φd ),
+every witness being checked a third way by complex values: all 2
+                                                                        2n+1 patterns for n = 2 and
+
+(p, q) ∈ {(2, 3), (3, 2), (2, 5), (5, 2), (3, 5), (5, 3)}, for n = 3 and several of these pairs, and for
+n = 4, (p, q) = (2, 3), as far as the solvers nished: 1,265 patterns decided in all, 1,181 of
+them by both solvers. Theorem 1 gives the computed value in every one. The rule of (c)
+was tted on n ≤ 3 and sealed before the n = 4 results were opened; an earlier guess of the
+author's, without clauses (2) and (4), was wrong on 39 of 554 patterns. The oating-point
+                THE LEAST MULTISET OF Zpn q WITH GIVEN CYCLOTOMIC DIVISORS                                11
+
+solver is a verdict and not a proof; the formal proof makes it unnecessary, and the table is
+now a check on the formal       statement : Lean's own evaluation of the formula agrees with all
+1,265 computed values (Section 5).
+
+                                              References
+[1] E. Coven and A. Meyerowitz, Tiling the integers with translates of one nite set, J. Algebra 212 (1999),
+    161174.
+[2] G. Kiss, I. aba, C. Marshall and G. Somlai, Lower bounds for mask polynomials with many cyclotomic
+    divisors, Adv. Math. 494 (2026), 110932; arXiv:2507.11672. (Read in part by the author; read through by
+    a fresh instance of the model.)
+[3] G. Kiss, R. D. Malikiosis, G. Somlai and M. Vizer, On the discrete Fuglede and Pompeiu problems, Anal.
+    PDE 13 (2020), 765788; arXiv:1807.02844. (Proposition 3.8 and Theorem 4.9 were read by a fresh instance
+    of the model; the author has not read the paper.)
+[4] T. Y. Lam and K. H. Leung, On vanishing sums of roots of unity, J. Algebra 224 (2000), 91109;
+    arXiv:math/9511209. (Read in part by a fresh instance of the model; not by the author.)
+[5] I. aba and C. Marshall, Vanishing sums of roots of unity and the Favard length of self-similar product
+    sets, Discrete Analysis 2022:19; arXiv:2202.07555. (Theorem 1.2, Corollary 6.4 and their proofs were read
+    by fresh instances of the model; the author has not read the paper.)
+[6] R. D. Malikiosis, On the structure of spectral and tiling subsets of cyclic groups, Forum Math. Sigma 10
+    (2022), e23; arXiv:2005.05800. (The proof of Theorem 6.1 was read by a fresh instance of the model and
+    by Noon; the author checked the lines derived from it.)
+[7] R. D. Malikiosis and M. N. Kolountzakis, Fuglede's conjecture on cyclic groups of order pn q , Discrete
+    Analysis 2017:12; arXiv:1612.01328. (The author read pp. 1011.)
+

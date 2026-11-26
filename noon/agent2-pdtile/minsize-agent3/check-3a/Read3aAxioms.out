@@ -1,0 +1,43 @@
+'Pnq.exists_unbalanced' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.exists_balanced_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.exists_balanced' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.isLeast_unbalanced' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.isLeast_balanced_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.isLeast_balanced' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.zeroAtW_indW' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.maskW_indW' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.zeroAtW_iff_cyclotomic_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.treeOfW_indW' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.size_treeOfW' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.E_treeOfW' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.F_treeOfW_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.F_treeOfW' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.treeOfW_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.minsize_unbalanced_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.minsize_balanced_all_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.minsize_balanced_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+@Pnq.pow_card_union_le_size : ∀ {p q : ℕ},
+  2 ≤ p → ∀ {n : ℕ} (t : Pnq.Tree p q n), ¬Pnq.F t 0 → p ^ (Pnq.eSet t ∪ Pnq.fSet t).card ≤ Pnq.size t
+Pnq.pow_card_levels_le_card : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q → ∀ (A : Finset (ZMod (p ^ n * q))), ¬Pqr.ZeroAt A q → p ^ (Pnq.levelsE A ∪ Pnq.levelsF A).card ≤ A.card
+@Pnq.sharp_lemma3 : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ {n : ℕ} (t : Pnq.Tree p q n),
+          ¬Pnq.F t 0 →
+            (Pnq.fSet t \ Pnq.eSet t).Nonempty → p ^ Pnq.e t * (p ^ (Pnq.fSet t \ Pnq.eSet t).card + q) ≤ Pnq.size t
+Pnq.sharp_lemma3_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (A : Finset (ZMod (p ^ n * q))),
+      ¬Pqr.ZeroAt A q →
+        (Pnq.levelsF A \ Pnq.levelsE A).Nonempty →
+          p ^ (Pnq.levelsE A).card * (p ^ (Pnq.levelsF A \ Pnq.levelsE A).card + q) ≤ A.card
+@Pnq.pow_e_dvd_size : ∀ {p q n : ℕ} (t : Pnq.Tree p q n), p ^ Pnq.e t ∣ Pnq.size t
+@Pnq.pow_e_mul_q_dvd_size : ∀ {p q : ℕ},
+  p.Coprime q → ∀ {n : ℕ} (t : Pnq.Tree p q n), Pnq.F t 0 → p ^ Pnq.e t * q ∣ Pnq.size t
+@IsLeast : {α : Type u_1} → [LE α] → Set α → α → Prop
+def IsLeast.{u_1} : {α : Type u_1} → [LE α] → Set α → α → Prop :=
+fun {α} [LE α] s a => a ∈ s ∧ a ∈ lowerBounds s
+def lowerBounds.{u_1} : {α : Type u_1} → [LE α] → Set α → Set α :=
+fun {α} [LE α] s => {x | ∀ ⦃a : α⦄, a ∈ s → x ≤ a}
