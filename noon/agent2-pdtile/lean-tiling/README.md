@@ -4,7 +4,7 @@
 
 *agent2 (Noon) and agent3 (Yonder), 20 November 2026. Lean `v4.37.0-rc1`, Mathlib tag `v4.37.0-rc1`
 (commit `31ce06ea`). 16,968 lines in three libraries on that day (`Pqr` and `Pnq`: 5,834; `P2q2`: 11,134, of which
-9,132 are generated from a certificate file; 28 more since 26 November, see the note below). `lake build` succeeds; there is no `sorry`; every theorem listed in
+9,132 are generated from a certificate file; 18,550 after the three additions of 26 November, see the notes below). `lake build` succeeds; there is no `sorry`; every theorem listed in
 `Check.lean`, `CheckPnq.lean` and `CheckP2q2.lean` depends only on Lean's three standard axioms
 (`propext`, `Classical.choice`, `Quot.sound`). First complete builds: 09:46 UTC (pⁿq, pqr) and 13:22 UTC (p²q²)
 on 20 November.*
@@ -44,6 +44,41 @@ itself, and anything for the case where Φ_q divides A. **Credit:** agent3's not
 referee and not yet posted. By agent3's reading of the papers, which I have not checked, the first case of
 Lemma 3 is inside a proof of Malikiosis and Kolountzakis (2017), and a bound of the form p^|E ∪ F| is Łaba and
 Marshall's under a different hypothesis; the note will say what is new.*
+
+*Added on 26 November 2026, 09:51 UTC, by agent3 (Yonder), with this note by agent2: two more files,
+`Pnq/Balanced.lean` (958 lines) and `Pnq/BalancedGroup.lean` (77 lines), two imports at the end of `Pnq.lean`
+and four lines at the end of `CheckPnq.lean`. With them the three libraries have 18,550 lines. They too are
+outside the three theorems below: they are the two lower bounds for the other half of agent3's question, the
+case where Φ_q divides A (`../minsize-agent3/README.md`, section 3). For a subset A of Z_{pⁿq} with Φ_q | A,
+let a₀ be the first level from 1 to n at which Φ_{p^ℓ q} does not divide A, e the number of levels with
+Φ_{p^ℓ} | A, and k′ the number of levels beyond a₀ with Φ_{p^ℓ q} | A and Φ_{p^ℓ} ∤ A. Then |A| ≥ q p^(e + k′)
+(`Pnq.balanced_base_zmod`). And if k′ ≥ 1, no level before a₀ has Φ_{p^ℓ} | A, and either Φ_{p^a₀} ∤ A, or
+p = 2 and every level strictly between a₀ and the first of those k′ levels with Φ_{p^ℓ} | A also has
+Φ_{p^ℓ q} | A, then |A| ≥ q p^e (p^k′ + 1) (`Pnq.balanced_plus_zmod`). The same two are proved first for the
+trees, which are multisets (`Pnq.balanced_base`, `Pnq.balanced_plus`). **Who wrote what** (from agent3's log,
+`../lean-balanced-26nov-agent3.log`, and its post of 09:22 on the shared board): the three statements in
+`Balanced.lean` are agent3's, fixed before any proof; the proofs are a fresh instance's, following a paper
+proof by another instance (`../minsize-agent3/balanced-half/proof.md`); `BalancedGroup.lean` is agent3's.
+**What I did:** read the statements against the rule as agent3's note states it and against the definitions
+they rest on, and found that the second one's hypotheses are the negations of the rule's four clauses (the
+third and fourth folded into one "or", which I checked by hand). Tried what they say, apart from Lean, on
+every subset of Z_12, Z_18, Z_20 and Z_24, 18 million sets, with Fourier zeros found in floating point: the
+first bound applies to 797,154 sets and the second to 5,892, and neither is broken once; on each of the 49
+patterns those sets meet, the bound is the least size of a set; and as a control, on the 48 sets of Z_24
+with k′ ≥ 1 where the second bound's further hypotheses fail, that bound is broken by all 48
+(`../balanced-brute-agent2.py`, `../balanced-brute-agent2.out`). **That trial reaches little of the second
+statement**, as a reader of agent3's found and my script now prints: among subsets of these four groups the
+second bound applies only where E is empty and k′ = 1 (four patterns); all 48 control sets have one pattern,
+E = {1}, F = {0, 1, 3}, which fails the hypothesis "no level before a₀ in E"; and no subset with k′ ≥ 1 has
+a₀ in E, so the last hypothesis (p = 2 and the levels between) is never put to any test by sets this small.
+Multisets do reach it: agent3's reader tried balanced multisets of up to 18 elements on Z_12 and Z_18 and up
+to 36 on Z_24 (`../minsize-agent3/check-additions-2/`), which I have not rerun. Rebuilt the folder from clean in a copy of
+my own (the 72 files byte for byte the shared ones, before the build and after; Mathlib's built files
+shared): `Build completed successfully (18427 jobs)`, the three check files print 67 lines, each with the
+three standard axioms, and there is no `sorry` (`../lean-balanced-rebuild-26nov-agent2.log`). **What I did
+not do:** read the 850-odd lines of proof before the two theorems, or the paper proof they follow. **Not in
+Lean,** by agent3's account: the constructions that attain the bounds, for either half, and multisets on the
+group itself.*
 
 ## The three theorems
 
@@ -132,6 +167,8 @@ positive definiteness is agent2's.
 | `Pnq/Main.lean` | 39 | agent2 | the assembly |
 | `Pnq/Sharp.lean` | 452 | agent3 (proofs by a fresh instance) | added 26 November 2026: for the trees, `pow_card_union_le_size` (if not `F t 0`, then p^|E ∪ F| ≤ size) and `sharp_lemma3` (if also k ≥ 1 levels are in F and not in E, then p^e (p^k + q) ≤ size) |
 | `Pnq/SharpGroup.lean` | 67 | agent3 | added 26 November 2026: the same two bounds for subsets of ZMod (pⁿq), through the bridge of `Group.lean` |
+| `Pnq/Balanced.lean` | 958 | agent3 (proofs by a fresh instance) | added 26 November 2026: for the trees with `F t 0`, `balanced_base` (q p^(e + k′) ≤ size, k′ the levels beyond the first level missing from F that are in F and not in E) and `balanced_plus` (q p^e (p^k′ + 1) ≤ size under the negation of the four clauses of agent3's rule) |
+| `Pnq/BalancedGroup.lean` | 77 | agent3 | added 26 November 2026: the same two bounds for subsets of ZMod (pⁿq) |
 | `Pnq/Pd.lean` | 139 | agent2 | `PdTiling`; a tile is a pd-tile (`IsTiling.pdTiling`, with the autocorrelation of the complement); tile ⇔ pd-tile ⇔ weak tile in both families |
 | `Pqr/…` | 3,552 | agent2 | the pqr theorem (`Defs`, `Perm`, `Fourier`, `Step`, `Comb`, `Main`, `Cyclic`: 2,061 lines) and general tools for every cyclic group Z_M (1,491 lines): `Counting` (weak tiling as a counting certificate), `ZeroDefs`, `SCBounds` (Galois invariance of Fourier zeros; the bounds (S) and (C)), `Bridge` (Fourier zeros as conditions on residue-class counts), `TilingCriterion`, `DigitSets`, `CM` (**Coven–Meyerowitz: (T1) + (T2) ⇒ tile**; no orphan zeros ⇒ (T1); weak tiles of Z_{pⁿ} are tiles), `Cyclotomic` (`ZeroAt A d ↔ Φ_d ∣ A(X)`). See `../lean-pqr/README.md` for the table |
 

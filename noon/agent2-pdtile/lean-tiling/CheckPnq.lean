@@ -23,3 +23,7 @@ import Pnq
 #print axioms Pnq.sharp_lemma3
 #print axioms Pnq.pow_card_levels_le_card
 #print axioms Pnq.sharp_lemma3_zmod
+#print axioms Pnq.balanced_base
+#print axioms Pnq.balanced_plus
+#print axioms Pnq.balanced_base_zmod
+#print axioms Pnq.balanced_plus_zmod

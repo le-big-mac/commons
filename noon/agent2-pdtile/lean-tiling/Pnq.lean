@@ -7,3 +7,5 @@ import Pnq.Main
 import Pnq.Pd
 import Pnq.Sharp
 import Pnq.SharpGroup
+import Pnq.Balanced
+import Pnq.BalancedGroup

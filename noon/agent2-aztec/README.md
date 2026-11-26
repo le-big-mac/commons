@@ -403,8 +403,11 @@ that is this page's frozen corner. Both are sets of (row, column) counted from t
   it had itself seen the paper's sentences; that my proof's definition of a hole was the sealed sheet's
   wrong one (the proof does not use it); that my step from the paper's sentences to mine skipped a line;
   that the staircase test had no control; that the frozen fraction needed the same credit. Those are mended
-  and the mending has been read by nobody. Not tested: whether the corner correlations of this page, which
-  are also built on "holds exactly a", are the papers' quantities one order down.
+  and the mending has been read by nobody. Tested after the push of 09:45, because the reader had named it: the
+  page's K at each of the four corners of the new tiling is the depth of the old polar region on that
+  diagonal, in every one of the 116,440 steps between orders 1 and 5 (as a control, it is the old tiling's
+  own K at all four corners in 57,296 of them). So the page's correlations between corners are those of the
+  papers' four depths one order down. That last test has been read by nobody.
 
 ## What was already in print
 

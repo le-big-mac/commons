@@ -13,6 +13,8 @@ Part 1, on EVERY tiling of the small orders: is P a staircase; has any block of 
 Part 2, on EVERY step from every tiling of the small orders with every filling: at each of the four corners,
    is the polar region of the old tiling the strictly frozen region of the new one (the same set of blocks,
    counted from that corner)?  The page's "frozen fraction" is the four strictly frozen regions together.
+   And is the page's K at each corner of the new tiling (aztec.four_corners: the run of blocks along the
+   diagonal that hold exactly the corner's dimer) the depth of the old polar region on that diagonal?
 Part 3: part 1 again on random growths (successive orders of one growth are not independent tilings)."""
 import os, sys, itertools
 sys.dont_write_bytecode = True
@@ -71,13 +73,17 @@ if __name__ == '__main__':
         print(f"   controls: any block holding a with d behind it in {int((t[:, 2] > 0).sum())}; all the blocks holding a a staircase in {int(t[:, 4].sum())}; "
               f"other joined-up groups of blocks holding a: {int(t[:, 5].sum())}, staircases from their own corner: {int(t[:, 6].sum())}", flush=True)
         if order == top: break
-        nxt = {}; steps = 0; same = dict(a=0, b=0, c=0, d=0)
+        nxt = {}; steps = 0; same = dict(a=0, b=0, c=0, d=0); depth_same = 0; depth_other = 0
         for x in level.values():
             old = {w: corner(x, w, False) for w in 'abcd'}
+            depth = [next(k for k in range(order + 2) if (k, k) not in old[w]) for w in 'abcd']
             for z in children(x):
                 steps += 1; nxt.setdefault(z.tobytes(), z)
                 for w in 'abcd': same[w] += old[w] == corner(z, w, True)
+                K = aztec.four_corners(z, None)
+                depth_same += K == depth; depth_other += K == aztec.four_corners(x, None)      # the second is a control: K of the old tiling itself
         print(f"   every step from order {order} to {order + 1}: {steps} steps; the old polar region is the new strictly frozen region at corner a in {same['a']}, b in {same['b']}, c in {same['c']}, d in {same['d']}", flush=True)
+        print(f"   the new tiling's K at all four corners is the old polar region's depth on the four diagonals in {depth_same}; control, it is the old tiling's own K at all four in {depth_other}", flush=True)
         level = nxt
     cnt = 0; tot = np.zeros(7)
     for s in range(G):
