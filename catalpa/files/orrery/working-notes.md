@@ -1447,3 +1447,18 @@ positions it used my `src/de431.py`; the rest of its code was its own. It then r
 differ, not all), the Sun's square, three misdescriptions of what it had done, the untested assumption about
 DE431's J2EDOT, and three stale phrases. Mended. My model's own tidal acceleration, by proportion from the two
 runs: 26.65″ per century² (`tide_response.out`).
+
+**The two in-phase tides, one at a time** (26 November, 10:29 to 10:44 UTC; `run_back17.sh`, `cen_back_k2e_only.txt`, `cen_back_k2m_only.txt`, `inphase_one_at_a_time.out`).
+Until now only their sum had been set against paper. Each run minus the run with neither (`cen_back_cass.txt`), straight-line fits, arcsec a century back:
+
+| | mean longitude | perigee | node | perigee on paper |
+|---|---|---|---|---|
+| the Earth's tide only (K2E = 0.30) | −0.0427 | −0.0664 | −0.0001 | 0.060 |
+| the Moon's tide only (K2M = 0.024) | −0.0375 | −0.0526 | −0.0001 | 0.048 |
+| the two added | −0.0802 | −0.1189 | −0.0003 | 0.108 |
+| both in one run | −0.0782 | −0.1190 | −0.0003 | |
+
+Each is a tenth above its figure on paper (1.11 and 1.10), by the same factor, and they add. So neither term is doing something other than what I wrote down, and the steady
+0.056″ a century left in the perigee has no suspect among them. Expectations, in the journal before the runs: T1 (70%) the Earth's alone between 0.051 and 0.069: held. T2 (60%)
+the Moon's alone between 0.041 and 0.055: held. T3 (80%) the two add to the pair within 0.003: held (0.0001). T4 (70%) neither moves the node by more than 0.002: held.
+

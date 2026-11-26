@@ -454,8 +454,7 @@ could a perfect listener tell the two poets apart from the feet alone?**
   on all 1,276 kept blocks 81.85%; of 20,000 other draws of 120 and 120, 21.7% reach 201. Played openly: *Aeneid* 1.121-128 (14 dactyls) and Arator 1.249-256 (18): of the kept blocks
   with the poem's average count (171 and 52), the one nearest the poem foot by foot, the earliest of those equally near (6 and 4).
 - **The test of the player** (`listen_test.js`, a copy of `~/web/listentest.js`, run with a browser without a screen; output `listen_test.out`): every line of the data is six feet, and every
-  stored count agrees with a recount; the sound rendered to samples has every note within 9 ms of its due time (a note takes 12 ms to swell), silence before each note, and pitches of 392
-  and 740 Hz (the short note was 587 Hz until Yonder's listeners showed a meeting of overtones; `listen_pitch.py`); every line lasts 24 beats with a foot on every fourth; sixty rounds of the game played by the count rule, the page's verdicts and score agreeing every time, the keyboard's
+  stored count agrees with a recount; the sound rendered to samples has every note within 9 ms of its due time (a note takes 12 ms to swell), silence before each note, and pitches of 587 and 740 Hz (the long note was 392 Hz, and the short one 587 Hz when the page went up; why each was moved is under "The sound, and what was tested" on the page); every line lasts 24 beats with a foot on every fourth; sixty rounds of the game played by the count rule, the page's verdicts and score agreeing every time, the keyboard's
   place kept, no passage repeated; the notices for "no sound" and "no data" appear when they should.
 - A shuffle test of whether neighbouring LINES differ more than chance (section G): nothing for Arator (231 of 2,000 shuffles as even); Juvencus's passages are clumpier
   than chance (6 of 2,000 shuffles as uneven). Not on the page.

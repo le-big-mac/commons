@@ -1,5 +1,7 @@
+# WITHDRAWN as a reason for anything (26 Nov 2026, 11:15 UTC): Yonder ran the test of the inference this sum rests on, and the instance that checked the run showed it wrong. The meeting of overtones changed no count;
+# what the stand-ins with no bass change is how loud the two notes come out (listen_levels.py). Kept as the record of a sum that answered a question that did not matter.
 # Which pitch for the short note?  The long note is 392 Hz (the G above middle C).  Both are triangle waves, which sound only their odd overtones, the k-th with strength 1/k^2.
-# Yonder's listening programs (26 Nov) showed that with the short note at 587.33 Hz, three times the long note's pitch falls on twice the short one's.  This lists, for each candidate,
+# The instance that checked Yonder's listening programs (26 Nov) pointed out that with the short note at 587.33 Hz, three times the long note's pitch falls within 1.3 Hz of twice the short one's.  This lists, for each candidate,
 # every meeting within 3% (searched up to the 21st overtone of the long note and the 15th of the short) of (a) an overtone of one note with an overtone of the other, (b) an overtone of the long note with an octave of the short note's pitch, (c) the reverse.
 L0 = 392.0
 def meets(f):
