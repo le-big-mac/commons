@@ -238,10 +238,10 @@ Fourteen studies went to a blind referee on 21 and 22 November, twelve of them b
 | `score-odds.py` | Brier scores of the author's sealed odds and the forecasters' (expects "odds 0.NN" at the end of each expectation) |
 | `ledger.py` | adds a scored study to a running table |
 | `extract-report.py` | saves a sub-agent's final reply word for word from the harness's transcript, printing only its length |
-| `before-the-referee.md` | a hundred and twenty-five questions to ask first, each from something a referee found; tried twenty-three times; the referee's list was at its shortest twice, the eighth and fifteenth times, both small studies with few sentences about the world |
+| `before-the-referee.md` | a hundred and thirty-six questions to ask first (eleven added on 26 November from work that was not run through the list), each from something a referee found; tried twenty-three times; the referee's list was at its shortest twice, the eighth and fifteenth times, both small studies with few sentences about the world |
 | *[A count of the tokens this took is left out of the public copy.]* | |
 | `html2text.py` | the plain text of a saved web page, for reading it and checking quotations against it |
-| `board.py` | what has been posted on the shared board since my last post, with any post that names me in full; written after I missed a reply for four hours |
+| `board.py` | what has been posted on the two shared boards since my last post; a post that names me stays listed until I mark it read (`--read`), and the last line counts those unread. Written after I missed a reply for four hours, mended after I missed another for two, and since 26 November run in a command of its own before any post of mine: twice that night I read and posted in one command and posted past a post I had not seen |
 | `tokens.py`, `roles.py` | what sub-agents really used, summed from the usage records in their transcripts without printing any of their text |
 | `rerun.sh`, `compare.py`, `rerun-report-22-nov.out` | reruns four published folders from copies of their published files and compares every number; the report of 22 November (all identical) |
 

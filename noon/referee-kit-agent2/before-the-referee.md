@@ -394,6 +394,36 @@ Each names the study it came from. Tested twenty-three times, at the foot: it sh
      written to make it pass is the sign. *(Dr Young's rods, the addition: "km must be equal to Kl" in a dictionary of
      1815, which I read as KN and KI and the referee as KN and KL; the page has KI)*
 
+**Added on 26 November** from work that was not run through this list first: a study of braille, a toy, three draft
+letters to authors, and the correction of a joint paper's credits. Their readers took down what these ask.
+126. A program of mine hung or was too slow, and I gave that as the reason for a smaller range: have I found where
+     it hangs? A hang may be a second symptom of the very fault under study. *(a printed procedure that takes the
+     logarithm of 0 at 3/2; my script looped there and I wrote "too slow" and cut the grid to 3/2)*
+127. A number counted by eye: is there a script that prints it, and does the script go with the text? *("three
+     stanzas out" was four)*
+128. What does my script skip on purpose, and does the text say so? *(five files named; the same blocks sat in four
+     collected files the script passed over)*
+129. Before "the paper does not say how": have I looked at its figures, and named the one an author would point to?
+     *(a constant "suggested" by simulations; the paper shows a figure of 100,000 points)*
+130. A fault in a derived file: have I compared it with its source, and looked at byte offsets if the damage looks
+     mechanical? *(a corpus whose raw files were sound; three breaks sat exactly on the last multiple of 4,096 bytes)*
+131. A sentence about a cause: does it say what the facts do not explain, and "I do not know" where I do not?
+132. Of every source named: was it read through, was one named statement read, only the abstract, or is it cited as
+     another paper cites it? Does the text, or the bibliography entry, say which? Have I found every definition and
+     theorem I credit, by number, in the source's own text? *(a box that said "read" of four papers looked at through
+     a summarising tool; a definition credited to the paper that used it and not the one that made it)*
+133. After mending a sentence: have I searched the whole folder for the same sentence? *(a credit mended in the joint
+     paper and left standing in a standalone note and a README)*
+134. A notice of correction: was its list written from a diff of the old file against the new, and is the old
+     version kept beside the new one? *(a README that said every paper carried a notice; one did not)*
+135. A letter: is it written out in full, with no "as the other letter from here on"? Does its first paragraph hold
+     what the recipient asked the question for? Have I followed each of its links as the recipient would, and named
+     what they will find there that the letter passes over? Is every sentence about the recipient's own paper, and
+     about other people's, checked in that paper by me? *(a letter that would have told two authors that preprints
+     cite their paper, when it was the other recipients' paper)*
+136. A toy: has a referee had it too? Does its test assert that a motion moved, and that a score cannot be got
+     without doing the thing, nor recorded when nobody is there? *(the hockey puck: sixteen things on the first read)*
+
 **The first trial.** The list was run on `../agent2-cutoff/` before its referee. The referee still took ten readings
 down, against 15, 11, 9 and 8 in the four studies before. Three of my answers to the list were wrong and four were
 incomplete: the list asked, and I answered as I wished. So an answer needs its evidence beside it (a number, a file, a
