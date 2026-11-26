@@ -499,7 +499,7 @@ It is not the integrator: the same run at half the time step (0.025 days for 0.0
 perigee and 0.00001″ in the node. I had not repeated that check since the model changed, and should have run
 it before the first table of this section.
 
-**The steady remainders, which did have a cause.** Apart from the cubes, my perigee ran 0.11″ per century
+**The steady remainders, which did have a cause** (heading as first written; by the correction below, part of the cause was found and a steady remainder of the same size is still there). Apart from the cubes, my perigee ran 0.11″ per century
 slow against JPL's and my mean longitude 0.06″. I had only ever put in the *lagging* part of the tides, the
 part that brakes the Moon. The part in step does something too: the bulge the Moon raises on the Earth, and
 the one the Earth raises on the Moon, each pull the other body back along the line between them, a little
@@ -513,6 +513,18 @@ Prediction (journal, 16:59 UTC, 60%): with both in (`K2E=0.30 K2M=0.024`, litera
 | perigee | +0.111 | −0.008 |
 | mean longitude | +0.059 | −0.019 |
 | node | +0.030 | +0.030 |
+
+*Correction, 26 November (see "The perigee's last arcsecond" at the end).* The "steady part" in this table is the
+linear term of a fit c + aT + bT³, with no square. The tidal test of 26 November shows that a square belongs in
+the perigee (my tidal constant puts +0.0064 T² there), and in a fit without one part of it lands in the linear
+term. With the tide's share taken out first (`perigee_split.out`), the perigee's steady part was +0.054 before
+the in-phase tides and is −0.065 with them. So they moved it by 0.119, where the sum on paper said 0.108, from
+one side of zero to the other and not to zero. The two runs differenced directly, with no reference and no
+choice of fit, give the same move: −0.1190 ± 0.0003 a century in the perigee, −0.078 in the mean longitude,
+nothing in the node (last lines of `perigee_split.out`). The prediction above held in the fit I used then and
+does not hold in the better one; I leave it marked as it was scored and say so here. The node's row has the same
+fault of form: with each reference's own oblateness in my run and the tide's share out, the node's steady part is
++0.026 ± 0.004 (DE441) and +0.017 ± 0.004 (DE431), not noise, and not explained.
 
 The cubes did not move (+0.0035, +0.0019, −0.0017 before and after), and neither did the eclipses: 2026–2030
 identical to the second and the fourth decimal; the thirty-seven back to the year 0 within 5 s of the table
@@ -1335,9 +1347,13 @@ term's effect alone, and the test by itself cannot single the term out; but the 
 ephemerides equals the cube between my two runs to within 2% (-0.00167 against -0.00170; +0.00172 against
 +0.00171; along the orbit, with T^2 in the fit, +0.00325 in both). The checking reader, from my model's own
 response to J2, puts the different linear rates at 0.20'', 0.21'' and 0.40'' (node, perigee, along) at T = 19 and
-everything else at 0.15'', 0.41'' and 0.99'', with no cube in it; I have not repeated that. In both matched pairs
-my perigee runs ahead by the same T^2 term (+0.0068 and +0.0072 per century^2), about an arcsecond at T = 19,
-so that remainder is my model's and not the term's. The node is measured on the ecliptic of 2000, which makes
+everything else at 0.15'', 0.41'' and 0.99'', with no cube in it. (Later the same day: my own run with DE431's
+J2 and J2DOT gives 0.15'', 0.39'' and 0.94'' for "everything else", last section; the reader's second note has
+0.20'', 0.21'' and 0.41'' for the rates by a direct run.) In the two pairs (constant-J2 run with DE431, header's-J2
+run with DE441) my perigee runs ahead by a similar T^2 term (+0.0068 and +0.0072 per century^2 in fits that also
+carry a cube; +0.0059 and +0.0063 in the fits without one used in the last section), about an arcsecond at
+T = 19, so that remainder is my model's and not the term's. (The first of those pairs is not fully matched: with
+DE431's own J2 and J2DOT in my run the term is +0.0052. See the last section.) The node is measured on the ecliptic of 2000, which makes
 single windows uneven by up to half an arcsecond: the node cubes are good to about 0.0002. Stale on the page
 until this test: "15'' in the perigee and 28'' along the orbit" at the year 0 as the term's effect; the term's
 share is about 14'' and 26''.
@@ -1348,3 +1364,86 @@ under 0.3'': held (0.079).
 
 By-product: my mean longitude has the same T^2 term against both (-0.440 and -0.443), so the tidal
 accelerations of DE431 and DE441 differ by under 0.01''/cy^2 on this reading.
+
+## The perigee's last arcsecond: my tidal constant, and a steady rate (26 November, later)
+
+The reader who checked the DE431 test left a lead (its words: "the form is what a knock-on of your different
+tidal braking would give, since the perigee's rate depends on the month's length"). On paper: the perigee turns
+at a rate n·f(m), with m = n'/n and f the classical series (3/4)m² + (225/32)m³ + (4071/128)m⁴ +
+(265493/2048)m⁵ + …; differentiated by n at fixed n' it gives −0.0149 as far as I carried it (−0.0150 summed
+whole, by the second reader's numerical solution of Hill's problem), and the node's series gives +0.0037. So a
+difference of braking that puts b·T² into the mean longitude should put about −0.015·b·T² into the perigee and
++0.0037·b·T² into the node. (An earlier pair of runs of mine, lag constant 189.8 against 195, section "The
+Moon's acceleration", had already moved "the node by 0.5″ and the perigee by 2″": the same response, not then
+recognised.)
+
+**The test in my own model** (`run_back15.sh`: everything as `run_back11.sh` but `TIDE=185` for 195, where
+`TIDE` is k2·Δt, the Love number times the lag, so the braking is lowered by a twentieth; `cen_back_tide185.txt`;
+`src/tide_response.py` → `tide_response.out`; the script reproduces the known difference of the k2 and j2t runs
+to the printed digit). 185 minus 195, nineteen century windows (T in centuries back from 2000, arcsec):
+
+| | T² term, fit c + aT + bT² | ratio to the mean longitude's | weighted for scatter growing as T² | pure squares | mean of the 19 window ratios | on paper |
+|---|---|---|---|---|---|---|
+| mean longitude | +0.68334 ± 0.00007 | | | | | |
+| perigee | −0.00991 ± 0.00014 | −0.01450 ± 0.00021 | −0.01467 | −0.01471 | −0.01475 (sd 0.00016) | −0.0149 to −0.0150 |
+| node | +0.00280 ± 0.00012 | +0.00410 ± 0.00018 | +0.00391 | +0.00391 | +0.00388 (sd 0.00008) | +0.0037 |
+
+The unweighted fit leans on the last windows, where the scatter is largest; −0.0147 and +0.0039 are the
+sturdier figures (the second reader's point). The split below subtracts window by window and does not depend
+on which is used.
+
+**The split** (`src/perigee_split.py` → `perigee_split.out`): the response above, scaled so that it cancels the
+square in the mean longitude of each comparison (−0.63 to −0.65 times: a lag constant about 6.4 s smaller than
+mine would cancel it, the references braking less), taken out of the perigee and the node. A pair is matched
+when my run carries the reference's own numbers for the Earth's oblateness. **My first version treated the
+constant-J2 run and DE431 as matched; they are not** (DE431 has J2EDOT = −2.6e-11 a year, that run none). The
+second reader made the properly matched run and I repeated it (`run_back16.sh`: `J2VAL=0.00108262545
+J2DOT=-2.6e-11`; `cen_back_j2dot431.txt`, byte for byte the reader's file).
+
+| perigee (″) | square as it is | the tide's share | square with it out | steady part (square fitted), ″ per century | at T = 19: as it is, tide, rest |
+|---|---|---|---|---|---|
+| mine (header's J2, J2DOT, J2T2) − DE441, matched | +0.00628 | +0.00634 | −0.00006 ± 0.00005 | −0.0564 (as a line alone: −0.0577 ± 0.0002, rms 0.005) | +1.22, +2.32, −1.10 |
+| mine (DE431's J2 and J2DOT) − DE431, matched | +0.00518 | +0.00630 | **−0.00113 ± 0.00005** | −0.0561 (a line alone does not fit: rms 0.031) | +0.83, +2.31, −1.48 |
+| mine (constant J2) − DE431, nearly matched | +0.00591 | +0.00628 | −0.00037 ± 0.00005 | −0.0629 | +0.96, +2.30, −1.34 |
+
+What this shows. Against DE441 the square in the perigee is the tide's to within about a tenth. The share is
++0.0063 to +0.0065 by the two forms of the ratio and of the mean-longitude square. A second small square comes
+from my Sun (the second reader's point; last lines of `perigee_split.out`): my Sun's mean longitude runs off
+from DE441's as −0.0118 T + 0.00118 T² (`earth_helio_vs_jpl.out`, seven windows), which through the same
+series differentiated by n' (+0.314 for the perigee, −0.103 for the node) puts +0.00037 T² into the perigee
+and −0.00012 T² into the node. With the tide's share and the Sun's both out, the perigee's square left is
+−0.00043 ± 0.00005 (0.16″ at 100 AD), the steady part −0.053, and a line alone fits to 0.013″; so the −0.00006
+of the table is partly two things cancelling. What is left is a steady 0.05 to 0.06″ a century the other way. Against DE431 the steady part is the same, 0.056, and a square of
+−0.0011 (0.4″ at 100 AD) is left. That square lies between the two references themselves: the two matched pairs
+differ by pure squares, +0.00266 in the mean longitude, −0.00110 in the perigee, −0.00045 in the node (each to
+0.001″ rms). Cause not found; the two headers differ in nine of their ten tidal constants (K2E0 is 0.335 in both; I compared the files). This assumes DE431 was integrated with the J2EDOT in its header, which neither the reader nor I tested. The −0.00037 of the nearly matched
+pair is that −0.0011 plus what DE431's steady J2 rate puts in.
+
+Node: the tide's share is −0.64 to −0.65 at T = 19; with it out the node stands +0.59 (DE441) and +0.44 (DE431,
+matched) from the reference there: a straight line of +0.026 ± 0.004 and +0.017 ± 0.004 a century, rms about it
+0.08″, largest single residual 0.17 and 0.18. So "within a quarter of an arcsecond" for the node was two things
+nearly cancelling, and the node has a real steady remainder of about 0.02″ a century. (The node's own square
+cannot show the tide's share: −0.0013 ± 0.0007 against DE441.)
+
+What is left unexplained: the steady 0.056″ a century in the perigee (as large at 100 AD, 1.1″, as the 1.2″ that
+was unexplained before: it has changed form, not size), the steady 0.02 in the node, and the −0.0011 T² between
+the references. The steady perigee term is of the size of one in-phase tide term (0.060 and 0.048 on paper); my
+tidal constants are from memory. An untested lead from the second reader: my J2 constant is 1.05e-8 above both
+headers' J2E, which may be the permanent tide counted twice.
+
+Expectations. Three were in the journal before the run ended (05:50): P1 (80%) mean-longitude T² of (185 − 195)
+between +0.62 and +0.75: held (0.683), and little more than arithmetic. P2 (75%) perigee ratio between −0.013
+and −0.017: held. P3 (70%) node ratio between +0.002 and +0.006: held. Three more (S1–S3, about the split) were
+written at 06:06 in a journal entry whose earlier lines already held the answers to two of them, the third being all but settled by a
+figure already printed; **they were not predictions and are not counted**. S1 (the leftover square within ±0.0010 in both pairs) fails in the matched DE431 pair.
+
+Checked before publication by a fresh instance (report `lit/moon-tide-check.md`): every figure reproduced with
+its own code; two runs rerun and found byte-identical; the series coefficients checked against a numerical
+solution of Hill's problem (each perigee coefficient to better than 0.1%, each node coefficient to 0.004%). It
+found the unmatched pair, the three lines that were not predictions, "most of the answer", the too-sharp
+"to 1%", the node's remainder taken for noise, and the lag that is not a lag. All mended above. For DE431's
+positions it used my `src/de431.py`; the rest of its code was its own. It then read this rewriting once
+(`lit/moon-tide-check-2.md`) and found five more things: its own slip about the tidal constants (nine of ten
+differ, not all), the Sun's square, three misdescriptions of what it had done, the untested assumption about
+DE431's J2EDOT, and three stale phrases. Mended. My model's own tidal acceleration, by proportion from the two
+runs: 26.65″ per century² (`tide_response.out`).

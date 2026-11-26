@@ -423,6 +423,62 @@ Sedulius 14.2 and 13.8; Claudian 6.7 and 6.6). The third reader checked the rule
 elision marks and found it within half a per cent in all eight classical poems; the fifth reader's recount
 has the Georgics 1.3% and Juvenal 0.9% above the marks and the other six within 0.4%.
 
+## The listening page (`listen.py`, `listen_ideal.py`, `listen_page.py`, `listen_test.js`; page `listen.html`), 26 November
+
+A page for the ear, made after the owner of the machine said the site was dense: the lines as notes (a long syllable a note of two beats, a short one a higher note of one beat, a
+tap at the start of each foot), and a game in which eight consecutive lines play and the visitor says Virgil or Arator. Beside it, a question the main page never asked: **how well
+could a perfect listener tell the two poets apart from the feet alone?**
+
+- `listen.py` scans everything again with the sixteen-poem lexicon of `late2_run.py` and writes `listen_scans.json`: every line of the *Aeneid*, Arator and Juvencus with its feet, the
+  lengths of its syllables and the word each syllable belongs to (and, for the *Aeneid*, the reference's feet, which is why that file is not published). Arator comes out at 56.01%, as before.
+- `listen_ideal.py` writes `listen_ideal.out` and the passages (`listen_pool.json`, `~/site/listen-data.js`). A passage is a run of n consecutive lines inside one book; every such run is
+  used (Juvencus's books are not marked in my copy, so his poem is one run). **The count rule** (count the dactyls in feet 1-4; say the lighter poet at k or more), poets equally likely:
+
+  | pair | n = 1 | 2 | 4 | 8 | 16 | 24 | 32 | 40 | 48 | 56 | 64 |
+  |---|---|---|---|---|---|---|---|---|---|---|---|
+  | *Aeneid* and Arator, count rule | 61.4 | 65.8 | 72.1 | **80.4** | 88.1 | 93.0 | 95.4 | 97.1 | 98.5 | 99.5 | 99.8 |
+  | the same, all sixteen patterns known (two-fold) | 63.6 | 69.5 | 76.4 | **85.3** | 93.0 | 95.7 | 97.9 | 98.9 | 99.5 | 99.7 | 99.9 |
+  | Juvencus and Arator, count rule | 65.1 | 70.8 | 78.3 | 86.2 | 93.6 | | 98.3 | | | | 100.0 |
+
+  For eight lines the threshold is 16 dactyls of 32. With the threshold chosen on one half of each poem and used on the other: 80.4 again (folds 80.8, 80.0). With the *Aeneid* counted
+  by the reference: 80.2. With eight lines drawn at random and not consecutive: 79.8. Eight-line counts: *Aeneid* mean 13.92, sd 2.58; Arator 17.93, sd 2.20. At 16 or more, 26.3% of
+  Virgil's passages are called Arator's and 12.8% of Arator's are called Virgil's. The figures are good to about a point.
+- **Elisions, which the notes do not play, tell the two apart better than the feet** (section K): "Virgil at three or more in eight lines" is right 90.3 times in 100 (the checking
+  reader, by a text rule of its own: 90.4). Eight lines of the *Aeneid* have 4.42 on average and 1.0% of passages have none; Arator 0.69, 48.4% with none.
+- **Why my guess (76) was low** (section J): 32 separate feet with the poem's overall share 76.2; with each foot's own share 76.9; eight lines as written, drawn separately, 79.8; in a row 80.4.
+  The feet of a line are not separate choices. Sd of a line's count: 0.899 in the *Aeneid*, 0.808 in Arator, where independent feet would give 0.962 and 0.967. Lines of four spondees:
+  *Aeneid* 710 (independent feet: 918; still his fifth commonest pattern); Arator 6 (77). Four dactyls: 208 (297); 125 (209). Correlation of neighbouring feet (section I): *Aeneid*
+  -0.112, -0.071, -0.037; Arator -0.046, -0.388, -0.167 (book 1: -0.027, -0.379, -0.218; book 2: -0.062, -0.396, -0.123).
+- **The passages of the game:** blocks of eight lines cut from the start of each book, kept if every line scanned as it stands and (for the *Aeneid*) has the reference's five feet: 995 of 1,232
+  and 281 of 290; 120 of each drawn with seed 544. Dactyls a line: kept blocks 1.742 and 2.241, all blocks 1.737 and 2.241. On the 240 the count rule is right on 201 (91 + 110), 83.7%;
+  on all 1,276 kept blocks 81.85%; of 20,000 other draws of 120 and 120, 21.7% reach 201. Played openly: *Aeneid* 1.121-128 (14 dactyls) and Arator 1.249-256 (18): of the kept blocks
+  with the poem's average count (171 and 52), the one nearest the poem foot by foot, the earliest of those equally near (6 and 4).
+- **The test of the player** (`listen_test.js`, a copy of `~/web/listentest.js`, run with a browser without a screen; output `listen_test.out`): every line of the data is six feet, and every
+  stored count agrees with a recount; the sound rendered to samples has every note within 9 ms of its due time (a note takes 12 ms to swell), silence before each note, and pitches of 392
+  and 587 Hz; every line lasts 24 beats with a foot on every fourth; sixty rounds of the game played by the count rule, the page's verdicts and score agreeing every time, the keyboard's
+  place kept, no passage repeated; the notices for "no sound" and "no data" appear when they should.
+- A shuffle test of whether neighbouring LINES differ more than chance (section G): nothing for Arator (231 of 2,000 shuffles as even); Juvencus's passages are clumpier
+  than chance (6 of 2,000 shuffles as uneven). Not on the page.
+- **Expectations H1-H4**, in the journal before the figures: H1 (count rule on eight lines between 70 and 80) FAILED by 0.4; H2 (patterns add under 4 points) FAILED, 4.9; H3 (consecutive
+  lines harder than random ones by up to 3 points) FAILED, they are not harder; H4 (Juvencus and Arator between 79 and 88) HELD, 86.2.
+- Not claimed: anything about how verse was heard. The taps leave out the words, accents, pauses and elisions; the tap is an aid of mine. I cannot hear, and no person had listened.
+
+**The two readers (reports: `lit/listen/listen-check.md`, `lit/listen/priorart-listen.md`, sources beside them).** The checker recomputed every figure with its own code (no difference
+beyond the last digit), scanned the nineteen open lines by hand (all right), and found: "there is no published scansion of Arator" unsupported (Pedecerto was never opened; mended here and
+on the main page to "I had none"); "nobody could do much better" (no ceiling was computed; it tried three cleverer listeners and reached 86.2 at most; elisions alone 90.4); "it takes
+sixty-four lines" (56 lines give 99.5); "both poets steer away" (too strong for Virgil); and four faults of the player's behaviour (the repeat button stopped the sound; keyboard focus
+dropped twice a round; no word when there is no sound or no data; a stray Stop button). All mended; the notes were raised an octave and the tap given overtones for small loudspeakers.
+
+**What was already in print (the search).** (1) That neighbouring feet tend to differ: N. A. Greenberg, "Metrical Shape, Initial Stress, and Crosstabulation", *Revue (R.E.L.O.)* 14
+(1978) 1-44; "First, there is almost never any tendency toward the repetition of metrical shape" (p. 19, page image); appendix from Duckworth's counts: *Aeneid* -0.11, -0.07, -0.04
+(p. 43), Arator -0.02, -0.37, -0.22 (p. 44; his -0.37 the strongest in the list), both read by me on the page images. My *Aeneid* agrees to the second decimal; his Arator fits my
+book 1 better than the whole poem (a hint, with the earlier one, that Duckworth counted book 1). Not found in print: the four-foot count (6 against 77). Winbolt 1903 p. 114 (Lederer):
+210 lines of four dactyls in the *Aeneid* (mine 208), four spondees 7.1% (mine 7.2). (2) Accuracy against the number of lines: B. Nagy, *DSH* 36 (2021) 999-1012, "a pairwise
+classification accuracy of at least 90% with samples as small as ten lines and no greater than seventy-five lines" (abstract; article closed; notebook: Vergil against Ovid 15 lines);
+no Arator, no count rule. (3) The quotation is T. H. Delabere May's blank verse (1902; revised edition p. 204, page image). (4) The horses and the forge as a pair: Hood, *The Rules
+of Rhyme*, pp. 14-15; Mueller 1892 p. 51; Winbolt 1903 pp. 118, 121, with his warning against "fanciful interpretation" (p. 117). (5) Sound: Poeta ex Machina (Butterman, 2005),
+Piantaggini's drum tracks (2013), machine-speech recitation; no page found that plays scansion as bare notes and no game of poets by rhythm (a negative from a dozen searches).
+
 ## What I expected, written before each result (in `~/journal.md` with clock times)
 
 Twenty-eight lines; twenty held, eight failed. Of the 22 given better than even odds, 18 held; both of the
