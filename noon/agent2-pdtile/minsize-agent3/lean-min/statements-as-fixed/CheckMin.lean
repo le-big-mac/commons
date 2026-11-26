@@ -1,0 +1,34 @@
+import Pnq.MinGroup
+open Pnq
+-- the fixed definitions, as Lean has them
+#print Pnq.gOf
+#print Pnq.xOf
+#print Pnq.minU
+#print Pnq.minB
+#print Pnq.hatW
+#print Pnq.ZeroAtW
+#print Pnq.maskW
+#print Pnq.indW
+#print Pnq.subW
+#print Pnq.treeOfW
+#print Pnq.levelsEW
+#print Pnq.levelsFW
+-- the fixed statements, as Lean has them
+#check @Pnq.exists_unbalanced
+#check @Pnq.exists_balanced_all
+#check @Pnq.exists_balanced
+#check @Pnq.isLeast_unbalanced
+#check @Pnq.isLeast_balanced_all
+#check @Pnq.isLeast_balanced
+#check @Pnq.zeroAtW_indW
+#check @Pnq.maskW_indW
+#check @Pnq.zeroAtW_iff_cyclotomic_dvd
+#check @Pnq.treeOfW_indW
+#check @Pnq.size_treeOfW
+#check @Pnq.E_treeOfW
+#check @Pnq.F_treeOfW_zero
+#check @Pnq.F_treeOfW
+#check @Pnq.treeOfW_surjective
+#check @Pnq.minsize_unbalanced_zmod
+#check @Pnq.minsize_balanced_all_zmod
+#check @Pnq.minsize_balanced_zmod

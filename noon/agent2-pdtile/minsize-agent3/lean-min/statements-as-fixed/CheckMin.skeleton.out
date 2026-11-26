@@ -1,0 +1,126 @@
+def Pnq.gOf : Finset ℕ → Finset ℕ → ℕ → Finset ℕ :=
+fun Es Fs a0 => {ℓ ∈ Fs \ Es | a0 < ℓ}
+def Pnq.xOf : ℕ → Finset ℕ → Finset ℕ → ℕ → ℕ :=
+fun p Es Fs a0 =>
+  if
+      gOf Es Fs a0 = ∅ ∨
+        (∃ ℓ ∈ Es, ℓ < a0) ∨ a0 ∈ Es ∧ 3 ≤ p ∨ a0 ∈ Es ∧ p = 2 ∧ ∃ b ∈ Es \ Fs, a0 < b ∧ ∀ g ∈ gOf Es Fs a0, b < g then
+    0
+  else 1
+def Pnq.minU : ℕ → ℕ → Finset ℕ → Finset ℕ → ℕ :=
+fun p q Es Fs => if Fs ⊆ Es then p ^ Es.card else p ^ Es.card * (p ^ (Fs \ Es).card + q)
+def Pnq.minB : ℕ → ℕ → Finset ℕ → Finset ℕ → ℕ → ℕ :=
+fun p q Es Fs a0 => q * p ^ Es.card * (p ^ (gOf Es Fs a0).card + xOf p Es Fs a0)
+def Pnq.hatW : {M : ℕ} → [NeZero M] → (ZMod M → ℕ) → ZMod M → ℂ :=
+fun {M} [NeZero M] w ξ => ∑ a, ↑(w a) * ZMod.stdAddChar (ξ * a)
+def Pnq.ZeroAtW : {M : ℕ} → [NeZero M] → (ZMod M → ℕ) → ℕ → Prop :=
+fun {M} [NeZero M] w d => ∀ (ξ : ZMod M), Pqr.ord ξ = d → hatW w ξ = 0
+def Pnq.maskW : {M : ℕ} → [NeZero M] → (ZMod M → ℕ) → Polynomial ℤ :=
+fun {M} [NeZero M] w => ∑ a, Polynomial.C ↑(w a) * Polynomial.X ^ a.val
+def Pnq.indW : {M : ℕ} → Finset (ZMod M) → ZMod M → ℕ :=
+fun {M} A a => if a ∈ A then 1 else 0
+def Pnq.subW : {p q n : ℕ} →
+  [Fact (Nat.Prime p)] → [Fact (Nat.Prime q)] → (ZMod (p ^ n * q) → ℕ) → (k : ℕ) → ℕ → ℕ → Pnq.Tree p q k :=
+fun {p q n} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)] w x x_1 x_2 =>
+  Nat.brecOn (motive := fun x => ℕ → ℕ → Pnq.Tree p q x) x (subW._f w) x_1 x_2
+def Pnq.treeOfW : {p q n : ℕ} → [Fact (Nat.Prime p)] → [Fact (Nat.Prime q)] → (ZMod (p ^ n * q) → ℕ) → Pnq.Tree p q n :=
+fun {p q n} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)] w => subW w n 0 0
+def Pnq.levelsEW : {p q n : ℕ} → [Fact (Nat.Prime p)] → [Fact (Nat.Prime q)] → (ZMod (p ^ n * q) → ℕ) → Finset ℕ :=
+fun {p q n} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)] w =>
+  {ℓ ∈ Finset.Icc 1 n | Polynomial.cyclotomic (p ^ ℓ) ℤ ∣ maskW w}
+def Pnq.levelsFW : {p q n : ℕ} → [Fact (Nat.Prime p)] → [Fact (Nat.Prime q)] → (ZMod (p ^ n * q) → ℕ) → Finset ℕ :=
+fun {p q n} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)] w =>
+  {ℓ ∈ Finset.Icc 1 n | Polynomial.cyclotomic (p ^ ℓ * q) ℤ ∣ maskW w}
+@exists_unbalanced : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ) (Es Fs : Finset ℕ),
+          Es ⊆ Finset.Icc 1 n → Fs ⊆ Finset.Icc 1 n → ∃ t, ¬F t 0 ∧ eSet t = Es ∧ fSet t = Fs ∧ size t = minU p q Es Fs
+@exists_balanced_all : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ), ∀ Es ⊆ Finset.Icc 1 n, ∃ t, F t 0 ∧ eSet t = Es ∧ fSet t = Finset.Icc 1 n ∧ size t = q * p ^ Es.card
+@exists_balanced : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ) (Es Fs : Finset ℕ),
+          Es ⊆ Finset.Icc 1 n →
+            Fs ⊆ Finset.Icc 1 n →
+              ∀ (a0 : ℕ),
+                1 ≤ a0 →
+                  a0 ≤ n →
+                    (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) →
+                      a0 ∉ Fs → ∃ t, F t 0 ∧ eSet t = Es ∧ fSet t = Fs ∧ size t = minB p q Es Fs a0
+@isLeast_unbalanced : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ) (Es Fs : Finset ℕ),
+          Es ⊆ Finset.Icc 1 n →
+            Fs ⊆ Finset.Icc 1 n → IsLeast {s | ∃ t, size t = s ∧ ¬F t 0 ∧ eSet t = Es ∧ fSet t = Fs} (minU p q Es Fs)
+@isLeast_balanced_all : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ),
+          ∀ Es ⊆ Finset.Icc 1 n,
+            IsLeast {s | ∃ t, size t = s ∧ 0 < s ∧ F t 0 ∧ eSet t = Es ∧ fSet t = Finset.Icc 1 n} (q * p ^ Es.card)
+@isLeast_balanced : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ) (Es Fs : Finset ℕ),
+          Es ⊆ Finset.Icc 1 n →
+            Fs ⊆ Finset.Icc 1 n →
+              ∀ (a0 : ℕ),
+                1 ≤ a0 →
+                  a0 ≤ n →
+                    (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) →
+                      a0 ∉ Fs → IsLeast {s | ∃ t, size t = s ∧ F t 0 ∧ eSet t = Es ∧ fSet t = Fs} (minB p q Es Fs a0)
+@zeroAtW_indW : ∀ {M : ℕ} [inst : NeZero M] (A : Finset (ZMod M)) (d : ℕ), ZeroAtW (indW A) d ↔ Pqr.ZeroAt A d
+@maskW_indW : ∀ {M : ℕ} [inst : NeZero M] (A : Finset (ZMod M)), maskW (indW A) = Pqr.mask A
+@zeroAtW_iff_cyclotomic_dvd : ∀ {M : ℕ} [inst : NeZero M] (w : ZMod M → ℕ) (d : ℕ),
+  d ∣ M → (ZeroAtW w d ↔ Polynomial.cyclotomic d ℤ ∣ maskW w)
+@treeOfW_indW : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)] (A : Finset (ZMod (p ^ n * q))),
+  treeOfW (indW A) = treeOf A
+@size_treeOfW : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)] (w : ZMod (p ^ n * q) → ℕ),
+  size (treeOfW w) = ∑ a, w a
+@E_treeOfW : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)] (w : ZMod (p ^ n * q) → ℕ) (ℓ : ℕ),
+  1 ≤ ℓ → ℓ ≤ n → (E (treeOfW w) ℓ ↔ ZeroAtW w (p ^ ℓ))
+@F_treeOfW_zero : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)] (w : ZMod (p ^ n * q) → ℕ),
+  F (treeOfW w) 0 ↔ ZeroAtW w q
+@F_treeOfW : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q → ∀ (w : ZMod (p ^ n * q) → ℕ) (ℓ : ℕ), 1 ≤ ℓ → ℓ ≤ n → (F (treeOfW w) ℓ ↔ ZeroAtW w (p ^ ℓ * q))
+@treeOfW_surjective : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q → Function.Surjective treeOfW
+minsize_unbalanced_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (Es Fs : Finset ℕ),
+      Es ⊆ Finset.Icc 1 n →
+        Fs ⊆ Finset.Icc 1 n →
+          IsLeast {s | ∃ w, ∑ a, w a = s ∧ ¬Polynomial.cyclotomic q ℤ ∣ maskW w ∧ levelsEW w = Es ∧ levelsFW w = Fs}
+            (minU p q Es Fs)
+minsize_balanced_all_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ Es ⊆ Finset.Icc 1 n,
+      IsLeast
+        {s |
+          ∃ w,
+            ∑ a, w a = s ∧ 0 < s ∧ Polynomial.cyclotomic q ℤ ∣ maskW w ∧ levelsEW w = Es ∧ levelsFW w = Finset.Icc 1 n}
+        (q * p ^ Es.card)
+minsize_balanced_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (Es Fs : Finset ℕ),
+      Es ⊆ Finset.Icc 1 n →
+        Fs ⊆ Finset.Icc 1 n →
+          ∀ (a0 : ℕ),
+            1 ≤ a0 →
+              a0 ≤ n →
+                (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) →
+                  a0 ∉ Fs →
+                    IsLeast
+                      {s | ∃ w, ∑ a, w a = s ∧ Polynomial.cyclotomic q ℤ ∣ maskW w ∧ levelsEW w = Es ∧ levelsFW w = Fs}
+                      (minB p q Es Fs a0)

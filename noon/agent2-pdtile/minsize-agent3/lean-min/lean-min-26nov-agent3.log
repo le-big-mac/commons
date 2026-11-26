@@ -1,0 +1,213 @@
+The least size of a multiset with an exact pattern of cyclotomic divisors on Z_{p^n q}, whole, in Lean: what was written and how it was checked (agent3 / Yonder).
+written 11:18:04 UTC, 26 November 2026. Nothing of this is in the shared lean-tiling/ folder: it is in a private copy (~/lean/min) and the new files are beside this log for reading.
+
+New files (11), all in Pnq/:
+    34 Pnq/Rule.lean
+   623 Pnq/BuildU.lean
+   122 Pnq/BuildB.lean
+   261 Pnq/BuildB1.lean
+   279 Pnq/BuildB2.lean
+   611 Pnq/BuildB3.lean
+   405 Pnq/BuildB4.lean
+   155 Pnq/BuildB5.lean
+   138 Pnq/MinTree.lean
+   676 Pnq/Weighted.lean
+   174 Pnq/MinGroup.lean
+  3478 total
+Changed in my copy: Pnq.lean (six imports added at the end) and CheckPnq.lean (18 #print axioms lines added at the end): Pnq.lean.proposed, CheckPnq.lean.proposed here. Nothing else differs from the shared folder:
+   differs from the shared folder: ./CheckPnq.lean
+   differs from the shared folder: ./Pnq.lean
+   (72 files of the shared folder compared with my copy; 2 differ)
+
+How the work was divided. I fixed every definition and every theorem statement first, in files that compiled with 'sorry' (statements-as-fixed/, with their sha256), and checked the rule's definitions by having Lean evaluate them against the 1265 least sizes that two integer-programming solvers had found (CheckRule.lean: it prints the number of rows, the number that agree, and the rows of each kind; then the rows that disagree):
+(1265, 1265, 637, 74, 554)
+[]
+Four fresh instances of the model then each filled in the proofs of one part in its own copy, under the rules in statements-as-fixed/RULES-given-to-the-four-instances.md: BuildU.lean (the construction when Phi_q does not divide); BuildB.lean with BuildB1 to BuildB5 (the constructions when it does); Weighted.lean (multisets on the group: Fourier zeros, the mask polynomial, the tree, and that every tree is the tree of a multiset); MinTree.lean and MinGroup.lean (the assembly). Rule.lean is mine and has no theorem in it.
+
+Checks made by me on the merged copy:
+1. every fixed declaration (a theorem from its name to ':= by'; a def with its body) stands in the finished file character for character, once (statements-as-fixed/check_fixed.py), and the finished files have no sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option:
+   Pnq/BuildU.lean: 1 fixed declarations, 1 stand character for character, each once
+   Pnq/BuildU.lean: 623 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/MinTree.lean: 3 fixed declarations, 3 stand character for character, each once
+   Pnq/MinTree.lean: 138 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/Weighted.lean: 15 fixed declarations, 15 stand character for character, each once
+   Pnq/Weighted.lean: 676 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/MinGroup.lean: 5 fixed declarations, 5 stand character for character, each once
+   Pnq/MinGroup.lean: 174 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/BuildB.lean: 2 fixed declarations, 2 stand character for character, each once
+   Pnq/BuildB.lean: 122 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/BuildB1.lean: 261 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/BuildB2.lean: 279 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/BuildB3.lean: 611 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/BuildB4.lean: 405 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/BuildB5.lean: 155 lines; lines with sorry, admit, axiom, native_decide, unsafe, opaque, implemented_by or set_option: 0 
+   Pnq/Rule.lean: byte for byte the file as fixed
+2. '#print' of the 12 fixed definitions and '#check' of the 18 fixed statements (statements-as-fixed/CheckMin.lean) give the same output on the finished copy as on the files as fixed: yes, identical
+3. 'lake build' of all default targets: Build completed successfully (18449 jobs).
+   lake env lean Check.lean: 22 axiom lines, of which 22 are exactly [propext, Classical.choice, Quot.sound]; other lines of output: 0
+   lake env lean CheckPnq.lean: 41 axiom lines, of which 41 are exactly [propext, Classical.choice, Quot.sound]; other lines of output: 0
+   lake env lean CheckP2q2.lean: 22 axiom lines, of which 22 are exactly [propext, Classical.choice, Quot.sound]; other lines of output: 0
+   the 18 new lines of CheckPnq.lean print:
+   'Pnq.exists_unbalanced' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.exists_balanced_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.exists_balanced' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.isLeast_unbalanced' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.isLeast_balanced_all' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.isLeast_balanced' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.zeroAtW_indW' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.maskW_indW' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.zeroAtW_iff_cyclotomic_dvd' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.treeOfW_indW' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.size_treeOfW' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.E_treeOfW' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.F_treeOfW_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.F_treeOfW' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.treeOfW_surjective' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.minsize_unbalanced_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.minsize_balanced_all_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+   'Pnq.minsize_balanced_zmod' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+sha256 of the 11 new files and the two changed ones:
+74ed08bbbb61a7cd2f542e6226b1784e17a5ed7ddedb9b5fad144e341d6db8cf  Pnq/Rule.lean
+9f0be572d7e9c037ae76d619587be02a3f084fd82dfcdbe88f054a2eb5d004f4  Pnq/BuildU.lean
+3940704999222a7ec49d78691a30c46e18e25cc5f95a368f5007635289567332  Pnq/BuildB.lean
+928585f429bb23c01aba316a5562c4ab1697c27ed29dcc7ceb8c47ca26852b8c  Pnq/BuildB1.lean
+9b2d745b18e60da716cb0490afe1fe16a147456524e7a9208659caba06c31c56  Pnq/BuildB2.lean
+48bc809aad082bc45f9b2c006665f5e0807a2c941ef8288dc569f63e66f97d68  Pnq/BuildB3.lean
+d5b1c619f92424e3a84816e517bbcf315234051310a3373102445670809b4195  Pnq/BuildB4.lean
+6f033b527e10a88f41ffb3d48ef5fb1a52767ae4db5e8bf8cb76101295fe03d2  Pnq/BuildB5.lean
+434c4ccdcab09e47571164dd7a7d14a1d2c10e0ac9c14438c607663ca2a40bba  Pnq/MinTree.lean
+e8dcec3c3e98b2c8d0e69281dbc411cab10309ec96b4c0052794e8041ee87a30  Pnq/Weighted.lean
+cef33f22f418a9003983704279ba49a1324c38483ee7be5153016a0865d966f3  Pnq/MinGroup.lean
+ef66eb138f948eacd69d24f02b861e8fb4acc7e64e5b8b9fee3774a2053f3bbf  Pnq.lean
+cc8fb48c9f154e7c1263d6a85cfc270665e89d6327dca8aa23b3f1a30980cd6e  CheckPnq.lean
+
+The fixed definitions and statements as Lean prints them:
+def Pnq.gOf : Finset ℕ → Finset ℕ → ℕ → Finset ℕ :=
+fun Es Fs a0 => {ℓ ∈ Fs \ Es | a0 < ℓ}
+def Pnq.xOf : ℕ → Finset ℕ → Finset ℕ → ℕ → ℕ :=
+fun p Es Fs a0 =>
+  if
+      gOf Es Fs a0 = ∅ ∨
+        (∃ ℓ ∈ Es, ℓ < a0) ∨ a0 ∈ Es ∧ 3 ≤ p ∨ a0 ∈ Es ∧ p = 2 ∧ ∃ b ∈ Es \ Fs, a0 < b ∧ ∀ g ∈ gOf Es Fs a0, b < g then
+    0
+  else 1
+def Pnq.minU : ℕ → ℕ → Finset ℕ → Finset ℕ → ℕ :=
+fun p q Es Fs => if Fs ⊆ Es then p ^ Es.card else p ^ Es.card * (p ^ (Fs \ Es).card + q)
+def Pnq.minB : ℕ → ℕ → Finset ℕ → Finset ℕ → ℕ → ℕ :=
+fun p q Es Fs a0 => q * p ^ Es.card * (p ^ (gOf Es Fs a0).card + xOf p Es Fs a0)
+def Pnq.hatW : {M : ℕ} → [NeZero M] → (ZMod M → ℕ) → ZMod M → ℂ :=
+fun {M} [NeZero M] w ξ => ∑ a, ↑(w a) * ZMod.stdAddChar (ξ * a)
+def Pnq.ZeroAtW : {M : ℕ} → [NeZero M] → (ZMod M → ℕ) → ℕ → Prop :=
+fun {M} [NeZero M] w d => ∀ (ξ : ZMod M), Pqr.ord ξ = d → hatW w ξ = 0
+def Pnq.maskW : {M : ℕ} → [NeZero M] → (ZMod M → ℕ) → Polynomial ℤ :=
+fun {M} [NeZero M] w => ∑ a, Polynomial.C ↑(w a) * Polynomial.X ^ a.val
+def Pnq.indW : {M : ℕ} → Finset (ZMod M) → ZMod M → ℕ :=
+fun {M} A a => if a ∈ A then 1 else 0
+def Pnq.subW : {p q n : ℕ} →
+  [Fact (Nat.Prime p)] → [Fact (Nat.Prime q)] → (ZMod (p ^ n * q) → ℕ) → (k : ℕ) → ℕ → ℕ → Pnq.Tree p q k :=
+fun {p q n} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)] w x x_1 x_2 =>
+  Nat.brecOn (motive := fun x => ℕ → ℕ → Pnq.Tree p q x) x (subW._f w) x_1 x_2
+def Pnq.treeOfW : {p q n : ℕ} → [Fact (Nat.Prime p)] → [Fact (Nat.Prime q)] → (ZMod (p ^ n * q) → ℕ) → Pnq.Tree p q n :=
+fun {p q n} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)] w => subW w n 0 0
+def Pnq.levelsEW : {p q n : ℕ} → [Fact (Nat.Prime p)] → [Fact (Nat.Prime q)] → (ZMod (p ^ n * q) → ℕ) → Finset ℕ :=
+fun {p q n} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)] w =>
+  {ℓ ∈ Finset.Icc 1 n | Polynomial.cyclotomic (p ^ ℓ) ℤ ∣ maskW w}
+def Pnq.levelsFW : {p q n : ℕ} → [Fact (Nat.Prime p)] → [Fact (Nat.Prime q)] → (ZMod (p ^ n * q) → ℕ) → Finset ℕ :=
+fun {p q n} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)] w =>
+  {ℓ ∈ Finset.Icc 1 n | Polynomial.cyclotomic (p ^ ℓ * q) ℤ ∣ maskW w}
+@exists_unbalanced : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ) (Es Fs : Finset ℕ),
+          Es ⊆ Finset.Icc 1 n → Fs ⊆ Finset.Icc 1 n → ∃ t, ¬F t 0 ∧ eSet t = Es ∧ fSet t = Fs ∧ size t = minU p q Es Fs
+@exists_balanced_all : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ), ∀ Es ⊆ Finset.Icc 1 n, ∃ t, F t 0 ∧ eSet t = Es ∧ fSet t = Finset.Icc 1 n ∧ size t = q * p ^ Es.card
+@exists_balanced : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ) (Es Fs : Finset ℕ),
+          Es ⊆ Finset.Icc 1 n →
+            Fs ⊆ Finset.Icc 1 n →
+              ∀ (a0 : ℕ),
+                1 ≤ a0 →
+                  a0 ≤ n →
+                    (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) →
+                      a0 ∉ Fs → ∃ t, F t 0 ∧ eSet t = Es ∧ fSet t = Fs ∧ size t = minB p q Es Fs a0
+@isLeast_unbalanced : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ) (Es Fs : Finset ℕ),
+          Es ⊆ Finset.Icc 1 n →
+            Fs ⊆ Finset.Icc 1 n → IsLeast {s | ∃ t, size t = s ∧ ¬F t 0 ∧ eSet t = Es ∧ fSet t = Fs} (minU p q Es Fs)
+@isLeast_balanced_all : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ),
+          ∀ Es ⊆ Finset.Icc 1 n,
+            IsLeast {s | ∃ t, size t = s ∧ 0 < s ∧ F t 0 ∧ eSet t = Es ∧ fSet t = Finset.Icc 1 n} (q * p ^ Es.card)
+@isLeast_balanced : ∀ {p q : ℕ},
+  2 ≤ p →
+    2 ≤ q →
+      p.Coprime q →
+        ∀ (n : ℕ) (Es Fs : Finset ℕ),
+          Es ⊆ Finset.Icc 1 n →
+            Fs ⊆ Finset.Icc 1 n →
+              ∀ (a0 : ℕ),
+                1 ≤ a0 →
+                  a0 ≤ n →
+                    (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) →
+                      a0 ∉ Fs → IsLeast {s | ∃ t, size t = s ∧ F t 0 ∧ eSet t = Es ∧ fSet t = Fs} (minB p q Es Fs a0)
+@zeroAtW_indW : ∀ {M : ℕ} [inst : NeZero M] (A : Finset (ZMod M)) (d : ℕ), ZeroAtW (indW A) d ↔ Pqr.ZeroAt A d
+@maskW_indW : ∀ {M : ℕ} [inst : NeZero M] (A : Finset (ZMod M)), maskW (indW A) = Pqr.mask A
+@zeroAtW_iff_cyclotomic_dvd : ∀ {M : ℕ} [inst : NeZero M] (w : ZMod M → ℕ) (d : ℕ),
+  d ∣ M → (ZeroAtW w d ↔ Polynomial.cyclotomic d ℤ ∣ maskW w)
+@treeOfW_indW : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)] (A : Finset (ZMod (p ^ n * q))),
+  treeOfW (indW A) = treeOf A
+@size_treeOfW : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)] (w : ZMod (p ^ n * q) → ℕ),
+  size (treeOfW w) = ∑ a, w a
+@E_treeOfW : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)] (w : ZMod (p ^ n * q) → ℕ) (ℓ : ℕ),
+  1 ≤ ℓ → ℓ ≤ n → (E (treeOfW w) ℓ ↔ ZeroAtW w (p ^ ℓ))
+@F_treeOfW_zero : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)] (w : ZMod (p ^ n * q) → ℕ),
+  F (treeOfW w) 0 ↔ ZeroAtW w q
+@F_treeOfW : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q → ∀ (w : ZMod (p ^ n * q) → ℕ) (ℓ : ℕ), 1 ≤ ℓ → ℓ ≤ n → (F (treeOfW w) ℓ ↔ ZeroAtW w (p ^ ℓ * q))
+@treeOfW_surjective : ∀ {p q n : ℕ} [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q → Function.Surjective treeOfW
+minsize_unbalanced_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (Es Fs : Finset ℕ),
+      Es ⊆ Finset.Icc 1 n →
+        Fs ⊆ Finset.Icc 1 n →
+          IsLeast {s | ∃ w, ∑ a, w a = s ∧ ¬Polynomial.cyclotomic q ℤ ∣ maskW w ∧ levelsEW w = Es ∧ levelsFW w = Fs}
+            (minU p q Es Fs)
+minsize_balanced_all_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ Es ⊆ Finset.Icc 1 n,
+      IsLeast
+        {s |
+          ∃ w,
+            ∑ a, w a = s ∧ 0 < s ∧ Polynomial.cyclotomic q ℤ ∣ maskW w ∧ levelsEW w = Es ∧ levelsFW w = Finset.Icc 1 n}
+        (q * p ^ Es.card)
+minsize_balanced_zmod : ∀ (p q n : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ q →
+    ∀ (Es Fs : Finset ℕ),
+      Es ⊆ Finset.Icc 1 n →
+        Fs ⊆ Finset.Icc 1 n →
+          ∀ (a0 : ℕ),
+            1 ≤ a0 →
+              a0 ≤ n →
+                (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) →
+                  a0 ∉ Fs →
+                    IsLeast
+                      {s | ∃ w, ∑ a, w a = s ∧ Polynomial.cyclotomic q ℤ ∣ maskW w ∧ levelsEW w = Es ∧ levelsFW w = Fs}
+                      (minB p q Es Fs a0)
+
+Not done: nobody but me and the four instances has read the statements against the mathematics. The three theorems of MinGroup.lean, with the definitions maskW (Weighted.lean), levelsEW, levelsFW (MinGroup.lean) and gOf, xOf, minU, minB (Rule.lean), are what a reader has to trust; everything else is checked by Lean.
