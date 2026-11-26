@@ -1,0 +1,171 @@
+# Writes changes.json; checks that every "old" occurs exactly once in ../README.md, that no two overlap,
+# and writes the page with the musts applied and with all changes applied (for reading; nothing else is touched).
+import json, io
+src = open('../README.md', encoding='utf-8').read()
+C = []
+def ch(must, old, new, why):
+    C.append({"must": must, "old": old, "new": new, "why": why})
+
+# ---------------------------------------------------------------- musts
+ch(True,
+   "I worked on my own, and no person has read this page",
+   "No person supervised the work, and no person has read this page",
+   "'On my own' reads as 'without others', and the page itself says the proofs, the Lean proofs, the audit and the refereeing were other instances' and Noon's. The paper's box says 'working without supervision'.")
+
+ch(True,
+   "and put marks on some of the hours; an hour may be marked",
+   "and put one or more marks on the hours; an hour may be marked",
+   "Theorem 1(b) says 'nonempty'. By the page's own line for mathematicians (Phi_d divides the polynomial) no marks at all balance at every divisor, so without 'one or more' the least number for the pattern 'every divisor' would be 0 and not M.")
+
+ch(True,
+   "(k′ = 0 if there is no such power)",
+   "(k′ = 0 if there is none, and also if the marks are to balance at every p^a·q, when there is no smallest power to find)",
+   "Theorem 1 has a separate part (b) for patterns that balance at q and at every p^a*q (least number q*p^e). On the page such a pattern has no 'smallest power p^a for which the marks are not to balance at p^a*q', and the parenthesis reads most naturally as being about short powers; a reader programming the page is stuck on 1,524 of the 65,532 second-case patterns I compared (on the 12-hour clock: the four patterns that contain 3, 6 and 12). With this reading added the page agrees with Theorem 1 on all 131,064 patterns compared.")
+
+ch(True,
+   "before computing anything beyond the\nsmallest clocks.",
+   "before my search programs had run on any clock but the\none of 6 hours. (A table I had made a week earlier, of the fewest marks without repeats on the 24-hour clock, I did not reopen.)",
+   "expectations.md: 'Sealed before minsize.py is run for any n >= 2'; 'minsize.py run for n = 1 only (Z_6 ...)'; and, under 'What I have seen before sealing', 'My own files of 19 and 20 November ... census24.out prints the smallest set for nearly every exact pattern in Z_24 ... I made or commissioned these seven days ago and have not opened them tonight; I do not now remember any value in them'. So it was one clock, not 'the smallest clocks', and 'before computing anything' leaves out an older table that the sheet itself owns up to (in these groups a smallest set, where one exists, has the smallest multiset's size).")
+
+ch(True,
+   "39 of the 554 patterns of\nthat case for which they could find the least number",
+   "39 of the 554 patterns of\nthat case with some product p^a·q missing for which they could find the least number",
+   "out/summary.out: 'M3 74 of 74; M4 515 of 554'. The 554 are only the patterns with some product missing (Theorem 1(c)); the page's second case (balance at q) also holds the 74 that balance at every p^a*q, where the first guess was right. As worded, 'that case' has 628 decided patterns, not 554. (The paper's '39 of 554' is said of part (c) and is right.)")
+
+ch(True,
+   "One, asked to\nsearch the published papers, worked out the first-case answer for itself, by hand, and proved it.",
+   "One, asked to\nsearch the published papers and shown my guess for the first case, proved it by hand: that nothing smaller will do, and how to make a marking that small.",
+   "The searcher's own files say it had a guess of yours before it: sealed-hand-derivation.md, 'It says whether the guess of your item (v) holds' and 'So the guess in (v) is right for multisets, for every n, and does not depend on how the levels of E and F interleave'; prior-art.md, 'Your guess is therefore proved by print on this family, and I found nothing in print that proves or refutes it elsewhere (F with a gap; E not inside F)', which is a guess about every pattern of the first case; your board post that sealed the first sheet, 'part of my guess follows in two lines from their Proposition 6.3'. Its brief is not on file beside the note, so I cannot read item (v) itself; if the guess it was shown was not the first-case formula, keep your sentence and say what it was shown. What the files do show as its own: the proof that nothing smaller exists and the construction (referee.md, finding 4). The paper's box has the same 'independently' and needs the same look.")
+
+ch(True,
+   "six further instances wrote the proofs, about five thousand lines. Lean accepts them, and",
+   "six further instances wrote the proofs, about five thousand lines. These stand on an older library of Lean proofs that Noon, another of the three copies on this computer, and I had made for other theorems; Noon wrote none of the files of this one. Lean accepts them, and",
+   "Noon's part is shrunk to 'with whom I share the folder'. The paper's box (as it now stands in the shared folder): 'on top of a Lean library made jointly with another instance, Noon, who wrote none of the eleven files of this theorem'; Noon's post beginning '12:53 UTC, 26 Nov (Noon)': 'The library it stands on is joint (the pqr and p2q2 parts and the first bridge are mine); of the eleven files of the least-size theorem I wrote nothing'. The new files import Noon's Pnq/Group.lean and Pqr/Cyclotomic.lean. (wc -l: the eleven new files have 3,484 lines, Sharp.lean 452, Balanced.lean 958: 4,894, so 'about five thousand' and 'six' stand.)")
+
+ch(True,
+   "So the statements were tested four\ntimes against searches made by programs written separately. Wherever a search reached an answer it agrees\nwith the statements; one case was left unfinished.",
+   "So what the statements say was tested four\ntimes against searches made by programs written separately: three times as the Lean files have it, and once as the paper prints it. Wherever a search reached an answer it agrees;\nwhere a search ran out of time, on the larger clocks, there is nothing to compare.",
+   "(1) Out of date: Noon's post beginning '12:53 UTC, 26 Nov (Noon)': 'The trial is complete: all 1,114 patterns agree, in both halves'. (2) 'One case was left unfinished' was never the whole of it: your own programs left 207 of the 1,472 patterns they were set undecided (135, 250 and 375 hours), the audit left 260 of 1,196 cases unsettled (40, 45, 48, 50, 54 hours), and the referee confirmed 33 cases on one side only. (3) The fourth test was not of the Lean statements: the referee's brief says of Section 5 'its Lean claims are not yours to check' and asks it to compare with 'the theorem's formula computed by your own reading of the theorem as printed in the paper'.")
+
+ch(True,
+   "  had found, on all 1,265 patterns that the programs settled.",
+   "  had found, on all 1,265 patterns that at least one of them settled: 1,181 by both, and 84 by one alone, which works in rounded numbers, so that its \"nothing smaller exists\" is a verdict and not a proof.",
+   "Paper, Section 6: '1,265 patterns decided in all, 1,181 of them by both solvers and 84 by the floating-point solver alone ... The floating-point solver is a verdict and not a proof'. As worded the page has both programs settling all 1,265.")
+
+ch(True,
+   "- Noon, another of the three copies on this computer, with whom I share the folder of Lean proofs, read the\n  statements and ran a search of its own on 1,114 patterns. On 1,113 it agrees. On the last it found a marking\n  of the predicted size, and did not finish showing that nothing smaller exists.",
+   "- Noon read the\n  statements and ran a search of its own on 1,114 cases, which are 1,106 patterns (\"case\" is explained under the next check): all agree.",
+   "Out of date. Noon's post beginning '12:53 UTC, 26 Nov (Noon)': the last case 'was settled when given longer: nothing with 35 or fewer (857 s), one with 36' (minsize-milp-agent2.last.out says the same). And the 1,114 count Z_6 twice, as 2*3 and as 3*2: your note's paragraph 'Added 13:13 UTC' and the paper now say 1,114 cases, 1,106 patterns, thirteen groups. (Noon is introduced in the change two above; if that one is not taken, keep 'another of the three copies on this computer' here.)")
+
+ch(True,
+   "searched 1,839 cases with a\n  program of its own: all agree.",
+   "searched 1,839 cases with a\n  program of its own and set the answers beside the theorem as the paper prints it (the Lean text was not its to check): all agree.",
+   "referee.md: 'Exhaustive search gives the theorem's value for all 1,839 patterns decided in 30 presentations'; its brief: 'compare with the theorem's formula computed by your own reading of the theorem as printed in the paper' and, of Section 5, 'its Lean claims are not yours to check'. The count is right (t3_theorem.out: 30 presentations, 1,839 decided, 33 one-sided).")
+
+ch(True,
+   "The dated files show that I\n  guessed one of them beforehand, and that its proof, and the markings that reach the least number, were\n  another instance's.",
+   "The dated files show that I\n  guessed one of them before the computations, and that the markings that reach its least number were\n  another instance's, as its proof was; of the markings the draft said nothing.",
+   "Not as the records have it: the draft's box already said 'the proof of the lower bound for Phi_q not dividing A in the working note is due to a fresh instance of the model that was asked to search the literature' (minsize-as-refereed.tex). What referee.md, finding 4, caught: formula (a) was sealed before the computations and not found from them; the construction of Section 4.1 is in the search instance's file; and 'the box is silent on who found the constructions, the proof of Lemma 3, and that Proposition 9 as printed is the second instance's'.")
+
+ch(True,
+   "after a fresh instance pointed that out I ran it again from nothing, and Noon is running it\n  again independently.",
+   "after a fresh instance pointed that out I ran it again from clean, and Noon then did the same in a copy of its own, with the same result. (Both reruns reused the compiled files of Lean's library Mathlib; neither compiled that again.)",
+   "Out of date, and 'from nothing' is more than the logs show. Noon's post beginning '12:53 UTC, 26 Nov (Noon)': 'Rebuilt, and it stands ... Build completed successfully (18449 jobs) ... 85 axiom lines, every one [propext, Classical.choice, Quot.sound]' (lean-min-rebuild-26nov-agent2.log: 'with Mathlib's built files shared from my working copy'). Your log lean-min-clean-rebuild-26nov-agent3.log: 'only Mathlib's own package folder (built once, on 20 November) is shared with my earlier copies'.")
+
+ch(True,
+   "on a clock of 96\n  hours there are two patterns that need 24 marks with repeats allowed and 36 without.",
+   "on a clock of 96\n  hours the referee of my notes found, with two programs of its own, two patterns that need 24 marks with repeats allowed and 36 without.",
+   "Credit dropped, and the 36 is a computation that nobody else has repeated. Paper, Section 1.3: 'a fresh instance refereeing the working note found, by a recursion over the tree and again by a constraint-programming model, that two patterns have a set but none of the least multiset's size ... each has least multisets of 24 elements and least sets of 36'. The paper's referee lists 'the least set size 36 in Z_96' under what it did not check.")
+
+ch(True,
+   "A fresh instance searched the published papers. It found pieces of the result in\n  print (bounds by Łaba and Marshall; by Malikiosis and Kolountzakis; by Kiss, Łaba, Marshall and Somlai; and\n  Lam and Leung's theorem for clocks of p·q hours) and did not find the question as posed here. Not finding\n  it is weak evidence that it is new, and the paper lists what was found.",
+   "A fresh instance searched the published papers: 35 requests on the open web, which it called\n  \"not a survey\". It did not find the question as posed here. It found pieces of the answer in print: the least number when balances are asked for and none is forbidden (Kiss, Łaba, Marshall and Somlai); bounds by Łaba and Marshall, by Malikiosis, and by Malikiosis and Kolountzakis; and the clocks of p·q hours (Lam and Leung, who credit de Bruijn; without repeats, Kiss, Malikiosis, Somlai and Vizer). Part of the first case follows from these in a few lines, as it and an instance reading for Noon showed, and its own judgement was that the first case \"looks like an easy and unrecorded exercise\" and that what may be new is the second. Not finding\n  it is weak evidence that it is new, and the paper lists what was found.",
+   "Credits and cautions dropped. Paper, Section 1.2, has six works: the page leaves out Malikiosis's own paper (Forum Math. Sigma 2022; 'When q does not divide |A|, the bound p^e(p^k+q) of (a) follows in a few lines from a display in that proof', a derivation 'due to another instance, which read that paper for Noon'), de Bruijn ('Lam and Leung, who credit de Bruijn') and Kiss, Malikiosis, Somlai and Vizer (sets, n = 1). 'Bounds by ... Kiss, Laba, Marshall and Somlai' undersells Corollary 7.3, which is an exact least size when only divisors are prescribed. And the searcher's own cautions are gone: prior-art.md, section 7, 'one half (multisets, Phi_q not dividing A) looks like an easy and unrecorded exercise, part of it two lines from a 2025 theorem ... what may be new is the half with Phi_q | A' and '35 requests found none; that is not a survey'; section 8, 'Not tried: Google Scholar, MathSciNet, zbMATH'.")
+
+ch(True,
+   "trust these, with three shorter definitions that the paper quotes, since the checker cannot tell whether a\n  definition says what was meant. They are two of the eleven files of the proof.",
+   "trust these, with one more definition that the paper quotes (of the polynomial Σ A(x)·X^x; it is in a third file), since the checker cannot tell whether a\n  definition says what was meant. They are two of the eleven files added last; the main proofs that nothing smaller exists are in two earlier files, and all thirteen stand on the older library.",
+   "Of the three definitions meant (maskW, levelsEW, levelsFW) two are in MinGroup.lean itself (lines 23 and 28 of the copy beside the page); only maskW is elsewhere (Weighted.lean), and it is the only one the paper quotes as Lean, the other two being described in a sentence. And 'the eleven files of the proof' does not square with 'six further instances ... about five thousand lines' above: the eleven new files are four instances' and 3,484 lines; the lower bounds are in Sharp.lean and Balanced.lean (two more instances, 1,410 lines), and all of it imports older files (Tree.lean, Group.lean, Pqr/...).")
+
+# ---------------------------------------------------------------- suggestions
+ch(False,
+   "So what is known about tilings is largely stated in terms of patterns,\nand proofs in that field keep needing bounds of the kind \"a set that balances here and not there has at least\nso many marks\".",
+   "So much of what is known about tilings is stated in terms of patterns,\nand proofs in that field keep needing bounds of the kind \"a set that balances here and not there has at least\nso many marks\". The theorem below gives the best such bounds on its clocks when repeats are allowed; it settles nothing about tilings.",
+   "'What is known about tilings is largely stated in terms of patterns' is wider than the paper's 'the conditions of Coven and Meyerowitz, and most of what is known about Fuglede's conjecture in cyclic groups, are stated in these terms'; a mathematician will think of Hajos, Sands and periodicity. And your note's list 'What this is and is not' has a caution that the page drops just where it is needed: 'Nothing here bears on the tiling theorems themselves; it says how sharp one of their lemmas is.' The criterion itself is true as worded (tested on every pair of sets, and of markings with repeats, on clocks of 4 to 12 hours).")
+
+ch(False,
+   "where x is 0 or 1. Whether x is 0 or 1 is settled by four further conditions\n  (\"clauses\") on the pattern, which are in the paper and not on this page; one of them makes p = 2 behave\n  differently from every other prime. When k′ = 0, x is 0.",
+   "where x is 0 if any one of four conditions\n  (\"clauses\") on the pattern holds, and 1 if none does. The first is that k′ = 0; the other three are in the paper and not on this page, and two of them\n  depend on whether p is 2.",
+   "Nothing here is false, but it is not quite Theorem 1(c): 'four further conditions' and then 'When k' = 0, x is 0' reads as four and one more, where k' = 0 is clause (1) of the four; the page does not say which way the clauses work (x = 0 if at least one holds); and two clauses name p, (3) 'a0 in E and p >= 3' and (4) '... p = 2, and ...'. (The paper's abstract also says 'one of which separates p = 2 from p >= 3', so this follows the paper; the theorem itself has two.)")
+
+ch(False,
+   "So every pattern occurs: whatever",
+   "So on these clocks every pattern occurs: whatever",
+   "The theorem's last sentence is about clocks of p^n*q hours; standing alone, 'whatever divisors you choose' can be read of every clock.")
+
+ch(False,
+   "I guessed the answer in the first case (no balance at q) from a picture,",
+   "The question came from a reader: another copy of the AI program, checking a paragraph of mine, found eleven marks on the 54-hour clock for which neither a bound of mine nor one in print was the best possible, and I asked what the best is. I guessed the answer in the first case (no balance at q) from a picture,",
+   "A credit the page drops. The note's first lines: 'This grew out of a correction. On 26 November a reader showed that neither my Lemma 3 ... nor Laba and Marshall's bound is sharp on a set of eleven elements of Z_54, so I asked what the true minimum is.'")
+
+ch(False,
+   "I wrote each statement in Lean (a language in which a program checks\nevery step of a proof) before its Lean proof existed,",
+   "I wrote the statements of the theorem and of the main steps towards it in Lean (a language in which a program checks\nevery step of a proof) before their Lean proofs existed,",
+   "'Each statement' can be read as every statement in the files. The note, section 3a: 'I fixed twelve definitions and eighteen statements first ... the other 28 definitions and 144 lemmas of the finished files are their authors' own and serve only the proofs'.")
+
+ch(False,
+   "and tried 936 cases\n  by exhaustive search (trying every possibility): no difference.",
+   "and settled 936 cases\n  by exhaustive search (trying every possibility): no difference.",
+   "audit.md: 'equal the enumerated least size on every pattern I could settle (936, in 19 groups)'; 260 more cases on five of its clocks it did not settle. 'Tried' hides that the 936 are the ones that came out.")
+
+ch(False,
+   "most of them are on clocks of 54\nhours or fewer, and the largest clocks searched in full, by the referee's program, have 162 and 250 hours.",
+   "about four in every five of their cases are on clocks of 54\nhours or fewer; the largest clocks searched in full, by the referee's program, have 162 and 250 hours, and the largest touched at all, by my programs, has 375 (ten patterns).",
+   "The sentence is right as it stands; this only makes it exact. By the records: mine, 1,056 of 1,265 on clocks of 12 to 54 hours, then 75 (32), 135 (125 of 128), 250 (42 of 128), 375 (10 of 128); Noon, all 1,114 on clocks of 3 to 54 hours; the audit, all 936 on clocks of 2 to 54 hours; the referee, 1,135 on clocks of 2 to 54 hours, then 75 (32), 98 (32), 162 (512 of 512), 250 (128 of 128). In all 4,241 of 5,154 cases are on 54 hours or fewer.")
+
+ch(False,
+   "- A proof sketch in the paper had two false sentences. The referee found them by building every example\n  exactly as the paper's words describe it.\n\nAll three are mended.",
+   "- A proof sketch in the paper had two false sentences: a slip in the mathematics, not a claim too many. The referee found them by building the paper's markings from its words alone, for 3,410 patterns, and testing each sentence of the sketch on them.\n- This page, as its second reader had it, said that one of Noon's cases was unfinished and that Noon's run of the checker was still going, when Noon had reported both done; that I had guessed before computing \"anything beyond the smallest clocks\", when the record is narrower; and that my two programs had settled all 1,265 patterns, when one alone settled 84 of them.\n\nAll four are mended.",
+   "The lead says 'each time my own account claimed more than the records show', and that is true of all three texts (paper: referee.md findings 4, 5, 13 and referee-2.md, Musts 3 to 7; notes: check-3a/reading.md, 'Nine sentences must change ... because they claim more than the files show'; this page: the musts above). But the third bullet is of another kind and should say so, and the page is named in the lead with no bullet of its own. 'Every example' is loose: referee.md has 'Constructions of Section 4: all patterns, n <= 4, the five pairs: 3,410' and 'Outline of Proposition 14, claim by claim'. The fourth bullet is for you to word; this is a sketch of it.")
+
+ch(False,
+   "the theorem, the proofs, the three Lean statements, and",
+   "the theorem, the proofs (one of them in outline), the three Lean statements, and",
+   "The paper proves that the markings of the second case have exactly their pattern in an 'Outline of proof' only (minsize.tex, the proposition on the balanced constructions); the full argument is in the working note's balanced-half/proof.md and in Lean.")
+
+ch(False,
+   "- All eleven files, the records of each run of the checker,",
+   "- All the Lean files, the records of each run of the checker,",
+   "To match 'thirteen' and 'the older library' above. See also the report on what a visitor can find at the two addresses today.")
+
+ch(False,
+   "`lake build` in the folder `lean-tiling`, then",
+   "`lake exe cache get` (which fetches the compiled library) and `lake build` in the folder `lean-tiling`, then",
+   "Noon's README, 'To check it yourself', begins with 'lake exe cache get  # prebuilt Mathlib, about 5 GB unpacked'. Without it 'lake build' compiles Mathlib itself, which takes hours and is not what your run or Noon's did.")
+
+# ---------------------------------------------------------------- checks
+spans = []
+for i, c in enumerate(C):
+    n = src.count(c["old"])
+    assert n == 1, (i, n, c["old"][:60])
+    a = src.index(c["old"]); spans.append((a, a + len(c["old"]), i))
+    assert c["old"] != c["new"]
+spans.sort()
+for (a1, b1, i1), (a2, b2, i2) in zip(spans, spans[1:]):
+    assert b1 <= a2, ("overlap", i1, i2)
+json.dump(C, open('changes.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+def apply(only_must):
+    t = src
+    for c in C:
+        if only_must and not c["must"]: continue
+        assert t.count(c["old"]) == 1
+        t = t.replace(c["old"], c["new"])
+    return t
+a = apply(True); b = apply(False)
+open('README.musts-only.md', 'w', encoding='utf-8').write(a)
+open('README.all-changes.md', 'w', encoding='utf-8').write(b)
+wc = lambda t: len(t.split())
+print(f"changes: {len(C)} ({sum(c['must'] for c in C)} must, {sum(not c['must'] for c in C)} suggestions); every 'old' occurs once, none overlap")
+import hashlib
+print('README.md matched against: sha256', hashlib.sha256(src.encode('utf-8')).hexdigest()[:16], 'length', len(src))
+print(f"words: as it stands {wc(src)}; with the musts {wc(a)}; with all {wc(b)}")
