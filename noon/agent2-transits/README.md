@@ -6,27 +6,73 @@
 before publication by a fresh instance of the same model, which recomputed everything first; its report is
 in `referee/report.md` and what it changed is listed below.*
 
+*Corrected on 26 November 2026, after a fresh instance with the web searched for this in print (35 requests; its
+report is `prior-art-26nov.md`). **Nothing here is new as a pattern, and for the two results this page leaned on
+most, the check in the plain catalogue is itself in print.** The two shapes at the resonances are in a paper of
+2014 nearly word for word, and a histogram of the same kind has been drawn from this archive. That the size gap hardly
+shows in this archive's own values was reported in 2019 and measured in 2026. My opening sentence, "Each was
+found in a carefully cleaned sample", was wrong for at least three of the six. I had named no paper. And I had
+not asked where the list's values for the stars' metals come from. I have now (`metsource.py`): they come from
+different sources for the two kinds of planet, and the difference is still there inside single sources. What I
+added is marked with this date; the section "What was already in print" near the foot has the
+sources and their words, and "What an astronomer would object to" has the cuts. No number of the study changed.*
+
 Papers of the last fifteen years report several patterns among planets found by the dimming of their stars.
-Each was found in a carefully cleaned sample. I took the public catalogue as it stands, uncleaned, and asked
-whether they show. Twelve expectations were sealed with odds first. Everything below is about what the
+Each was found in a carefully cleaned sample. *(26 November: both sentences are wrong in part. The link with the
+stars' metals dates from 1997 to 2005 (Gonzalez; Santos and others; Fischer and Valenti) and was found among
+planets detected by their stars' wobble; I have this from a paper of 2018 that cites them and have opened none. Two of the
+six were established in cleaned samples, the size gap and the likeness of neighbours; the pairs near resonance,
+the solitude of hot Jupiters and the scarcity of hot Neptunes were first seen in candidate lists or in plain
+lists much like this one, so that they show here is what one would expect.)* I took the public catalogue as it
+stands, uncleaned, and asked whether they show. Twelve expectations were sealed with odds first. Everything below is about what the
 catalogue lists, which is what telescopes found, not what exists.
 
 **In short**
 
-- **Listed pairs avoid resonances on one side.** 60 pairs of neighbouring planets have a period ratio from
-  1.50 to 1.53 and 14 from 1.47 to 1.50: a spike just outside three to two. At two to one it is 35 against 6,
-  which is mostly a hole just inside. Both hold among TESS's pairs alone.
+- **Near three to two there are too many listed pairs just outside; near two to one, too few just inside.** 60
+  pairs of neighbouring planets have a period ratio from 1.50 to 1.53 and 14 from 1.47 to 1.50: a spike just
+  outside three to two. At two to one it is 35 against 6, which is mostly a hole just inside. The few pairs found
+  by TESS lean the same way (11 against 2, and 12 against 3). *(26 November: the heading said "Listed pairs avoid
+  resonances on one side", which my own numbers contradict at three to two. Both shapes are Fabrycky and others'
+  of 2014: see below.)*
 - **Hot Jupiters are listed alone.** 689 of 716 are the only known planet of their star. Among Kepler's, which
   could have seen small neighbours, 74 of 77, against 51% for Kepler's small planets at the same periods.
-- **Hot Jupiters' stars are richer in metals** by 0.11 dex than the stars of planets under 4 Earth radii.
-  So are the stars of giants further out (+0.10). The difference fades for stars hotter than 6,000 K.
+  *(26 November: "alone" here is "no other planet in the list". What the papers say is narrower: no near
+  companion (Steffen and others 2012; Huang and others 2016; Hord and others 2021). Far companions are common
+  by one estimate: Dawson and Johnson's review of 2018 reports two surveys as finding that 70 ± 8% of hot
+  Jupiters have an outer planet of 1 to 13 Jupiter masses between 1 and 20 times the Earth's distance from the
+  Sun. And "Kepler's, which could have seen small neighbours" should not be read as "only Kepler's": Hord and
+  others searched TESS's data for neighbours of 0.3 to 4 Earth radii.)*
+- **Hot Jupiters' stars are listed as richer in metals** by 0.11 dex than the stars of planets under 4 Earth
+  radii. So are the stars of giants further out (+0.10). The difference fades for stars hotter than 6,000 K.
+  *(26 November: the reader raised a doubt that I have now tested. In Kepler's catalogue of stars, metal
+  contents estimated from colours run about 0.15 dex below ones measured from spectra (Narang and others 2018),
+  so if small planets' stars carried the first kind and hot Jupiters' the second, 0.11 could be nothing but
+  that. I asked the archive for the reference of each value (`metsource.py`, `metsource.out`). The sources do
+  differ: 54% of the small planets' values come from three bulk lists of Kepler's and 4% of the hot Jupiters'.
+  But inside single references that hold both kinds the difference is still there: +0.126 with a standard error
+  of 0.017, pooled over seven references, though these hold only 61 of the 697 hot Jupiters; inside the largest
+  reference alone it is +0.05. So the mixing does not make the difference, and its size is between 0.05 and
+  0.13 by this split. I have not sorted the references into measured and estimated; that would be the proper
+  test. The direction was never in doubt: it is the oldest of the six patterns. The fading with temperature has
+  no source and no control.)*
 - **Few hot Neptunes are listed.** Planets from 3 to 8 Earth radii are 5.5% of those with periods under 3 days:
-  3.4% of Kepler's and 13.7% of TESS's. In each survey the share rises with period.
+  3.4% of Kepler's and 13.7% of TESS's. In each survey the share rises with period. *(26 November: a share of
+  listed planets in a fixed box depends on how many small planets each survey lists, so the two shares are not
+  two measurements of one thing; and the desert as drawn in the papers is a wedge, not a box.)*
 - **Neighbours' sizes go together** (correlation 0.60; 0.51 within narrow bands of stellar size), and the outer
   one is the larger in 70% of pairs, against 62% when any inner planet is paired with an outer one from
-  another system.
+  another system. *(26 November: Weiss and others (2018) have 0.65 and 65% in a cleaned sample; Ciardi and others
+  (2013), from a candidate list corrected for what would be missed, 68 ± 6% where at least one of the pair is
+  larger than about 3 Earth radii, and no ordering among smaller pairs. My shuffled baseline and my control for the star's size are, in small,
+  the objection Zhu raised in 2020.)*
 - **The size gap does not show in the bins I chose** (523, 574, 785 planets). Looking again, most ways of
-  binning show a shallow dip somewhere from 1.7 to 2.2 Earth radii, no more.
+  binning show a shallow dip somewhere from 1.7 to 2.2 Earth radii, no more. *(26 November: this is not a
+  finding. The gap's discoverers said that less precise sizes had blurred it; a paper of 2019 took all known
+  planets from this archive and wrote that a gap "is not discernible" in the distribution of sizes alone, while
+  in size against period it reports the valley confirmed; a paper of 2026 measured the valley in the archive's
+  values as shallow. And I named only one of two causes: the valley sits at different sizes for
+  different periods and stars, so one histogram of all of them flattens it however good the sizes.)*
 - **Ten of twelve expectations held as sealed and two failed.** One of the ten held only on the catalogue's
   default zeros. Three blind forecasters priced them better than I did: Brier score 0.089 against my 0.106,
   and they were closer on 11 of the 12.
@@ -80,7 +126,9 @@ numbers here are recomputed in `transits.py`.
 - **Resonances (R, the referee's runs).** The outside-to-inside contrast holds for window widths from 0.01 to
   0.08, with one pair per system, and in TESS alone (11 against 2, and 12 against 3). Against the neighbouring
   ratios, three to two is a spike outside (60 where about 16 would be expected) and two to one mainly a hole
-  inside (6 where about 25). Pairs confirmed by 2013 sit near resonance more often than later ones.
+  inside (6 where about 25). Pairs confirmed by 2013 sit near resonance more often than later ones *(26
+  November: a likely reason, which is the reader's inference and not a source's statement: many of Kepler's early
+  systems were confirmed by the timing of their transits, which is easiest to detect near a resonance)*.
 - **Alone, with a baseline (R).** Kepler and K2: hot Jupiters 74 of 77; planets under 4 Earth radii and under
   10 days 51%; giants beyond 10 days 46%. TESS: 215 of 223; 59%; 75%. Ground surveys found almost nothing but
   hot Jupiters, so their 96% has nothing to stand against.
@@ -148,7 +196,8 @@ Every number and all twelve verdicts matched its blind recomputation.
 - **"The outer one is the larger in 70%"** had no baseline: 62% for planets paired at random.
 - **"Hot Neptunes are scarce: 5.5%"** mixed two surveys with very different shares.
 - **"Hot Jupiters are alone, 96% however found"** treated three numbers as three confirmations. Only Kepler
-  could have seen small neighbours, and my "from the ground" group included 29 planets found from space.
+  could have seen small neighbours, and my "from the ground" group included 29 planets found from space. *(26
+  November: "only Kepler" says too much. A search of TESS's data for such neighbours was published in 2021.)*
 - **"Pairs pile up just outside resonances"** described two different shapes with one phrase.
 - **Sentences about planets** are now sentences about the list.
 
@@ -158,12 +207,77 @@ Every number and all twelve verdicts matched its blind recomputation.
   big stars are missed.
 - **That neighbours are born alike.** Each star has its own smallest detectable planet, and an outer planet
   transits less often, so it must be larger to be found. The controls remove some of the pattern, not all. The
-  question is disputed in the literature and is not settled here.
-- **That hot Jupiters have no neighbours.** "The only known planet" depends on how hard anyone looked.
+  question is disputed in the literature and is not settled here. *(26 November: the dispute by name: Zhu (2020)
+  and Murchikova and Tremaine (2020) against, and the reply of Weiss and others (2023).)*
+- **That hot Jupiters have no neighbours.** "The only known planet" depends on how hard anyone looked. *(26
+  November: and by one estimate most of them have a far one; see the note under "Hot Jupiters are listed
+  alone".)*
 - **That cool stars have few giants** (or many). The surveys that found giants watched hot stars.
 - **Why later surveys list bigger planets.** TESS watches brighter stars for a shorter time than Kepler did.
-- **The size gap as the papers measure it.** They use stars with precise radii and correct for what was missed.
+- **The size gap as the papers measure it.** They use stars with precise radii and correct for what was missed
+  *(26 November: and they do not pool every period and every kind of star into one histogram, as I did)*.
 - **Which listed values are measured.** I did not fetch the columns that say where each number came from.
+
+## What an astronomer would object to
+
+*Added on 26 November 2026, from section 5 of `prior-art-26nov.md`. None of these was tried; each is a cut I made
+without knowing better.*
+
+- **"Found by transit" is not "transits".** I kept planets whose discovery method is "Transit". The usual cut is
+  the column that says whether a planet transits, which I fetched and did not use; planets that transit but were
+  found first another way are left out, and a pair with such a planet between them counts here as neighbours.
+- **The table.** The archive says of its composite table: "Use this table's information on any one planet or
+  stellar host with caution, as the parameters in a given row may have been drawn from different sources and may
+  have calculated values." A listed size can be calculated from a mass, and a listed metal content can be of
+  either kind.
+- **Words.** The field says "near resonance" or "near commensurability", not "resonance": few of these pairs are
+  in one.
+- **Eccentricities.** The median of the measured ones (0.047) is not clean: measured eccentricities near zero
+  come out too large. (From the reader's memory of a paper of 1971, not fetched.)
+
+## What was already in print
+
+*Added on 26 November 2026 from `prior-art-26nov.md`. I checked each quotation below against the text the reader
+saved. The reader read abstracts and the passages it found by searching each paper for words, none of them
+through; nor have I.*
+
+- **Pairs near resonance, and both shapes.** Lissauer and others (2011), from Kepler's candidates: "there are
+  small but statistically significant excesses of candidate pairs both in resonance and spaced slightly too far
+  apart to be in resonance, particularly near the 2:1 resonance." Fabrycky and others (2014), from "899
+  transiting planet candidates in 365 multiple-planet systems": "The peak at 3:2 appears to be a true excess of
+  systems where the integrated population near the 3:2 remains above the baseline. On the other hand, the peak
+  just wide of 2:1 contains only slightly more pairs than the trough just narrow of the 2:1 is missing". That is
+  my "spike outside" and "hole inside". Dai and others (2024) "queried the NASA Exoplanet Archive ... for the
+  latest sample of confirmed exoplanetary systems" and drew "the well-known excess population of pairs" on one
+  side and the deficit on the other. Not found: counts for TESS alone, or the split at 2013.
+- **Hot Jupiters alone.** Steffen and others (2012), of 63 candidates: "No additional planets have been found in
+  any of the hot Jupiter systems." Huang, Wu and Triaud (2016): hot Jupiters "do not have any detectable inner or
+  outer planetary companions", while "half of the warm Jupiters are closely flanked by small companions", which
+  agrees with my 46% of Kepler's giants beyond ten days listed alone, though theirs are giants at 10 to 200 days
+  with near companions and mine are all giants beyond ten days with any other listed planet. Hord and others (2021), with my definition of a hot
+  Jupiter and TESS's data, are titled "... Hot Jupiters are Still Lonely".
+- **Metals.** The pattern is credited to Gonzalez (1997) and to Fischer and Valenti (2005), neither fetched.
+  Narang and others (2018) found it in Kepler's own catalogue and warn that there "the DR25 photometric
+  metallicities show offsets of 0.15 dex compared to CKS metallicities".
+- **Hot Neptunes.** Szabó and Kiss (2011), from "the currently known 106 transiting exoplanets": "there is not
+  one hot Neptune with an orbital period less than 2.5 days". Mazeh, Holczer and Faigler (2016) call their sets
+  inhomogeneous and say: "The desert in the period-radius plane of the transiting planets is less clear."
+- **Neighbours alike.** Weiss and others (2018): "there is a large (r = 0.65) and significant ... correlation
+  between the sizes of adjacent planets". Zhu (2020): "Here I show that these patterns can be largely explained
+  by detection biases."
+- **The size gap in this archive.** Fulton and others (2017) "detect a factor of ≥2 deficit in the occurrence
+  rate distribution at 1.5–2.0" Earth radii, with star sizes good to about a tenth, and say of an earlier study
+  that its larger uncertainties "diluted the gap and reduced its statistical significance". MacDonald (2019):
+  "We use all known exoplanets in our analyses, pulling data from the exoplanetarchive", and of that sample and
+  one other, "A gap is not discernible in the other two data sets"; yet in the plane of size against period,
+  "With our larger sample, we confirm the radius valley and characterize it as a power law." Kamulali and others (2026): "The radius
+  valley was not apparent in the initial Kepler data due to large uncertainties in the stellar radii", and with
+  their own star sizes the valley's depth is 0.686 "compared to VA = 0.824 based on values in the NASA Exoplanet
+  Archive". My dip bin over its two neighbours gives 0.80, or 0.90 with the planets at exactly 2.00 moved: a
+  ratio of the same form over narrower ranges and another sample, and not the same measure.
+- **Not searched for:** the share of giants by the star's temperature, the medians by year of discovery, and the
+  zeros among listed eccentricities. Not found: anyone who took this table and asked which patterns survive, as a
+  study of its own; one search for such pages found none, which is weak evidence.
 
 ## Files
 
@@ -173,6 +287,8 @@ Every number and all twelve verdicts matched its blind recomputation.
 | `sheet.md` | the same without the odds, as the forecasters saw it |
 | `forecast/` | the brief, the three forecasts, an audit of what the forecasters opened |
 | `transits.py` → `transits.out`, `results.json` | `python -I transits.py pscomppars.csv results.json` |
+| `metsource.py` → `metsource.out` | added 26 November: the difference in the stars' metals split by the reference each value comes from. Needs a second query to the archive (the columns are named at the head of the script; sha256 of the reply I used: 3cecb50fa61d18dd16153765d2e5e040aaf0cf8f0fc79bd5ec42200396206e49) |
+| `prior-art-26nov.md` | what a fresh reader with the web found in print on 26 November, in its own words |
 | `score.py` → `score.out` | `python -I score.py expectations.md results.json forecast` |
 | `figures.py` → `planets.png` | `python -I figures.py results.json planets.png` |
 | `data.sha256` | hash of the table as fetched |

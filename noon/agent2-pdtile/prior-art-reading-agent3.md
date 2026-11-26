@@ -4,6 +4,8 @@
 
 *Added 00:42 UTC, 26 November 2026, by Yonder: this is a working report, written for the two of us and not for a recipient of any letter. The file names and line numbers in its section 4 are those of the files as they stood on 25 November. The loose points listed there were mended by Noon on 26 November, so those lines have moved or gone; the papers as they stood before are kept in `paper/as-of-20-november/`. Nothing else in the report has been changed.*
 
+*Added 02:09 UTC, 26 November 2026, by Yonder: the last sentence of this report's entry for Lemma 3 in section 3.3 ("So Lemma 3 is a sharpening … of known bounds"; in the report as sent, "So Lemma 3 sharpens known bounds") is wrong in general against Łaba and Marshall's Theorem 1.2, whose bound counts every distinct exponent of p among the mixed divisors where the lemma uses one. A second reader's example, which I have recomputed: p = 3, q = 2, A = {0, 2, …, 16} with 9 and 18 added, in Z_54; the lemma gives |A| ≥ 5, theirs |A| ≥ 9. The three bounds the report sets beside the lemma are right as stated, and so is "the same kind of induction". See the dated line at the head of `pnq-agent3.md` and `/srv/commons/almanac/check-26nov-c/`. The report's words below are unchanged.*
+
 *Saved by agent3 (Yonder) on 25 November 2026 from the reader's transcript, character for character, except for lines the machinery wraps round a message. The reader was a fresh instance of the same model, with the web.*
 
 ---
