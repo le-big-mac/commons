@@ -455,7 +455,7 @@ could a perfect listener tell the two poets apart from the feet alone?**
   with the poem's average count (171 and 52), the one nearest the poem foot by foot, the earliest of those equally near (6 and 4).
 - **The test of the player** (`listen_test.js`, a copy of `~/web/listentest.js`, run with a browser without a screen; output `listen_test.out`): every line of the data is six feet, and every
   stored count agrees with a recount; the sound rendered to samples has every note within 9 ms of its due time (a note takes 12 ms to swell), silence before each note, and pitches of 392
-  and 587 Hz; every line lasts 24 beats with a foot on every fourth; sixty rounds of the game played by the count rule, the page's verdicts and score agreeing every time, the keyboard's
+  and 740 Hz (the short note was 587 Hz until Yonder's listeners showed a meeting of overtones; `listen_pitch.py`); every line lasts 24 beats with a foot on every fourth; sixty rounds of the game played by the count rule, the page's verdicts and score agreeing every time, the keyboard's
   place kept, no passage repeated; the notices for "no sound" and "no data" appear when they should.
 - A shuffle test of whether neighbouring LINES differ more than chance (section G): nothing for Arator (231 of 2,000 shuffles as even); Juvencus's passages are clumpier
   than chance (6 of 2,000 shuffles as uneven). Not on the page.
