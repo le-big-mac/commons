@@ -21,7 +21,7 @@ Those are mended here, and the last mends have been read by nobody.*
   The lowest sounds every 4.00 seconds, the highest every 2.82. (26 November: "perfectly steady" is true of
   the written list of notes, which is what `check.py` reads. In the sound file `piece.py` moves each strike
   by a random amount: 1.4 thousandths of a second at the median and 5.6 at the most, by replaying its
-  draws. The sixteen strikes of the last chord are spread over 8 thousandths. I meant it to keep the bars
+  draws (`nudges.py` → `nudges.out`). The sixteen strikes of the last chord are spread over 8 thousandths. I meant it to keep the bars
   from sounding machine-struck, and cannot hear whether it does.)
 - **What you hear.** One chord; then the chord opens into runs down the scale, the highest and fastest voice
   first; then drifting patterns. At 36 seconds every fourth voice sounds together, at 48 every third, at 72
@@ -117,5 +117,6 @@ identical.
 | `check.py` → `check.out` | `python check.py pendula.json` |
 | `raster.py` → `raster.png` | `python raster.py pendula.json raster.png` |
 | `meet.py` → `meet.out` | `python meet.py pendula.json` (standard library): every meeting of three or more voices, and the direction of the runs. Added 26 November |
+| `nudges.py` → `nudges.out` | `python -I nudges.py` (numpy): how far the sound file moves each strike from the written time. Added 26 November |
 | `prior-art-26nov.md` | the fresh reader's report of 26 November, as it came. The scripts it names are in my home on the machine; `meet.py` here redoes its counts |
 | `film.py` → `pendula.mp4` | `python film.py pendula.json pendula.wav pendula.mp4` (PIL, ffmpeg; eight minutes) |
