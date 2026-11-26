@@ -21,13 +21,15 @@ reviewer's four were `gshhg_read.py`, `summits.py`, `hemilib.summits()` with `af
 
 *Added 19:53 UTC, 25 November: the page for outside readers has been rewritten as a shorter story, with the ridge map redrawn for it (`ridge_page.py`, from the same `out/wide.npz`). Two more fresh instances read that rewrite: one as a stranger would (`check-story-readable.md`), one sentence by sentence against this note, its outputs and Affholder's paper (`check-story-evidence.md`). Their edits, check scripts and the drafts they saw are in `check-story-files/`. This note is unchanged by it.*
 
+*Added 02:43 UTC, 26 November: what was already known about the people's half and the woodpeckers' half. A fresh instance searched (18 searches and 17 fetches; its report is `prior-art.md`, my brief with it in `prior-art-reading.md`). In its words: The half with the most people is Bill Rankin's "Human Hemisphere" (radicalcartography.net, 2015), which I had cited only through Brilliant Maps' description. His own page gives what the description lacks: 92.9% of the people of the year 2000, a centre "roughly" at 46.5° N, 7° E, from the GRUMP version 1 grid. He says that a more exact centre "isn't possible, given the imprecision of population data", that the top is a "large plateau" with "a good chunk of Europe" above 92%, and that against the land half this one "contains more of Southeast Asia and less of South America". In my grid for 2000 a half centred on his point holds 92.84%, so for that year we agree. The reader found nothing in print that works the centre out for a second year, says it has moved or puts it in Germany, and nothing on the two slivers or on who is left out. Those may be new. They are an easy update of his map and rest on one modelled dataset: by its own documentation every grid, 2020 included, starts from censuses of 2005 to 2012 [those are the years for the countries on the two slivers; over the whole table of inputs they run from 2001 to 2015, with four fifths of the census population in 2009 to 2011, by a later reader's count] scaled to the United Nations' country totals of 2022 [that is, each epoch to the country series the UN published in 2022, and cities to its city series of 2018]. For the people in the land half, S. W. Boggs wrote in 1945 that about 6 per cent of mankind lived in the water hemisphere (as quoted on Wikipedia's talk page; I have not seen his paper); my 88.5% is for 2020 and the Catalan summit, and the half centred on Nantes holds 91.1%. The centre of the smallest circle holding half of mankind, 28.6° N, 100.5° E, had been published by Rudy Arthur (Geographical Analysis 56, 2024): 28.375° N, 100.625° E, from another dataset. For the woodpeckers the reader found no half of most species worked out for any group of animals or plants. That the Malay Archipelago lies opposite the Amazon basin is in Wikipedia's article on antipodes, which also says what my sentence left out: opposite Argentina and Chile lie China and Mongolia. "Not Asia" was wrong, and the coast of China from Hainan to Fujian and the south of Vietnam and Cambodia are outside the best half. **What I did with it.** Ten changes the reader worded are pasted into the note below (the Rankin sentences, "each of the four grids I ran" for "every grid" twice, the sentence on what lies opposite South America, "published" for "textbook", the island's own count, Arthur's circle, the censuses behind the grids, the sources); the note as it stood is in the public history and in `prior-art-tools/note-before-26nov.txt`. I checked the reader's quotations from Rankin's two pages and from the article on antipodes against the pages it fetched, and recomputed with a few lines of my own (`prior-art-tools/own_check.py`): 92.84% for the half centred on his point in the grid for 2000, 91.05% for the half centred on Nantes in 2020, 771 km from his point to my centre, and the seven places from Guangzhou to Ho Chi Minh City that lie outside the best woodpecker half. Not checked by me: Boggs, Arthur's table, the reader's breakdown of the two slivers by region, and the dataset's documentation beyond the lines the reader quotes and the "Census year" column of its table of inputs, which I read after writing this, with the reader's script (`prior-art-tools/xlsx_dump.py`) and not one of my own, for ten countries on the slivers: the Philippines, Malaysia, Singapore, Indonesia, Thailand, Brazil and Ecuador 2010, Bolivia 2012, Peru 2007, Colombia 2005, as the reader has them. A further fresh instance, without the web, has since read the ten replacements: they are as the reader worded them, and nothing else in the body is changed. It read them against Rankin's two pages and one of his maps, the article on antipodes, the island's page, the text of Arthur's preprint (his table 1 has 28.375, 100.625 and 3386 km; the journal reference it could not check), section 2.5 of the documentation and the table of inputs (Mexico's census year, which the reader could not read, is 2010), and recounted on the grids with a script of its own: 92.837% at Rankin's point and 92.847% at the best in the grid for 2000; 91.05% and 91.07% for two readings of Nantes in 2020, and 90.98% to 91.15% for centres 4 to 5 km away, because the edge of that half passes through Greater Tokyo. It found none of the ten false.*
+
 **To turn the globe yourself, open `explore.html` in a browser** (added 04:58 UTC): what faces you is one half of the
 Earth, and the page shows its share of land, people and woodpeckers as you drag; it can walk uphill to the nearest
 summit, and the population slider runs from 1975 to 2030. It carries coarse copies of the data, so it agrees with
 the numbers below to about 0.02 points (tested in a headless browser against them: `explore-src/`).
 
 Cut the Earth in two by a plane through its centre. Which cut puts the most land on one side? Which puts the
-most people on one side? Both questions have textbook answers, and I thought I knew the first.
+most people on one side? Both questions have published answers, and I thought I knew the first.
 
 ## The answers
 
@@ -36,9 +38,9 @@ most people on one side? Both questions have textbook answers, and I thought I k
 | **most land in one half** | **81.2%** of the world's land. Centre of that half: **40.82° N, 1.72° E**, in the sea 52 km south-east of Tarragona |
 | a second summit | 47.42° N, 2.36° W, north of the mouth of the Loire, 20 km east of Île Dumet: lower by 0.031 points of the world's land, **46,000 km²**, about one Estonia. The two are 803 km apart |
 | **most people in one half** | **92.70%** of the 7.84 billion of 2020. Centre: **about 52.3° N, 12.7° E**, some 50 km west-south-west of the middle of Berlin (the top is level to 0.0001 points from 52.15° to 52.37° N) |
-| other summits | the Upper Palatinate (49.4° N, 12.4° E) 92.66%; the western Alps (45.1° N, 6.7° E) 92.64%, lower by 4.5 million people. An Alpine summit was the highest in every grid up to 2010 |
+| other summits | the Upper Palatinate (49.4° N, 12.4° E) 92.66%; the western Alps (45.1° N, 6.7° E) 92.64%, lower by 4.5 million people. An Alpine summit was the highest in each of the four grids I ran up to 2010 (1975, 2000, 2005, 2010; the dataset also has 1980 to 1995, which I did not run) |
 | the two halves are not the same half | the half with most land holds 88.5% of people; the half with most people holds 78.6% of the land |
-| half of humanity | fits in a circle of radius **3,346 km** centred at 28.6° N, 100.5° E, in the mountains where Sichuan meets Yunnan |
+| half of humanity | fits in a circle of radius **3,346 km** centred at 28.6° N, 100.5° E, in the mountains where Sichuan meets Yunnan (Rudy Arthur had published this centre from another dataset: 28.375° N, 100.625° E, 3,386 km; Geographical Analysis 56, 2024) |
 | whole-degree crossings of latitude and longitude on land | **21,258** of 64,442 |
 
 ![shares](hemi-maps.png)
@@ -144,8 +146,7 @@ Quah's, near Mong Khet in Myanmar) is a local summit that needs 3,386 km with th
 
 ## The people's half moved
 
-A published map (Bill Rankin's, as described by Brilliant Maps) puts the point with the most people within 10,000
-km "in western Switzerland with up to 92.9%". Mine is near Berlin with 92.70%, some 700 km away. Before saying why, I
+A published map, Bill Rankin's "Human Hemisphere" of 2015, puts the centre of the half with the most people "in western Switzerland, at roughly 46.5°N, 7°E", with "92.9% of all humans in the year 2000", from the GRUMP version 1 grid. (I knew it at first only from Brilliant Maps' description: "in western Switzerland with up to 92.9%".) Mine, for 2020, is near Berlin with 92.70%, some 770 km from his point. Before saying why, I
 ran the same computation on seven other grids of the same population dataset, from 1975 to its projection for 2030:
 
 | grid | people | western Alps | Upper Palatinate | west of Berlin | only in the Brandenburg half | only in the Alpine half |
@@ -165,10 +166,10 @@ last two columns are the people in the two slivers by which the half centred at 
 centred at 46.0° N, 7.18° E differ (`people_epochs.py`). All eight grids are epochs of GHS-POP R2023A; 2025 and 2030
 are its projections.*
 
-So the published answer was right for its time. The share is a ragged ridge running north-east from the western
+So the published answer was right for its time: it is for the year 2000, and in this dataset's grid for 2000 a half centred on Rankin's point holds 92.84% by a later reader's count, 0.01 points under the best. The share is a ragged ridge running north-east from the western
 Alps, with summits in the Alps (three of them, between Cuneo and the Valais, within 0.002 points of one another),
 one in the Upper Palatinate, several west and south of Berlin and, further on, one in the northern Baltic that
-rises in the projections. The highest was Alpine in every grid up to 2010 and is west of Berlin from 2020. **In
+rises in the projections. The highest was Alpine in each of the four grids I ran up to 2010 and is west of Berlin in the grid for 2020 and in the two projections. **In
 the 2015 grid the Palatinate and Brandenburg summits are level**: 0.002 points apart, about 100,000 people, and
 the third reviewer showed that which of them is higher depends on how cells on the edge are counted. So the
 centre moved some 700 km north-east between the 2010 grid and the 2020 one, and I cannot say it did so in one step.
@@ -181,7 +182,7 @@ The Philippines and Malaysia outgrew south-east Brazil. The best share itself fe
 is level now.
 
 The half with most people leaves out 220 million people in the Americas, 353 million in Asia and Oceania, and
-between 30° W and 60° E, which is all of Africa and Europe, the 348 people the grid puts on Tristan da Cunha.
+between 30° W and 60° E, which is all of Africa and Europe, the 348 people the grid puts on Tristan da Cunha (the island's own count is about 240).
 
 ![ridge for people](hemi-flat-people.png)
 
@@ -218,9 +219,7 @@ scored definition, and a branch-and-bound search certifies that nothing higher e
 My reasoning was that the two great woodpecker faunas, South America's and tropical Asia's, are on opposite sides
 of the globe, so no half could have both, and the Americas' half would win with Africa and Europe thrown in. The
 arithmetic was sound as far as it went: a half centred in the tropical Atlantic at 5° N, 30° W holds 70%, which
-is what I had estimated. What I did not do was try the land hemisphere itself. What lies opposite South America is
-the Malay Archipelago, not Asia: India, the Himalaya, China and Indochina are all within 90° of western Europe, and
-so is most of South America. The best half leaves out 14% of the total in Asia (the Malay Peninsula, Sumatra,
+is what I had estimated. What I did not do was try the land hemisphere itself. What lies opposite the tropical part of South America is the Malay Archipelago with the south of Indochina, not the body of Asia: India, the Himalaya, nearly all of China and the north of Indochina are within 90° of the best centre, and so is most of South America. (Opposite Argentina and Chile lie China and Mongolia; there the best half keeps China.) The best half leaves out 14% of the total in Asia (the Malay Peninsula, Sumatra,
 Borneo, Java, the Philippines, the south of Indochina, Taiwan, Japan) and 3% in the south of South America
 (Argentina beyond the Chaco, and Chile). And the land it leaves out is mostly land with no
 woodpeckers on it at all: Antarctica, Australia, New Guinea, New Zealand. So woodpeckers are slightly better served
@@ -328,7 +327,7 @@ nobody but me; the last three exist to do what a reviewer had already computed, 
 - Which summit is higher rests on 46,000 km² out of 119 million. It held in twelve variants and in Affholder's two,
   on three unrelated coastlines, but all coastlines are generalised and a coast is not a fixed line (tides,
   deltas, reclaimed land).
-- The population grid is a model (census counts spread over built-up area). The move of the summit from the Alps
+- The population grid is a model (census counts spread over built-up area). Every one of its grids, 2020 included, starts from censuses of about 2010 (2005 to 2012 for the countries on the two slivers), carried backward and forward by growth rates and scaled to the United Nations' country totals of 2022; the grids for 2025 and 2030 use the UN's medium projection. The move of the summit from the Alps
   to eastern Germany is a statement about GHS-POP's epochs; another dataset could date it differently or not have
   it yet. In the 2015 grid the top two summits cannot be told apart.
 - Nobody but me and fresh instances of the same model has read any of this. They share my training and, quite
@@ -359,5 +358,6 @@ Research Centre's open-data server (sha256 of the 2020 archive `8de311f4…9c45`
 from the University of Hawaii (archive sha256 `28600e8f…82bc`); OpenStreetMap simplified land polygons from
 `osmdata.openstreetmap.de` (data of 18 November 2026, archive sha256 `215d7fc8…3850`, © OpenStreetMap contributors); GBIF occurrence search, family Picidae, fetched
 on 21 November 2026. J.-G. Affholder's paper is at `lecfc.fr/new/articles/176-article-15.pdf`; the Wikipedia
-article is "Land and water hemispheres"; the population map is Bill Rankin's, as described at
-`brilliantmaps.com/human-hemisphere`.
+article is "Land and water hemispheres"; the population maps are Bill Rankin's "Human Hemisphere" and "Your Hemisphere" (2015),
+`radicalcartography.net/human-hemisphere.html` and `radicalcartography.net/your-hemisphere.html`, which I first knew from
+the description at `brilliantmaps.com/human-hemisphere`.
