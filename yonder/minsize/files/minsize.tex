@@ -54,7 +54,7 @@ $\Phi_q\mid A$ it is $q\,p^{e}(p^{k'}+x)$, where $k'$ counts such levels beyond 
 the pattern's multiples of $q$, and $x\in\{0,1\}$ is decided by four clauses, one of which separates $p=2$ from
 $p\ge 3$. The lower bounds are elementary inductions on a tree of residue classes and come from following the \emph{set} of sizes that a class can have, not only its least size; the constructions are explicit sets of digit strings.
 The whole statement, for multisets on $\Z_{p^nq}$ and in terms of cyclotomic polynomials dividing the mask
-polynomial, has been formalised in Lean~4 with Mathlib and is accepted by Lean's kernel.
+polynomial, has been formalised in Lean~4 with Mathlib and is accepted by Lean's kernel. The theorem holds as it stands on $\Z_{p^nq\,s}$ for every $s\ge1$, for the patterns made of divisors of $p^nq$ (Section~\ref{sec:lift}); this too is formalised.
 \end{abstract}
 
 \maketitle
@@ -81,7 +81,7 @@ changes are made (\texttt{referee-minsize/}, beside this paper: its reports, the
 and its programs). One of its changes was wrong and has been undone: its wording for this box had the
 searching instance find the formula ``independently'', when that instance had been shown the guess. In
 its third reading it read what had changed since against the records; the changes it then asked for,
-and this sentence, are in its own words. It did not read the Lean proofs or the cited papers. The working note, with the files, the computations and what its readers found, is \texttt{minsize-agent3/README.md}, beside this paper's folder.}}
+and this sentence, are in its own words. It did not read the Lean proofs or the cited papers. Section~\ref{sec:lift} was added later the same day. Its first lemma is due to a fresh instance that was reading a sequel to this paper and proved it by the degree of a cyclotomic extension; the proof by counting roots, the corollary and the text are the author's (the same instance had drawn the corollary's case $\Z_{p^2q^2}$, for a lift along an odd prime), the Lean proof was written by a further instance to statements fixed in advance, and another audited those statements. The lemma on signs and its proof are due to yet another fresh instance, to which the author had put the statement, with the reduction of the prime $2$ to it, as a question to prove or refute; by that instance's account a further instance, which it asked, read its proof and reported no error (no report of that reading is on file); the author read it too. The Lean proofs for the prime $2$ and for every $s$ were written after that, by three more instances, to statements that the author had fixed in advance. A fresh instance refereed that section, and what Section~\ref{sec:lean} says of it, three times: before the prime $2$ was in it, with the prime $2$ proved on paper, and with the Lean proofs for the prime $2$ in it; its reports are \texttt{referee-lift/report.md}, \texttt{report-2.md} and \texttt{report-3.md}, with the second working note. The working note, with the files, the computations and what its readers found, is \texttt{minsize-agent3/README.md}, beside this paper's folder.}}
 
 \section{Introduction}
 
@@ -569,10 +569,161 @@ contains a nonempty class of depth $<\min G$ all of whose subclasses, itself inc
 of such a class then makes the totals unequal at the levels of $G$ at no cost. The word ``least'' cannot be dropped: for $p=2$, $q=3$, $n=3$, $E=\emptyset$, $F=\{3\}$, where $x=1$, a multiset of $12$ elements with pattern $(\{3\},\{3\})$ has such a class; the least ones, of $6$ elements, have none. (Propositions~11 and~13 of the working note's proof; the example is its referee's.)
 \end{remark}
 
+\section{Larger groups}\label{sec:lift}
+
+Theorem~\ref{thm:main} holds as it stands on $\Z_{p^nq\,s}$ for every $s\ge1$, for the patterns that consist of
+divisors of $p^nq$. This rests on two lemmas that are not the author's. The first, on lifting along an odd prime, was found, with another proof, by a fresh instance of the model that
+was reading a sequel to this paper; the proof below, by counting roots, is the one that was then formalised (Section~\ref{sec:lean}).
+The second, on signs, which gives the prime~$2$, was proved by a further instance (see below), and has since been formalised too.
+A short search of the literature, made by the author after the results existed (seven requests), found neither lemma and not
+Corollary~\ref{cor:lift}; that is weak evidence, and statements as simple as these may well be in print. The first step of the
+proof of Lemma~\ref{lem:lift}, that reduction keeps the divisors, is in \cite[Section~2.2]{KLaMS}.
+
+\begin{lemma}[lifting]\label{lem:lift}
+Let $N\ge1$, let $r$ be an odd prime, $M=Nr$, and let $A$ be a nonempty multiset on $\Z_N$. There is a
+multiset $A'$ on $\Z_M$ with the same number of elements, whose reduction modulo $N$ is $A$, such that for
+every divisor $d$ of $M$: $\Phi_d\mid A'(X)$ if and only if $d\mid N$ and $\Phi_d\mid A(X)$.
+\end{lemma}
+\begin{proof}
+If $A'$ reduces to $A$ modulo $N$, then $A'(X)\equiv A(X)$ modulo $X^N-1$, and $\Phi_d\mid X^N-1$ for $d\mid N$; so
+$A'$ and $A$ have the same divisors among the $\Phi_d$, $d\mid N$, whatever the lift. It remains to choose the
+lift so that no $\Phi_d$ with $d\mid M$, $d\nmid N$ divides $A'(X)$.
+
+Write $N=r^kN'$ with $r\nmid N'$, and for $y\in\Z_M$ let $\beta(y)\in[0,r^{k+1})$ be its residue modulo
+$r^{k+1}$. An element $x$ of $\Z_N$ has $r$ lifts to $\Z_M$, and their values of $\beta$ are
+$(x \bmod r^k)+r^kt$, $t=0,\dots,r-1$, each once, because $N'$ is invertible modulo $r$. Lift every element of
+$A$ to its lift with $t=0$, except one single element $x_0$, which is lifted to its lift $y_0$ with $t=1$.
+
+A divisor $d$ of $M$ that does not divide $N$ is $d=e\,r^{k+1}$ with $e\mid N'$. Suppose $\Phi_d\mid A'(X)$, and fix a root of
+unity $\omega$ of order $e$. For every root of unity $\eta$ of order $r^{k+1}$ the product $\omega\eta$ is a
+primitive $d$-th root of unity, so
+\[
+0=A'(\omega\eta)=\sum_{y}\omega^{y}\eta^{\beta(y)}=\ell(\eta),\qquad
+\ell(Y)=\sum_{b}g_b\,Y^{b},\quad g_b=\sum_{\beta(y)=b}\omega^{y},
+\]
+the sums over the elements $y$ of $A'$ with multiplicity. Every element has $\beta(y)<2r^k$, so $\ell$ has
+degree less than $2r^k\le(r-1)r^k$, the number of roots of unity of order $r^{k+1}$, at all of which it
+vanishes; hence $\ell=0$. But for $b=\beta(y_0)$, which lies in $[r^k,2r^k)$, the only element with
+$\beta(y)=b$ is $y_0$, so $g_b=\omega^{y_0}\ne0$.
+\end{proof}
+
+The inequality $2r^k\le(r-1)r^k$ is the only place where the oddness of $r$ is used. Lifting everything to the least
+representative and one element higher by $N$ does not always do: for $N=2$, $r=3$ and $A=\{0,0,1\}$, raising one of the two $0$s gives $\{0,1,2\}$ in $\Z_6$,
+whose mask is $\Phi_3$.
+
+\subsection*{The prime 2}
+
+For $r=2$ the count of roots fails, since $2\cdot2^k$ is more than the number $2^k$ of roots of unity of order $2^{k+1}$, and the
+statement turns into one about signs. The author put that statement as a question to a further fresh instance, which
+proved it for the moduli that are needed here (and for some others, see below). Lemma~\ref{lem:signs} is that
+instance's, and so are the two steps of its proof, the descent modulo $q$ and the choice of signs; the proof below
+reads the coefficients directly where the instance uses a lemma on functions that sum to zero over cosets, and that
+part of the wording is the author's. In the two lemmas that follow, $n$ is a modulus and $p$, $q$ are odd primes; they
+are not the $n$, $p$, $q$ of Theorem~\ref{thm:main}.
+
+\begin{lemma}[signs]\label{lem:signs}
+Let $p\ne q$ be odd primes, $a,b\ge0$, $n=p^aq^b$, and let $B$ be a nonempty multiset on $\Z_n$. Each element of $B$
+can be given a sign $\pm1$ (equal elements may get different signs) so that the signed mask
+$S(X)=\sum_{x\in B}\pm X^x$ is divisible by no $\Phi_d$ with $d\mid n$, the divisor $d=1$ included.
+\end{lemma}
+\begin{proof}
+For a set $C$ of residues write $s(C)$ for the sum of the signs of the elements of $B$ that lie in $C$.
+
+\emph{What has to be avoided.} Let $d=p^iq^j$ divide $n$ and suppose $\Phi_d\mid S$. If $j\ge1$ then
+$\Phi_{p^iq^j}(X)\,\Phi_{p^i}(X^{q^{j-1}})=\Phi_{p^i}(X^{q^j})$, and $f(X^q)\equiv f(X)^q$ modulo $q$ for every integer
+polynomial $f$, so $\Phi_{p^iq^j}\equiv\Phi_{p^i}^{\,q^j-q^{j-1}}$ modulo $q$. In every case, therefore, $\Phi_{p^i}$
+divides $S$ in $\mathbb{F}_q[X]$, and with it the remainder of $S$ modulo $X^{p^i}-1$, which is
+$\sum_{v=0}^{p^i-1}s(v+p^i\Z)\,X^v$. For $i=0$ this says that $s(\Z_n)\equiv0$ modulo $q$. For $i\ge1$ we have
+$\Phi_{p^i}=1+X^{p^{i-1}}+\dots+X^{(p-1)p^{i-1}}$; a multiple $g\,\Phi_{p^i}$ of degree less than $p^i$ has
+$\deg g<p^{i-1}$, so its coefficient at $X^v$ is the coefficient of $g$ at $X^{v\bmod p^{i-1}}$. So the $p$ classes
+modulo $p^i$ that make up a class modulo $p^{i-1}$ all have the same $s$ modulo $q$. It is therefore enough to
+choose the signs so that
+\begin{itemize}
+\item[(i)] $s(\Z_n)\not\equiv0$ modulo $q$, and
+\item[(ii)] for each $i=1,\dots,a$ there are two classes modulo $p^i$, inside one class modulo $p^{i-1}$, whose
+values of $s$ are incongruent modulo $q$.
+\end{itemize}
+
+\emph{The signs.} A class that holds $\nu$ elements of $B$ can be given any value $s$ with $|s|\le\nu$ and
+$s\equiv\nu$ modulo $2$. Fix an element $x^*$ of $B$ and let $C_i$ be its class modulo $p^i$, so that
+$\Z_n=C_0\supseteq C_1\supseteq\dots\supseteq C_a$. Give $C_a$ the value $s(C_a)=1$ if it holds an odd number of
+elements and $2$ if an even number. Then, for $i=a,a-1,\dots,1$ in turn, sign the rest of $C_{i-1}$, which
+consists of $p-1$ classes modulo $p^i$. Those that hold an even number of elements (none, perhaps) get $s=0$. Those that hold an
+odd number get $s=+1$ and $s=-1$ in pairs; if one is left over, it gets that one of $+1$, $-1$ which keeps
+$s(C_{i-1})$ away from $0$ modulo $q$ (if both $s(C_i)+1$ and $s(C_i)-1$ were divisible by $q$, so would $2$ be).
+Thus $s(C_{i-1})$ is $s(C_i)$ or $s(C_i)\pm1$, and, starting from $s(C_a)\in\{1,2\}$, no $s(C_i)$ is divisible by
+$q$. For $i=0$ this is (i). For (ii) at the level $i$: if one of the $p-1$ classes holds an even number of
+elements, its $s$ is $0\not\equiv s(C_i)$. Otherwise all $p-1$ hold odd numbers; $p-1$ is even and at least
+$2$, so the values $+1$ and $-1$ both occur among them, and $s(C_i)$ is incongruent to one of the two.
+\end{proof}
+
+\begin{lemma}[lifting along 2]\label{lem:lift2}
+Let $N=2^kN'$ with $k\ge0$ and $N'=p^aq^b$ as in Lemma~\ref{lem:signs}, and let $A$ be a nonempty multiset on $\Z_N$.
+There is a multiset $A'$ on $\Z_{2N}$ with the same number of elements, whose reduction modulo $N$ is $A$, such
+that for every divisor $d$ of $2N$: $\Phi_d\mid A'(X)$ if and only if $d\mid N$ and $\Phi_d\mid A(X)$.
+\end{lemma}
+\begin{proof}
+As in Lemma~\ref{lem:lift} the divisors $d\mid N$ take care of themselves, and the others are $d=2^{k+1}e$ with
+$e\mid N'$. The two lifts of an element $x$ of $\Z_N$ are congruent modulo $2^{k+1}$ to $x\bmod 2^k$ (the
+\emph{low} lift) and to $(x\bmod2^k)+2^k$ (the \emph{high} one), because $N'$ is odd. Choose a class $c$ modulo
+$2^k$ that holds an element of $A$, let $B$ be the multiset on $\Z_{N'}$ of the residues modulo $N'$ of the
+elements of $A$ in that class, and give them signs by Lemma~\ref{lem:signs}. Lift the elements with the sign
+$+$ low and those with the sign $-$ high; lift the elements of all other classes low.
+
+Suppose $\Phi_d\mid A'(X)$ with $d=2^{k+1}e$, and fix a root of unity $\omega$ of order $e$. For each of the $2^k$
+roots of unity $\eta$ of order $2^{k+1}$ the product $\omega\eta$ is a primitive $d$-th root of unity, and
+$\eta^{2^k}=-1$, so
+\[
+0=A'(\omega\eta)=\sum_{c'=0}^{2^k-1}T_{c'}\,\eta^{c'},\qquad T_{c'}=\sum_{y\equiv c'\ (2^k)}\pm\,\omega^{y},
+\]
+the inner sum over the elements $y$ of $A'$ in the class $c'$ modulo $2^k$, with the sign $-$ for the high lifts.
+The polynomial $\sum_{c'}T_{c'}Y^{c'}$ has degree less than $2^k$ and vanishes at $2^k$ points, so every
+$T_{c'}$ is $0$. But $T_c=S(\omega)$, where $S$ is the signed mask of $B$, and $\omega^{N'}=1$; this contradicts
+Lemma~\ref{lem:signs}.
+\end{proof}
+
+For odd $N$ the statement of Lemma~\ref{lem:lift2} and that of Lemma~\ref{lem:signs} for $n=N$ are the same
+statement. The proof of Lemma~\ref{lem:lift2} uses nothing of $N'$ but Lemma~\ref{lem:signs} for $n=N'$; so
+lifting along $2$ holds for every $N$ for whose odd part the statement on signs holds. The same instance proved
+that statement also for $n=p\,r\,q^b$ with three different odd primes, starting from a signing of a rectangle of cells
+whose row sums and column sums are all $0$ or $\pm1$, in which one sign is then turned if need be; that proof is not
+given here and is not formalised (it is in the file \texttt{sign-lemma-result.md} that goes with the second working
+note, and the author has read it). Together the
+two cases cover every odd $n$ below $1155=3\cdot5\cdot7\cdot11$. For general odd $n$ the statement on signs is
+open, and with it Lemma~\ref{lem:lift} for $r=2$ and general $N$; no counterexample was found.
+
+\subsection*{The theorem on larger groups}
+
+\begin{corollary}\label{cor:lift}
+Let $p\ne q$ be primes, $n\ge0$, and $s\ge1$; put $M=p^nq$. Let $D$ be a set of divisors $d>1$ of $M$. The numbers of
+elements of the nonempty multisets on $\Z_{Ms}$ whose mask is divisible by $\Phi_d$, among the divisors $d>1$ of
+$Ms$, exactly for $d\in D$, are the numbers of elements of the nonempty multisets on $\Z_M$ with pattern exactly
+$D$. In particular the least of them is the number that Theorem~\ref{thm:main} gives for $D$.
+\end{corollary}
+\begin{proof}
+For $s$ a prime $r$: a multiset on $\Z_{Mr}$ as described reduces modulo $M$ to a multiset of the same
+size on $\Z_M$ with pattern exactly $D$; and a nonempty multiset on $\Z_M$ with pattern $D$ has, by
+Lemma~\ref{lem:lift} or, for $r=2$, by Lemma~\ref{lem:lift2}, a lift of the same size whose divisors among the $\Phi_d$, $d\mid Mr$, are
+those $d\in D$. For general $s=2^js'$ with $s'$ odd, apply this once for each prime factor of $s$, counted with
+multiplicity, and take the factors $2$ first: the groups lifted from are then $\Z_{2^iM}$, $i<j$, whose order has the
+odd part of $M$, which is of the form $p^aq^b$ of Lemma~\ref{lem:signs} (a prime power if $p$ or $q$ is $2$), so that
+Lemma~\ref{lem:lift2} applies; the odd prime factors follow by Lemma~\ref{lem:lift}, which holds for every $N$.
+\end{proof}
+
+The lower bound in the corollary needs nothing about the new divisors: a nonempty multiset on $\Z_{Ms}$ whose mask is
+divisible by $\Phi_d$, among the divisors $d>1$ of $M$, exactly for $d\in D$, reduces modulo $M$ to one of the same
+size with pattern exactly $D$, whatever $\Phi_d$ with $d\nmid M$ divide it; so it has at least as many elements as
+Theorem~\ref{thm:main} says.
+
+For $r=p$ the last sentence of the corollary says nothing new: $\Z_{p^nq\cdot p}=\Z_{p^{n+1}q}$, and it is Theorem~\ref{thm:main} for $n+1$ and the patterns
+without the level $n+1$ (this was pointed out by Noon, who read the formal statements). The new ground is $r=q$ and a third prime.
+For instance, on $\Z_{p^2q^2}$ the $32$ patterns among the divisors of $p^2q$ have the least sizes of
+Theorem~\ref{thm:main} for $n=2$, and those among the divisors of $pq^2$ the same with $p$ and $q$ exchanged.
+
 \section{The formal proof}\label{sec:lean}
 
 Theorem~\ref{thm:main} is formalised in Lean~4 (toolchain \lean{v4.37.0-rc1}) with Mathlib, in the library
-\lean{Pnq} of the development that also holds the tiling theorems of the companion papers. The eleven new files are in the shared development (\lean{lean-tiling/Pnq/}), and copies are in
+\lean{Pnq} of the development that also holds the tiling theorems of the companion papers. The eleven files of Theorem~\ref{thm:main} are in the shared development (\lean{lean-tiling/Pnq/}), and copies are in
 \lean{minsize-agent3/lean-min/}, beside the working note, with a log of what was checked, the statements as they were fixed before any proof that uses them, and the audit of the statements. The author
 built the whole development with them, and then again from clean in a fresh copy of the shared folder; Noon then rebuilt it from clean in a copy of its own, with the same result (in both, Mathlib itself was not rebuilt).
 
@@ -646,7 +797,7 @@ cyclotomic divisibility of the mask polynomial (\lean{zeroAtW\_iff\_cyclotomic\_
 \lean{treeOfW w} of a multiset, the translation of Lemma~\ref{lem:translate} (\lean{size\_treeOfW},
 \lean{E\_treeOfW}, \lean{F\_treeOfW\_zero}, \lean{F\_treeOfW}), and that every tree is the tree of a
 multiset (\lean{treeOfW\_surjective}; the Chinese remainder theorem); it also proves that on a set these
-notions are the ones used for the tiling theorems. The new files have $3{,}484$ lines.
+notions are the ones used for the tiling theorems. The eleven files have $3{,}484$ lines.
 
 \subsection*{How the formal proof differs from this paper} The formal lower bound for part (a) is not
 Proposition~\ref{prop:U}: it is the direct induction of the working note (two claims and four cases), written
@@ -678,6 +829,38 @@ statements cover every pattern once; compared Lean's values with the rule as wor
 $103{,}752$ patterns; and, by enumerating multisets with exact polynomial division, found Lean's value to be
 the least size on every pattern of $\Z_2,\Z_3,\Z_5,\Z_6,\Z_{10},\Z_{15},\Z_{12},\Z_{18},\Z_{20},\Z_{24}$ and on
 every pattern it could settle in nine further groups: $936$ cases, over the $28$ triples $(p,q,n)$ it took in these $19$ groups, no mismatch. It did not read the proofs.
+
+\subsection*{Larger groups} The three lemmas and the corollary of Section~\ref{sec:lift} are formalised in six further files. Three hold the odd primes,
+\lean{Pnq/Lift.lean}, \lean{Pnq/Lift1.lean} and \lean{Pnq/LiftMin.lean} (603 lines):
+\lean{Pnq.Lift.sum\_reduce} and \lean{Pnq.Lift.cyclotomic\_dvd\_reduce\_iff} (reduction modulo $N$ keeps the number of elements and the divisors $\Phi_d$, $d\mid N$);
+\lean{Pnq.Lift.exists\_lift} (for $r\neq2$ a nonempty multiset on \lean{ZMod N} is the reduction of one on
+\lean{ZMod (N * r)} whose mask is divisible by no $\Phi_d$ with $d\mid Nr$, $d\nmid N$);
+\lean{Pnq.Lift.sizes\_eq} (for $r\neq2$ and a set $P$ of divisors of $N$ the sizes of the nonempty multisets with exactly the
+pattern $P$ are the same on the two groups); and \lean{minsize\_unbalanced\_lift},
+\lean{minsize\_balanced\_all\_lift}, \lean{minsize\_balanced\_lift}, which are the three theorems above on
+\lean{ZMod (p \^{} n * q * r)} with $r\ne2$ prime, \lean{levelsEW w = Es} and \lean{levelsFW w = Fs} written out level by level, and one clause added, that no $\Phi_d$ with $d\mid p^nqr$, $d\nmid p^nq$ divides the mask.
+Three more, \lean{Pnq/Sign.lean}, \lean{Pnq/Lift2.lean} and \lean{Pnq/LiftAll.lean} ($1{,}153$ lines), hold the prime $2$ and every $s$:
+\lean{Pnq.Lift.exists\_signs} (Lemma~\ref{lem:signs}; a signing is given as a splitting $w=u+v$ of the multiset into the
+elements signed $+$ and those signed $-$, and the signed mask is \lean{maskW u - maskW v});
+\lean{exists\_lift\_two} (Lemma~\ref{lem:lift2}, for $N=2^k(p^aq^b)$) and \lean{sizes\_eq\_two} (the sizes, as in \lean{sizes\_eq});
+\lean{sizes\_eq\_odd} (for every $N$ and every odd $s$, the sizes of the nonempty multisets with exactly a pattern $P$ of divisors of $N$ are the same on
+\lean{ZMod (N * s)} and on \lean{ZMod N});
+\lean{sizes\_eq\_mul} (the first sentence of Corollary~\ref{cor:lift}: the same on \lean{ZMod (p \^{} n * q * s)} and
+\lean{ZMod (p \^{} n * q)}, for primes $p\ne q$ and every $s\ge1$); and \lean{minsize\_unbalanced\_mul},
+\lean{minsize\_balanced\_all\_mul}, \lean{minsize\_balanced\_mul}, the three theorems above on
+\lean{ZMod (p \^{} n * q * s)} for every $s\ge1$, with the same clause added.
+Not formalised: the statement on signs for $n=p\,r\,q^b$; and the remarks of Section~\ref{sec:lift} that stand outside its lemmas and its corollary: that for odd $N$ Lemmas~\ref{lem:signs} and~\ref{lem:lift2} are one statement, the remark on $r=p$, and the remark after Corollary~\ref{cor:lift} (the three theorems assert their lower bound for the multisets that satisfy the added clause). That lifting along $2$ holds wherever the statement on signs holds for the odd part is in \lean{Pnq/Lift2.lean} as a lemma of the proving instance, \lean{TwoAux.exists\_lift\_two\_aux}, which was not among the statements fixed or audited.
+
+All six files were made in the same way as the eleven. For the first three the author fixed the one definition, one instance and the seven statements first; a fresh instance wrote the
+proofs; the author checked that the fixed declarations stand character for character, that Lean prints the
+statements as it did before the proofs existed, that there is no \lean{sorry}, added axiom, instance, notation
+or attribute beyond the fixed ones, and that the seven theorems rest on the same three axioms. Another fresh
+instance audited the statements and found no difference from what is meant; with programs of its own it found
+Lean's value to be the least size in 317 of 372 cases in groups up to $\Z_{72}$ and did not finish the other 55
+(none came out different), and for $r=2$, which those statements exclude, it found a lift with no new divisor for
+every multiset it tried. The three files are in the shared development (\lean{lean-tiling/Pnq/}), where they were put after Noon had read the seven statements; the author then built a fresh copy of the development with them from nothing ($18{,}459$ jobs, no error; Mathlib itself was not rebuilt), and Noon did the same in a copy of its own, with the same count of jobs, the three check files printing $95$ lines that each name only the three axioms. Noon also tried \lean{exists\_lift} by brute force, with nothing from the proof, on $1{,}481$ small multisets for $r=3$ and $r=5$: each had a lift.
+For the other three the author fixed the eight statements (they need no new definition) and posted a hash of them on the board that the instances share before any proof was
+begun; three fresh instances then wrote the proofs at the same time, one file each; the author made the same checks, with the same result. Another fresh instance audited the eight statements and found no difference from what is meant. With programs of its own it found, by exhaustion, a good signing for each of $1{,}581{,}519{,}831$ multisets on $40$ moduli $p^aq^b$ up to $375$, and a lift along $2$ for each of $696{,}029{,}875$ multisets on $112$ groups up to $\Z_{225}$; equal sets of sizes, as far as its censuses reach, for every pattern in $270$ pairs of groups ($44$, $139$ and $196$ for the three statements, which overlap); and no least size different from Lean's value in $2{,}344$ cases with $s>1$: in $1{,}481$ of them it proved the bound ($1{,}219$ by complete enumeration, $262$ with a solver), and in the other $863$ it found a multiset of Lean's size and none smaller as far as it searched. These three files are in the author's copy of the development (\lean{two-lean/} in the folder of the second working note); Noon has been asked to read the eight statements before they go into the shared one.
 
 \subsection*{What the formal proof does not show} That the theorem is new; that the prose proofs of this
 paper are right (they were read by the author and, in their working-note form, refereed by fresh instances,
