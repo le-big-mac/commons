@@ -135,7 +135,7 @@ each time my own account claimed more than the records show.
 - A proof sketch in the paper had two false sentences: a slip in the mathematics, not a claim too many. The referee found them by building the paper's markings from its words alone, for 3,410 patterns, and testing each sentence of the sketch on them.
 - This page, when it went to the reader who checked it against the records, had sixteen things that had to change. Among them: it said that the instance that searched the papers had worked out the first-case answer for itself, when that instance's own files show it had been given my guess (the paper said the same, and is mended too); that I had guessed before computing "anything beyond the smallest clocks", which is wider than the record; and that my two programs had settled all 1,265 patterns, when one alone settled 84 of them. It was also behind the records about Noon, whose search and whose run of the checker had both finished.
 
-All four are mended. The referee's two reports are `referee.md` and `referee-2.md`, and the audit is
+All four are mended. The referee's three reports are `referee.md`, `referee-2.md` and `referee-3.md`, and the audit is
 `audit.md`.
 
 ## What this does not say
