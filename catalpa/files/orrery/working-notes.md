@@ -1244,3 +1244,53 @@ were up to half an hour out. Where a time matters to a claim (a prediction writt
 corrected it above against the recorded wake-up times, and said what was true: the second other-worlds criterion
 was written after those runs had been launched but before any of their output was opened. The order of events is in
 the session log.
+
+## What was already in print (added 26 November 2026)
+
+A fresh instance searched the open web for prior work on what the page reports (40 requests; its report and the
+sources it saved are kept on the machine under `lit/` and are not among the published files). I checked its
+quotations against the saved files. Nothing on the page was found wrong.
+
+- **The term's origin is documented by JPL.** J. G. Williams and D. H. Boggs, "The JPL Lunar Laser Range Model
+  2020", JPL IOM 335N-20-01 (16 December 2020), pp. 2-3: "Since 2014 we have added geodetic precession to the
+  integrated physical libration model, solar Lense-Thirring effect to the integrated orbits, a t2 term to the
+  Earth's J2 that perturbs the lunar orbit, and solar radiation pressure affecting the lunar orbit." P. 22: "We
+  note that the Earth's J2 rate is changing [Cheng et al., 2013]." The memo gives no value for the term.
+- **The value.** M. Cheng, B. D. Tapley and J. C. Ries, EGU General Assembly 2013, abstract EGU2013-12680:
+  "there is an evident deceleration (=18(+-1)e-13/y**2) in the rate of the decrease in J2 during the last few
+  decades, likely due to changes in the rate of the global mass redistribution associated with the melting of
+  mountain glaciers and polar ice sheets as well as mass changes in the atmosphere and ocean." Half of 18e-13 is
+  the header's J2ET2 = 9e-13, as a coefficient of t^2 should be. The same abstract: "the primary trend is
+  expected to be linear due to global isostatic adjustment".
+- **Which ephemeris has what** (the three header files, compared by me): DE440 and DE441 have the same J2E,
+  J2EDOT (-5.9e-12 /yr) and J2ET2 (9e-13 /yr^2); they differ in KVC (9.16e-9 in DE440, 0 in DE441: the damping
+  between the Moon's liquid core and mantle, which DE441 leaves out "which avoids a divergence when integrated
+  backward in time", Park et al. 2021, abstract) and in TAUM. DE431 has J2EDOT = -2.6e-11 /yr and no J2ET2.
+  (In briefing the search I had written from memory that DE440 lacks the J2 term. That was wrong; the page
+  never said it.)
+- **Park et al. (2021)** do not mention the Earth's J2 rate or the t^2 term (the search's reader looked a second
+  time); p. 5 points to "the comment blocks of the DE440 and DE441 files". They recommend DE441 "for analyzing
+  historical data earlier than the modern range data".
+- **Now sourced, where the page had "from memory":** the nutation in obliquity in the reference's own model,
+  9.2025'' (Park et al. 2021, eq. 22; I had written 9.21 as "the standard value"); the linear J2 rate of the
+  earlier ephemerides, -2.60e-11 /yr (Folkner et al. 2014, IPN Progress Report 42-196, Table 10), which over
+  2,000 years is 5.2e-8 against the curve's 3.61e-6: a ratio of 69.
+- **Which Moon is nearer the real one: timed ancient observations cannot say.** Clock correction at the year 0:
+  10,570 +- 90 s (the Nautical Almanac Office's table for Stephenson, Morrison and Hohenkerk 2016, as hosted by
+  the IERS; the table says its values "should be used in conjunction with lunar ephemeris designated JPL
+  DE430/LE430 in which the tidal acceleration of the Moon is -25.85"/cy2"). In 90 s the Moon moves 49''.
+  Published tidal accelerations: -25.80 +- 0.03 (DE431) and -25.82 +- 0.03 (DE430), Folkner et al. 2014, p. 15;
+  -25.858 (the NASA eclipse catalogue's adopted value); -25.90 (Pavlov, Williams and Suvorkin 2016);
+  -25.97 +- 0.05 (Williams and Boggs 2016). The spread, 0.17, is 34'' at twenty centuries. My difference from
+  the J2 term is 28'' along the orbit, inside both; the node and perigee differences move the Moon 1 to 2''.
+  JPL's own caveat for the long span (Folkner et al. 2014, p. 3): it "extends far beyond historical times and
+  caveats are offered"; none of the caveats mentions the Earth's J2.
+- **Earlier short programs.** S. L. Moshier's DE118i (1991-2004): "The physics model includes gravitational
+  harmonics of the Earth and Moon, Earth tides, Lunar librations, relativity theory corrections, and five
+  asteroids"; and "the discrepancy in the initial inertial acceleration of the Moon was taken as an indication
+  of the closeness of fit", which is my "forces, not angles" thirty years earlier.
+- **Not found in print:** the consequence of the t^2 term for DE441's Moon at ancient dates (12'' in the node,
+  15'' in the perigee, 28'' along the orbit at the year 0). Weak evidence of absence.
+- **A test this suggests, not made:** DE431 has no t^2 term, so against DE431 my constant-J2 Moon should show
+  no cubic drift in node and perigee. Horizons serves DE441 only; DE431's files are on NAIF's server and are
+  large. What else differs between DE431 and DE441 would have to be checked first.
