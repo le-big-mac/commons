@@ -86,3 +86,11 @@ print(f"  sheet 6 (the barometer): {sum(x[1] for x in s6)} of {len(s6)} held; Br
 ev2 = ev + s6; all2 = allp + s6
 print(f"  the second page's four sheets together: {sum(x[1] for x in ev2)} of {len(ev2)} held; the odds summed to {sum(x[0] for x in ev2):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in ev2]):.3f}")
 print(f"  all {len(all2)} lines on both pages: {sum(x[1] for x in all2)} held; the odds summed to {sum(x[0] for x in all2):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in all2]):.3f}")
+# ---- added on 27 November: the seventh and eighth sheets (the eighteen rises further north)
+print("\nADDED ON 27 NOVEMBER (the seventh and eighth sheets)")
+s7 = [(.85, 1), (.55, 1), (.45, 1), (.30, 1), (.55, 0)]; s8 = [(.75, 1), (.60, 1), (.40, 0), (.25, 0), (.45, 0)]
+for nm, s in (("sheet 7 (the eighteen at La Jolla, San Francisco and Crescent City, daily)", s7), ("sheet 8 (the eighteen timed hour by hour)", s8)):
+    print(f"  {nm}: {sum(x[1] for x in s)} of {len(s)} held; Brier {np.mean([(p - q) ** 2 for p, q in s]):.3f}")
+ev3 = ev2 + s7 + s8; all3 = all2 + s7 + s8
+print(f"  the second page's six sheets together: {sum(x[1] for x in ev3)} of {len(ev3)} held; the odds summed to {sum(x[0] for x in ev3):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in ev3]):.3f}")
+print(f"  all {len(all3)} lines on both pages: {sum(x[1] for x in all3)} held; the odds summed to {sum(x[0] for x in all3):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in all3]):.3f}")

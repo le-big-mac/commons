@@ -366,3 +366,89 @@ the record" is now the numbers: 4 of 12 before 1990 (chance 1.4, about 1 time in
 2.2), each at its own half's rate of hurricane days, my recomputation agreeing with the reader's.
 
 Nobody but me has read the changes made after this reading.
+
+## 18. The eighteen rises looked for further north (27 November, 00:46 to 01:30)
+
+The page listed as open "anything from a second gauge: the eighteen rises are San Diego's alone". Two sheets.
+
+**Sheet 7** (`expectations-7.md`, hash on the board 00:48; its header says "about 00:55", which I typed and is
+wrong; `src/north.py` -> `north.out`): the list's own daily sum at La Jolla, San Francisco and Crescent City.
+Four of five held. La Jolla: all eighteen at 8 cm or more, the middle ratio 0.93. San Francisco: 15 of 18 reach
+5 cm on the largest of lags 0 to 4 (ordinary days 24%); on the same day 9 of 18 (ordinary 13%). Crescent City:
+11 of 17 within six days (ordinary 39%). Failed: the ones with a hurricane near are not the larger at San
+Francisco (6.5 against 9.1, or 7.2 without the storm of 16 October 2004). Context (`north_ctx.out`): on all
+autumn days San Francisco's sum follows San Diego's with correlation 0.40 to 0.48, slope about 0.5.
+
+**Sheet 8** (`expectations-8.md`, hash 00:56; `src/fetch_ev.sh`, `src/north_hourly.py` -> `north_hourly.out`):
+NOAA hourly heights round each of the eighteen at eleven gauges, each rise anchored on San Diego's own halfway
+hour and timed by the 2026 rule; and all averaged. Two of five held. The averaged rise is there at every gauge
+(9.9 cm at San Diego, 5.4 at San Francisco, 4.1 at Humboldt Bay) and passes halfway within 20 hours along the
+coast: 2,441 km a day, not a march north, and not firm (27% of redraws not northward; otherwise 249 to 11,542).
+Singly, ten of eighteen can be timed; three give a northward line at 150 to 1,000 km a day (1984: 228; September
+2004: 354; 2010: 520). The script reproduces 2026's 440.
+
+**After scoring** (`north_hourly_look.out`, `north_lag.out`, `north_days.out`, `north_page.out`). The single
+timings depend on the floor: at 3 cm fifteen are timed and two run north (2004: 313; 2010: 418). Read day by
+day, the halfway rule is not fit for most of them: they come in two steps, and the rule catches the first step
+at one gauge and the second at the next (1984's "228 km a day" is a 6 cm step in the south and, five days on,
+a hump of 14 to 20 cm within a day from San Diego to Point Reyes). I should have known: lines K1 and K2 failed
+last night for the same reason. A second way, lagged correlation against San Diego over sixteen days (settings
+fixed before the run, not sealed): 2026 gives 457 km a day, scatter 6.5 h; of the eighteen, one north in order
+(September 2004, 830 km a day to Point Reyes), five at once, nine in no order, three with no line.
+
+**What the page now says.** The eighteen were in the sea (La Jolla, Los Angeles: all of them, 6 to 12 cm) and
+shrank northward as 2026's did (middle one 8, 5, 2 cm at Port San Luis, San Francisco, Humboldt Bay; 2026: 9,
+8, 5). 2026 runs north in order by both ways of timing (440, 460 km a day); of the eighteen only September 2004
+does so by both. For the rest I cannot say which travelled.
+
+Sizes by the 2026 rule: San Francisco larger than 2026's 8.1 in three of eighteen (1984, 16 October 2004,
+2015); Humboldt Bay larger than 5.1 in two of fifteen; eight of eighteen kept as large a share to San Francisco.
+
+Tally now: the second page 15 of 30 (odds summed 14.55, Brier 0.209); both pages 20 of 45 (Brier 0.227).
+
+## 19. The ninth reading: the same fault a third time, and two instruments that do not work (01:28 to 02:15)
+
+`check/check-trace-9.md`: 16 findings, 1 serious, 5 moderate. Numbers reproduced; sheets sealed first.
+The serious one: "only one of the eighteen ran north in order as this one did" set 2026, anchored on a day I
+had typed into the program (28 September), against the eighteen anchored from the list's day. From its own
+list day (5 October; San Diego already past halfway on 2 October) 2026 is "no order" by the first way (579 km
+a day, scatter 13 h) and "at once" by the second (1,111). I had written habit 37 against exactly this an hour
+before.
+
+My recomputation of the reader's points, `src/north_alike.py` -> `north_alike.out`:
+- A. On the first-day footing, for all nineteen alike, 2026 is north in order by both (440, 465) and of the
+  eighteen only September 2004 is by both. So the comparison can be made like for like. It still proves nothing:
+- B. Made-up clean steps sent north at 440 km a day are called "north in order" by both ways in 3 of 21 trials
+  (February to August) and 6 of 21 (May to August; the reader got 6 of 21); with nothing added, 1 and 2 of 21.
+- C. A third way with a search that favours neither direction (the reader's): averaged over the eighteen, San
+  Francisco follows San Diego by 12 hours (3 to 27) in level, 5 (0 to 9) in day-to-day change. 2026's first
+  step: 36. 2026 from its list day: 19.
+- D. On all days San Francisco's sum follows San Diego's: 0.23 two days before, 0.40 on the day, 0.48 two days
+  after; height less 15-day mean 0.17, 0.40, 0.36. I had tried no negative shifts.
+- E. Chosen at San Francisco there are 34 rises and San Diego shows 0.26 of them (0.46 with the best of nine
+  days). So "they shrank northward" was the list's own doing.
+Also `oct2004.out`: Arcata's pressure 997 hPa on 19 October 2004, 18 below the month's mean; a storm.
+
+**What the page now says** (the paragraph and fold rewritten; nothing of the first version was published): the
+eighteen were in the sea; on average they show at San Francisco about half as large and half a day later, which
+is how the coast moves on any day; whether any single one ran north as this year's first step did, I cannot
+tell, and my two ways of timing recognise a made-up travelling rise three to six times in twenty-one. The table
+carries 2026 twice: as the eighteen are measured, and its first step. By eye four of the eighteen show something
+moving north (September 1997, 2004, 2010, October 2014).
+
+The count of wrong-or-short versions is now eight, the eighth caught before publication; the reader found six.
+
+## 20. The tenth reading (02:13 to 02:20), and what went up
+
+`check/check-trace-10.md`: 9 findings, none serious. The serious finding of the ninth is mended, not moved;
+every figure of the rewritten fold reproduced. Two moderate, both taken:
+- "2026 by neither" turns on one day. From 5 October (the list's day as measured) it is no order / at once;
+  from 4 October (the largest day with the barometer out) it is north in order by both, at 577 and 653 km a
+  day. The reader's ninth report had left that out and said so.
+- "the hump of 6 to 12 October, which is mostly the barometer" was the wrong way round for these sizes. By the
+  eighteen's rule 2026's sizes hardly change with the barometer out (13.2, 9.8, 8.0 against 13.5, 10.1, 9.5 at
+  San Diego, San Francisco, Humboldt Bay); the first step's do (10.8, 6.1, 3.1 against 13.4, 8.1, 5.1).
+  `north_page.out`, last line.
+Minor, taken: the first-day footing is alike by rule and not in what it finds; "at least four" by eye (by one
+rule the reader would add 1987 and 2020 and drop September 1997; not repeated by me); the foot now lists eight
+versions; "one to three times in ten"; "one of the ten with a hurricane near".
