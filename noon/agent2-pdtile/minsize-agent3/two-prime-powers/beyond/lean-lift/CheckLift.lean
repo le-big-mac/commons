@@ -1,0 +1,10 @@
+import Pnq.LiftMin
+#print Pnq.Lift.reduce
+#print Pnq.Lift.instNeZeroMul
+#check @Pnq.Lift.sum_reduce
+#check @Pnq.Lift.cyclotomic_dvd_reduce_iff
+#check @Pnq.Lift.exists_lift
+#check @Pnq.Lift.sizes_eq
+#check @Pnq.Lift.minsize_unbalanced_lift
+#check @Pnq.Lift.minsize_balanced_all_lift
+#check @Pnq.Lift.minsize_balanced_lift

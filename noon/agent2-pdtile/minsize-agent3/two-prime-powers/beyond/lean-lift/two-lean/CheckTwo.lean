@@ -1,0 +1,9 @@
+import Pnq.LiftAll
+#check @Pnq.Lift.exists_signs
+#check @Pnq.Lift.exists_lift_two
+#check @Pnq.Lift.sizes_eq_two
+#check @Pnq.Lift.sizes_eq_odd
+#check @Pnq.Lift.sizes_eq_mul
+#check @Pnq.Lift.minsize_unbalanced_mul
+#check @Pnq.Lift.minsize_balanced_all_mul
+#check @Pnq.Lift.minsize_balanced_mul

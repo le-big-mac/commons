@@ -1,0 +1,105 @@
+Pnq.Lift.exists_signs : ∀ (p q : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)],
+  p ≠ 2 →
+    q ≠ 2 →
+      p ≠ q →
+        ∀ (a b : ℕ) (w : ZMod (p ^ a * q ^ b) → ℕ),
+          (∃ x, w x ≠ 0) →
+            ∃ u v,
+              (∀ (x : ZMod (p ^ a * q ^ b)), u x + v x = w x) ∧
+                ∀ (d : ℕ), d ∣ p ^ a * q ^ b → ¬Polynomial.cyclotomic d ℤ ∣ Pnq.maskW u - Pnq.maskW v
+@Pnq.Lift.exists_lift_two : ∀ {N : ℕ} [inst : NeZero N] (p q : ℕ) [Fact (Nat.Prime p)] [Fact (Nat.Prime q)],
+  p ≠ 2 →
+    q ≠ 2 →
+      p ≠ q →
+        ∀ (k a b : ℕ),
+          N = 2 ^ k * (p ^ a * q ^ b) →
+            ∀ (w : ZMod N → ℕ),
+              (∃ x, w x ≠ 0) →
+                ∃ w', Pnq.Lift.reduce w' = w ∧ ∀ (d : ℕ), d ∣ N * 2 → ¬d ∣ N → ¬Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w'
+@Pnq.Lift.sizes_eq_two : ∀ {N : ℕ} [inst : NeZero N] (p q : ℕ) [Fact (Nat.Prime p)] [Fact (Nat.Prime q)],
+  p ≠ 2 →
+    q ≠ 2 →
+      p ≠ q →
+        ∀ (k a b : ℕ),
+          N = 2 ^ k * (p ^ a * q ^ b) →
+            ∀ (P : Finset ℕ),
+              (∀ d ∈ P, d ∣ N) →
+                {s |
+                    ∃ w',
+                      ∑ y, w' y = s ∧
+                        0 < s ∧ ∀ (d : ℕ), d ∣ N * 2 → d ≠ 1 → (Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w' ↔ d ∈ P)} =
+                  {s |
+                    ∃ w,
+                      ∑ x, w x = s ∧
+                        0 < s ∧ ∀ (d : ℕ), d ∣ N → d ≠ 1 → (Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w ↔ d ∈ P)}
+@Pnq.Lift.sizes_eq_odd : ∀ {N : ℕ} [inst : NeZero N] (s : ℕ) [inst_1 : NeZero s],
+  Odd s →
+    ∀ (P : Finset ℕ),
+      (∀ d ∈ P, d ∣ N) →
+        {t |
+            ∃ w',
+              ∑ y, w' y = t ∧
+                0 < t ∧ ∀ (d : ℕ), d ∣ N * s → d ≠ 1 → (Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w' ↔ d ∈ P)} =
+          {t | ∃ w, ∑ x, w x = t ∧ 0 < t ∧ ∀ (d : ℕ), d ∣ N → d ≠ 1 → (Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w ↔ d ∈ P)}
+Pnq.Lift.sizes_eq_mul : ∀ (p q n s : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)] [inst_2 : NeZero s],
+  p ≠ q →
+    ∀ (P : Finset ℕ),
+      (∀ d ∈ P, d ∣ p ^ n * q) →
+        {t |
+            ∃ w',
+              ∑ y, w' y = t ∧
+                0 < t ∧ ∀ (d : ℕ), d ∣ p ^ n * q * s → d ≠ 1 → (Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w' ↔ d ∈ P)} =
+          {t |
+            ∃ w,
+              ∑ x, w x = t ∧
+                0 < t ∧ ∀ (d : ℕ), d ∣ p ^ n * q → d ≠ 1 → (Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w ↔ d ∈ P)}
+Pnq.Lift.minsize_unbalanced_mul : ∀ (p q n s : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)]
+  [inst_2 : NeZero s],
+  p ≠ q →
+    ∀ (Es Fs : Finset ℕ),
+      Es ⊆ Finset.Icc 1 n →
+        Fs ⊆ Finset.Icc 1 n →
+          IsLeast
+            {t |
+              ∃ w,
+                ∑ a, w a = t ∧
+                  ¬Polynomial.cyclotomic q ℤ ∣ Pnq.maskW w ∧
+                    (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ) ℤ ∣ Pnq.maskW w ↔ ℓ ∈ Es) ∧
+                      (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ * q) ℤ ∣ Pnq.maskW w ↔ ℓ ∈ Fs) ∧
+                        ∀ (d : ℕ), d ∣ p ^ n * q * s → ¬d ∣ p ^ n * q → ¬Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w}
+            (Pnq.minU p q Es Fs)
+Pnq.Lift.minsize_balanced_all_mul : ∀ (p q n s : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)]
+  [inst_2 : NeZero s],
+  p ≠ q →
+    ∀ Es ⊆ Finset.Icc 1 n,
+      IsLeast
+        {t |
+          ∃ w,
+            ∑ a, w a = t ∧
+              0 < t ∧
+                Polynomial.cyclotomic q ℤ ∣ Pnq.maskW w ∧
+                  (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ) ℤ ∣ Pnq.maskW w ↔ ℓ ∈ Es) ∧
+                    (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ * q) ℤ ∣ Pnq.maskW w) ∧
+                      ∀ (d : ℕ), d ∣ p ^ n * q * s → ¬d ∣ p ^ n * q → ¬Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w}
+        (q * p ^ Es.card)
+Pnq.Lift.minsize_balanced_mul : ∀ (p q n s : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)]
+  [inst_2 : NeZero s],
+  p ≠ q →
+    ∀ (Es Fs : Finset ℕ),
+      Es ⊆ Finset.Icc 1 n →
+        Fs ⊆ Finset.Icc 1 n →
+          ∀ (a0 : ℕ),
+            1 ≤ a0 →
+              a0 ≤ n →
+                (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) →
+                  a0 ∉ Fs →
+                    IsLeast
+                      {t |
+                        ∃ w,
+                          ∑ a, w a = t ∧
+                            Polynomial.cyclotomic q ℤ ∣ Pnq.maskW w ∧
+                              (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ) ℤ ∣ Pnq.maskW w ↔ ℓ ∈ Es) ∧
+                                (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ * q) ℤ ∣ Pnq.maskW w ↔ ℓ ∈ Fs) ∧
+                                  ∀ (d : ℕ),
+                                    d ∣ p ^ n * q * s → ¬d ∣ p ^ n * q → ¬Polynomial.cyclotomic d ℤ ∣ Pnq.maskW w}
+                      (Pnq.minB p q Es Fs a0)

@@ -1,0 +1,299 @@
+=== Pnq.Lift.exists_signs
+kind: theorem; universe params: []
+  Init.Core: #[Exists, Ne]
+  Init.Data.Int.Basic: #[Int]
+  Init.Data.Nat.Basic: #[Nat.instNeZeroHPow]
+  Init.Data.Nat.Div.Basic: #[Nat.instDvd]
+  Init.Data.NeZero: #[instNeZeroNatHMul]
+  Init.Data.Zero: #[Zero.ofOfNat0]
+  Init.Prelude: #[And, Dvd.dvd, Eq, HAdd.hAdd, HMul.hMul, HPow.hPow, HSub.hSub, Nat, Not, OfNat.ofNat, instAddNat, instHAdd, instHMul, instHPow, instHSub, instMulNat, instOfNatNat]
+  Mathlib.Algebra.Divisibility.Basic: #[semigroupDvd]
+  Mathlib.Algebra.Group.Defs: #[AddGroup.toSubNegMonoid]
+  Mathlib.Algebra.Group.DivInvMonoid: #[SubNegMonoid.toSub]
+  Mathlib.Algebra.Group.Monoid: #[Monoid.toNPow, NPow.toPow]
+  Mathlib.Algebra.Group.Nat.Defs: #[Nat.instAddMonoid, Nat.instAddSemigroup, Nat.instMonoid, Nat.instOne]
+  Mathlib.Algebra.GroupWithZero.Defs: #[SemigroupWithZero.toSemigroup]
+  Mathlib.Algebra.MonoidAlgebra.Defs: #[AddMonoidAlgebra.nonUnitalSemiring, AddMonoidAlgebra.ring]
+  Mathlib.Algebra.Order.GroupWithZero.Canonical: #[LinearOrderedCommMonoidWithZero.toIsBotZeroClass]
+  Mathlib.Algebra.Order.IsBotOne: #[NeZero.of_gt']
+  Mathlib.Algebra.Order.Ring.Nat: #[Nat.instLinearOrderedCommMonoidWithZero]
+  Mathlib.Algebra.Polynomial.Basic: #[Polynomial]
+  Mathlib.Algebra.Ring.Defs: #[NonUnitalSemiring.toSemigroupWithZero, Ring.toAddGroupWithOne, Ring.toSemiring]
+  Mathlib.Algebra.Ring.Int.Defs: #[Int.instRing, Int.instSemiring]
+  Mathlib.Basic.Logic.Basic: #[Fact]
+  Mathlib.Data.Int.Cast.Defs: #[AddGroupWithOne.toAddGroup]
+  Mathlib.Data.Nat.Basic: #[Nat.instPreorder]
+  Mathlib.Data.Nat.Prime.Defs: #[Nat.Prime, Nat.Prime.one_lt']
+  Mathlib.Data.ZMod.Defs: #[ZMod]
+  Mathlib.RingTheory.Polynomial.Cyclotomic.Basic: #[Polynomial.cyclotomic]
+  Pnq.Weighted: #[Pnq.maskW]
+  instance arguments:
+    @Pnq.maskW   (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)     (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p a)     (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) q b))   (@instNeZeroNatHMul     (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p a)     (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) q b)     (@Nat.instNeZeroHPow p a       (@NeZero.of_gt' Nat p (@Zero.ofOfNat0 Nat (instOfNatNat (nat_lit 0))) Nat.instPreorder         (@LinearOrderedCommMonoidWithZero.toIsBotZeroClass Nat Nat.instLinearOrderedCommMonoidWithZero) Nat.instOne         (@Nat.Prime.one_lt' p inst✝¹)))     (@Nat.instNeZeroHPow q b       (@NeZero.of_gt' Nat q (@Zero.ofOfNat0 Nat (instOfNatNat (nat_lit 0))) Nat.instPreorder         (@LinearOrderedCommMonoidWithZero.toIsBotZeroClass Nat Nat.instLinearOrderedCommMonoidWithZero) Nat.instOne         (@Nat.Prime.one_lt' q inst✝))))
+=== Pnq.Lift.exists_lift_two
+kind: theorem; universe params: []
+  Init.Core: #[Exists, Ne]
+  Init.Data.Int.Basic: #[Int]
+  Init.Data.Nat.Div.Basic: #[Nat.instDvd]
+  Init.Data.NeZero: #[NeZero]
+  Init.Prelude: #[And, Dvd.dvd, Eq, HMul.hMul, HPow.hPow, Nat, Not, OfNat.ofNat, instHMul, instHPow, instMulNat, instOfNatNat]
+  Mathlib.Algebra.Divisibility.Basic: #[semigroupDvd]
+  Mathlib.Algebra.Group.Monoid: #[Monoid.toNPow, NPow.toPow]
+  Mathlib.Algebra.Group.Nat.Defs: #[Nat.instAddSemigroup, Nat.instMonoid]
+  Mathlib.Algebra.GroupWithZero.Defs: #[MulZeroClass.toZero, SemigroupWithZero.toSemigroup]
+  Mathlib.Algebra.GroupWithZero.Nat: #[Nat.instMulZeroClass]
+  Mathlib.Algebra.MonoidAlgebra.Defs: #[AddMonoidAlgebra.nonUnitalSemiring]
+  Mathlib.Algebra.Polynomial.Basic: #[Polynomial]
+  Mathlib.Algebra.Ring.Defs: #[NonUnitalSemiring.toSemigroupWithZero, Ring.toSemiring]
+  Mathlib.Algebra.Ring.Int.Defs: #[Int.instRing]
+  Mathlib.Basic.Logic.Basic: #[Fact]
+  Mathlib.Data.Nat.Prime.Defs: #[Nat.Prime, Nat.fact_prime_two]
+  Mathlib.Data.ZMod.Defs: #[ZMod]
+  Mathlib.RingTheory.Polynomial.Cyclotomic.Basic: #[Polynomial.cyclotomic]
+  Pnq.Lift: #[Pnq.Lift.instNeZeroMul, Pnq.Lift.reduce]
+  Pnq.Weighted: #[Pnq.maskW]
+  instance arguments:
+    @Pnq.Lift.reduce N (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) inst✝² Nat.fact_prime_two
+    @Pnq.maskW   (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) N (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))   (@Pnq.Lift.instNeZeroMul N (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) inst✝² Nat.fact_prime_two)
+=== Pnq.Lift.sizes_eq_two
+kind: theorem; universe params: []
+  Init.Core: #[Exists, Iff, Ne]
+  Init.Data.Int.Basic: #[Int]
+  Init.Data.Nat.Div.Basic: #[Nat.instDvd]
+  Init.Data.NeZero: #[NeZero]
+  Init.Prelude: #[And, Dvd.dvd, Eq, HMul.hMul, HPow.hPow, LT.lt, Membership.mem, Nat, OfNat.ofNat, instHMul, instHPow, instLTNat, instMulNat, instOfNatNat]
+  Mathlib.Algebra.BigOperators.Group.Finset.Defs: #[Finset.sum]
+  Mathlib.Algebra.Divisibility.Basic: #[semigroupDvd]
+  Mathlib.Algebra.Group.Monoid: #[Monoid.toNPow, NPow.toPow]
+  Mathlib.Algebra.Group.Nat.Defs: #[Nat.instAddCommMonoid, Nat.instAddSemigroup, Nat.instMonoid]
+  Mathlib.Algebra.GroupWithZero.Defs: #[MulZeroClass.toZero, SemigroupWithZero.toSemigroup]
+  Mathlib.Algebra.GroupWithZero.Nat: #[Nat.instMulZeroClass]
+  Mathlib.Algebra.MonoidAlgebra.Defs: #[AddMonoidAlgebra.nonUnitalSemiring]
+  Mathlib.Algebra.Polynomial.Basic: #[Polynomial]
+  Mathlib.Algebra.Ring.Defs: #[NonUnitalSemiring.toSemigroupWithZero, Ring.toSemiring]
+  Mathlib.Algebra.Ring.Int.Defs: #[Int.instRing]
+  Mathlib.Basic.Logic.Basic: #[Fact]
+  Mathlib.Basic.SetLike.Basic: #[SetLike.instMembership]
+  Mathlib.Data.Finset.Defs: #[Finset, Finset.instSetLike]
+  Mathlib.Data.Fintype.Defs: #[Finset.univ]
+  Mathlib.Data.Nat.Prime.Defs: #[Nat.Prime, Nat.fact_prime_two]
+  Mathlib.Data.Set.Defs: #[Set, Set.ofPred]
+  Mathlib.Data.ZMod.Defs: #[ZMod, ZMod.fintype]
+  Mathlib.RingTheory.Polynomial.Cyclotomic.Basic: #[Polynomial.cyclotomic]
+  Pnq.Lift: #[Pnq.Lift.instNeZeroMul]
+  Pnq.Weighted: #[Pnq.maskW]
+  instance arguments:
+    @Finset.univ   (ZMod (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) N (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))   (@ZMod.fintype     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) N (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))     (@Pnq.Lift.instNeZeroMul N (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) inst✝² Nat.fact_prime_two))
+    @Pnq.maskW   (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) N (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))   (@Pnq.Lift.instNeZeroMul N (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) inst✝² Nat.fact_prime_two)
+    @Finset.univ (ZMod N) (@ZMod.fintype N inst✝²)
+    @Pnq.maskW N inst✝²
+=== Pnq.Lift.sizes_eq_odd
+kind: theorem; universe params: []
+  Init.Core: #[Exists, Iff, Ne]
+  Init.Data.Int.Basic: #[Int]
+  Init.Data.Nat.Div.Basic: #[Nat.instDvd]
+  Init.Data.NeZero: #[NeZero, instNeZeroNatHMul]
+  Init.Prelude: #[And, Dvd.dvd, Eq, HMul.hMul, LT.lt, Membership.mem, Nat, OfNat.ofNat, instHMul, instLTNat, instMulNat, instOfNatNat]
+  Mathlib.Algebra.BigOperators.Group.Finset.Defs: #[Finset.sum]
+  Mathlib.Algebra.Divisibility.Basic: #[semigroupDvd]
+  Mathlib.Algebra.Group.Nat.Defs: #[Nat.instAddCommMonoid, Nat.instAddSemigroup]
+  Mathlib.Algebra.GroupWithZero.Defs: #[MulZeroClass.toZero, SemigroupWithZero.toSemigroup]
+  Mathlib.Algebra.GroupWithZero.Nat: #[Nat.instMulZeroClass]
+  Mathlib.Algebra.MonoidAlgebra.Defs: #[AddMonoidAlgebra.nonUnitalSemiring]
+  Mathlib.Algebra.Polynomial.Basic: #[Polynomial]
+  Mathlib.Algebra.Ring.Defs: #[NonUnitalSemiring.toSemigroupWithZero, Ring.toSemiring]
+  Mathlib.Algebra.Ring.Int.Defs: #[Int.instRing]
+  Mathlib.Algebra.Ring.Nat: #[Nat.instSemiring]
+  Mathlib.Algebra.Ring.Parity: #[Odd]
+  Mathlib.Basic.SetLike.Basic: #[SetLike.instMembership]
+  Mathlib.Data.Finset.Defs: #[Finset, Finset.instSetLike]
+  Mathlib.Data.Fintype.Defs: #[Finset.univ]
+  Mathlib.Data.Set.Defs: #[Set, Set.ofPred]
+  Mathlib.Data.ZMod.Defs: #[ZMod, ZMod.fintype]
+  Mathlib.RingTheory.Polynomial.Cyclotomic.Basic: #[Polynomial.cyclotomic]
+  Pnq.Weighted: #[Pnq.maskW]
+  instance arguments:
+    @Finset.univ (ZMod (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) N s))   (@ZMod.fintype (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) N s) (@instNeZeroNatHMul N s inst✝¹ inst✝))
+    @Pnq.maskW (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) N s) (@instNeZeroNatHMul N s inst✝¹ inst✝)
+    @Finset.univ (ZMod N) (@ZMod.fintype N inst✝¹)
+    @Pnq.maskW N inst✝¹
+=== Pnq.Lift.sizes_eq_mul
+kind: theorem; universe params: []
+  Init.Core: #[Exists, Iff, Ne]
+  Init.Data.Int.Basic: #[Int]
+  Init.Data.Nat.Div.Basic: #[Nat.instDvd]
+  Init.Data.NeZero: #[NeZero, instNeZeroNatHMul]
+  Init.Prelude: #[And, Dvd.dvd, Eq, HMul.hMul, HPow.hPow, LT.lt, Membership.mem, Nat, OfNat.ofNat, instHMul, instHPow, instLTNat, instMulNat, instOfNatNat]
+  Mathlib.Algebra.BigOperators.Group.Finset.Defs: #[Finset.sum]
+  Mathlib.Algebra.Divisibility.Basic: #[semigroupDvd]
+  Mathlib.Algebra.Group.Monoid: #[Monoid.toNPow, NPow.toPow]
+  Mathlib.Algebra.Group.Nat.Defs: #[Nat.instAddCommMonoid, Nat.instAddSemigroup, Nat.instMonoid]
+  Mathlib.Algebra.GroupWithZero.Defs: #[MulZeroClass.toZero, SemigroupWithZero.toSemigroup]
+  Mathlib.Algebra.GroupWithZero.Nat: #[Nat.instMulZeroClass]
+  Mathlib.Algebra.MonoidAlgebra.Defs: #[AddMonoidAlgebra.nonUnitalSemiring]
+  Mathlib.Algebra.Polynomial.Basic: #[Polynomial]
+  Mathlib.Algebra.Ring.Defs: #[NonUnitalSemiring.toSemigroupWithZero, Ring.toSemiring]
+  Mathlib.Algebra.Ring.Int.Defs: #[Int.instRing]
+  Mathlib.Basic.Logic.Basic: #[Fact]
+  Mathlib.Basic.SetLike.Basic: #[SetLike.instMembership]
+  Mathlib.Data.Finset.Defs: #[Finset, Finset.instSetLike]
+  Mathlib.Data.Fintype.Defs: #[Finset.univ]
+  Mathlib.Data.Nat.Prime.Defs: #[Nat.Prime]
+  Mathlib.Data.Set.Defs: #[Set, Set.ofPred]
+  Mathlib.Data.ZMod.Defs: #[ZMod, ZMod.fintype]
+  Mathlib.RingTheory.Polynomial.Cyclotomic.Basic: #[Polynomial.cyclotomic]
+  Pnq.Group: #[Pnq.instNeZeroNatHMulHPow_pnq]
+  Pnq.Weighted: #[Pnq.maskW]
+  instance arguments:
+    @Finset.univ   (ZMod     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s))   (@ZMod.fintype     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s)     (@instNeZeroNatHMul       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹) inst✝))
+    @Pnq.maskW   (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)     s)   (@instNeZeroNatHMul     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)     s (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹) inst✝)
+    @Finset.univ   (ZMod     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q))   (@ZMod.fintype     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)     (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹))
+    @Pnq.maskW   (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)     (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)   (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹)
+=== Pnq.Lift.minsize_unbalanced_mul
+kind: theorem; universe params: []
+  Init.Core: #[Exists, Iff, Ne]
+  Init.Data.Int.Basic: #[Int]
+  Init.Data.Nat.Div.Basic: #[Nat.instDvd]
+  Init.Data.NeZero: #[NeZero, instNeZeroNatHMul]
+  Init.Prelude: #[And, Dvd.dvd, Eq, HMul.hMul, HPow.hPow, LE.le, Membership.mem, Nat, Not, OfNat.ofNat, instHMul, instHPow, instLENat, instMulNat, instOfNatNat]
+  Mathlib.Algebra.BigOperators.Group.Finset.Defs: #[Finset.sum]
+  Mathlib.Algebra.Divisibility.Basic: #[semigroupDvd]
+  Mathlib.Algebra.Group.Monoid: #[Monoid.toNPow, NPow.toPow]
+  Mathlib.Algebra.Group.Nat.Defs: #[Nat.instAddCommMonoid, Nat.instAddSemigroup, Nat.instMonoid]
+  Mathlib.Algebra.GroupWithZero.Defs: #[MulZeroClass.toZero, SemigroupWithZero.toSemigroup]
+  Mathlib.Algebra.GroupWithZero.Nat: #[Nat.instMulZeroClass]
+  Mathlib.Algebra.MonoidAlgebra.Defs: #[AddMonoidAlgebra.nonUnitalSemiring]
+  Mathlib.Algebra.Polynomial.Basic: #[Polynomial]
+  Mathlib.Algebra.Ring.Defs: #[NonUnitalSemiring.toSemigroupWithZero, Ring.toSemiring]
+  Mathlib.Algebra.Ring.Int.Defs: #[Int.instRing]
+  Mathlib.Basic.Logic.Basic: #[Fact]
+  Mathlib.Basic.SetLike.Basic: #[SetLike.instMembership]
+  Mathlib.Data.Finset.Defs: #[Finset, Finset.instPartialOrder, Finset.instSetLike]
+  Mathlib.Data.Fintype.Defs: #[Finset.univ]
+  Mathlib.Data.Nat.Basic: #[Nat.instPreorder]
+  Mathlib.Data.Nat.Prime.Defs: #[Nat.Prime]
+  Mathlib.Data.Set.Defs: #[Set.ofPred]
+  Mathlib.Data.ZMod.Defs: #[ZMod, ZMod.fintype]
+  Mathlib.Order.Bounds.Defs: #[IsLeast]
+  Mathlib.Order.Defs.PartialOrder: #[PartialOrder.toPreorder, Preorder.toLE]
+  Mathlib.Order.Interval.Finset.Defs: #[Finset.Icc]
+  Mathlib.Order.Interval.Finset.Nat: #[Nat.instLocallyFiniteOrder]
+  Mathlib.RingTheory.Polynomial.Cyclotomic.Basic: #[Polynomial.cyclotomic]
+  Pnq.Group: #[Pnq.instNeZeroNatHMulHPow_pnq]
+  Pnq.Rule: #[Pnq.minU]
+  Pnq.Weighted: #[Pnq.maskW]
+  instance arguments:
+    @Finset.univ   (ZMod     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s))   (@ZMod.fintype     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s)     (@instNeZeroNatHMul       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹) inst✝))
+    @Pnq.maskW   (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)     s)   (@instNeZeroNatHMul     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)     s (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹) inst✝)
+=== Pnq.Lift.minsize_balanced_all_mul
+kind: theorem; universe params: []
+  Init.Core: #[Exists, Iff, Ne]
+  Init.Data.Int.Basic: #[Int]
+  Init.Data.Nat.Div.Basic: #[Nat.instDvd]
+  Init.Data.NeZero: #[NeZero, instNeZeroNatHMul]
+  Init.Prelude: #[And, Dvd.dvd, Eq, HMul.hMul, HPow.hPow, LE.le, LT.lt, Membership.mem, Nat, Not, OfNat.ofNat, instHMul, instHPow, instLENat, instLTNat, instMulNat, instOfNatNat]
+  Mathlib.Algebra.BigOperators.Group.Finset.Defs: #[Finset.sum]
+  Mathlib.Algebra.Divisibility.Basic: #[semigroupDvd]
+  Mathlib.Algebra.Group.Monoid: #[Monoid.toNPow, NPow.toPow]
+  Mathlib.Algebra.Group.Nat.Defs: #[Nat.instAddCommMonoid, Nat.instAddSemigroup, Nat.instMonoid]
+  Mathlib.Algebra.GroupWithZero.Defs: #[MulZeroClass.toZero, SemigroupWithZero.toSemigroup]
+  Mathlib.Algebra.GroupWithZero.Nat: #[Nat.instMulZeroClass]
+  Mathlib.Algebra.MonoidAlgebra.Defs: #[AddMonoidAlgebra.nonUnitalSemiring]
+  Mathlib.Algebra.Polynomial.Basic: #[Polynomial]
+  Mathlib.Algebra.Ring.Defs: #[NonUnitalSemiring.toSemigroupWithZero, Ring.toSemiring]
+  Mathlib.Algebra.Ring.Int.Defs: #[Int.instRing]
+  Mathlib.Basic.Logic.Basic: #[Fact]
+  Mathlib.Basic.SetLike.Basic: #[SetLike.instMembership]
+  Mathlib.Data.Finset.Card: #[Finset.card]
+  Mathlib.Data.Finset.Defs: #[Finset, Finset.instPartialOrder, Finset.instSetLike]
+  Mathlib.Data.Fintype.Defs: #[Finset.univ]
+  Mathlib.Data.Nat.Basic: #[Nat.instPreorder]
+  Mathlib.Data.Nat.Prime.Defs: #[Nat.Prime]
+  Mathlib.Data.Set.Defs: #[Set.ofPred]
+  Mathlib.Data.ZMod.Defs: #[ZMod, ZMod.fintype]
+  Mathlib.Order.Bounds.Defs: #[IsLeast]
+  Mathlib.Order.Defs.PartialOrder: #[PartialOrder.toPreorder, Preorder.toLE]
+  Mathlib.Order.Interval.Finset.Defs: #[Finset.Icc]
+  Mathlib.Order.Interval.Finset.Nat: #[Nat.instLocallyFiniteOrder]
+  Mathlib.RingTheory.Polynomial.Cyclotomic.Basic: #[Polynomial.cyclotomic]
+  Pnq.Group: #[Pnq.instNeZeroNatHMulHPow_pnq]
+  Pnq.Weighted: #[Pnq.maskW]
+  instance arguments:
+    @Finset.univ   (ZMod     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s))   (@ZMod.fintype     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s)     (@instNeZeroNatHMul       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹) inst✝))
+    @Pnq.maskW   (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)     s)   (@instNeZeroNatHMul     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)     s (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹) inst✝)
+=== Pnq.Lift.minsize_balanced_mul
+kind: theorem; universe params: []
+  Init.Core: #[Exists, Iff, Ne]
+  Init.Data.Int.Basic: #[Int]
+  Init.Data.Nat.Div.Basic: #[Nat.instDvd]
+  Init.Data.NeZero: #[NeZero, instNeZeroNatHMul]
+  Init.Prelude: #[And, Dvd.dvd, Eq, HMul.hMul, HPow.hPow, LE.le, LT.lt, Membership.mem, Nat, Not, OfNat.ofNat, instHMul, instHPow, instLENat, instLTNat, instMulNat, instOfNatNat]
+  Mathlib.Algebra.BigOperators.Group.Finset.Defs: #[Finset.sum]
+  Mathlib.Algebra.Divisibility.Basic: #[semigroupDvd]
+  Mathlib.Algebra.Group.Monoid: #[Monoid.toNPow, NPow.toPow]
+  Mathlib.Algebra.Group.Nat.Defs: #[Nat.instAddCommMonoid, Nat.instAddSemigroup, Nat.instMonoid]
+  Mathlib.Algebra.GroupWithZero.Defs: #[MulZeroClass.toZero, SemigroupWithZero.toSemigroup]
+  Mathlib.Algebra.GroupWithZero.Nat: #[Nat.instMulZeroClass]
+  Mathlib.Algebra.MonoidAlgebra.Defs: #[AddMonoidAlgebra.nonUnitalSemiring]
+  Mathlib.Algebra.Polynomial.Basic: #[Polynomial]
+  Mathlib.Algebra.Ring.Defs: #[NonUnitalSemiring.toSemigroupWithZero, Ring.toSemiring]
+  Mathlib.Algebra.Ring.Int.Defs: #[Int.instRing]
+  Mathlib.Basic.Logic.Basic: #[Fact]
+  Mathlib.Basic.SetLike.Basic: #[SetLike.instMembership]
+  Mathlib.Data.Finset.Defs: #[Finset, Finset.instPartialOrder, Finset.instSetLike]
+  Mathlib.Data.Fintype.Defs: #[Finset.univ]
+  Mathlib.Data.Nat.Basic: #[Nat.instPreorder]
+  Mathlib.Data.Nat.Prime.Defs: #[Nat.Prime]
+  Mathlib.Data.Set.Defs: #[Set.ofPred]
+  Mathlib.Data.ZMod.Defs: #[ZMod, ZMod.fintype]
+  Mathlib.Order.Bounds.Defs: #[IsLeast]
+  Mathlib.Order.Defs.PartialOrder: #[PartialOrder.toPreorder, Preorder.toLE]
+  Mathlib.Order.Interval.Finset.Defs: #[Finset.Icc]
+  Mathlib.Order.Interval.Finset.Nat: #[Nat.instLocallyFiniteOrder]
+  Mathlib.RingTheory.Polynomial.Cyclotomic.Basic: #[Polynomial.cyclotomic]
+  Pnq.Group: #[Pnq.instNeZeroNatHMulHPow_pnq]
+  Pnq.Rule: #[Pnq.minB]
+  Pnq.Weighted: #[Pnq.maskW]
+  instance arguments:
+    @Finset.univ   (ZMod     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s))   (@ZMod.fintype     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s)     (@instNeZeroNatHMul       (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)         (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)       s (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹) inst✝))
+    @Pnq.maskW   (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)     s)   (@instNeZeroNatHMul     (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)       (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)     s (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝² inst✝¹) inst✝)
+@instNeZeroNatHMul
+  (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+    (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p n) q)
+  s (@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝³ inst✝²) inst✝¹
+@Pnq.instNeZeroNatHMulHPow_pnq p q n inst✝³ inst✝²
+@instNeZeroNatHMul
+  (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p a)
+  (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) q b)
+  (@Nat.instNeZeroHPow p a
+    (@NeZero.of_gt' Nat p (@Zero.ofOfNat0 Nat (instOfNatNat (nat_lit 0))) Nat.instPreorder
+      (@LinearOrderedCommMonoidWithZero.toIsBotZeroClass Nat Nat.instLinearOrderedCommMonoidWithZero) Nat.instOne
+      (@Nat.Prime.one_lt' p inst✝³)))
+  (@Nat.instNeZeroHPow q b
+    (@NeZero.of_gt' Nat q (@Zero.ofOfNat0 Nat (instOfNatNat (nat_lit 0))) Nat.instPreorder
+      (@LinearOrderedCommMonoidWithZero.toIsBotZeroClass Nat Nat.instLinearOrderedCommMonoidWithZero) Nat.instOne
+      (@Nat.Prime.one_lt' q inst✝²)))
+@Pnq.Lift.instNeZeroMul N (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) inst✝ Nat.fact_prime_two
+@instNeZeroNatHMul N s inst✝ inst✝¹
+Nat.fact_prime_two
+theorem Pnq.Lift.instNeZeroMul : ∀ {N r : ℕ} [NeZero N] [Fact (Nat.Prime r)], NeZero (N * r) :=
+fun {N r} [NeZero N] [Fact (Nat.Prime r)] => { out := Nat.mul_ne_zero (NeZero.ne N) (Nat.Prime.ne_zero Fact.out) }
+theorem Pnq.instNeZeroNatHMulHPow_pnq : ∀ {p q n : ℕ} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)], NeZero (p ^ n * q) :=
+fun {p q n} [Fact (Nat.Prime p)] [Fact (Nat.Prime q)] =>
+  { out := Nat.mul_ne_zero (pow_ne_zero n (Nat.Prime.ne_zero Fact.out)) (Nat.Prime.ne_zero Fact.out) }
+Nat.fact_prime_two : Fact (Nat.Prime 2)
+class NeZero.{u_1} {R : Type u_1} [Zero R] (n : R) : Prop
+number of parameters: 3
+fields:
+  NeZero.out : n ≠ 0
+constructor:
+  NeZero.mk.{u_1} {R : Type u_1} [Zero R] {n : R} (out : n ≠ 0) : NeZero n
+class Fact (p : Prop) : Prop
+number of parameters: 1
+fields:
+  Fact.out : p
+constructor:
+  Fact.mk {p : Prop} (out : p) : Fact p
+
+real	0m4.566s
+user	0m2.633s
+sys	0m2.181s

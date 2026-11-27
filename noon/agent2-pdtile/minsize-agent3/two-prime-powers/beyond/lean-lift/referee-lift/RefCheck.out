@@ -1,0 +1,84 @@
+def Pnq.Lift.reduce : {N r : ℕ} → [NeZero N] → [Fact (Nat.Prime r)] → (ZMod (N * r) → ℕ) → ZMod N → ℕ :=
+fun {N r} [NeZero N] [Fact (Nat.Prime r)] w' x => ∑ y, if (ZMod.castHom ⋯ (ZMod N)) y = x then w' y else 0
+@sum_reduce : ∀ {N r : ℕ} [inst : NeZero N] [inst_1 : Fact (Nat.Prime r)] (w' : ZMod (N * r) → ℕ),
+  ∑ x, reduce w' x = ∑ y, w' y
+@cyclotomic_dvd_reduce_iff : ∀ {N r : ℕ} [inst : NeZero N] [inst_1 : Fact (Nat.Prime r)] (w' : ZMod (N * r) → ℕ)
+  (d : ℕ), d ∣ N → (Polynomial.cyclotomic d ℤ ∣ maskW (reduce w') ↔ Polynomial.cyclotomic d ℤ ∣ maskW w')
+@exists_lift : ∀ {N r : ℕ} [inst : NeZero N] [inst_1 : Fact (Nat.Prime r)],
+  r ≠ 2 →
+    ∀ (w : ZMod N → ℕ),
+      (∃ x, w x ≠ 0) → ∃ w', reduce w' = w ∧ ∀ (d : ℕ), d ∣ N * r → ¬d ∣ N → ¬Polynomial.cyclotomic d ℤ ∣ maskW w'
+@sizes_eq : ∀ {N r : ℕ} [inst : NeZero N] [inst_1 : Fact (Nat.Prime r)],
+  r ≠ 2 →
+    ∀ (P : Finset ℕ),
+      (∀ d ∈ P, d ∣ N) →
+        {s |
+            ∃ w',
+              ∑ y, w' y = s ∧ 0 < s ∧ ∀ (d : ℕ), d ∣ N * r → d ≠ 1 → (Polynomial.cyclotomic d ℤ ∣ maskW w' ↔ d ∈ P)} =
+          {s | ∃ w, ∑ x, w x = s ∧ 0 < s ∧ ∀ (d : ℕ), d ∣ N → d ≠ 1 → (Polynomial.cyclotomic d ℤ ∣ maskW w ↔ d ∈ P)}
+minsize_unbalanced_lift : ∀ (p q n r : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)]
+  [inst_2 : Fact (Nat.Prime r)],
+  p ≠ q →
+    r ≠ 2 →
+      ∀ (Es Fs : Finset ℕ),
+        Es ⊆ Finset.Icc 1 n →
+          Fs ⊆ Finset.Icc 1 n →
+            IsLeast
+              {s |
+                ∃ w,
+                  ∑ a, w a = s ∧
+                    ¬Polynomial.cyclotomic q ℤ ∣ maskW w ∧
+                      (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ) ℤ ∣ maskW w ↔ ℓ ∈ Es) ∧
+                        (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ * q) ℤ ∣ maskW w ↔ ℓ ∈ Fs) ∧
+                          ∀ (d : ℕ), d ∣ p ^ n * q * r → ¬d ∣ p ^ n * q → ¬Polynomial.cyclotomic d ℤ ∣ maskW w}
+              (minU p q Es Fs)
+minsize_balanced_all_lift : ∀ (p q n r : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)]
+  [inst_2 : Fact (Nat.Prime r)],
+  p ≠ q →
+    r ≠ 2 →
+      ∀ Es ⊆ Finset.Icc 1 n,
+        IsLeast
+          {s |
+            ∃ w,
+              ∑ a, w a = s ∧
+                0 < s ∧
+                  Polynomial.cyclotomic q ℤ ∣ maskW w ∧
+                    (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ) ℤ ∣ maskW w ↔ ℓ ∈ Es) ∧
+                      (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ * q) ℤ ∣ maskW w) ∧
+                        ∀ (d : ℕ), d ∣ p ^ n * q * r → ¬d ∣ p ^ n * q → ¬Polynomial.cyclotomic d ℤ ∣ maskW w}
+          (q * p ^ Es.card)
+minsize_balanced_lift : ∀ (p q n r : ℕ) [inst : Fact (Nat.Prime p)] [inst_1 : Fact (Nat.Prime q)]
+  [inst_2 : Fact (Nat.Prime r)],
+  p ≠ q →
+    r ≠ 2 →
+      ∀ (Es Fs : Finset ℕ),
+        Es ⊆ Finset.Icc 1 n →
+          Fs ⊆ Finset.Icc 1 n →
+            ∀ (a0 : ℕ),
+              1 ≤ a0 →
+                a0 ≤ n →
+                  (∀ (ℓ : ℕ), 1 ≤ ℓ → ℓ < a0 → ℓ ∈ Fs) →
+                    a0 ∉ Fs →
+                      IsLeast
+                        {s |
+                          ∃ w,
+                            ∑ a, w a = s ∧
+                              Polynomial.cyclotomic q ℤ ∣ maskW w ∧
+                                (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ) ℤ ∣ maskW w ↔ ℓ ∈ Es) ∧
+                                  (∀ ℓ ∈ Finset.Icc 1 n, Polynomial.cyclotomic (p ^ ℓ * q) ℤ ∣ maskW w ↔ ℓ ∈ Fs) ∧
+                                    ∀ (d : ℕ),
+                                      d ∣ p ^ n * q * r → ¬d ∣ p ^ n * q → ¬Polynomial.cyclotomic d ℤ ∣ maskW w}
+                        (minB p q Es Fs a0)
+'Pnq.Lift.sum_reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.cyclotomic_dvd_reduce_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.exists_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.sizes_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.minsize_unbalanced_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.minsize_balanced_all_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.minsize_balanced_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Referee.paper_lemma' depends on axioms: [propext, Classical.choice, Quot.sound]
+5
+36
+true
+186
+exit 0
