@@ -1,0 +1,3 @@
+s|    assert len(rows) == 5 and len(level) == 1, (rows, level)          # four grid lines and the foot of the chart; one darker line at level|    rows = [r for r in rows if abs(r - level[0]) > 4]                # the pale edge of the darker line is not a grid line\n    assert len(rows) == 5 and len(level) == 1, (rows, level)          # four grid lines and the foot of the chart; one darker line at level|
+s|        core = ndimage.binary_erosion(m, iterations=er)$|        core = ndimage.binary_erosion(m, structure=np.ones((3, 3)), iterations=er)|
+s|            core = ndimage.binary_erosion(m, iterations=er); lab, k = ndimage.label(core)|            core = ndimage.binary_erosion(m, structure=np.ones((3, 3)), iterations=er); lab, k = ndimage.label(core)|

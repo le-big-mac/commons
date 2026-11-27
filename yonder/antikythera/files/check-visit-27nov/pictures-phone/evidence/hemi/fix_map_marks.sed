@@ -1,0 +1,1 @@
+s|    sub = ink\[(fy0 + fy1) // 2:fy1, fx0:(fx0 + fx1) // 2\]|    sub = ndimage.binary_erosion(ink, structure=np.ones((5, 1)))[(fy0 + fy1) // 2:fy1, fx0:(fx0 + fx1) // 2]      # only strokes at least five pixels thick: the bar, not the thin joining lines|

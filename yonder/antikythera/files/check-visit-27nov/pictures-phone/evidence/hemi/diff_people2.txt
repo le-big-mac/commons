@@ -1,0 +1,54 @@
+1,2c1,5
+< """How many more people the half centred near Berlin holds than the half centred in the Alps, by year, on three population maps.
+< usage: people2_fig.py OUT_DIR FIGURE.png      (reads OUT_DIR/{ghs,g1,g2}-YEAR.json written by run_people2.py)"""
+---
+> """Drawn for a narrow screen: the same points and lines as people2_fig.py (how many more people the half centred near Berlin
+> holds than the half centred in the Alps, by year, on three population maps), with the same words, the three names set in a
+> list above the chart beside their marks, and lettering a phone can show.
+> usage: people2_fig_phone.py OUT_DIR FIGURE.png      (reads OUT_DIR/{ghs,g1,g2}-YEAR.json written by run_people2.py)
+> At 350 pixels wide (a phone's column) the lettering comes out at about 10 to 11 pixels. Colours and marks as in people2_fig.py."""
+5a9
+> from matplotlib.lines import Line2D
+9,11c13,15
+<        ('g1', "WorldPop's older maps (made in 2018)", '#eb6834', 's', (2000, 2010, 2020)),
+<        ('g2', "WorldPop's newer maps,\nwhich know the censuses of about 2020", '#1baf7a', 'D', (2015, 2020, 2025, 2030))]
+< plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 9.5, 'text.color': INK, 'figure.facecolor': SURF, 'axes.facecolor': SURF, 'savefig.facecolor': SURF,
+---
+>        ('g1', "WorldPop's older maps (made in 2018; their\n2020 is a projection, drawn hollow)", '#eb6834', 's', (2000, 2010, 2020)),
+>        ('g2', "WorldPop's newer maps, which know\nthe censuses of about 2020", '#1baf7a', 'D', (2015, 2020, 2025, 2030))]
+> plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 10, 'text.color': INK, 'figure.facecolor': SURF, 'axes.facecolor': SURF, 'savefig.facecolor': SURF,
+13c17,18
+< fig, ax = plt.subplots(figsize=(7.6, 4.3), dpi=170)
+---
+> fig = plt.figure(figsize=(4.6, 5.7))
+> ax = fig.add_axes([0.185, 0.068, 0.775, 0.60])
+16,17c21,22
+< ax.text(2027, -12.9, 'projections', color=INK2, ha='center', va='bottom', fontsize=8.5)
+< ax.text(1974.3, 12.6, '5 million people is 0.06% of the world', color=INK2, fontsize=8.5, va='top')
+---
+> ax.text(2031.2, -12.9, 'projections', color=INK2, ha='right', va='bottom', fontsize=9.5)
+> ax.text(1974.3, 12.9, '5 million people is 0.06% of the world', color=INK2, fontsize=9.5, va='top')
+28,34c33,34
+< # direct labels, in ink, each at an end of its own line; the older series' label has a thin leader in its line's colour
+< ax.text(2032.0, ends['ghs'][1][-1], 'GHS-POP:\nthe maps\nfirst used', color=INK, ha='left', va='center', fontsize=9, clip_on=False)
+< ax.text(2032.0, ends['g2'][1][-1] - 0.6, "WorldPop's newer\nmaps, which know\nthe censuses of\nabout 2020", color=INK, ha='left', va='center', fontsize=9, clip_on=False)
+< ax.annotate("WorldPop's older maps\n(made in 2018; their 2020\nis a projection, drawn hollow)", xy=(ends['g1'][0][0] - 0.5, ends['g1'][1][0] + 0.25), xytext=(1997.0, -1.9),
+<             color=INK, ha='right', va='top', fontsize=9, arrowprops=dict(arrowstyle='-', color=ends['g1'][3], lw=1.0, shrinkA=2, shrinkB=1))
+< ax.text(1974.3, 0.45, 'above the line, the half centred near Berlin holds more', color=INK2, fontsize=8.5, va='bottom')
+< ax.text(1974.3, -0.5, 'below it, the half centred in the Alps holds more', color=INK2, fontsize=8.5, va='top')
+---
+> ax.text(1974.3, 0.5, 'above the line, the half centred\nnear Berlin holds more', color=INK2, fontsize=9.5, va='bottom', linespacing=1.15)
+> ax.text(1974.3, -0.6, 'below it, the half centred\nin the Alps holds more', color=INK2, fontsize=9.5, va='top', linespacing=1.15)
+37d36
+< ax.set_ylabel('how many more people in the half centred near Berlin\nthan in the half centred in the Alps, millions')
+40,41c39,45
+< ax.tick_params(length=0)
+< fig.tight_layout(); fig.subplots_adjust(right=0.83); fig.savefig(figp); print('written', figp)
+---
+> ax.tick_params(length=0, labelsize=9.5)
+> # above the chart: what is counted, then the three names, each beside its own mark and line
+> fig.text(0.012, 0.988, 'How many more people in the half centred near Berlin\nthan in the half centred in the Alps, in millions', fontsize=10, color=INK2, ha='left', va='top', linespacing=1.3)
+> handles = [Line2D([0], [0], color=col, lw=2, marker=mk, ms=6.5, mec=SURF, mew=1.2) for _, _, col, mk, _ in SER]
+> leg = fig.legend(handles, [name for _, name, _, _, _ in SER], loc='upper left', bbox_to_anchor=(0.0, 0.89), frameon=False, fontsize=10, labelcolor=INK,
+>                  handlelength=2.2, handletextpad=0.6, labelspacing=0.75, borderaxespad=0.2)
+> fig.savefig(figp, dpi=230); print('written', figp)

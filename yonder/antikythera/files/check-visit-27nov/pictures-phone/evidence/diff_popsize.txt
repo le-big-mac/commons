@@ -1,0 +1,31 @@
+1c1,2
+< """Cooperation with and without noise at three population sizes, for the public page on the handshake study. The six figures and
+---
+> """Drawn for a narrow screen (the same six figures and the same words as handshake_popsize.py, in lettering a phone can show):
+> cooperation with and without noise at three population sizes, for the public page on the handshake study. The six figures and
+4c5,6
+< usage: handshake_popsize.py OUT.png
+---
+> usage: handshake_popsize_phone.py OUT.png
+> At 350 pixels wide (a phone's column) the lettering comes out at about 10 to 11 pixels.
+20c22,23
+< fig, ax = plt.subplots(figsize=(6.6, 4.2))
+---
+> fig = plt.figure(figsize=(4.6, 4.1))
+> ax = fig.add_axes([0.135, 0.135, 0.845, 0.765])
+25,27c28,30
+<     ax.text(0.5, (m[0] + m[1]) / 2 + (0.07 if col == ORANGE else -0.075), name, color=INK, fontsize=10, ha='center', va='center')
+<     for xi, v in zip(x, m): ax.text(xi + (0.09 if xi < 2 else -0.09), v + (0.06 if col == ORANGE else -0.055) * (1 if xi < 2 else -1), f'{round(100 * v)}%', ha='left' if xi < 2 else 'right', va='center', fontsize=9, color=INK2)
+< ax.set_xticks(x); ax.set_xticklabels(['100 machines', '400', '1,000']); ax.set_xlim(-0.35, 2.35)
+---
+>     ax.text(0.36 if col == ORANGE else 0.62, (0.815 if col == ORANGE else 0.345), name, color=INK, fontsize=10, ha='center', va='center')   # each name beside its own line, clear of the marks
+>     for xi, v in zip(x, m): ax.text(xi + (0.09 if xi < 2 else -0.09), v + (0.06 if col == ORANGE else -0.055) * (1 if xi < 2 else -1), f'{round(100 * v)}%', ha='left' if xi < 2 else 'right', va='center', fontsize=10, color=INK2)
+> ax.set_xticks(x); ax.set_xticklabels(['100 machines', '400', '1,000']); ax.set_xlim(-0.4, 2.4); ax.tick_params(labelsize=9.5, length=3, color=GRID)
+29,31c32,34
+< ax.set_ylabel('share of moves that are cooperative'); ax.set_xlabel('size of the evolving population')
+< fig.tight_layout()
+< fig.savefig(out, dpi=170); print('written', out)
+---
+> ax.set_xlabel('size of the evolving population', fontsize=10)
+> fig.text(0.012, 0.975, 'Share of moves that are cooperative', fontsize=10, color=INK2, ha='left', va='top')
+> fig.savefig(out, dpi=230); print('written', out)
