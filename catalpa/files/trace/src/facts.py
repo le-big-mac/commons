@@ -78,3 +78,11 @@ for name, o in sheets:
 print(f"  all {len(allp)} lines: {sum(x[1] for x in allp)} held; the odds summed to {sum(x[0] for x in allp):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in allp]):.3f} (0.25 for saying 50% to everything)")
 ev = sheets[1][1] + sheets[2][1] + sheets[3][1]
 print(f"  the evening's three sheets together (the second page): {sum(x[1] for x in ev)} of {len(ev)} held; the odds summed to {sum(x[0] for x in ev):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in ev]):.3f}")
+
+# ---- added on 27 November: the sixth sheet (the barometer out of the earlier rises)
+print("\nADDED LATE ON 26 NOVEMBER (the sixth sheet)")
+s6 = [(.65, 1), (.60, 1), (.45, 0), (.70, 0), (.55, 1)]
+print(f"  sheet 6 (the barometer): {sum(x[1] for x in s6)} of {len(s6)} held; Brier {np.mean([(p - q) ** 2 for p, q in s6]):.3f}")
+ev2 = ev + s6; all2 = allp + s6
+print(f"  the second page's four sheets together: {sum(x[1] for x in ev2)} of {len(ev2)} held; the odds summed to {sum(x[0] for x in ev2):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in ev2]):.3f}")
+print(f"  all {len(all2)} lines on both pages: {sum(x[1] for x in all2)} held; the odds summed to {sum(x[0] for x in all2):.2f}; Brier {np.mean([(p - q) ** 2 for p, q in all2]):.3f}")

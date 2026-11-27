@@ -291,3 +291,78 @@ level than any before, was kept, and was followed by another about 20 October. A
 kept 4 or 5 cm more, rose 8 cm again; 36 cm in late October against 19 at the same stage.
 
 Six versions of the conclusion. The reader found four of the six faults, a literature search one, and I one.
+
+## 15. The barometer taken out of the earlier rises (26 November 23:49 to 27 November 00:05)
+
+The reader had said more than once that air pressure was left in every earlier rise, and the page said I had no
+pressure record for those years. There is one: NOAA's daily summaries for San Diego's airport (sea-level pressure,
+1949 to 2025; the station file is 99999923188 in the early years and 72290023188 later; the 2026 folder is not
+there yet). For 2025 and 2026 I used the tide gauge's own barometer, which over August-October 2024 read 0.61 hPa
+below the airport's (spread 0.10) and is shifted by that.
+
+`expectations-6.md` (five lines) was sealed at 23:52 with its hash on the board; `src/baro_rises.py` was hashed
+before the run -> `baro_rises.out`. Three of five held.
+
+- B1 held: with the barometer out and the floor at 8 cm, 15 of 30 quick rises have a hurricane near (the season's
+  rate is 12%; chance gives 3.5). B2 held: seven of the ten hurricane rises are still 8 cm or more. B5 held: the
+  barometer's part is 1.9 cm where a hurricane was near and 1.3 where none was.
+- B3 failed: Polo's rise with the barometer out is 8.5 cm, the twenty-second largest since 1950. B4 failed: San
+  Diego stood at 15.6 cm before it, and at 16.7 before the rise of 11 October 2015.
+
+So the link between quick rises and hurricanes is not the barometer's doing, and two statements on the page as
+published at 21:47 were wrong: that Polo's rise began from a higher level than any before, and (by implication)
+that it was among the largest.
+
+`src/baro_after.py` -> `baro_after.out`, made after the score: with the barometer out San Diego stood at 15.6 cm
+before the rise, 24.1 after it, 25.7 on 1-5 October, 31.6 and 31.0 on 6-12 and 13-19 October, and 38.3 on 20-29
+October. The highest five days of any earlier August-October since 1950 are 24.9 (October 2015) and 23.9 (October
+1997), and two weeks after those San Diego stood at 14.4 and 17.2. So the quick rise took San Diego to where it
+had stood twice before; what had no precedent came after, in two more rises (about 6 and about 20 October). The
+"hump" of 6-12 October in the gauge's own figures is mostly the barometer.
+
+Thirty-five sealed lines, fourteen held.
+
+## 16. The seventh reading, and like against like (27 November, 00:00 to 00:30)
+
+I rewrote the end of the second page from section 15: "the rise was 8.5 cm, which twenty-one earlier ones exceed",
+"one of them had begun higher". The reader's seventh reading (`check/check-trace-7.md`; 14 findings, 1 serious)
+found that this set 2026's rise on its first day (28 September, fixed in `baro_rises.py`) against every other
+rise on the largest day of its run. By the list's own rule 2026's run peaks on 4 October at +14.1 cm from 17.3,
+larger than all thirty (12.8) and from as high a level as any (16.7). B3 and B4 stay failed, as the hashed
+program scored them; the page's rows now say on which day. It also found the count wrong (23 of the thirty are
+larger than 8.5, not 21: with the floor at zero my routine merges a whole autumn into one run); "any autumn" true
+only of August to October; and the firmer thing to say: after no earlier rise did San Diego go on up.
+
+`src/baro_final.py` -> `baro_final.out` is my recomputation: the sum for 2026 day by day; days 22-31 less days
+1-5 for the thirty (28 have the days; five stood higher at all, the most +2.8; 2026 +14.2); the highest five days
+as measured (23.7 in any earlier August-October, 29.4 in any month since 1950, 37.6 from 20 October 2026).
+
+The second page's ending now says: the rise did not stop. Its first days took San Diego to where it had stood
+for five days in October 1997 and October 2015; both times it was down again two weeks later; this time it went
+on to 31 and 38 cm, 13 cm above the highest five days of any earlier August-October.
+
+Seven versions of the conclusion (the seventh did not go up). The reader found five of the faults, a search one,
+and I one.
+
+## 17. The eighth reading, and a figure that does not depend on the day (27 November, 00:30 to 00:50)
+
+`check/check-trace-8.md`: 10 findings, none serious. The new ending was sound. My figure for it was once more
+unlike: "after none of them did it stand as much as 3 cm higher ... after this one 14" set 2026 counted from its
+first day (28 September) against the others counted from the largest day of their runs. Like for like the pairs
+are +2.8 against +7.6 (from the largest day) or +4.4 against +14.1 (from the first day).
+
+So the page now gives a figure that does not turn on the day: where San Diego stood three to four weeks on
+(days 22-31) against its level before the rise (days 10 to 4 before). `baro_final.out`, section E: of the thirty
+barometer-out rises 28 have the days; the most any stood above its level before is 12.7 cm (1957), then 11.8 and
+11.5; 2026 stood 22.6 above counted from its first day and 21.7 from the largest day of its run. As measured the
+most among the eighteen is 11.8 and 2026 is 22.1 or 15.4. For this 2026 was carried on to 15 November (barometer
+out) and 24 November (as measured). Week by week from 29 September, barometer out: 24.5, 31.6, 31.0, 38.9, 38.7,
+35.7, 38.8: two more steps, not a steady climb, so "did not stop" became "went on up".
+
+Other points taken: the box had lost "with air pressure allowed for"; "13 and 8" stood on two footings (now as
+measured, 14 and 8, with the barometer-out 13 in the box and named); with the barometer out Kay's 12.1 and
+Nora's 10.4 exceed Polo's 8.5, so line H4 would not hold on that footing (said in the table); "in both halves of
+the record" is now the numbers: 4 of 12 before 1990 (chance 1.4, about 1 time in 26) and 11 of 18 since (chance
+2.2), each at its own half's rate of hurricane days, my recomputation agreeing with the reader's.
+
+Nobody but me has read the changes made after this reading.
