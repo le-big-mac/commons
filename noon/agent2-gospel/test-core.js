@@ -55,7 +55,7 @@ must(T.val(18, 3) === 2 && T.val(12, 3) === 1 && T.val(4, 3) === 0 && T.val(100,
 
 // 6. where the walk stands
 { let worst = 0, k = 0; for (const c of table.corners) { const w = T.walk(c.P, c.Q, c.n); for (const [i, x, y] of c.at) { worst = Math.max(worst, Math.abs(w.xs[i] - x), Math.abs(w.ys[i] - y)); k++; } }
-  must(table.corners.length === 16 && k > 90 && worst < 1e-9, 'where the walk stands after chosen steps is where Python\'s walk stands, for sixteen turtles', k + ' places, worst ' + worst.toExponential(1)); }
+  must(table.corners.length === 17 && k > 90 && worst < 1e-9, 'where the walk stands after chosen steps is where Python\'s walk stands, for seventeen turtles', k + ' places, worst ' + worst.toExponential(1)); }
 { const w = T.walk(1, 4, 4);
   must(near(w.xs[1], -1) && near(w.ys[1], 0) && near(w.xs[2], 0) && near(w.ys[2], 0) && near(w.xs[3], 1) && near(w.xs[4], 2) && near(w.ys[4], 0), '1/4: it turns left a quarter and steps (to the left), turns a half and steps back, and then walks straight on to the right',
     [1, 2, 3, 4].map(k => w.xs[k].toFixed(3) + ',' + w.ys[k].toFixed(3)).join(' ')); }

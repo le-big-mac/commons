@@ -38,3 +38,18 @@ is not about lifts. It was already known to the tiling project beside this folde
 
 **Not done:** no paper was read in full for this search; nothing behind a paywall was opened; no search by citation ("who cites
 Lam and Leung") was made; no person was asked.
+
+## Added later the same evening: lifting a multiset to a set with no new divisor
+
+For the proposition that a multiset on Z_N lifts to a *set* on Z_(N r^j) with the same cyclotomic divisors (section 8 of the note,
+and the paper's "Sets on larger groups"), two more requests, word for word, both in the quick mode:
+
+1. `multiset in Z_N lifted to a set in Z_M "A ≡ B mod N" cyclotomic divisors mask polynomial "multiset" "lift" set without multiplicities larger cyclic group fibers`
+2. `smallest set A in cyclic group Z_M with Φ_s dividing A(X) exactly for s in S, minimal cardinality independent of M, multiset reduction modulo lcm(S) attained by a set for large M`
+
+**Found:** not the proposition. **Nearest:** the same paper of Kiss, Łaba, Marshall and Somlai. Its question is the least size
+MIN(S) of a set of nonnegative integers whose mask is divisible by Φ_s for every s in S (divisors asked for, none forbidden); it
+reduces such a set to a multiset modulo lcm(S); and in its Section 8 (the proof of Proposition 8.4, the opening of the proof of Theorem 8.7 and the remark after Proposition
+8.2 are what I read, in the journal text on disk) it lifts a multiset on Z_N to a set on a larger Z_M that reduces to it and
+gains the divisor Φ_M, placing fibres in disjoint grids so that the lift is a set. A lift to a set that gains no divisor, and when one
+exists, I did not find. As before: a short search by me, after the result; weak evidence.

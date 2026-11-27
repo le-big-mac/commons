@@ -20,3 +20,6 @@ import Pnq.Upset
 import Pnq.Lift1
 import Pnq.Lift
 import Pnq.LiftMin
+import Pnq.Sign
+import Pnq.Lift2
+import Pnq.LiftAll

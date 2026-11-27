@@ -42,9 +42,10 @@ if __name__ == '__main__':
         picks.append((rng.randrange(1, q), q))
     picks.append((1635, 1009681))                     # the nearest miss (added 26 November, after the others, so that none of them changes)
     picks += [(1739, 1094420), (12605, 1741011), (2195, 65537), (1008046, 1009681)]     # four more near misses: one after a tail, and the mirror image of the nearest
+    picks.append((1, 1000000))                        # a tenth button (added after the plain readers' visits)
     fr = [dict(one(p, q), P=p, Q=q) for p, q in picks]
     cor = []
-    for p, q in [(1, 9), (1, 45), (1, 7), (1, 63), (1, 171), (1, 25), (1, 27), (1, 12), (2, 9), (3, 8), (-1, 9), (1, 99), (1, 36), (1, 441), (1, 1194649), (1635, 1009681)]:
+    for p, q in [(1, 9), (1, 45), (1, 7), (1, 63), (1, 171), (1, 25), (1, 27), (1, 12), (2, 9), (3, 8), (-1, 9), (1, 99), (1, 36), (1, 441), (1, 1194649), (1635, 1009681), (1, 1000000)]:
         s, n = tail_round(p % q, q); total = min(s + 2 * n, 400); pts, home = places(p, q, total)
         ks = sorted(set(k for k in (1, 2, 3, 5, total // 3, total // 2, total - 1, total) if 1 <= k <= total))
         cor.append({'P': p, 'Q': q, 'n': total, 'at': [[k, pts[k][0], pts[k][1]] for k in ks]})

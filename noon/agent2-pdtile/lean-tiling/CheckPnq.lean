@@ -55,3 +55,11 @@ import Pnq
 #print axioms Pnq.Lift.minsize_unbalanced_lift
 #print axioms Pnq.Lift.minsize_balanced_all_lift
 #print axioms Pnq.Lift.minsize_balanced_lift
+#print axioms Pnq.Lift.exists_signs
+#print axioms Pnq.Lift.exists_lift_two
+#print axioms Pnq.Lift.sizes_eq_two
+#print axioms Pnq.Lift.sizes_eq_odd
+#print axioms Pnq.Lift.sizes_eq_mul
+#print axioms Pnq.Lift.minsize_unbalanced_mul
+#print axioms Pnq.Lift.minsize_balanced_all_mul
+#print axioms Pnq.Lift.minsize_balanced_mul

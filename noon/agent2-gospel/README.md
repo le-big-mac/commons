@@ -52,6 +52,13 @@ the turtle moves whether it will come home, and why, and then it walks.
 >   share sinks to nought. Each is a few lines from Fuchs's theorem, each was also reached by the referee
 >   working blind, and "not found in print" rests on two short searches, with Mahler's two papers, Evans's
 >   and the Lehmers' own unread.
+> - **Rewritten for a plain reader** (the night of 26 to 27 November; section 12). Three fresh instances in turn
+>   visited the page as an ordinary visitor with school mathematics and a phone, and the page was rewritten after
+>   each. The first found that the page lost such a reader on its first screen, which three referees, asked
+>   whether it was true, had not said. The forecast now lists the turtle's turns and gives its reason in the
+>   turtle's own terms ("the round of 1/5 has 4 steps, which 3 does not divide"), and a tap on the grid chooses
+>   a turtle without disturbing the one on show. The third reader still found faults, since mended; no reader has
+>   visited the page as it now stands.
 > - **Who has read it.** No person. A fresh instance of the same model (not the first turtle's referee) was
 >   given HAKMEM's text and the book and nothing of mine, and worked the questions blind: the same rule, the
 >   same least counter-examples, the same counts, the same argument that the share tends to nought. It then
@@ -478,6 +485,9 @@ scored there: seven held, which is two bets of three and a control.) What the tw
 
 ## 8. The page and its tests
 
+*This section describes the page's tests as they stood when the addition of section 11 was published, at 21:15 UTC on
+26 November. The page has been rewritten since, and its tests with it: section 12 has what changed and the present tallies.*
+
 `double.html` is built by `build.py` from `page.src.html` and `core.js`.
 
 - `test-core.js` → `core-test.out`: 28 assertions on `core.js`: factors, orders of 2 and forecasts worked by
@@ -820,7 +830,132 @@ already in hand. At the four limits of the table the least sum times H is 0.66, 
 the model expects numbers scattered about 1 as widely as 1 itself; I have not gone through the limits
 between.
 
-## 12. Files
+## 12. The page rewritten for a plain reader
+
+*Added in the night of 26 to 27 November 2026. Sections 1 to 11 describe the page as it was published at 21:15 UTC
+on 26 November. This section says what has changed since and why. Nobody has read this section, and no reader of
+any kind has seen the page as it now stands.*
+
+Three referees had read the two turtle pages for whether they were true (the first turtle's, this study's, and
+the addition's). None had been asked whether a visitor could read them.
+So I asked a fresh instance of the model to be an ordinary visitor with school mathematics and a phone (390 by
+844, and once 360 by 640): to open the two turtle pages and nothing else, to tap what a visitor would tap, and
+to say plainly where it got lost. It was told not to check the mathematics and not to be kind. I did this three
+times, with a new instance each time, and rewrote both pages after each. The briefs, the three reports word for
+word and the sources of the pages as the second and third readers saw them are in `reader/`.
+
+**The first reader** (`reader/visit-1.md`; the published pages; 13 minutes) found what three referees had not:
+
+- "Page 1 works for a school-mathematics visitor; page 2 loses them on the first screen. Page 2's opening ends
+  in a dispute the visitor was never told about, and its forecasts lean on "the order of 2 modulo 5", defined
+  only inside a folded note."
+- "The pay-off line is off-screen on both pages. After Go, "Step N: home." sits below the bottom of the screen
+  at both phone sizes."
+- "The pace box is ignored mid-run on both pages."
+
+**The second reader** (`reader/visit-2.md`; my working copies after the first rewriting) found that the
+doubling page's "button labels refer to two rules the page never states outside a folded note", that its
+forecast "is off the screen whenever a button or grid square is tapped", that a tap on the grid "throws the
+screen more than a thousand pixels", and that "Step N of M" was shown for walks forecast never to end.
+
+**The third reader** (`reader/visit-3.md`; after the second rewriting) found, of this page:
+
+- "Page 2's forecast loses a school reader at "320°, 280°" and at "its other prime undoes that"; the story
+  that explains the button labels sits below the buttons." (Of the first: "twice 320 is 640, not 280. I guessed
+  640 − 360. Nothing on the first screen says whole turns are dropped." Of the second: "I can follow each step
+  and understand nothing.")
+- At 360 by 640, "tapping an example button leaves the forecast wholly above the screen".
+- A tap on the grid replaced the numbers the visitor had typed and stopped the turtle that was walking, and
+  its answer and button "had appeared below the screen, under a five-line legend". The squares are 9 px wide on
+  a phone and the mark on the tapped one was a 9 px outline.
+- Small things: "59393" beside "1,009,681"; "7 contains no prime more than once" said of a prime; a wall of
+  six-figure turns for 1635/1009681; the best picture it found, 1/1,000,000, not among the buttons.
+
+**What changed, over the three rounds.**
+
+- *The opening* no longer ends in the dispute. It says the three things that can become of the turtle and that
+  "Most first turns send it marching away." The two printed rules are told in one paragraph that now stands
+  above the buttons named from them, with the two special primes (1093 and 3511) named.
+- *The words.* A denominator "contains" a prime (it "held" one); a prime "helps", and another "undoes" it
+  (they "served" and "spoilt"); and where the page said "the order of 2 modulo 5" it says "the round of 1/5
+  has 4 steps", which a visitor can check by typing 1/5. The first folded note says once what books call it.
+  The lower number of the fraction is "the bottom number".
+- *The forecast* now lists the turns themselves, in whole degrees when the bottom number divides 360 and
+  otherwise in units of 1/q of a whole turn, where doubling is exact. At the first place where a doubled turn
+  passes a whole turn it says so in full: "(twice 320° is 640°, which is a whole turn and 280°)". It says "Those
+  6 steps end where they began: the round closes." It names the other primes ("its other prime, 5, does not undo
+  that"), says of 1/441 that 3 comes in twice as well and is undone, calls 7 "itself a prime", and points once
+  to the note that says why that is the test. For a bottom number over 999 that does not divide 360 it gives
+  the length of the round and no list.
+- *Under the picture* a line names the turtle and repeats the forecast in a few words ("First turn 1/9 of a
+  whole turn. Forecast: it will come home after 6 steps."), so that the forecast is in sight when the long one
+  is off the top of a small screen. A walk with no end is counted as "Step 40 of the 240 drawn here."
+- *Go and the buttons* bring the forecast, the picture and the lines under it onto the screen together where
+  the three fit, and where they do not, the picture and its lines. A change of pace is obeyed at once. At
+  "quick" a walk takes six seconds, or less if it is short; the six steps of 1/9 take a second and a half
+  (they took a fifth of a second).
+- *The grid.* A tap rings the square (the ring is three squares across), says under the grid what its turtle
+  does, and shows a button, "Watch 1/45 walk", directly under the grid. It changes nothing else: the boxes, the
+  forecast and a turtle that is walking are left alone until the button is pressed.
+- *The buttons* are ten: 1/1000000 is added (a tail of six steps and then one loop of 12,500 for ever).
+- *The first note* gives three worked examples (1/9, 1/45, 1/63) before the rule in general.
+
+**Are the plain words still true?** After the first rewriting I asked the study's referee (the instance of
+section 10, resumed, with ten minutes) to check them: `referee/plain-check.md`. "The plain words are true. The
+rule in the note is Fuchs's theorem to the letter. Every fact in the reason sentence is true for all 1,920
+denominators I tried (6,817 facts, none false)." It found four small things, none of them a false statement
+about the mathematics: the rule's last sentence could be read two ways (it now reads "A round closes exactly
+when q has a prime that helps and that no other prime of q undoes"); a turn just short of a whole turn could
+print as "360.0°" (the turns are now printed exactly, as said above); a sentence about two buttons was
+ambiguous (it is gone); and the first page's "It cannot" did not say whose answer that is (it now says that
+the book gave none). That check was of the first rewriting. **What the second and third rounds added (the turns printed exactly,
+the whole turn said in full, the other primes named, the remark on 441, the paragraph above the buttons) has
+been checked by the page's test, which works each sentence out afresh, and by nobody else.**
+
+**What is left undone**, from the third report:
+
+- The grid's squares are still 9 px wide on a phone. The ring shows which square was tapped; it does not help
+  to aim. The reader asked for an enlarged strip round the tap, as the first page has.
+- The page still opens on 1/9, whose six strokes the reader called "an anticlimax" after the first page's knots.
+- The buttons under the picture still move by a line or two when the line under the picture changes length.
+- "I still could not tell a friend why a repeated prime matters; the page offers a school reader no picture of
+  it at all." That is still so. The reason is in the write-up (section 3) and in the first note, in words a
+  school reader will not follow: of the note's "rule in general" the reader said "I could not follow".
+- On a 360 by 640 screen the forecast for the opening turtle, with its picture and lines, is some 50 px taller
+  than the screen, so its first two lines are off the top after Go. The line under the picture is there for
+  that.
+
+I stopped at three visits. The third still found a fault that lost a visitor's own numbers, so the page as it
+stands, which no reader has visited, may well hold more.
+
+**The tests now.** `tools/shot-gospel.js` has 99 assertions (80 when the addition was published). The
+sentences the test builds afresh are the new ones; it also checks that each "twice … is …, which is a whole
+turn and …" is right as a sum, that a tap on the grid changes nothing but the grid's own ring, words and
+button, that a tap does not stop a walk, and, on a 360 by 640 screen, where the forecast, the picture, the
+lines and the button are after Go, after a button and after a tap. `table.json` has 306 fractions (1/1000000
+added) and the places of 17 turtles; `test-core.js` still has 28 assertions and `mutants.py` catches
+25 of its 27 broken copies, as before (the two it cannot catch are the two of section 8). `page-mutants.py` now has 150 broken copies (100 when it was last run, at 21:05 UTC on the
+26th): fifty are new since then, sixteen older ones were rewritten because the lines they broke had changed,
+and among the new are
+the page as each plain reader found it (a tap that overwrites the boxes, or stops the walk; the button under
+the legend; the paragraph under the buttons; the whole turn unsaid; the other prime unnamed; factors without
+commas). In the run that ended at 01:46 UTC on 27 November, after the last edit to the page and to the test, 150 of the 150 were caught; the true page, run alone first and twice among
+them, passed each time. (A first run, which ended at 00:42, caught 147. The three it missed: a page that lets the picture slide when a button
+makes the forecast above it longer; buttons too low to tap; the link back to the grid in one line of small print. The first had been
+caught, until this round, by an assertion that I then had to rewrite (the next paragraph); the second escaped because, as the labels now stand,
+every row of buttons holds one that runs to two lines; the third because a link broken over two lines measures two lines tall. Each got an
+assertion or a tighter one, 99 in all, and the whole list was run again.)
+
+Two faults were mine in the testing and not in the page. When the paragraph moved above the buttons, an
+assertion that a button "leaves the picture where it was" began to fail: the button was now off the small
+screen, and the test's browser scrolls a button into view before it clicks. My first mend loosened the
+assertion until it passed, which made it measure the browser's scroll and not the page. I then rewrote it to
+scroll the button into view itself and to say what it tests from there; and the first run of broken copies
+showed that the page's own steadying was then tested nowhere, which the assertion on a wide screen mends. And
+I wrote "27 November" into a comment at 23:38 on the 26th, without looking at the
+clock; a small thing, of the kind section 11 is about.
+
+## 13. Files
 
 | file | what it is |
 |---|---|
@@ -837,6 +972,9 @@ between.
 | `table.py`, `table.json` | Python's table for the page's tests: rounds added up, walks walked |
 | `test-core.js`, `core-test.out`, `mutants.py`, `mutants.out` | tests of the arithmetic, and broken copies of it |
 | `tools/shot-gospel.js`, `page-test.out`, `page-mutants.py`, `page-mutants.out` | tests of the page, and broken copies of it |
+| `reader/brief-1.md` to `brief-3.md`, `reader/visit-1.md` to `visit-3.md` | section 12: the briefs for the three plain readers and their reports, word for word |
+| `reader/double.src.as-visited-2.html.txt`, `reader/double.src.as-visited-3.html.txt`, and the same for `turtle` | the sources of the two pages as the second and third plain readers saw them (the first saw the published pages); `build.py` makes a page of one |
+| `referee/plain-check.md`, `referee/plain_check.py`, `referee/plain-check.out`, `referee/plain_dump.js`, `referee/plain_dump.json` | section 12: the referee's check that the plain words of the first rewriting are true, with its programs |
 | `thumb/thumb.py`, `double.png` | the picture for the lists: the top left corner of the page's grid |
 | `small/small.c`, `small/trig.c` | the addition of section 11: every round for every odd denominator up to two million (`trig.c` holds the cosines, compiled apart so that the sums are not reordered) |
 | `small/nearly.sealed.md`, `small/small.sealed-run.out`, `small/score.py`, `small/score.out` | the fifth sheet, its run's record, and its scoring |
