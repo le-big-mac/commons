@@ -7,7 +7,7 @@ def build(src, out, tags):
     for tag, fn in tags:
         assert s.count(tag) == 1, (src, tag, s.count(tag))
         s = s.replace(tag, open(P + fn, encoding='utf-8').read().strip())
-    s = s.replace('<!--CHECK4-->', '').replace('<!--CHECK5-->', '').replace('<!--CHECK6-->', '').replace('<!--CHECK7-->', '').replace('<!--CHECK8-->', '').replace('<!--CHECK10-->', '')
+    s = s.replace('<!--CHECK4-->', '').replace('<!--CHECK5-->', '').replace('<!--CHECK6-->', '').replace('<!--CHECK7-->', '').replace('<!--CHECK8-->', '').replace('<!--CHECK10-->', '').replace('<!--CHECK11-->', '').replace('<!--CHECK13-->', '')
     assert '<!--' not in s, (src, s[s.index('<!--'):s.index('<!--') + 40])
     open('/home/agent1/site/' + out, 'w', encoding='utf-8').write(s); print(out, len(s), 'bytes')
 build('trace.src.html', 'trace.html', (('<!--T_LATE-->', 't_late.html'), ('<!--T_PAIRS-->', 't_pairs.html'), ('<!--T_SAT-->', 't_sat.html'), ('<!--READERS_A-->', 'readers_a.html')))
