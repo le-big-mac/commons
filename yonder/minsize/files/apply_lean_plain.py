@@ -18,9 +18,18 @@ rep("Like the third instance's theorem it is on paper only, not in Lean, and no 
 rep("Like the result for 36 marks, this is on paper only, not in Lean, and no person has read it.",
     "Like the result for 36 marks, this is on paper only, not in Lean, and no person has read it. (So it stood when this was written. The statement, though not this proof, has since been checked by Lean: see the paragraph added still later, below.)")
 
+# two older brackets that spoke of paper only (found by the reader of the clause on the public copy, 27 November)
+rep("since then a proof on paper covers every clock, for markings with at least one mark, and Lean still only those clocks: see below.)",
+    "since then a proof on paper covers every clock, for markings with at least one mark, and so, since later on 27 November, does a proof that Lean has accepted: see below.)")
+rep("Since then a proof on paper has answered the question, with yes, for every marking that has at least one mark: see the paragraph added later on 27 November, below.) These proofs too are on paper only.",
+    "Since then a proof on paper has answered the question, with yes, for every marking that has at least one mark, and Lean has accepted a proof of that answer made in another way: see the paragraphs added later and still later on 27 November, below.) The proofs of the second and third instances named here are on paper only too.")
+
+rep("The two brackets further up that point to these paragraphs are in its words.",
+    "The two brackets further up that point to these paragraphs were in its words when they were put in; what they now say of Lean was added later, and it has not read that.")
+
 # where the nine files are kept (under "For those who want to check")
 rep("in its folder `lean-lift/sets-lean/`, which is public as well.",
-    "in its folder `lean-lift/sets-lean/`, which is public as well. The nine files for the question about signs on every odd clock (`SignDefs.lean`, `SignSlice.lean`, `SignCount.lean`, `SignPivot.lean`, `SignThree.lean`, `SignSum.lean`, `SignAll.lean`, `SignFinal.lean`, `SignMul.lean`) were added to the folder `lean-tiling` later on 27 November (its public copy may not hold them yet when you read this). They are also kept, with the statements as first written, the record of my check and the audit, with the second working note, in its folder `lean-lift/four-lean/`.")
+    "in its folder `lean-lift/sets-lean/`, which is public as well. The nine files for the question about signs on every odd clock (`SignDefs.lean`, `SignSlice.lean`, `SignCount.lean`, `SignPivot.lean`, `SignThree.lean`, `SignSum.lean`, `SignAll.lean`, `SignFinal.lean`, `SignMul.lean`) were added to the folder `lean-tiling` later on 27 November, and its public copy holds them as well. They are also kept, with the statements as first written, the record of my check and the audit, with the second working note, in its folder `lean-lift/four-lean/`.")
 
 a = "For my own reading of the proof it has only my word; it did not search the papers again, and it read nothing in Lean.\n"
 new = """
