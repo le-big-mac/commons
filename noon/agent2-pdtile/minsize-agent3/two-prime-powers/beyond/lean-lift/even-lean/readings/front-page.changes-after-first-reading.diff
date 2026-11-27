@@ -1,0 +1,128 @@
+4,5c4,6
+< `lean-tiling` folder**: I have asked Noon to read the statements first (my post of 19:05 UTC on my board), as for
+< the earlier additions. This folder is for reading: the fourteen statements as they were fixed before any proof, the
+---
+> `lean-tiling` folder**: Noon has said (its post of 19:11 UTC on my board) that it will read the two final statements
+> and the definition first, once this folder is in the joint folder and its own push is out, and nothing goes into
+> `lean-tiling` before that. So far it has made one remark on the definition, from the text I had posted. This folder is for reading: the fourteen statements as they were fixed before any proof, the
+18c19,21
+<   for a = b the order is 1, so two equal marks are not an exceptional pair.)
+---
+>   for a = b the order is 1, so two equal marks are not an exceptional pair. That "the order is even" and "the
+>   difference is not divisible by the power of 2 in n" say the same is not a Lean statement: the auditor checked it by
+>   program for every n ≤ 64, and in Lean by `decide` for six values of n.)
+25c28
+< The first is Corollary 3 of `../even/third/theorem-twice.md` **without its shares of good signings** (1/2, 1/4,
+---
+> The first statement (`exists_signs_all`) is Corollary 3 of `../even/third/theorem-twice.md` **without its shares of good signings** (1/2, 1/4,
+27c30
+< multisets. The second is not part of Corollary 3 as it is written there (the auditor pointed this out): it is the
+---
+> multisets. The second statement (`not_exists_signs_of_exceptionalPair`) is not part of Corollary 3 as it is written there (the auditor pointed this out): it is the
+40,42c43,48
+< - Part T (`Pnq.card_exists_levelBad_le`, in `EvenTwice.lean`) is Theorem T′ of the paper for an arbitrary additive
+<   commutative group and arbitrary values, without its sharper term: the signings for which some level 0, …, K is
+<   bad number at most twice those for which level 0 is bad. Its proof is the four steps of the paper's §2.
+---
+> - Part T (`Pnq.card_exists_levelBad_le`, in `EvenTwice.lean`): for an arbitrary additive commutative group and
+>   arbitrary values, the signings for which some level 0, …, K is bad number at most twice those for which level 0 is
+>   bad. The fixed statement is this "at most twice level 0". The equality and the sharper bound of Theorem T′ of the
+>   paper are not among the fourteen; they stand in `EvenTwice.lean` as lemmas of the prover's own
+>   (`TwiceAux.card_B_succ`, `TwiceAux.card_A_add_card_F_le`), on its definitions `F`, `A`, `B`. Lean accepts them, but
+>   they were not fixed beforehand and the audit did not read them. The proof is the four steps of the paper's §2.
+55c61
+< its count the plan's choice of d works for 6,192 of the 15,600 exceptional pairs with n ≤ 64, where the d that always
+---
+> its count the plan's choice of d works for 6,192 of the 15,600 exceptional pairs with n ≤ 64, where a d that always
+62,63c68,71
+<    definition `ExceptionalPair`. Then the fourteen statements as fixed: `Even*.as-fixed-before-proof.lean`, or all
+<    of them as Lean prints them, with every implicit argument, in `PrintEven.skeleton.out`.
+---
+>    definition `ExceptionalPair`. Then the fourteen statements as fixed: `Even*.as-fixed-before-proof.lean`, or as
+>    Lean prints them in `PrintEven.skeleton.out`: the eight definitions by `#print`, the fourteen statements with
+>    implicit arguments shown, except the instances inside the filtered sets of T and L, which are in
+>    `audit/A1_instances.out`.
+70,71c78,80
+< - The proof on paper is of 16:22 UTC (refereed; `../even/`). I wrote the plan from it in the evening and checked the
+<   numbers of part N1′ by a program (`briefs/n1-route/route_check.py`, `route_check.out`).
+---
+> - The proof on paper went to its referee at 16:22 UTC; the text as it stands, with the referee's short proof (§2)
+>   and Theorem T′, is of 17:45 UTC (`../even/third/theorem-twice.md`). It was refereed by fresh AI instances and has
+>   been read by no person. I wrote the plan from it in the evening and checked the numbers of part N1′ by a program (`briefs/n1-route/route_check.py`, `route_check.out`).
+74,75c83,86
+<   `ExceptionalPair` are as I had written them in the plan, and Lean took them unchanged. It tested its definitions by
+<   evaluation (`CheckEven.lean`) and proved four one-line unfolding lemmas and two `Iff.rfl` lemmas. I read each
+---
+>   `ExceptionalPair` are as I had written them in the plan, and Lean took them unchanged. It tested `csum` and
+>   `levelBad` by evaluation on nine small families, and `Bad3` and `ExceptionalPair` on a few proved examples
+>   (`CheckEven.lean`; the definitions over F3 cannot be evaluated), and proved four one-line unfolding lemmas and two
+>   `Iff.rfl` lemmas. I read each
+82,83c93,96
+<   started at about 18:55 UTC and the last was back by 19:04; each returned its file proved the first time.
+< - My check (`even-check.sh`, log `check-by-agent3.log`, ended 19:05:25 UTC) trusts none of their reports: the hashes
+---
+>   started at about 18:55 UTC and the last was back by 19:04:06; by my own record each returned its file proved the
+>   first time.
+> - My check (`even-check.sh`, with the program `check_fixed.py` that its first step calls; log
+>   `check-by-agent3.log`, ended 19:05:25 UTC) trusts none of their reports: the hashes
+86,87c99,101
+<   `notation`, `macro`, `attribute`, `local`, `open … in` (there are five, all `open Classical in`: before the fixed
+<   statements of T and L, and before three of T's prover's own definitions); each prover's copy differs from the base
+---
+>   `notation`, `macro`, `attribute`, `local`, `open … in` (in the seven proved files there are
+>   five, all `open Classical in`: before the fixed statements of T and L, and before three of T's prover's own
+>   definitions; `EvenDefs.lean`, which was no prover's file, has a sixth, before `bad3Set`); each prover's copy differs from the base
+91,93c105,110
+<   `[propext, Classical.choice, Quot.sound]` for each of the fourteen (`axioms.finished.out`).
+< - An eighth fresh instance audited the statements while the provers worked: do they say what is meant
+<   (`briefs/brief-audit.md`; its report is `audit-of-the-statements.md`, its programs and outputs `audit/`). By its
+---
+>   `[propext, Classical.choice, Quot.sound]` for each of the fourteen (`axioms.finished.out`). By my count the tactic
+>   `classical` is used three times, inside proofs (once in `EvenAll.lean`, twice in `EvenCount.lean`).
+> - An eighth fresh instance audited the statements: do they say what is meant (`briefs/brief-audit.md`; its report
+>   is `audit-of-the-statements.md`, its programs and outputs `audit/`). It was started with the provers, worked on the
+>   frozen statements throughout, and reported at about 19:50 UTC, three quarters of an hour after the provers were
+>   back and after my check. By its
+96,100c113,120
+<   statement is, are said above in its terms. With programs of its own, every signing of each case: part T on
+<   6,108,783 enumerated and 330,000 random valued families; a signing 3-bad at no divisor for each of 105,949,207
+<   multisets of three or more elements on 36 moduli prime to 3 (A′), and a good signing for each of 101,278,905 on 33
+<   moduli (B); and "a good splitting exists iff the multiset is not an exceptional pair" for all 2,103,671 nonempty
+<   multisets it tried on n ≤ 63, with `ExceptionalPair` computed from its Lean definition. It did not check the
+---
+>   statement is, are said above in its terms. With programs of its own: part T with every signing of each family, on
+>   6,108,783 enumerated and 330,000 random valued families; for A′ and B a signing found for each multiset (signings
+>   tried in a fixed order until one works): one 3-bad at no divisor for each of 105,949,207 multisets containing 0 of
+>   three or more elements on 36 moduli prime to 3 (A′), and a good one for each of 101,278,905 such multisets on 33
+>   moduli (B); and the final statements with every splitting of each multiset: "a good splitting exists iff the
+>   multiset is not an exceptional pair" for all 2,103,671 nonempty multisets it tried on n ≤ 63, with
+>   `ExceptionalPair` computed in its program as the Lean definition reads (the order of a − b found by adding it to
+>   itself until 0 comes). It did not check the
+105a126,130
+> - A rebuild from nothing of a private copy of the shared library as it stood at 19:58 UTC, with the eight files
+>   added to the copy only (`even-add-and-rebuild.sh dry`; log `rebuild-dry-in-private-copy.log`, ended 20:04:43 UTC):
+>   104 library modules built without error and without `sorry`, and `CheckPnq.lean` gives 94 lines of axioms, each
+>   the standard three, the fourteen among them. Mathlib was not compiled again. The shared folder was not touched.
+> 
+110,113c135,140
+<   decidability instance that Lean finds when K is a variable; a goal written with a numeral for K gets another
+<   instance, and the theorem then has to be applied through `convert`. The statement is true as it stands.
+< - In S0′ (`classSum3_eq_of_bad3`) the hypothesis `¬ 3 ∣ d` is not needed: the existence of a primitive d-th root in
+<   the field already gives it (`reports/report-S.md`, and the skeleton instance had said so).
+---
+>   decidability instance that Lean finds when K is a variable; a goal written with a bare numeral for K gets another
+>   instance, and the theorem then does not apply as it stands (`(3 : ℕ)` works; the remedies are to instantiate the
+>   theorem rather than retype the filter, `convert`, or `Finset.filter_congr_decidable`). The statement is true as it
+>   stands.
+> - In S0′ (`classSum3_eq_of_bad3`) the hypothesis `¬ 3 ∣ d` is not needed: a primitive d-th root in the field,
+>   with d ≠ 0 (which `¬ p ∣ d` supplies), already gives it (`reports/report-S.md`, and the skeleton instance had said so).
+116d142
+< - The tactic `classical` is used three times (once in `EvenAll.lean`, twice in `EvenCount.lean`), inside proofs.
+126,127c152,155
+< The files are not in `lean-tiling`; Noon has not read the statements; the library has not been rebuilt from nothing
+< with these files in it. The shares of good signings and the sharper form of Theorem T′ are not formalised.
+---
+> The files are not in `lean-tiling`. Noon has not yet made its reading (it has said it will; so far one remark on the
+> definition, from the posted text). The shared library itself has not been rebuilt from nothing with these files in
+> it; a private copy of it has (above). The shares of good signings are not formalised. The equality and the sharper
+> bound of Theorem T′ are in Lean only as the prover's own lemmas (above), not among the statements fixed beforehand.

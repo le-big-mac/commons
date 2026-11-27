@@ -1,0 +1,137 @@
+@Pnq.card_exists_levelBad_le.{u_1,
+    u_2} : ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι] {V : Type u_2} [inst_1 : AddCommGroup.{u_2} V] (pos : ι → Nat)
+  (val : ι → V) (K : Nat),
+  @LE.le.{0} Nat instLENat
+    (@Finset.card.{u_1} (ι → Bool)
+      (@Finset.filter.{u_1} (ι → Bool)
+        (fun (ε : ι → Bool) =>
+          @Exists.{1} Nat fun (j : Nat) =>
+            And (@LE.le.{0} Nat instLENat j K) (@Pnq.levelBad.{u_1, u_2} ι inst V inst_1 pos val ε j))
+        (fun (a : ι → Bool) =>
+          @Nat.decidableExistsLE (@Pnq.levelBad.{u_1, u_2} ι inst V inst_1 pos val a)
+            (fun (a_1 : Nat) => Classical.propDecidable (@Pnq.levelBad.{u_1, u_2} ι inst V inst_1 pos val a a_1)) K)
+        (@Finset.univ.{u_1} (ι → Bool)
+          (@Pi.instFintype.{u_1, 0} ι (fun (a : ι) => Bool)
+            (fun (a b : ι) => Classical.propDecidable (@Eq.{u_1 + 1} ι a b)) inst fun (a : ι) => Bool.fintype))))
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      (@Finset.card.{u_1} (ι → Bool)
+        (@Finset.filter.{u_1} (ι → Bool)
+          (fun (ε : ι → Bool) =>
+            @Pnq.levelBad.{u_1, u_2} ι inst V inst_1 pos val ε
+              (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+          (fun (a : ι → Bool) =>
+            Classical.propDecidable
+              (@Pnq.levelBad.{u_1, u_2} ι inst V inst_1 pos val a
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+          (@Finset.univ.{u_1} (ι → Bool)
+            (@Pi.instFintype.{u_1, 0} ι (fun (a : ι) => Bool)
+              (fun (a b : ι) => Classical.propDecidable (@Eq.{u_1 + 1} ι a b)) inst fun (a : ι) => Bool.fintype)))))
+@Pnq.card_exists_bad3_le.{u_1} : ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι] (e : ι → Nat) {d : Nat}
+  (hd : Not (@Dvd.dvd.{0} Nat Nat.instDvd (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) d))
+  (h3 : Not (@Dvd.dvd.{0} Nat Nat.instDvd (@OfNat.ofNat.{0} Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) d)) (K : Nat),
+  @LE.le.{0} Nat instLENat
+    (@Finset.card.{u_1} (ι → Bool)
+      (@Finset.filter.{u_1} (ι → Bool)
+        (fun (ε : ι → Bool) =>
+          @Exists.{1} Nat fun (j : Nat) =>
+            And (@LE.le.{0} Nat instLENat j K)
+              (@Pnq.Bad3.{u_1} ι inst e ε
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                    (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) j)
+                  d)))
+        (fun (a : ι → Bool) =>
+          @Nat.decidableExistsLE
+            (fun (j : Nat) =>
+              @Pnq.Bad3.{u_1} ι inst e a
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                    (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) j)
+                  d))
+            (fun (a_1 : Nat) =>
+              Classical.propDecidable
+                (@Pnq.Bad3.{u_1} ι inst e a
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                      (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) a_1)
+                    d)))
+            K)
+        (@Finset.univ.{u_1} (ι → Bool)
+          (@Pi.instFintype.{u_1, 0} ι (fun (a : ι) => Bool)
+            (fun (a b : ι) => Classical.propDecidable (@Eq.{u_1 + 1} ι a b)) inst fun (a : ι) => Bool.fintype))))
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      (@Finset.card.{u_1} (ι → Bool) (@Pnq.bad3Set.{u_1} ι inst e d)))
+def Pnq.bad3Set.{u_1} : {ι : Type u_1} → [Fintype.{u_1} ι] → (e : ι → Nat) → (d : Nat) → Finset.{u_1} (ι → Bool) :=
+fun {ι : Type u_1} [inst : Fintype.{u_1} ι] (e : ι → Nat) (d : Nat) =>
+  @Finset.filter.{u_1} (ι → Bool) (fun (ε : ι → Bool) => @Pnq.Bad3.{u_1} ι inst e ε d)
+    (fun (a : ι → Bool) => Classical.propDecidable (@Pnq.Bad3.{u_1} ι inst e a d))
+    (@Finset.univ.{u_1} (ι → Bool)
+      (@Pi.instFintype.{u_1, 0} ι (fun (a : ι) => Bool) (fun (a b : ι) => Classical.propDecidable (@Eq.{u_1 + 1} ι a b))
+        inst fun (a : ι) => Bool.fintype))
+def Pnq.ExceptionalPair : {n : Nat} → (w : ZMod n → Nat) → Prop :=
+fun {n : Nat} (w : ZMod n → Nat) =>
+  @Exists.{1} (ZMod n) fun (a : ZMod n) =>
+    @Exists.{1} (ZMod n) fun (b : ZMod n) =>
+      And
+        (@Eq.{1} (ZMod n → Nat) w
+          (@HAdd.hAdd.{0, 0, 0} ((j : ZMod n) → Nat) ((j : ZMod n) → Nat) (ZMod n → Nat)
+            (@instHAdd.{0} ((j : ZMod n) → Nat)
+              (@Pi.instAdd.{0, 0} (ZMod n) (fun (j : ZMod n) => Nat) fun (i : ZMod n) => instAddNat))
+            (@Pi.single.{0, 0} (ZMod n) (fun (a : ZMod n) => Nat)
+              (fun (i : ZMod n) => @MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) (ZMod.decidableEq n) a
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+            (@Pi.single.{0, 0} (ZMod n) (fun (a : ZMod n) => Nat)
+              (fun (i : ZMod n) => @MulZeroClass.toZero.{0} Nat Nat.instMulZeroClass) (ZMod.decidableEq n) b
+              (@OfNat.ofNat.{0} Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+        (@Even.{0} Nat instAddNat
+          (@addOrderOf.{0} (ZMod n)
+            (@AddMonoidWithOne.toAddMonoid.{0} (ZMod n)
+              (@AddGroupWithOne.toAddMonoidWithOne.{0} (ZMod n)
+                (@Ring.toAddGroupWithOne.{0} (ZMod n) (@CommRing.toRing.{0} (ZMod n) (ZMod.commRing n)))))
+            (@HSub.hSub.{0, 0, 0} (ZMod n) (ZMod n) (ZMod n)
+              (@instHSub.{0} (ZMod n)
+                (@SubNegMonoid.toSub.{0} (ZMod n)
+                  (@AddGroup.toSubNegMonoid.{0} (ZMod n)
+                    (@AddGroupWithOne.toAddGroup.{0} (ZMod n)
+                      (@Ring.toAddGroupWithOne.{0} (ZMod n) (@CommRing.toRing.{0} (ZMod n) (ZMod.commRing n)))))))
+              a b)))
+exists_not_bad3.{u_1} : ∀ (n : ℕ),
+  ¬Dvd.dvd.{0} 3 n →
+    ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι],
+      LE.le.{0} 3 (Fintype.card.{u_1} ι) → ∀ (e : ι → ℕ), ∃ ε, ∀ (d : ℕ), Dvd.dvd.{0} d n → ¬Bad3.{u_1} e ε d
+exists_not_badAt_of_three_le.{u_1} : ∀ (n : ℕ),
+  Ne.{1} n 0 →
+    ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι],
+      LE.le.{0} 3 (Fintype.card.{u_1} ι) → ∀ (e : ι → ℕ), ∃ ε, ∀ (d : ℕ), Dvd.dvd.{0} d n → ¬BadAt.{u_1} e ε d
+@card_exists_levelBad_le.{u_1,
+    u_2} : ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι] {V : Type u_2} [inst_1 : AddCommGroup.{u_2} V] (pos : ι → ℕ)
+  (val : ι → V) (K : ℕ),
+  LE.le.{0} (Finset.card.{u_1} {ε | ∃ j, LE.le.{0} j K ∧ levelBad.{u_1, u_2} pos val ε j})
+    (HMul.hMul.{0, 0, 0} 2 (Finset.card.{u_1} {ε | levelBad.{u_1, u_2} pos val ε 0}))
+@card_exists_bad3_le.{u_1} : ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι] (e : ι → ℕ) {d : ℕ},
+  ¬Dvd.dvd.{0} 2 d →
+    ¬Dvd.dvd.{0} 3 d →
+      ∀ (K : ℕ),
+        LE.le.{0}
+          (Finset.card.{u_1}
+            {ε | ∃ j, LE.le.{0} j K ∧ Bad3.{u_1} e ε (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 2 j) d)})
+          (HMul.hMul.{0, 0, 0} 2 (Finset.card.{u_1} (bad3Set.{u_1} e d)))
+AuditE1Print.lean:22:28: warning: Variable name `w` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _w
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'Pnq.mem_bad3Set' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.val3_eq_aeval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.val3_eq_eval₂' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.val3_eq_eval_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.levelBad_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.levelBad_succ' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.card_exists_levelBad_le' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Pnq.exists_signs_all' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

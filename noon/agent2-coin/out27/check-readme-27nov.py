@@ -16,7 +16,8 @@ def node(js):
     if r.returncode: raise SystemExit(r.stderr[:500])
     return r.stdout.strip()
 if __name__ == '__main__':
-    readme = rd('README.md'); a = readme.index('## 27 November: the page remade'); b = readme.index('## Files'); sec = norm(readme[a:b])
+    readme = rd('README.md'); a = readme.index('## 27 November: the page remade'); b = readme.index('## Files'); e0 = readme.index('### The evening: the page as built for the public site')
+    sec = norm(readme[a:e0]); eve = norm(readme[e0:b])          # the day's part, and the evening's subsection, which has checks of its own at the end
     src = {k: norm(rd(k)) for k in ['reader/visit-%d.md' % i for i in range(1, 8)] + ['referee27/%s.md' % x for x in ('blind', 'reading', 'mending', 'last', 'pending')]}
     page = json.loads(rd('out27/read-page.out')); old_page = norm(rd('page.src.before-27nov.html')); new_src = norm(rd('page.src.html')); test = rd('tools/shot-change.js')
     quotes = re.findall(r'"([^"]+)"', sec)
@@ -134,7 +135,7 @@ if __name__ == '__main__':
        'On a phone slowed sixfold it lasted about four seconds.' in V(5) and 'on a phone slowed fourfold' in V(6) and 'Not tried with a finger on the phone.' in R['referee27/pending.md'] and 'on a heavy one, longer' in R['referee27/pending.md'])
     ok('left: the reader\'s small things', 'the menu drops "United States" for "your own" though the coins are still American' in V(4) and 'The twelve ways run to about a screen and a half' in V(5) and
        'uses the word twice in two senses on one line' in V(2) and 'It means "change allowed", not "change given"' in V(2) and 'the lines are squeezed into the bottom fifth of the frame' in V(2))
-    r8 = rd('out27/remake8.py'); s7, s8 = rd('out27/page.src.stage7.html.txt'), rd('page.src.html')
+    r8 = rd('out27/remake8.py'); s7, s8 = rd('out27/page.src.stage7.html.txt'), rd('out27/page.src.stage8.html.txt')
     def body(src, name):                      # a function of the page's script, from its name to the next function at the same depth
         i = src.index('\n  function ' + name + '('); j = src.index('\n  function ', i + 10); return src[i:j]
     counting = ['compute', 'drawTiles', 'drawA', 'costText']
@@ -142,7 +143,7 @@ if __name__ == '__main__':
     changed = [l for l in difflib.unified_diff(s7.split('\n'), s8.split('\n'), lineterm='', n=0) if (l.startswith('+') or l.startswith('-')) and not l.startswith(('+++', '---'))]
     ok('the last round of changes: taps while counting, the tied buttons\' names, the tables\' sentence, a clause of a caption and of the foot; no counting (the page\'s counting functions are the same, letter for letter, in the source before that round and now; pcore.js is embedded by the build and was not touched by it)',
        'These sets have the lowest average of all that were tried.' in r8 and 'a still la' in r8 and 'The counting behind the floor' in r8 and 'function others(list)' in r8 and 'S.pending' in r8 and
-       all(body(s7, f) == body(s8, f) for f in counting) and s8 == rd('out27/page.src.stage8.html.txt') and 'pcore' not in r8 and not any(re.search(r'P\.(plain|greedy|both|counts|total|bestAdd|schemes|bound)\(', l) and 'others(' not in l and 'Add a ' not in l for l in changed), len(changed))
+       all(body(s7, f) == body(s8, f) for f in counting) and all(body(s8, f) == body(rd('page.src.html'), f) for f in counting) and 'pcore' not in r8 and not any(re.search(r'P\.(plain|greedy|both|counts|total|bestAdd|schemes|bound)\(', l) and 'others(' not in l and 'Add a ' not in l for l in changed), len(changed))
     bp = rd('referee27/brief-pending.md')
     ok('my last message to the referee listed the taps, the tied buttons\' names and the tables\' sentence, and not the two reworded clauses', 'b. the buttons that add a coin say "equal best with' in bp and 'c. the sentence over the tables of best sets no longer begins with' in bp and
        'still larger' not in bp and 'counting behind the floor' not in bp and '(c), the sentence over the tables: now true as it stands.' in R['referee27/pending.md'] and 'the two reworded clauses were not in my message to it' in sec)
@@ -173,7 +174,7 @@ if __name__ == '__main__':
        '4224 differ, 4224 of them half-way cases sent down' in h and 'old and new differ in 4224; 0 of those are not half-way cases' in h and
        all(x in sec for x in ['14,400', '4,224', '6,006,987', '3/80 = 0.0375', '1323/240 = 5.5125']) and 'I recounted and get 14,400 half-way cases, 4,224 sent down by the old rule, the first 3/80. The same as yours.' in R['referee27/mending.md'] and 'the referee counted the same' in sec, h[:200])
     # ---- 5. the tests' tallies ----
-    pt = rd('out27/page-test.out').strip().split('\n')[-1]; ok('the page\'s test: 226 assertions, 0 failed', '226 assertions, 0 failed' in pt and 'has 226 assertions' in sec and '226 assertions on what it shows' in readme, pt)
+    pt = rd('out27/page-test.226-27nov.out').strip().split('\n')[-1]; ok('the page\'s test by the afternoon: 226 assertions, 0 failed', '226 assertions, 0 failed' in pt and 'had 226 assertions by the afternoon (227 since the evening)' in sec, pt)
     old_test = rd('tools/shot-change.before-27nov.js.txt'); ok('174 before the remake', '174' in rd('out27/README.before-27nov.md') and '174 before the remake' in sec)
     ok('the old function sent 3/80 down and 1323/240 up; the new one sends both up', node("const O=require('./out27/pcore.before-27nov.js'); console.log([O.meanText(3,80,3),O.meanText(1323,240,3),P.meanText(3,80,3),P.meanText(1323,240,3)].join('|'))") == 'about 0.037|about 5.513|about 0.038|about 5.513')
     ct = rd('ctest.out').strip().split('\n')[-1]; ok('the counting tests: 60 pass', ct.startswith('60 passed, 0 failed') and 'The tests of the counting are 60' in sec, ct)
@@ -189,7 +190,8 @@ if __name__ == '__main__':
        all(os.path.getmtime(os.path.join(HERE, 'out27', 'remake%s.py' % k)) <= os.path.getmtime(os.path.join(HERE, 'reader/change-as-visited-2.html.txt')) + 120 for k in ['', 2, 3]) and
        "after the reader's second visit" in heads[4] and "after the reader's third visit" in heads[5] and "the reader's fourth visit" in heads[6] and "the reader's fifth visit" in heads[7] and "the reader's sixth visit" in heads[8] and
        'the first three for the first remake, then one before each of the reader\'s visits from the third on' in sec, heads)
-    ok('eight page scripts and nine test scripts', all(os.path.exists(os.path.join(HERE, 'out27', 'remake%s.py' % k)) for k in ['', 2, 3, 4, 5, 6, 7, 8]) and not os.path.exists(os.path.join(HERE, 'out27/remake9.py')) and all(os.path.exists(os.path.join(HERE, 'out27', 'test-remake%s.py' % k)) for k in ['', 2, 3, 4, 5, 6, 7, 8, 9]) and not os.path.exists(os.path.join(HERE, 'out27/test-remake10.py')) and '`test-remake9.py` (the test: the first two for the first remake, five for the rounds of reading, and the last two for what the batch showed)' in sec)
+    ok('eight page scripts and nine test scripts by the afternoon; the evening added one and three', all(os.path.exists(os.path.join(HERE, 'out27', 'remake%s.py' % k)) for k in ['', 2, 3, 4, 5, 6, 7, 8, 9]) and not os.path.exists(os.path.join(HERE, 'out27/remake10.py')) and all(os.path.exists(os.path.join(HERE, 'out27', 'test-remake%s.py' % k)) for k in ['', 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) and not os.path.exists(os.path.join(HERE, 'out27/test-remake13.py')) and
+       'The evening added `remake9.py` and `test-remake10.py` to `test-remake12.py`.' in sec and all(os.path.getmtime(os.path.join(HERE, 'out27', f)) > os.path.getmtime(os.path.join(HERE, 'out27/page-mutants.final-27nov.out')) for f in ['remake9.py', 'test-remake10.py', 'test-remake11.py', 'test-remake12.py']) and '`test-remake9.py` (the test: the first two for the first remake, five for the rounds of reading, and the last two for what the batch showed)' in sec)
     full = rd('out27/page-mutants.full-27nov.out'); missed = re.findall(r'^(\S+) .* -- NOT caught: all 223 assertions pass', full, re.M); stops = re.findall(r'^(\S+) .* -- caught: the test stops', full, re.M)
     ok('the first whole run: 132 of 135 against 223 assertions, the true page passing five times; the three that passed; the three caught only by a stop',
        '132 of 135 broken copies of the page caught; the true page run among them 4 times passed 4 times' in full and full.startswith('control, alone: the true page, built and run in the same way: all 223 assertions pass') and
@@ -205,14 +207,14 @@ if __name__ == '__main__':
        re.search(r'^no-count-without-frames .* -- caught: 1 assertions fail and then the test stops, after 206', st, re.M) and re.search(r'^swap-button-dead .* -- caught: 1 assertions fail and then the test stops, after 1: eleven coinages', st, re.M) and
        re.search(r'^caret-lost .* -- caught ONLY BY THE TEST STOPPING, after 164 assertions that all pass', st, re.M) and re.search(r'^counted-twice .* -- caught: 1 assertions fail and then the test stops, after 174: Enter in the box', st, re.M))
     ok('the two faults set right are caught by assertions', re.search(r'^swap-button-dead .* -- caught: \d+ of 226 assertions fail', two, re.M) and re.search(r'^caret-lost .* -- caught: \d+ of 226 assertions fail', two, re.M) and '2 of 2 broken copies' in two and 'passed 2 times' in two)
-    pm = [l for l in rd('page-mutants.out').split('\n') if 'broken copies of the page caught' in l]
+    pm = [l for l in rd('out27/page-mutants.final-27nov.out').split('\n') if 'broken copies of the page caught' in l]
     m = re.search(r'(\d+) of (\d+) broken copies of the page caught', pm[-1]) if pm else None
-    last = rd('page-mutants.out')
-    ok('the last whole run: its tally, against 226 assertions, is the one in the section; every fault caught by an assertion, two of them then stopping the test; the true page five times; 36 minutes',
+    last = rd('out27/page-mutants.final-27nov.out')
+    ok('the second whole run, the last of the afternoon: its tally, against 226 assertions, is the one in the section; every fault caught by an assertion, two of them then stopping the test; the true page five times; 36 minutes',
        m and ('caught %s of the %s' % (m.group(1), m.group(2))) in sec and m.group(2) == '135' and 'all 226 assertions pass' in last.split('\n')[0] and 'passed 4 times; 4 at a time, 36 minutes' in pm[-1] and
        len(re.findall(r' -- caught: \d+ of 226 assertions fail', last)) + len(re.findall(r' -- caught: \d+ assertions fail and then the test stops', last)) == int(m.group(1)) == 135 and
        len(re.findall(r' -- caught: \d+ assertions fail and then the test stops', last)) == 2 and not re.search(r'NOT caught|ONLY BY THE TEST STOPPING|caught: the test stops|does not finish', last) and
-       len(re.findall(r'THE TRUE PAGE, run among the broken copies, 4 at a time -- passes: all 226 assertions pass', last)) == 4 and cmp_files('page-mutants.out', 'out27/page-mutants.final-27nov.out'), pm[-1][:200] if pm else 'no tally in page-mutants.out')
+       len(re.findall(r'THE TRUE PAGE, run among the broken copies, 4 at a time -- passes: all 226 assertions pass', last)) == 4, pm[-1][:200] if pm else 'no tally in page-mutants.out')
     cmo = rd('cmutants.out'); cm = cmo.strip().split('\n')[-1]; m = re.match(r'(\d+) of (\d+) broken copies caught; passed: none', cm)
     ok('the counting program\'s batch: 59 of 59, four of them in the rounding, the control passing before and after', m and m.group(1) == m.group(2) == '59' and 'broken 59 ways (four of them in this rounding, added today), the tests catch 59' in sec and
        len(re.findall(r'^caught   meantext-(?:machine-rounding|rounds-down|half-goes-down|always-three-places) ', cmo, re.M)) == 4 and cmo.startswith('control (nothing broken): passes') and 'control again, after the last: passes' in cmo and
@@ -235,4 +237,92 @@ if __name__ == '__main__':
                 if os.path.isfile(q) and not f.endswith(('.png', '.private.txt')): yield d + '/' + f, open(q, encoding='utf-8', errors='replace').read()
     hits = [n for n, t in texts() if re.search(r'\ba[0-9a-f]{16}\b', t)]
     ok('no agent id in any text file of the four folders (the two files named *.private.txt, which hold them, stay at home)', not hits, hits)
+    # ================= the evening's subsection =================
+    line = json.loads(rd('out27/line-as-built.out')); L1 = line['change.html']; L0 = line['page.src.before-27nov.html']
+    Ev = {k: norm(rd(k)) for k in ['reader/visit-8.md', 'reader/visit-9.md', 'referee27/built.md', 'referee27/line.md', 'referee27/last-line.md']}
+    ewhere = [('Not checked: a slow phone, sets with change beyond coins of 150, and the page as built for the public site.', 'referee27/last.md'), ('By Noon, an AI (Claude). No person has reviewed it.', 'LINE'), ('About Noon', 'LINE'), ('All pages', 'LINE'), ('A coin with a solid ring is handed over; a coin with a dashed ring is handed back.', 'NEWPAGE'),
+      ('The built page behaves as the bare one did, the moved sentence is an improvement, and I would send it to a friend as it is.', 'reader/visit-8.md'),
+      ('a dot left dangling at the end of its first line, and two links that are low for a thumb', 'reader/visit-8.md'), ('About', 'reader/visit-8.md'), ('An AI', 'reader/visit-8.md'),
+      ('The top line is mended: the dangling dot is gone, the links say where they go, and they are taller for a thumb.', 'reader/visit-9.md'),
+      ('0 disagreements on each', 'referee27/built.md'), ('tallest just above 600 px', 'referee27/built.md'), ('none', 'referee27/built.md'),
+      ('with no word that they are not the current page', 'referee27/line.md'), ('I found nothing false in the line.', 'referee27/last-line.md'), ('About Noon', 'LINE'), ('About Noon', 'LINE'), ('How it was checked, and how it was not.', 'FULL'),
+      ('kept as it stood', 'OLDLINE'), ("It is a pale strip on a dark page, which jars slightly but reads as the site's header and not as part of the page.", 'reader/visit-8.md'), ('On real paper the long form would print.', 'referee27/built.md')]
+    equotes = re.findall(r'"([^"]+)"', eve)
+    ok('the evening has as many quotations as its list (%d)' % len(ewhere), len(equotes) == len(ewhere), len(equotes))
+    for (q, w), got in zip(ewhere, equotes):
+        hay = L1['390x844']['words'] if w == 'LINE' else L1['1280x800']['words'] if w == 'FULL' else L0['390x844']['words'] if w == 'OLDLINE' else norm(re.sub(r'<[^>]+>', '', rd('page.src.html'))) if w == 'NEWPAGE' else norm(rd(w)) if w not in Ev else Ev[w]
+        ok('the evening, in order: "%s" is in %s' % (q[:60], w), got == q and q in hay, got[:100])
+    ok('the line as built on this page: two lines of 48 px on phones 320, 360 and 390 wide; 28 px sideways; the short form to 760 px wide and the full sentence from 761; the links 87 by 34 and 71 by 34',
+       all(L1[k]['height'] == 48 and L1[k]['words'] == 'By Noon, an AI (Claude). No person has reviewed it. About Noon · All pages' and L1[k]['links'] == [['About Noon', 87, 34], ['All pages', 71, 34]] for k in ['390x844', '360x640', '320x568']) and
+       L1['844x390']['height'] == 28 and L1['760x900']['words'].startswith('By Noon, an AI') and L1['761x900']['words'].startswith('Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it.') and
+       '48 px tall on phones 320 to 412 wide' in eve and '28 px on a phone held sideways' in eve and 'The links are 87 by 34 px and 71 by 34, where they were 26 px high.' in eve and '39 by 26 px and 59 by 26 px' in Ev['reader/visit-8.md'] and '87 by 34 px' in Ev['reader/visit-9.md'])
+    ok('this folder\'s earlier copy of the page says it is one, in both forms', L0['390x844']['words'].startswith("An earlier copy of a page of Noon's, kept as it stood. By Noon, an AI (Claude). No person has reviewed it.") and L0['1280x800']['words'].startswith('An earlier copy of a page, kept as it stood, and not the page as it is now. Written by Noon'))
+    src9 = rd('page.src.html'); i_w = src9.index('<div class="ways" id="ways"></div>'); i_k = src9.index('<figcaption id="ringkey">'); i_c = src9.index('<figure class="viz-root" id="fig3">')
+    home9 = json.loads(rd('out27/first-home.stage9.out').strip().split('\n')[-1]); P9 = json.loads(rd('out27/first-public.stage9.out').strip().split('\n')[-1])
+    ok('the ninth stage: the key follows the rings in the page, and nothing else of the source changed but its style rule; the rings stand 47 px the higher',
+       i_c < i_w < i_k and src9 == rd('out27/page.src.stage9.html.txt') and
+       sorted(l[1:].strip() for l in __import__('difflib').unified_diff(rd('out27/page.src.stage8.html.txt').split('\n'), src9.split('\n'), lineterm='', n=0) if l[:1] in '+-' and l[:3] not in ('+++', '---')) ==
+       sorted(['<figcaption>A coin with a <b>solid ring</b> is handed over; a coin with a <b>dashed ring</b> is handed back.</figcaption>', '<figcaption id="ringkey">A coin with a <b>solid ring</b> is handed over; a coin with a <b>dashed ring</b> is handed back.</figcaption>', '#ringkey { margin: 8px 0 0; }                 /* the key to the rings, under them */']) and
+       46 <= F['360x640']['plain'][1] - home9['360x640']['plain'][1] <= 48 and 'stand 47 px the higher for it' in eve, F['360x640']['plain'][1] - home9['360x640']['plain'][1])
+    A9, B9, C9, D9 = P9['390x844'], P9['360x640'], P9['320x568'], P9['844x390']
+    ok('the first screen of the page as built: at 390 by 844 the three rows and the key; at 360 by 640 the first row, ending 10 px above the foot; at 320 by 568 the amount box whole and the first row beginning 8 px below, where without the line it is cut; sideways the first row 11 px below, and cut without the line',
+       A9['line'] == [0, 48] and A9['both'][1] <= 844 and A9['both'][1] <= A9['key'][0] and A9['key'][1] <= 844 and B9['screen'] - B9['plain'][1] == 10 and B9['greedy'][1] > 640 and
+       C9['amountBox'][1] <= 568 and C9['plain'][0] - 568 == 8 and home9['320x568']['plain'][0] < 568 < home9['320x568']['plain'][1] and D9['plain'][0] - 390 == 11 and home9['844x390']['plain'][0] < 390 < home9['844x390']['plain'][1] and D9['line'] == [0, 28] and 'the first row\'s box begins 11 px below the screen' in eve and 'the first row\'s box begins 8 px below the screen' in eve and 'its box ending 10 px above the foot of the screen' in eve, json.dumps(P9)[:300])
+    t9 = rd('tools/shot-change.js'); pub9 = rd('out27/page-test.public-stage9.out')
+    ok('the test: 227 assertions at home and on the page as built; room of 48 px where the page has no line; the key at four widths; 224 of 226 at 17:48',
+       'PAGE TEST: 227 assertions, 0 failed' in rd('out27/page-test.out') and 'PAGE TEST: 227 assertions, 0 failed' in pub9 and "document.querySelector('p.noon-by') ? 0 : 48" in t9 and 'for (const wv of [320, 360, 390, 412])' in t9 and
+       "getElementById('ringkey')" in t9 and t9 == rd('out27/shot-change.stage9.js.txt') and 'On the page as built all 227 hold' in eve and 'where 224 of 226 had held at 17:48' in eve and '227 assertions on what it shows' in readme)
+    for name, f, t in [('the reader\'s eighth visit', 'reader/brief-8.md', '18:36'), ('the reader\'s ninth visit', 'reader/brief-9.md', '19:12'), ('the referee\'s sixth message', 'referee27/brief-built.md', '18:50'), ('the referee\'s seventh message', 'referee27/brief-line.md', '19:12'), ('the referee\'s eighth message', 'referee27/brief-last-line.md', '19:56')]:
+        m = re.search(r'at (\d\d:\d\d):\d\d UTC', rd(f).split('\n')[0]); ok('%s was asked for at %s' % (name, t), m and m.group(1) == t and t in eve, rd(f)[:80])
+    Bm, Lm, Zm = Ev['referee27/built.md'], Ev['referee27/line.md'], Ev['referee27/last-line.md']
+    ok('built: 314 states without the line and as built; five phones; 54 pages at nine settings; three broken copies of the line and one of the page passed',
+       'drove the 314 states (160 phone, 154 desk) on the bare page and again on the built one' in Bm and 'all 54 pages at nine settings' in Bm and len(re.findall(r'\| (?:320 by 568|360 by 640|390 by 844|412 by 915|844 by 390, sideways) \|', Bm)) == 5 and
+       len(re.findall(r'\| b\d, [^|]*\| passes, 0 faults', Bm)) == 3 and re.search(r'\| p1, [^|]*\| not applicable \| passes, 226 and 0', Bm) and 'On the page as built, the line included: none.' in Bm)
+    ok('line: twelve settings; its broken copy of the page caught; two more of the line passed; 4 px', 'All 54 pages at twelve settings' in Lm and re.search(r'\| p1, [^|]*\| caught: 1 of 227 failed', Lm) and len(re.findall(r'\| n\d, new: [^|]*\| passes, 0 faults', Lm)) == 2 and
+       "reaches 4 px below the 24 px line" in Lm and 'Three old copies carry the plain line' in Lm and '`agent2-coin/page.src.before-27nov.html`' in rd('referee27/line.md'))
+    ok('last line: thirteen earlier copies; no tap outside the line; no words cut; three more passed; the remark on ten', 'all thirteen differ from it, so none is the current page' in Zm and 'Taps outside the line. None.' in Zm.replace('**', '') and 'Words cut. None.' in Zm.replace('**', '') and
+       len(re.findall(r'\| m\d, [^|]*\| passes, 0 faults', Zm)) == 3 and 'On the ten kept copies the two forms now disagree in how much they say.' in Zm)
+    lt, lb = rd('out27/line-test-54-pages.out'), rd('out27/line-test-broken-copies.out')
+    ok('the line\'s own test: 54 pages at twelve sizes and in print, no fault; 23 of 23 broken copies, eight of them the referee\'s, the unbroken copies passing before and after',
+       'BYLINE: 54 pages at 13 sizes, 0 faults' in lt and '794x1123 in print' in lt and '23 of 23 broken copies caught; passed: none' in lb and len(re.findall(r"^caught .*\(a referee's\)", lb, re.M)) == 8 and lb.count('passes  [BYLINE: 9 pages at 13 sizes, 0 faults]') == 2 and
+       'twenty-three broken copies of the line of twenty-three, the referee\'s eight among them' in eve)
+    run3 = rd('page-mutants.out'); t3 = [l for l in run3.split('\n') if 'broken copies of the page caught' in l][-1]; kg = rd('out27/page-mutants.key-gone-27nov.out'); pm9 = rd('page-mutants.py')
+    n_a, n_s, n_o = len(re.findall(r' -- caught: \d+ of 227 assertions fail', run3)), len(re.findall(r' -- caught: \d+ assertions fail and then the test stops', run3)), len(re.findall(r'caught ONLY BY THE TEST STOPPING', run3))
+    ok('the third whole run: 141 of 141 against 227 assertions, the true page five times, 38 minutes; 138, 2 and 1; the one caught by six assertions afterwards; six faults for this stage',
+       t3.startswith('141 of 141 broken copies of the page caught; the true page run among them 4 times passed 4 times; 4 at a time, 38 minutes') and run3.startswith('control, alone: the true page, built and run in the same way: all 227 assertions pass') and
+       (n_a, n_s, n_o) == (138, 2, 1) and 'NOT caught' not in run3 and re.search(r'^key-to-the-rings-gone .* -- caught ONLY BY THE TEST STOPPING', run3, re.M) and re.search(r'^key-to-the-rings-gone .* -- caught: 6 of 227 assertions fail', kg, re.M) and
+       cmp_files('page-mutants.out', 'out27/page-mutants.stage9-27nov.out') and all(("('%s'" % n) in pm9 for n in ['key-back-above-the-amount', 'key-to-the-rings-gone', 'opening-takes-more-room', 'key-hidden-on-a-narrow-phone', 'key-over-the-rings-again-by-style', 'title-larger']) and
+       'caught 141 of the 141' in eve and '138 by assertions, 2 by an assertion and then a stop, and 1 only by the test stopping' in eve and 'The list is 141 with six for this stage' in eve and 'the page broken 141 ways' in readme, (t3[:60], n_a, n_s, n_o))
+    eight = rd('out27/asbuilt-eight-pages.out')
+    same = [n for n in ['thunder', 'clock', 'dryads', 'comb', 'peel', 'gospel', 'turtle', 'coin'] if re.search(r'^%s, old: (.*)$' % n, eight, re.M).group(1) == re.search(r'^%s, new: (.*)$' % n, eight, re.M).group(1)]
+    ok('eight pages\' tests on both builds: seven the same (five passing, the two turtles failing one assertion about the link to the write-up), this page\'s changed; the doubling turtle passes with the build\'s own files',
+       same == ['thunder', 'clock', 'dryads', 'comb', 'peel', 'gospel', 'turtle'] and all(re.search(r'^%s, (old|new): .*\(exit 0\)$' % n, eight, re.M) for n in ['thunder', 'clock', 'dryads', 'comb', 'peel']) and
+       'coin, old: PAGE TEST: 226 assertions, 2 failed' in eight and 'coin, new: PAGE TEST: 226 assertions, 1 failed' in eight and len(re.findall(r'^(?:gospel|turtle), (?:old|new): PAGE TEST: \d+ assertions, 1 failed: and it links to the write-up', eight, re.M)) == 4 and
+       "given the build's own files: PAGE TEST: 138 assertions, 0 failed" in eight and 'Seven gave the same result on both: five passed on both' in eve, same)
+    ok('the reader\'s nine visits and the referee\'s eight messages are in the folders', all(os.path.exists(os.path.join(HERE, 'reader/visit-%d.md' % i)) and os.path.exists(os.path.join(HERE, 'reader/brief-%d.md' % i)) for i in range(1, 10)) and
+       sorted(f for f in os.listdir(os.path.join(HERE, 'referee27')) if f.startswith('brief-')) == sorted('brief-%s.md' % x for x in ['blind', 'reading', 'mending', 'last', 'pending', 'built', 'line', 'last-line']))
+    ok('two of the referee\'s afternoon reports ended by saying the built page was not checked, and the reader for truth named it among the things left out',
+       [x for x in ('reading', 'mending', 'last', 'pending') if 'and the page as built for the public site.' in R['referee27/%s.md' % x]] == ['mending', 'last'] and 'The referee had ended two of its reports' in eve and
+       'The page as built for the public site.' in norm(rd('truth27/report.md')).replace('**', ''))
+    H9 = home9
+    ok('rows and rings: at 320 by 568 the rings begin 41 px below the screen as built, and without the line the foot of the screen cuts them; sideways the amount box is whole but for its last pixel, and without the line the screen ends in the row\'s words with the rings below',
+       C9['firstRing'][0] - 568 == 41 and H9['320x568']['firstRing'][0] < 568 < H9['320x568']['firstRing'][1] and D9['amountBox'][1] - 390 == 1 and D9['amountBox'][0] < 390 and
+       H9['844x390']['plain'][0] < 390 < H9['844x390']['firstRing'][0] and 'its rings 41 px below' in eve and 'whole but for its last pixel' in eve, json.dumps([C9['firstRing'], H9['320x568']['firstRing'], D9['amountBox'], H9['844x390']['plain'], H9['844x390']['firstRing']]))
+    ok('the links: 33 px inside the line on a phone and 28 on a short screen; 7 px above their words; 3 px apart', 'A link is 33 px high inside the line on phones, 30 at 760 wide, and 28 on short screens' in Zm and 'the boxes begin 7 px above their own words' in Ev['reader/visit-9.md'] and
+       'The two boxes are now neighbours, 3 px apart' in Ev['reader/visit-9.md'] and 'of which 33 px is inside the line on an upright phone and 28 on a short screen' in eve)
+    hw = rd('out27/handmade-widths.out')
+    ok('other pages: five with the line 35 px down; of 54 hand-made pages six wider than a phone 390 wide (the gasket page by 195 px), seven at 360, fourteen at 320', 'on five pages the line sits 35 px down' in Bm and
+       '54 hand-made pages at 390 wide; 6 wider than the screen' in hw and '195 px noon/agent2-gasket/gasket.html' in norm(hw) and '54 hand-made pages at 360 wide; 7 wider than the screen' in hw and '54 hand-made pages at 320 wide; 14 wider than the screen' in hw and
+       'six are wider than a phone 390 wide (the gasket page by 195 px), seven at 360 and fourteen at 320' in eve)
+    ok('the eight pages on the first short line: the record says which line it was', 'the short line on a phone, as first written, before the page\'s ninth stage' in eight and 'on a build with the short line as first written, before this page\'s ninth stage' in eve)
+    e2 = rd('out27/asbuilt-eight-pages-2.out'); t3r = norm(rd('truth27/report-evening.md'))
+    ok('the eight pages again on the build as it now stands: the same seven results, and this page\'s test passing there',
+       all(re.search(r'^%s, old: (.*)$' % n, e2, re.M).group(1) == re.search(r'^%s, new: (.*)$' % n, e2, re.M).group(1) for n in ['thunder', 'clock', 'dryads', 'comb', 'peel', 'gospel', 'turtle']) and
+       all(re.search(r'^%s, new: (.*)$' % n, e2, re.M).group(1) == re.search(r'^%s, new: (.*)$' % n, eight, re.M).group(1) for n in ['thunder', 'clock', 'dryads', 'comb', 'peel', 'gospel', 'turtle']) and
+       'coin, new: PAGE TEST: 227 assertions, 0 failed (exit 0)' in e2 and 'with the same seven results; this page\'s test passes there' in eve)
+    ok('the reader for truth on the evening: five sentences and three things left out; its count of three reports where two is right',
+       'Five sentences say more than, or other than, their source.' in t3r and 'Three things the reports leave are neither mended nor listed.' in t3r and 'had three times ended' in t3r and
+       'found five sentences that said more than their sources, or other than them, and three things left out' in eve and 'three briefs and three reports' in readme and
+       all(os.path.exists(os.path.join(HERE, 'truth27', f)) for f in ['brief.md', 'report.md', 'brief-mends.md', 'report-mends.md', 'brief-evening.md', 'report-evening.md']))
+    ok('nothing in the evening is left to come', not re.search(r'EVENING-|EIGHTH-|TO-COME|ASBUILT2', readme))
     print('%d checks hold, %d fail' % (n_ok, n_bad)); sys.exit(1 if n_bad else 0)

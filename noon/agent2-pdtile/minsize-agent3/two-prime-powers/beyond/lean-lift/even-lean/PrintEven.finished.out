@@ -1,0 +1,265 @@
+@[reducible] def Pnq.F3 : Type :=
+AlgebraicClosure (ZMod 3)
+def Pnq.val3.{u_1} : {ι : Type u_1} → [Fintype ι] → (ι → ℕ) → (ι → Bool) → F3 → F3 :=
+fun {ι} [Fintype ι] e ε ζ => ∑ k, ↑(sg (ε k)) * ζ ^ e k
+def Pnq.Bad3.{u_1} : {ι : Type u_1} → [Fintype ι] → (ι → ℕ) → (ι → Bool) → ℕ → Prop :=
+fun {ι} [Fintype ι] e ε d => ∀ (ζ : F3), IsPrimitiveRoot ζ d → val3 e ε ζ = 0
+def Pnq.bad3Set.{u_1} : {ι : Type u_1} → [Fintype ι] → (ι → ℕ) → ℕ → Finset (ι → Bool) :=
+fun {ι} [Fintype ι] e d => {ε | Bad3 e ε d}
+def Pnq.classSum3.{u_1} : {ι : Type u_1} → [Fintype ι] → (ι → ℕ) → (ι → Bool) → F3 → ℕ → ℕ → F3 :=
+fun {ι} [Fintype ι] e ε η M r => ∑ k, if e k % M = r then ↑(sg (ε k)) * η ^ e k else 0
+def Pnq.csum.{u_1, u_2} : {ι : Type u_1} →
+  [Fintype ι] → {V : Type u_2} → [AddCommGroup V] → (ι → ℕ) → (ι → V) → (ι → Bool) → ℕ → ℕ → V :=
+fun {ι} [Fintype ι] {V} [AddCommGroup V] pos val ε M r => ∑ k, if pos k % M = r then sg (ε k) • val k else 0
+def Pnq.levelBad.{u_1, u_2} : {ι : Type u_1} →
+  [Fintype ι] → {V : Type u_2} → [AddCommGroup V] → (ι → ℕ) → (ι → V) → (ι → Bool) → ℕ → Prop :=
+fun {ι} [Fintype ι] {V} [AddCommGroup V] pos val ε x =>
+  match x with
+  | 0 => ∑ k, sg (ε k) • val k = 0
+  | j.succ => ∀ r < 2 ^ j, csum pos val ε (2 ^ (j + 1)) r = csum pos val ε (2 ^ (j + 1)) (r + 2 ^ j)
+def Pnq.ExceptionalPair : {n : ℕ} → (ZMod n → ℕ) → Prop :=
+fun {n} w => ∃ a b, w = Pi.single a 1 + Pi.single b 1 ∧ Even (addOrderOf (a - b))
+@card_exists_levelBad_le : ∀ {ι : Type u_1} [inst : Fintype ι] {V : Type u_2} [inst_1 : AddCommGroup V] (pos : ι → Nat)
+  (val : ι → V) (K : Nat),
+  @LE.le Nat instLENat
+    (@Finset.card (ι → Bool) {ε | ∃ j, And (@LE.le Nat instLENat j K) (@levelBad ι inst V inst_1 pos val ε j)})
+    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      (@Finset.card (ι → Bool)
+        {ε | @levelBad ι inst V inst_1 pos val ε (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))}))
+@bad3_of_badAt : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) (ε : ι → Bool) (i : Nat) {d : Nat},
+  Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) d) →
+    @BadAt ι inst e ε
+        (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+          (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+            (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) i)
+          d) →
+      @Bad3 ι inst e ε d
+@classSum3_eq_of_bad3 : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) (ε : ι → Bool) {p : Nat},
+  Nat.Prime p →
+    @Ne Nat p (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) →
+      ∀ {i : Nat},
+        @LE.le Nat instLENat (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) i →
+          ∀ {d : Nat},
+            Not (@Dvd.dvd Nat Nat.instDvd p d) →
+              Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) d) →
+                ∀ {η : F3},
+                  @IsPrimitiveRoot F3
+                      (@CommRing.toCommMonoid F3
+                        (@AlgebraicClosure.instCommRing (ZMod (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))))
+                          (@ZMod.instField (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+                            Nat.fact_prime_three)))
+                      η d →
+                    @Bad3 ι inst e ε
+                        (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                          (@HPow.hPow Nat Nat Nat
+                            (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p i)
+                          d) →
+                      ∀ (c t t' : Nat),
+                        @LT.lt Nat instLTNat t p →
+                          @LT.lt Nat instLTNat t' p →
+                            @Eq F3
+                              (@classSum3 ι inst e ε η
+                                (@HPow.hPow Nat Nat Nat
+                                  (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p i)
+                                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
+                                  (@HMod.hMod Nat Nat Nat (@instHMod Nat Nat.instMod) c
+                                    (@HPow.hPow Nat Nat Nat
+                                      (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p
+                                      (@HSub.hSub Nat Nat Nat (@instHSub Nat instSubNat) i
+                                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                                  (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) t
+                                    (@HPow.hPow Nat Nat Nat
+                                      (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p
+                                      (@HSub.hSub Nat Nat Nat (@instHSub Nat instSubNat) i
+                                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))
+                              (@classSum3 ι inst e ε η
+                                (@HPow.hPow Nat Nat Nat
+                                  (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p i)
+                                (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
+                                  (@HMod.hMod Nat Nat Nat (@instHMod Nat Nat.instMod) c
+                                    (@HPow.hPow Nat Nat Nat
+                                      (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p
+                                      (@HSub.hSub Nat Nat Nat (@instHSub Nat instSubNat) i
+                                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+                                  (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) t'
+                                    (@HPow.hPow Nat Nat Nat
+                                      (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p
+                                      (@HSub.hSub Nat Nat Nat (@instHSub Nat instSubNat) i
+                                        (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))))
+@bad3_of_not_live : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) (ε : ι → Bool) {p : Nat},
+  Nat.Prime p →
+    @Ne Nat p (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) →
+      ∀ {i : Nat},
+        @LE.le Nat instLENat (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) i →
+          ∀ {d : Nat},
+            Not (@Dvd.dvd Nat Nat.instDvd p d) →
+              Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) d) →
+                @Bad3 ι inst e ε
+                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                      (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                        p i)
+                      d) →
+                  @Eq Bool (@live ι inst e p i) false →
+                    @Bad3 ι inst e ε
+                      (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                        (@HPow.hPow Nat Nat Nat
+                          (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p
+                          (@HSub.hSub Nat Nat Nat (@instHSub Nat instSubNat) i
+                            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1)))))
+                        d)
+@card_bad3Set_mul_two_pow_card_le : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) {p : Nat},
+  Nat.Prime p →
+    @Ne Nat p (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) →
+      ∀ {i : Nat},
+        @LE.le Nat instLENat (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) i →
+          ∀ {d : Nat},
+            Not (@Dvd.dvd Nat Nat.instDvd p d) →
+              Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) d) →
+                ∀ {J : Finset ι},
+                  @IsPivot ι e p i J →
+                    @LE.le Nat instLENat
+                      (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                        (@Finset.card (ι → Bool)
+                          (@bad3Set ι inst e
+                            (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                              (@HPow.hPow Nat Nat Nat
+                                (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p i)
+                              d)))
+                        (@HPow.hPow Nat Nat Nat
+                          (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                          (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) (@Finset.card ι J)))
+                      (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                        (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) (@Fintype.card ι inst))
+@card_bad3Set_mul_two_pow_rank_le : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) {p : Nat},
+  Nat.Prime p →
+    @Ne Nat p (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) →
+      ∀ {i : Nat},
+        @LE.le Nat instLENat (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) i →
+          ∀ {d : Nat},
+            Not (@Dvd.dvd Nat Nat.instDvd p d) →
+              Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) d) →
+                @Eq Bool (@live ι inst e p i) true →
+                  @LE.le Nat instLENat
+                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                      (@Finset.card (ι → Bool)
+                        (@bad3Set ι inst e
+                          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                            (@HPow.hPow Nat Nat Nat
+                              (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid))) p i)
+                            d)))
+                      (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                        (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+                        (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                          (@HSub.hSub Nat Nat Nat (@instHSub Nat instSubNat) p
+                            (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+                          (@rank ι inst e p i))))
+                    (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                      (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) (@Fintype.card ι inst))
+@bad3_one_iff : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) (ε : ι → Bool),
+  Iff (@Bad3 ι inst e ε (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+    (@Dvd.dvd Int Int.instDvd (@OfNat.ofNat Int (nat_lit 3) (@instOfNat (nat_lit 3))) (∑ k, sg (ε k)))
+@card_bad3Set_one : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat),
+  @Eq Nat
+    (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
+      (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3)))
+        (@Finset.card (ι → Bool) (@bad3Set ι inst e (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))))
+      (@ite Nat (@Even Nat instAddNat (@Fintype.card ι inst)) (@Fintype.card ι inst).instDecidablePredEven
+        (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))
+        (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+    (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat)
+      (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+        (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) (@Fintype.card ι inst))
+      (@ite Nat (@Even Nat instAddNat (@Fintype.card ι inst)) (@Fintype.card ι inst).instDecidablePredEven
+        (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+@card_exists_bad3_le : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) {d : Nat},
+  Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) d) →
+    Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) d) →
+      ∀ (K : Nat),
+        @LE.le Nat instLENat
+          (@Finset.card (ι → Bool)
+            {ε |
+              ∃ j,
+                And (@LE.le Nat instLENat j K)
+                  (@Bad3 ι inst e ε
+                    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                      (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                        (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) j)
+                      d))})
+          (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+            (@Finset.card (ι → Bool) (@bad3Set ι inst e d)))
+sum_half_pow_mu_lt : ∀ (T : Finset Nat),
+  (∀ (t : Nat),
+      @Membership.mem Nat (Finset Nat) (@SetLike.instMembership (Finset Nat) Nat (@Finset.instSetLike Nat)) T t →
+        And (Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) t))
+          (And (Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) t))
+            (@LT.lt Nat instLTNat (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) t))) →
+    @LT.lt Rat Rat.instLT
+      (∑ t ∈ T,
+        @HPow.hPow Rat Nat Rat (@instHPow Rat Nat Rat.instPowNat)
+          (@HDiv.hDiv Rat Rat Rat (@instHDiv Rat Rat.instDiv)
+            (@OfNat.ofNat Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+            (@OfNat.ofNat Rat (nat_lit 2) (@Rat.instOfNat (nat_lit 2))))
+          (μ t))
+      (@HDiv.hDiv Rat Rat Rat (@instHDiv Rat Rat.instDiv) (@OfNat.ofNat Rat (nat_lit 1) (@Rat.instOfNat (nat_lit 1)))
+        (@OfNat.ofNat Rat (nat_lit 8) (@Rat.instOfNat (nat_lit 8))))
+exists_not_bad3 : ∀ (n : Nat),
+  Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) n) →
+    ∀ {ι : Type u_1} [inst : Fintype ι],
+      @LE.le Nat instLENat (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) (@Fintype.card ι inst) →
+        ∀ (e : ι → Nat), ∃ ε, ∀ (d : Nat), @Dvd.dvd Nat Nat.instDvd d n → Not (@Bad3 ι inst e ε d)
+exists_not_badAt_of_three_le : ∀ (n : Nat),
+  @Ne Nat n (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
+    ∀ {ι : Type u_1} [inst : Fintype ι],
+      @LE.le Nat instLENat (@OfNat.ofNat Nat (nat_lit 3) (instOfNatNat (nat_lit 3))) (@Fintype.card ι inst) →
+        ∀ (e : ι → Nat), ∃ ε, ∀ (d : Nat), @Dvd.dvd Nat Nat.instDvd d n → Not (@BadAt ι inst e ε d)
+exists_signs_all : ∀ (n : Nat) [inst : @NeZero Nat (@MulZeroClass.toZero Nat Nat.instMulZeroClass) n]
+  (w : ZMod n → Nat),
+  (∃ x, @Ne Nat (w x) (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))) →
+    Not (@ExceptionalPair n w) →
+      ∃ u v,
+        And (∀ (x : ZMod n), @Eq Nat (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) (u x) (v x)) (w x))
+          (∀ (d : Nat),
+            @Dvd.dvd Nat Nat.instDvd d n →
+              Not
+                (@Dvd.dvd (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                  (@semigroupDvd (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                    (@SemigroupWithZero.toSemigroup (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                      (@NonUnitalSemiring.toSemigroupWithZero (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                        (@AddMonoidAlgebra.nonUnitalSemiring Int Nat (@Ring.toSemiring Int Int.instRing)
+                          Nat.instAddSemigroup))))
+                  (@Polynomial.cyclotomic d Int Int.instRing)
+                  (@HSub.hSub (@Polynomial Int Int.instSemiring) (@Polynomial Int Int.instSemiring)
+                    (@Polynomial Int Int.instSemiring)
+                    (@instHSub (@Polynomial Int Int.instSemiring)
+                      (@SubNegMonoid.toSub (@Polynomial Int Int.instSemiring)
+                        (@AddGroup.toSubNegMonoid (@Polynomial Int Int.instSemiring)
+                          (@AddGroupWithOne.toAddGroup (@Polynomial Int Int.instSemiring)
+                            (@Ring.toAddGroupWithOne (@Polynomial Int Int.instSemiring)
+                              (@AddMonoidAlgebra.ring Int Nat Int.instRing Nat.instAddMonoid))))))
+                    (@maskW n inst u) (@maskW n inst v))))
+not_exists_signs_of_exceptionalPair : ∀ (n : Nat) [inst : @NeZero Nat (@MulZeroClass.toZero Nat Nat.instMulZeroClass) n]
+  (w : ZMod n → Nat),
+  @ExceptionalPair n w →
+    Not
+      (∃ u v,
+        And (∀ (x : ZMod n), @Eq Nat (@HAdd.hAdd Nat Nat Nat (@instHAdd Nat instAddNat) (u x) (v x)) (w x))
+          (∀ (d : Nat),
+            @Dvd.dvd Nat Nat.instDvd d n →
+              Not
+                (@Dvd.dvd (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                  (@semigroupDvd (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                    (@SemigroupWithZero.toSemigroup (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                      (@NonUnitalSemiring.toSemigroupWithZero (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                        (@AddMonoidAlgebra.nonUnitalSemiring Int Nat (@Ring.toSemiring Int Int.instRing)
+                          Nat.instAddSemigroup))))
+                  (@Polynomial.cyclotomic d Int Int.instRing)
+                  (@HSub.hSub (@Polynomial Int Int.instSemiring) (@Polynomial Int Int.instSemiring)
+                    (@Polynomial Int Int.instSemiring)
+                    (@instHSub (@Polynomial Int Int.instSemiring)
+                      (@SubNegMonoid.toSub (@Polynomial Int Int.instSemiring)
+                        (@AddGroup.toSubNegMonoid (@Polynomial Int Int.instSemiring)
+                          (@AddGroupWithOne.toAddGroup (@Polynomial Int Int.instSemiring)
+                            (@Ring.toAddGroupWithOne (@Polynomial Int Int.instSemiring)
+                              (@AddMonoidAlgebra.ring Int Nat Int.instRing Nat.instAddMonoid))))))
+                    (@maskW n inst u) (@maskW n inst v)))))

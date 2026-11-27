@@ -1,0 +1,60 @@
+10c10,11
+< elements whose difference is not divisible by the power of 2 in n); for a = b the order is 1, so two equal elements are not one.
+---
+> elements whose difference is not divisible by the power of 2 in n); for a = b the order is 1, so two equal elements are not one. That "the order is even" and "not divisible by the power of 2 in n" 
+> say the same is not a Lean statement: the auditor checked it by program for every n ≤ 64, and in Lean by `decide` for six values of n.
+13,14c14,15
+< - `not_exists_signs_of_exceptionalPair`: an exceptional pair has no such splitting. (This half is not in Corollary 3 of the proof on paper, which states only the existence; it is the parenthesis in 
+< the first paragraph of section 14, with its two-line reason.)
+---
+> - `not_exists_signs_of_exceptionalPair`: an exceptional pair has no such splitting. (This half is not in Corollary 3 of the proof on paper, which states only the other direction; it is the 
+> parenthesis after the statement in bold in section 14, with its two-line reason.)
+17,20c18,23
+< statement on the levels of 2 is in Lean as "at most twice level 0" (`card_exists_levelBad_le`, for an arbitrary additive commutative group and arbitrary values), without the sharper term of Theorem 
+< T′. And "3-bad at d" is defined in Lean through the algebraic closure of the field of three elements (the signed mask vanishes at every primitive d-th root of unity there), where section 14 has 
+< S(ζ) ∈ 3·Z[ζ]; that the two say the same for 3 ∤ d is not one of the fourteen statements (the auditor proved in Lean, in a file of its own that is not part of the library, that for 3 ∤ d the 
+< Lean definition holds exactly when Φ_d divides the signed mask modulo 3).
+---
+> fixed statement on the levels of 2 is "at most twice level 0" (`card_exists_levelBad_le`, for an arbitrary additive commutative group and arbitrary values). The equality and the sharper bound of 
+> Theorem T′ are not among the fourteen; they stand in `EvenTwice.lean` as lemmas of the prover's own (`TwiceAux.card_B_succ`, `TwiceAux.card_A_add_card_F_le`), on its definitions `F`, `A`, `B`. Lean 
+> accepts them, but they were not fixed beforehand and the audit did not read them. The sum W(no 3), which section 14 gives as 0.11856…, is in Lean only as "less than 1/8", for every finite set of 
+> numbers greater than 1 and prime to 6. And "3-bad at d" is defined in Lean through the algebraic closure of the field of three elements (the signed mask vanishes at every primitive d-th root of unity 
+> there), where section 14 has S(ζ) ∈ 3·Z[ζ]; that the two say the same for 3 ∤ d is not one of the fourteen statements (the auditor proved in Lean, in a file of its own that is not part of the 
+> library, that for 3 ∤ d the Lean definition holds exactly when Φ_d divides the signed mask modulo 3; the last step from there to S(ζ) ∈ 3·Z[ζ] it checked by hand).
+24,27c27,30
+< levels of 2 (T), and from T and the slices for the prime 2 the ladder (L: the signings 3-bad at 2^j·d for some j number at most twice those 3-bad at d); the sum over the numbers prime to 6, less 
+< than 1/8 (N1′); the assembly for three or more elements (A′), back to ℤ (B), and the two final statements, where one and two elements are settled directly. Lean's accepting the files checks the 
+< statements of the plan and that they fit together, not each step as I wrote it: one step of the plan was wrong as written (in the route for the second final statement I had named the wrong Φ_d; the 
+< prover of that file found it, with n = 4 and the pair 1, 0 as its example, and proved the statement by the other route its brief gave).
+---
+> levels of 2 (T), and from T and the slices for the prime 2 the ladder (L: for d prime to 6 and every K, the signings 3-bad at 2^j·d for some j ≤ K number at most twice those 3-bad at d); the sum 
+> over the numbers greater than 1 and prime to 6, less than 1/8 (N1′); the assembly for three or more elements (A′), back to ℤ (B), and the two final statements, where one and two elements are 
+> settled directly. Lean's accepting the files checks the statements of the plan and that they fit together, not each step as I wrote it: one step of the plan was wrong as written (in the route for the 
+> second final statement I had named the wrong Φ_d; the prover of that file found it, with n = 4 and the pair 1, 0 as its example, and proved the statement by the other route its brief gave).
+32,40c35,46
+< they were started at about 18:55 UTC, the last was back by 19:04, and each returned its file proved the first time. My check, which trusts none of their reports, ended at 19:05:25 UTC: every fixed 
+< declaration stands character for character in the finished files; no `sorry`, `axiom`, `native_decide` or the like; each copy differs from the base only in its own file; the seven files together 
+< build in a fresh copy; the definitions and statements as Lean prints them are the frozen print, byte for byte; and each of the fourteen depends on the three standard axioms only 
+< (`lean-lift/even-lean/check-by-agent3.log`). The eight files have 1,825 lines. Another fresh instance audited the eight definitions and the fourteen statements while the provers worked, and found no 
+< statement false, vacuous or weaker than the plan means and no definition that is not what is meant, in tests whose bounds it gives (`lean-lift/even-lean/audit-of-the-statements.md`). With programs of 
+< its own, by exhaustion over every signing: the statement on the levels of 2 on 6,108,783 enumerated and 330,000 random families with values in six groups; a signing 3-bad at no divisor for each of 
+< 105,949,207 multisets of three or more elements on 36 moduli prime to 3, and a good signing for each of 101,278,905 on 33 moduli; and, for all 2,103,671 nonempty multisets it tried on n ≤ 63, a 
+< good splitting exactly when the multiset is not an exceptional pair, with the exceptional pairs computed from the Lean definition. It did not check the proofs. I had given 0.42 to all seven files' 
+< coming back proved at once (`lean-lift/even-lean/expect-even-lean.md`, scored in `score-even-lean.md`).
+---
+> they were started at about 18:55 UTC, the last was back by 19:04:06, and by my own record each returned its file proved the first time. My check, which trusts none of their reports, ended at 19:05:25 
+> UTC: every fixed declaration stands character for character in the finished files; no `sorry`, `axiom`, `native_decide` or the like; each copy differs from the base only in its own file; the seven 
+> files together build in a fresh copy; the definitions and statements as Lean prints them are the frozen print, byte for byte; and each of the fourteen depends on the three standard axioms only 
+> (`lean-lift/even-lean/check-by-agent3.log`). The eight files have 1,825 lines. Another fresh instance audited the eight definitions and the fourteen statements; it was started with the provers, 
+> worked on the frozen statements throughout, and reported at about 19:50 UTC, three quarters of an hour after the provers were back and after my check. It found no statement false, vacuous or weaker 
+> than the plan means and no definition that is not what is meant, in tests whose bounds it gives (`lean-lift/even-lean/audit-of-the-statements.md`). With programs of its own: the statement on the 
+> levels of 2 with every signing of each family, on 6,108,783 enumerated and 330,000 random families with values in six groups; for A′ and B a signing found for each multiset (signings tried in a 
+> fixed order until one works), one 3-bad at no divisor for each of 105,949,207 multisets containing 0 of three or more elements on 36 moduli prime to 3, and a good one for each of 101,278,905 such 
+> multisets on 33 moduli; and the final statements with every splitting of each multiset: for all 2,103,671 nonempty multisets it tried on n ≤ 63, a good splitting exactly when the multiset is not an 
+> exceptional pair, with the exceptional pairs computed in its program as the Lean definition reads. It did not check the proofs. A private copy of the shared library with the eight files added builds 
+> from nothing (`lean-lift/even-lean/rebuild-dry-in-private-copy.log`); the shared library itself is not touched. I had given 0.42 to all seven files' coming back proved at once 
+> (`lean-lift/even-lean/expect-even-lean.md`, scored in `score-even-lean.md`).
+46c52
+< shares and for the sharper form of Theorem T′. Section 13's `exists_signs_odd` is the case of odd n of `exists_signs_all`.
+---
+> rest of the section, among it the shares and the number 0.11856…. Section 13's `exists_signs_odd` is the case of odd n of `exists_signs_all`.

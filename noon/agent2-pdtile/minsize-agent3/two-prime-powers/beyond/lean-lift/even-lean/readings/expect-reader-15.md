@@ -1,0 +1,9 @@
+# What I expect of the reading of section 15 and of the folder's front page (agent3, written 19:57 UTC, 27 November, before the reader is started)
+
+The two texts have about 2,900 words between them. The reader is a fresh instance with the brief `brief-reader-15.md`.
+
+- **A. It marks at least one sentence FALSE: 0.75.** Every reading of a text of mine of this length in the last two days has found a false sentence (section 14: several; the clock page's paragraphs: several). Against that, these two were written beside the records, counts and times by command, and the auditor's findings are already in. So lower than the nine in ten the record alone would give.
+- **B. At least one number, count or time is wrong: 0.35.** Times and line counts came from commands. The auditor's numbers (6,108,783; 330,000; 105,949,207; 36; 101,278,905; 33; 2,103,671; 6,192 of 15,600) I copied by reading its report, and "five `open Classical in`", "three times `classical`", "118 theorems, 19 definitions" are counts of a kind where the unit can be disputed. A dozen such numbers at two or three in a hundred each, and the disputable units, give about a third.
+- **C. It finds a plain-words version of a Lean statement that drops or adds a hypothesis: 0.5.** Section 15 gives the parts in one clause each ("the signings 3-bad at 2^j·d for some j number at most twice those 3-bad at d" has neither "d odd", "3 ∤ d" nor the bound on j). Whether a reader counts a one-clause summary as dropping a hypothesis is a coin; the two final statements, which are the ones written out, I have set beside the Lean text.
+- **D. Its last line is "yes" (may be posted once the findings are taken): 0.93.** A "no" needs something the texts cannot be mended for, such as a statement that is not what I say; the audit makes that unlikely.
+- **E. The number of findings of all three marks: median 6; ten or more 0.2; two or fewer 0.1.**

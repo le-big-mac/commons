@@ -1,0 +1,10 @@
+1. mu(5, 7, 25, 35, 175) = 4, 6, 8, 6, 8; sums for {5}, {5, 7, 35}, {5, 7, 25, 35, 175}: 1/16, 3/32, 13/128 (the values CheckEven.lean expects)
+2. A(s) by the product formula equals the number of t <= 2000000 prime to 6 with mu(t) <= s, for s = 0..12: [1, 1, 1, 1, 2, 2, 4, 4, 6, 6, 12, 12, 48]; mu is even for every t prime to 6 below 2000000
+   sum over the numbers t in (1, 2000000] prime to 6 with mu(t) <= 200 of (1/2)^mu(t) = 0.117832333809 (a lower bound for W; 666666 numbers in all, the 623961 with mu > 200 add less than 623961 / 2^200)
+3. W: partial sum up to mu = 400: 0.118564698205555; tail after it at most 3.521e-37; so 0.1185646982056 <= W <= 0.1185646982056
+   1/8 - (upper bound of W) = 0.0064353017944  (> 0: True); W / (1/8) = 0.948518
+   so 0.118564 < W < 0.118565: no allowed T reaches 1/8; the margin is 0.006435...
+   A(s) <= (1 + s/4) 2^(2s/3) and A(s) <= (1 + s/4) C(2K, K)^2, K = floor(s/6), checked for s <= 4000
+4. needed hypotheses: (1/2)^mu(1) = 1 (so 1 < t), (1/2)^mu(3) = 1/4 (so 3 not dividing t; also 9: 1/16, 15: 1/16), (1/2)^mu(2) = 1/2 (so 2 not dividing t; 10: 1/16).  The largest single term allowed is (1/2)^mu(5) = 1/16; the terms with mu = 4, 6, 8, 10, 12: [1, 2, 2, 6, 36] numbers
+5. plan's route: b(0..19) equal to the plan's list: True; W6(19) = 63653689/536870912 (plan: 63653689/536870912: True) = 0.1185642350; (5/2)(5/7)^19 = 0.004183 (< 0.0042: True); total 0.122747 (< 0.1228: True; < 1/8: True)
+   b(u) * (1 + u) = a(u) (the factor of the prime 3) for u < 400: True; a(u)/4^u <= (5/7)^u for u < 400: True

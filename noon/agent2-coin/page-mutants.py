@@ -151,6 +151,31 @@ M = [
  ('legend-same-when-near', 'the legend says "the same for paying exactly and with change" when the two totals differ by one (a copy of the referee\'s that passed)', "(tp === tb ? 'the average now (the same", "(Math.abs(tp - tb) <= 1 ? 'the average now (the same"),
  ('one-of-the-best', 'the button says "one of the 2 best coins" (a visitor read it as one of the top two)', "(bp.length > 1 ? ': equal best' + others(bp) : ': the best coin')", "(bp.length > 1 ? ': one of the ' + bp.length + ' best coins' : ': the best coin')"),
  ('equal-best-names-itself', 'the button says "equal best with" the coin it adds', "function others(list) { var c = list.slice(1).map(", "function others(list) { var c = list.slice(0, list.length - 1).map("),
+ # ---- the ninth stage (27 November, evening): room on a phone's first screen for the line the public site puts above the page
+ ('key-back-above-the-amount', "the key to the rings stands above the box for the amount again, so that on the public site the first row of rings is cut by the foot of a small phone's screen",
+  '''  <figure class="viz-root" id="fig3">
+    <div class="controls">
+      <label>Amount <input type="number" id="amount" min="0" step="1" aria-describedby="amountSay"></label>
+      <label><input type="range" id="amountR" min="0" step="1" aria-label="Amount"></label>
+    </div>
+    <p class="say" id="amountSay" role="status"></p>
+    <div class="ways" id="ways"></div>
+    <figcaption id="ringkey">A coin with a <b>solid ring</b> is handed over; a coin with a <b>dashed ring</b> is handed back.</figcaption>
+  </figure>''',
+  '''  <figure class="viz-root" id="fig3">
+    <figcaption id="ringkey">A coin with a <b>solid ring</b> is handed over; a coin with a <b>dashed ring</b> is handed back.</figcaption>
+    <div class="controls">
+      <label>Amount <input type="number" id="amount" min="0" step="1" aria-describedby="amountSay"></label>
+      <label><input type="range" id="amountR" min="0" step="1" aria-label="Amount"></label>
+    </div>
+    <p class="say" id="amountSay" role="status"></p>
+    <div class="ways" id="ways"></div>
+  </figure>'''),
+ ('key-to-the-rings-gone', "nothing says what a solid ring and a dashed ring are", '''    <figcaption id="ringkey">A coin with a <b>solid ring</b> is handed over; a coin with a <b>dashed ring</b> is handed back.</figcaption>\n''', ""),
+ ('opening-takes-more-room', "the opening paragraph has 3em under it: at home the rings still fit a small phone's first screen, and under the public site's line they do not", "  p.sub { margin: 0 0 12px;", "  p.sub { margin: 0 0 3em;"),
+ ('key-hidden-on-a-narrow-phone', "the key to the rings is hidden on a screen up to 340 px wide (a copy of the referee's that passed)", "  #ringkey { margin: 8px 0 0; }", "  #ringkey { margin: 8px 0 0; } @media (max-width: 340px) { #ringkey { display: none; } }"),
+ ('key-over-the-rings-again-by-style', "the key is drawn above the rings by a style rule, though it follows them in the file", "  #ringkey { margin: 8px 0 0; }", "  #fig3 { display: flex; flex-direction: column; } #ringkey { margin: 8px 0 0; order: -1; }"),
+ ('title-larger', "the title is set in 40 px, which costs the first screen 21 px", "  h1 { font-weight: normal; font-size: 26px; margin: 0 0 2px; }", "  h1 { font-weight: normal; font-size: 40px; margin: 0 0 2px; }"),
 ]
 def stopped(r, first):
     """the test threw before its end: what it had found by then (it prints that since 27 November), or the last line of its error"""
