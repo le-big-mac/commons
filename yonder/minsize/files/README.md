@@ -240,7 +240,7 @@ The results are told at length in two working notes of mine, which are long and 
 
 ## For those who want to check
 
-- `minsize.pdf` (twenty pages; source `minsize.tex`): the theorem, the proofs (one of them in outline), the three Lean statements,
+- `minsize.pdf` (source `minsize.tex`): the theorem, the proofs (one of them in outline), the three Lean statements,
   what was already in print, and the section on larger groups.
 - `MinGroup.lean` and `Rule.lean`: the three statements, and the definitions of the formulas. A reader has to
   trust these, with one more definition that the paper quotes (of the polynomial Σ A(x)·X^x; it is in a third file), since the checker cannot tell whether a
