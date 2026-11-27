@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two rival products, one better</title>
+<style>
+  :root { --ink: #2b2622; --muted: #6f675e; --grid: #e4dfd6; --paper: #fbfaf7; --card: #ffffff; --blue: #2a78d6; --orange: #eb6834; --neutral: #b9b1a5; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 Georgia, 'Iowan Old Style', 'Times New Roman', serif; }
+  main { max-width: 1000px; margin: 0 auto; padding: 28px 20px 60px; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 8px; font-weight: normal; }
+  h2 { font-size: 19px; margin: 0 0 6px; font-weight: normal; }
+  p { margin: 0 0 10px; } .lede { color: var(--muted); max-width: 780px; }
+  .card { background: var(--card); border: 1px solid var(--grid); border-radius: 8px; padding: 16px 18px; margin: 16px 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; } .row > .card { flex: 1 1 400px; margin: 0; }
+  .sans, button, select, label, .tiles, .hint, .knob { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  button, select { font-size: 14px; color: var(--ink); background: #fff; border: 1px solid var(--neutral); border-radius: 6px; padding: 6px 11px; cursor: pointer; }
+  button:hover { border-color: var(--ink); } button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  button.strong { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; align-items: center; }
+  .knobs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px 28px; }
+  .knob label { display: block; font-size: 13px; color: var(--muted); } .knob .say { font-size: 15px; min-height: 22px; } .knob input[type=range] { width: 100%; accent-color: var(--blue); }
+  canvas { display: block; width: 100%; } #paths { height: 300px; } #spread { height: 220px; }
+  .hint { font-size: 13px; color: var(--muted); min-height: 20px; margin-top: 4px; }
+  .tiles { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+  .tile { flex: 1 1 150px; border-top: 3px solid var(--grid); padding-top: 8px; } .tile .k { font-size: 12.5px; color: var(--muted); } .tile .v { font-size: 26px; line-height: 1.2; }
+  .small { font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+<h1>Two rival products, one better</h1>
+<p class="lede">Buyers come one at a time. Each weighs the two products by how many earlier buyers took each, and then leans towards the better one by fixed odds.
+Does the better product end up ahead? Set the knobs and run the market, as often as you like.</p>
+
+<div class="card">
+  <div class="knobs">
+    <div class="knob"><label for="q">how much better</label><input id="q" type="range" min="1" max="2" step="0.01" value="1.1"><div class="say" id="qsay"></div></div>
+    <div class="knob"><label for="g">how strongly buyers copy</label><input id="g" type="range" min="0" max="2" step="0.05" value="1"><div class="say" id="gsay"></div></div>
+    <div class="knob"><label for="a">what a product counts for before it has sold anything</label>
+      <select id="a"><option value="0.1">a tenth of a sale</option><option value="0.3">a third of a sale</option><option value="1" selected>one sale</option><option value="3">three sales</option><option value="10">ten sales</option><option value="30">thirty sales</option><option value="100">a hundred sales</option></select></div>
+    <div class="knob"><label for="n">how many sales</label><select id="n"><option value="100">a hundred</option><option value="1000" selected>a thousand</option><option value="10000">ten thousand</option></select></div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="card">
+    <h2>One market at a time</h2>
+    <canvas id="paths" aria-label="The better product's share of the sales so far, sale by sale, in each market run."></canvas>
+    <div class="buttons"><button class="strong" id="one">run one market</button><button id="twenty">run twenty</button><button id="clear">clear</button></div>
+    <div class="hint" id="tally">Nothing run yet. Each line will be one market: the better product's share of the sales so far.</div>
+  </div>
+  <div class="card">
+    <h2>Every way it can go, added up</h2>
+    <canvas id="spread" aria-label="The exact chance of each share for the better product at the end; the numbers beneath say the same."></canvas>
+    <div class="hint" id="hover">The better product's share of all the sales at the end, and how likely each share is. Exact: nothing here is sampled.</div>
+    <div class="tiles">
+      <div class="tile"><div class="k">chance the better product ends ahead</div><div class="v" id="ahead">–</div></div>
+      <div class="tile"><div class="k">the same if nobody copied</div><div class="v" id="alone">–</div></div>
+      <div class="tile"><div class="k">chance it ends with under a third of the sales</div><div class="v" id="third">–</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="card small">
+  <p><b>The rule.</b> When the better product has sold nA and the other nB, the next buyer takes the better one with probability q (a + nA)^g / (q (a + nA)^g + (a + nB)^g).
+  Here q is "how much better", g is "how strongly buyers copy" (0: not at all; 1: in proportion to sales so far; above 1: more than in proportion), and a is what a product counts for before it has sold anything.</p>
+  <p><b>What to try.</b> Leave the product a little better (11 to 10) and move the copying from none to "in proportion": the chance of ending ahead after a thousand sales falls from 0.93 to 0.65.
+  Then give each product the weight of ten sales before it starts, and it climbs back to 0.80: with copying, almost everything turns on how much the first few sales count.
+  Put the weight back to one sale and push the copying past "in proportion": one product takes nearly everything, and which one is all but settled within the first hundred sales.</p>
+  <p><b>What this is.</b> A model, not a market: two products, buyers who see every earlier sale, a preference that never changes, and nothing else. The numbers on the right are computed in your browser by adding up every way the sales can go;
+  they agree with the study's own code to ten decimal places on the cases tested. The page itself was not refereed. The study, its sealed guesses and its referee's report are in <a href="README.md">README.md</a> beside this page.</p>
+  <p>Noon (agent2), 22 November 2026.</p>
+</div>
+</main>
+<script>
+/* The numerical core of the page (no browser needed, so it can be tested in node against the study's Python).
+   Two products, A the better. With nA and nB sold, the next buyer takes A with probability
+   q (a + nA)^g / (q (a + nA)^g + (a + nB)^g). */
+function weights(g, N, a) { const w = new Float64Array(N + 1); for (let k = 0; k <= N; k++) w[k] = Math.pow(a + k, g); return w; }
+function dist(q, g, N, a) {               // the exact probability of each nA = 0..N after N sales
+  const w = weights(g, N, a), p = new Float64Array(N + 2); p[0] = 1;
+  for (let n = 0; n < N; n++) {            // go down so that p[k] is still the old value when it is used
+    for (let k = n; k >= 0; k--) { const wa = q * w[k], move = p[k] * wa / (wa + w[n - k]); p[k + 1] += move; p[k] -= move; }
+  }
+  return p.subarray(0, N + 1);
+}
+function ahead(p) {                       // the chance that A has sold more than B, plus half the chance of a tie
+  const N = p.length - 1; let s = 0; for (let k = Math.floor(N / 2) + 1; k <= N; k++) s += p[k];
+  return s + (N % 2 === 0 ? 0.5 * p[N / 2] : 0);
+}
+function below(p, share) { const N = p.length - 1; let s = 0; for (let k = 0; k <= N && k < share * N; k++) s += p[k]; return s; }   // the chance that A's share is under `share`
+function market(q, g, N, a, rand) {       // one market, sale by sale: A's sales after each sale
+  const w = weights(g, N, a), out = new Int32Array(N + 1); let nA = 0;
+  for (let n = 0; n < N; n++) { const wa = q * w[nA]; if (rand() < wa / (wa + w[n - nA])) nA++; out[n + 1] = nA; }
+  return out;
+}
+function settles(q, g) { if (g >= 1) return null; const o = Math.pow(q, 1 / (1 - g)); return o / (1 + o); }   // where A's share settles when copying is less than in proportion
+
+</script>
+<script>
+'use strict';
+const INK = '#2b2622', MUTED = '#6f675e', GRID = '#e4dfd6', BLUE = '#2a78d6', ORANGE = '#eb6834', NEUTRAL = '#b9b1a5';
+const $ = id => document.getElementById(id);
+let S = { q: 1.1, g: 1, a: 1, N: 1000 }, exact = null, alone = {}, runs = [], wins = 0, hoverBin = -1;
+const ODDS = { '1.00': 'no better at all: even odds', '1.05': '21 to 20', '1.10': '11 to 10', '1.20': '6 to 5', '1.25': '5 to 4', '1.50': '3 to 2', '1.75': '7 to 4', '2.00': '2 to 1' };
+function prep(cv) { const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); } const c = cv.getContext('2d'); c.setTransform(dpr, 0, 0, dpr, 0, 0); c.clearRect(0, 0, w, h); return { c, w, h }; }
+const FONT = "12px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+function drawPaths() {
+  const { c, w, h } = prep($('paths')), l = 46, r = 26, t = 10, b = 44, pw = w - l - r, ph = h - t - b, N = S.N, X = n => l + pw * Math.log(n) / Math.log(N), Y = s => t + ph * (1 - s);
+  c.font = FONT; c.textBaseline = 'middle'; c.textAlign = 'right';
+  for (const s of [0, 0.25, 0.5, 0.75, 1]) { c.strokeStyle = s === 0.5 ? NEUTRAL : GRID; c.lineWidth = 1; c.beginPath(); c.moveTo(l, Math.round(Y(s)) + 0.5); c.lineTo(l + pw, Math.round(Y(s)) + 0.5); c.stroke(); c.fillStyle = MUTED; c.fillText(['0%', '25%', '50%', '75%', '100%'][s * 4], l - 6, Y(s)); }
+  c.textAlign = 'center'; c.textBaseline = 'top'; for (let n = 1; n <= N; n *= 10) c.fillText(n.toLocaleString('en'), X(n), t + ph + 8);
+  c.fillText('sales so far (the better product\'s share of them is the height)', l + pw / 2, h - 16);
+  runs.forEach((tr, i) => { const last = i === runs.length - 1; c.strokeStyle = last ? BLUE : 'rgba(111,103,94,0.28)'; c.lineWidth = last ? 2 : 1; c.beginPath(); for (let n = 1; n <= N; n++) { const x = X(n), y = Y(tr[n] / n); if (n === 1) c.moveTo(x, y); else c.lineTo(x, y); } c.stroke(); });
+  const st = settles(S.q, S.g); if (st !== null && S.g > 0) { c.setLineDash([4, 4]); c.strokeStyle = ORANGE; c.lineWidth = 1.2; c.beginPath(); c.moveTo(l, Y(st)); c.lineTo(l + pw, Y(st)); c.stroke(); c.setLineDash([]); c.fillStyle = INK; c.textAlign = 'right'; c.textBaseline = 'bottom'; c.fillText('where the share settles in the end', l + pw - 2, Y(st) - 3); }
+}
+const BINS = 50;
+function bins() { const N = S.N, out = new Float64Array(BINS); for (let k = 0; k <= N; k++) out[Math.min(BINS - 1, Math.floor(k / N * BINS))] += exact[k]; return out; }
+function drawSpread() {
+  const { c, w, h } = prep($('spread')), l = 12, r = 12, t = 8, b = 30, pw = w - l - r, ph = h - t - b, hb = bins(); let top = 0; for (const v of hb) top = Math.max(top, v);
+  c.font = FONT; const bw = pw / BINS;
+  for (let j = 0; j < BINS; j++) { const bh = ph * hb[j] / top, x = l + j * bw + 1; if (j === hoverBin) { c.fillStyle = '#f1eee8'; c.fillRect(l + j * bw, t, bw, ph); } c.fillStyle = BLUE; if (bh > 0.3) c.fillRect(x, t + ph - bh, Math.max(1, bw - 2), bh); }
+  c.strokeStyle = INK; c.lineWidth = 1; c.beginPath(); c.moveTo(l, t + ph + 0.5); c.lineTo(l + pw, t + ph + 0.5); c.stroke();
+  c.strokeStyle = NEUTRAL; c.setLineDash([3, 3]); c.beginPath(); c.moveTo(l + pw / 2, t); c.lineTo(l + pw / 2, t + ph); c.stroke(); c.setLineDash([]);
+  c.fillStyle = MUTED; c.textBaseline = 'top'; ['none', 'a quarter', 'half', 'three quarters', 'all'].forEach((s, i) => { c.textAlign = i === 0 ? 'left' : i === 4 ? 'right' : 'center'; c.fillText(s, l + pw * i / 4, t + ph + 8); });
+}
+function qsay(q) { const k = q.toFixed(2); return 'buyers who know nothing of sales prefer it by ' + (ODDS[k] || (k + ' to 1')).replace('no better at all: even odds', 'even odds: it is no better at all'); }
+function gsay(g) { return g === 0 ? 'not at all: every buyer judges alone' : g < 1 ? `less than in proportion to sales so far (power ${g})` : g === 1 ? 'in proportion to sales so far' : `more than in proportion (power ${g})`; }
+function recompute() {
+  exact = dist(S.q, S.g, S.N, S.a); const key = S.q + '|' + S.N; if (!(key in alone)) alone[key] = ahead(dist(S.q, 0, S.N, 1));
+  $('ahead').textContent = ahead(exact).toFixed(3); $('alone').textContent = alone[key].toFixed(3); $('third').textContent = below(exact, 1 / 3).toFixed(3);
+  $('qsay').textContent = qsay(S.q); $('gsay').textContent = gsay(S.g);
+}
+function tally() { $('tally').textContent = runs.length ? `${runs.length} market${runs.length > 1 ? 's' : ''} run with these settings; the better product ended ahead in ${wins}${Number.isInteger(wins) ? '' : ' (a tie counts a half)'}. In the last one it took ${(100 * runs[runs.length - 1][S.N] / S.N).toFixed(1)}% of the sales.` : 'Nothing run yet. Each line will be one market: the better product\'s share of the sales so far.'; }
+let pending = false;
+function refresh(reset) { if (reset) { runs = []; wins = 0; } if (pending) return; pending = true; requestAnimationFrame(() => { pending = false; recompute(); drawPaths(); drawSpread(); tally(); }); }
+function run(k) { for (let i = 0; i < k; i++) { const tr = market(S.q, S.g, S.N, S.a, Math.random); runs.push(tr); if (runs.length > 200) runs.shift(); wins += tr[S.N] * 2 > S.N ? 1 : tr[S.N] * 2 === S.N ? 0.5 : 0; } drawPaths(); tally(); }
+$('q').addEventListener('input', () => { S.q = +$('q').value; refresh(true); }); $('g').addEventListener('input', () => { S.g = +$('g').value; refresh(true); });
+$('a').addEventListener('change', () => { S.a = +$('a').value; refresh(true); }); $('n').addEventListener('change', () => { S.N = +$('n').value; refresh(true); });
+$('one').onclick = () => run(1); $('twenty').onclick = () => run(20); $('clear').onclick = () => { runs = []; wins = 0; drawPaths(); tally(); };
+$('spread').addEventListener('pointermove', ev => { const b = $('spread').getBoundingClientRect(), j = Math.max(0, Math.min(BINS - 1, Math.floor((ev.clientX - b.left - 12) / (b.width - 24) * BINS))); hoverBin = j; const hb = bins(); $('hover').textContent = `a share from ${(100 * j / BINS).toFixed(0)}% to ${(100 * (j + 1) / BINS).toFixed(0)}% of the sales: chance ${hb[j] < 0.0005 ? 'under 0.001' : hb[j].toFixed(3)}`; drawSpread(); });
+$('spread').addEventListener('pointerleave', () => { hoverBin = -1; $('hover').textContent = 'The better product\'s share of all the sales at the end, and how likely each share is. Exact: nothing here is sampled.'; drawSpread(); });
+window.addEventListener('resize', () => refresh(false)); refresh(true);
+window.__mk = { get S() { return S; }, get runs() { return runs.length; }, numbers() { return { ahead: ahead(exact), alone: alone[S.q + '|' + S.N], third: below(exact, 1 / 3) }; } };
+</script>
+</body>
+</html>

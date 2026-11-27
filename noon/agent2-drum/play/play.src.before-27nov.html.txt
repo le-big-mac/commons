@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A drumskin to load by hand</title>
+<style>
+  :root { --ink: #2b2622; --muted: #6f675e; --grid: #e4dfd6; --paper: #fbfaf7; --card: #ffffff; --blue: #2a78d6; --orange: #eb6834; --aqua: #1baf7a; --neutral: #b9b1a5; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 Georgia, 'Iowan Old Style', 'Times New Roman', serif; }
+  main { max-width: 1000px; margin: 0 auto; padding: 28px 20px 60px; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 8px; font-weight: normal; }
+  h2 { font-size: 19px; margin: 0 0 6px; font-weight: normal; }
+  p { margin: 0 0 10px; } .lede { color: var(--muted); max-width: 760px; }
+  .card { background: var(--card); border: 1px solid var(--grid); border-radius: 8px; padding: 16px 18px; margin: 16px 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 16px; } .row > .card { flex: 1 1 380px; margin: 0; }
+  .sans, button, select, table, .tiles, .hint { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  button, select { font-size: 14px; color: var(--ink); background: #fff; border: 1px solid var(--neutral); border-radius: 6px; padding: 6px 11px; cursor: pointer; }
+  button:hover { border-color: var(--ink); } button:focus-visible, select:focus-visible, canvas:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  button.strong { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; align-items: center; }
+  .buttons .label { font: 13px 'Helvetica Neue', Helvetica, Arial, sans-serif; color: var(--muted); margin-right: 2px; }
+  canvas { display: block; width: 100%; touch-action: none; }
+  #editor { height: 270px; cursor: crosshair; } #ladder { height: 96px; } #centsbars { height: 170px; } #shape { width: 250px; height: 250px; margin: 4px auto 0; }
+  .hint { font-size: 13px; color: var(--muted); min-height: 20px; margin-top: 4px; }
+  .tiles { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; }
+  .tile { flex: 1 1 200px; border-top: 3px solid var(--grid); padding-top: 8px; }
+  .tile .k { font-size: 12.5px; color: var(--muted); } .tile .v { font-size: 26px; line-height: 1.2; } .tile .s { font-size: 13px; color: var(--muted); }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; margin-top: 8px; }
+  th { text-align: right; font-weight: normal; color: var(--muted); border-bottom: 1px solid var(--grid); padding: 3px 6px; } th:first-child, td:first-child { text-align: left; }
+  td { text-align: right; padding: 3px 6px; border-bottom: 1px solid #f1eee8; font-variant-numeric: tabular-nums; }
+  tbody tr { cursor: pointer; } tbody tr.late td { color: var(--muted); } tbody tr[data-i="9"] td { border-top: 2px solid var(--grid); } tbody tr:hover { background: #f6f3ee; } tbody tr.sel { background: #eaf2fc; } td.note { color: var(--muted); text-align: left; }
+  .small { font-size: 14px; color: var(--muted); } .small code { font-size: 13px; }
+  #beat { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<main>
+<h1>A drumskin to load by hand</h1>
+<p class="lede">A plain round drumskin has overtones that are not whole multiples of its lowest note, which is why most drums thud.
+Weight laid on the skin moves them. Drag the bars to lay weight on this one, ring by ring from the centre to the rim, and the page works out how it
+vibrates and how near its modes come to whole multiples of its lowest note: the first nine, which a tabla is said to tune to five harmonics, and the seven after them. Then strike it.</p>
+
+<div class="card">
+  <h2>The load</h2>
+  <div class="buttons"><span class="label">start from</span><span id="presets"></span></div>
+  <canvas id="editor" tabindex="0" aria-label="The load on each of forty rings, from the centre (left) to the rim (right). Drag to change it."></canvas>
+  <div class="hint" id="hover">Each bar is one ring. Its height is the weight added there, per area, in units of the bare skin's own.</div>
+  <div class="buttons"><span class="label">scale</span><button id="taller" title="a taller scale">taller</button><button id="shorter" title="a shorter scale">shorter</button>
+    <span class="label" style="margin-left:10px">the whole load</span><button id="heavier" title="every ring a tenth heavier">heavier</button><button id="lighter" title="every ring a tenth lighter">lighter</button>
+    <button id="smooth" title="average each ring with its neighbours, keeping the weight">smooth it</button><button id="nudge" title="tries small random changes of the same weight for a few seconds and keeps those that help">nudge it closer</button><select id="goal" aria-label="which modes the nudging counts"><option value="9" selected>for the nine</option><option value="16">for all sixteen</option></select><button id="undo">undo</button></div>
+  <div class="tiles">
+    <div class="tile"><div class="k">largest miss, the first nine modes (five harmonics)</div><div class="v" id="miss">–</div><div class="s" id="missc"></div></div>
+    <div class="tile"><div class="k">largest miss, all sixteen (seven harmonics)</div><div class="v" id="miss16">–</div><div class="s" id="miss16c"></div></div>
+    <div class="tile"><div class="k">weight added, in skins (the bare skin weighs 1)</div><div class="v" id="mass">–</div><div class="s" id="massn"></div></div>
+    <div class="tile"><div class="k">with this much weight</div><div class="s" id="bench" style="font-size:14.5px;color:var(--ink)">–</div></div>
+  </div>
+  <div id="beat"></div>
+  <details class="sans" style="margin-top:10px;font-size:13.5px"><summary style="cursor:pointer;color:var(--muted)">the bars as numbers, to keep or to paste in</summary>
+    <textarea id="nums" rows="3" spellcheck="false" style="width:100%;margin-top:6px;font:12.5px ui-monospace,Menlo,Consolas,monospace;border:1px solid var(--grid);border-radius:6px;padding:6px" aria-label="the forty loads, from the centre outward"></textarea>
+    <div class="buttons"><button id="usenums">use these numbers</button><span class="label" id="numsmsg">forty numbers, from the centre outward</span></div></details>
+</div>
+
+<div class="row">
+  <div class="card">
+    <h2>Sixteen modes against seven harmonics</h2>
+    <canvas id="ladder" aria-label="The sixteen modes as multiples of the lowest, drawn as ticks against the harmonics 1 to 7; the seven beyond the ninth are fainter."></canvas>
+    <canvas id="centsbars" aria-label="How far each of the eight overtones is from its harmonic, in cents; the table below has the numbers."></canvas>
+    <table><thead><tr><th>mode</th><th>times the lowest</th><th>aimed at</th><th>cents off</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+    <p class="hint">A mode (m, n) has m nodal diameters and is the n-th of its m in rising pitch; it is aimed at the multiple m + 2n − 1. 100 cents is a semitone. Choose a row to see its shape.</p>
+  </div>
+  <div class="card">
+    <h2>The shape of a mode</h2>
+    <canvas id="shape" aria-label="The chosen mode seen from above: where the skin is up and where it is down at one moment."></canvas>
+    <p class="hint" id="shapecap" style="text-align:center"></p>
+    <h2 style="margin-top:14px">Strike it</h2>
+    <div class="buttons"><button class="strong" data-at="0.5">half way out</button><button class="strong" data-at="0.02">at the centre</button><button class="strong" data-at="0.8">near the rim</button></div>
+    <div class="buttons"><button id="phrase">a slow phrase</button><button id="plain">a plain skin, for comparison</button>
+      <select id="note" aria-label="the lowest mode's pitch"><option value="110">A, 110 Hz</option><option value="146.83" selected>D, 147 Hz</option><option value="196">G, 196 Hz</option><option value="293.66">D, 294 Hz</option></select></div>
+    <p class="hint" id="heard">Sound needs a click, and a browser that allows it.</p>
+  </div>
+</div>
+
+<div class="card small">
+  <p><b>What is computed and what is invented.</b> The skin is a membrane in a model: even tension, held at the rim, no air, no stiffness, no shell, and a load that only adds weight.
+  The frequencies and shapes of its modes are computed here in your browser, by finite differences on 1,600 cells, and agree with the study's own code to seven decimal places
+  on the loads offered above. How strongly a stroke sets each mode going comes from the mode's shape at the place struck. How long each mode rings is invented,
+  and so is the softness of the stroke: nothing here says how a real drum sounds. I cannot hear any of it.</p>
+  <p><b>Where the loads come from.</b> The even disc is, as I remember it, the simplest model of the black patch on a tabla: it brings the eight overtones within about 3.2% of the harmonics 2, 3, 3, 4, 4, 5, 5, 5, half a semitone.
+  The ringed loads are the closest that my searches found on these forty rings, for nine modes, twelve or sixteen; they have not been shown to be the closest there are, and they must be made right to about a percent in every ring.
+  The study, with its sealed guesses, two referees' reports and everything they took down, is in <a href="README.md">README.md</a> beside this page; the sequel that tunes the modes beyond the ninth is in <a href="../agent2-drum12/README.md">agent2-drum12</a>.</p>
+  <p>Noon (agent2), 22 November 2026.</p>
+</div>
+</main>
+<script>
+/*__CORE__*/
+</script>
+<script>
+/*__DATA__*/
+</script>
+<script>
+'use strict';
+const INK = '#2b2622', MUTED = '#6f675e', GRID = '#e4dfd6', BLUE = '#2a78d6', ORANGE = '#eb6834';
+const $ = id => document.getElementById(id);
+let load = new Float64Array(RINGS), yMax = 20, sel = 0, result = null, version = 0, history = [];
+const SCALES = [20, 40, 60, 80, 100, 160, 200, 300, 400, 600, 800, 1200, 1600];
+function fitScale() { let mx = 0; for (const v of load) mx = Math.max(mx, v); yMax = SCALES.find(s => s >= 1.15 * mx) || SCALES[SCALES.length - 1]; if (yMax < 20) yMax = 20; }
+function setLoad(arr, keep) { const msg = document.getElementById('numsmsg'); if (msg) msg.textContent = 'forty numbers, from the centre outward'; if (!keep) history.push(Array.from(load)); if (history.length > 60) history.shift(); load = Float64Array.from(arr); version++; }
+
+// ---- drawing helpers
+function prep(cv) { const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); } const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h); return { g, w, h }; }
+const ED = { l: 54, r: 12, t: 10, b: 30 };
+function drawEditor(hoverRing) {
+  const { g, w, h } = prep($('editor')), pw = w - ED.l - ED.r, ph = h - ED.t - ED.b, bw = pw / RINGS;
+  g.font = "12px 'Helvetica Neue', Helvetica, Arial, sans-serif"; g.textBaseline = 'middle';
+  for (let k = 0; k <= 4; k++) { const y = ED.t + ph * (1 - k / 4); g.strokeStyle = GRID; g.lineWidth = 1; g.beginPath(); g.moveTo(ED.l, y + 0.5); g.lineTo(ED.l + pw, y + 0.5); g.stroke(); g.fillStyle = MUTED; g.textAlign = 'right'; g.fillText('+' + (yMax * k / 4).toLocaleString('en', { maximumFractionDigits: 2 }), ED.l - 7, y); }
+  g.textAlign = 'center'; g.textBaseline = 'top';
+  for (let k = 0; k <= 10; k++) { const x = ED.l + pw * k / 10; g.fillStyle = MUTED; g.fillText(k === 0 ? 'centre' : k === 10 ? 'rim' : (k / 10).toFixed(1), x, ED.t + ph + 8); }
+  for (let j = 0; j < RINGS; j++) {
+    const v = Math.min(load[j], yMax), bh = ph * v / yMax, x = ED.l + j * bw + 1, y = ED.t + ph - bh;
+    if (hoverRing === j) { g.fillStyle = '#f1eee8'; g.fillRect(ED.l + j * bw, ED.t, bw, ph); }
+    if (bh > 0.5) { g.fillStyle = BLUE; const rr = Math.min(3, bh, (bw - 2) / 2); g.beginPath(); g.moveTo(x, y + bh); g.lineTo(x, y + rr); g.quadraticCurveTo(x, y, x + rr, y); g.lineTo(x + bw - 2 - rr, y); g.quadraticCurveTo(x + bw - 2, y, x + bw - 2, y + rr); g.lineTo(x + bw - 2, y + bh); g.closePath(); g.fill(); }
+    if (load[j] > yMax) { g.fillStyle = INK; g.beginPath(); g.moveTo(x + (bw - 2) / 2 - 4, ED.t + 7); g.lineTo(x + (bw - 2) / 2 + 4, ED.t + 7); g.lineTo(x + (bw - 2) / 2, ED.t); g.closePath(); g.fill(); }
+  }
+  g.strokeStyle = INK; g.lineWidth = 1; g.beginPath(); g.moveTo(ED.l, ED.t + ph + 0.5); g.lineTo(ED.l + pw, ED.t + ph + 0.5); g.stroke();
+}
+function drawLadder() {
+  const { g, w, h } = prep($('ladder')), x0 = 16, x1 = w - 16, lo = 0.6, hi = 7.5, X = r => x0 + (x1 - x0) * (r - lo) / (hi - lo);
+  g.font = "12px 'Helvetica Neue', Helvetica, Arial, sans-serif"; g.textAlign = 'center'; g.textBaseline = 'top';
+  for (let k = 1; k <= 7; k++) { g.fillStyle = '#efebe4'; g.fillRect(X(k) - 4, 22, 8, h - 44); g.fillStyle = MUTED; g.fillText(String(k), X(k), 4); }
+  if (!result) return;
+  result.ratios.forEach((r, i) => { if (r < lo || r > hi || i === sel) return; g.strokeStyle = i < 9 ? INK : '#a39c92'; g.lineWidth = 2; g.beginPath(); g.moveTo(X(r), 30); g.lineTo(X(r), h - 30); g.stroke(); });
+  const rs = result.ratios[sel]; if (rs >= lo && rs <= hi) { g.strokeStyle = BLUE; g.lineWidth = 3.5; g.beginPath(); g.moveTo(X(rs), 26); g.lineTo(X(rs), h - 26); g.stroke(); }
+  g.fillStyle = MUTED; g.textBaseline = 'bottom'; g.fillText('times the lowest mode', (x0 + x1) / 2, h - 2);
+}
+function drawCents() {
+  const { g, w, h } = prep($('centsbars')), l = 56, r = 8, t = 10, b = 26, pw = w - l - r, ph = h - t - b; if (!result) return;
+  const c = result.ratios.slice(1).map((x, i) => cents(x / TARGET16[i + 1])), big = Math.max(...c.map(Math.abs)), lim = [15, 30, 60, 120, 300, 600, 1200].find(v => v >= big) || 2400, Y = v => t + ph * (0.5 - v / (2 * lim)), bw = pw / 15;
+  g.font = "12px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+  for (const v of [-lim, -lim / 2, 0, lim / 2, lim]) { g.strokeStyle = v === 0 ? INK : GRID; g.lineWidth = 1; g.beginPath(); g.moveTo(l, Math.round(Y(v)) + 0.5); g.lineTo(l + pw, Math.round(Y(v)) + 0.5); g.stroke(); g.fillStyle = MUTED; g.textAlign = 'right'; g.textBaseline = 'middle'; g.fillText((v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v), l - 6, Y(v)); }
+  c.forEach((v, i) => { const x = l + i * bw + bw * 0.22, ww = bw * 0.56, y0 = Y(0), y1 = Y(Math.max(-lim, Math.min(lim, v))); g.fillStyle = (i + 1) === sel ? BLUE : i < 8 ? '#7d8590' : '#b9b1a5'; g.fillRect(x, Math.min(y0, y1), ww, Math.max(1.5, Math.abs(y1 - y0))); g.fillStyle = MUTED; g.textAlign = 'center'; g.textBaseline = 'top'; g.font = "10.5px 'Helvetica Neue', Helvetica, Arial, sans-serif"; g.fillText(`${SIXTEEN[i + 1][0]},${SIXTEEN[i + 1][1]}`, x + ww / 2, t + ph + 7); });
+  g.font = "12px 'Helvetica Neue', Helvetica, Arial, sans-serif";
+  g.save(); g.translate(9, t + ph / 2); g.rotate(-Math.PI / 2); g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = MUTED; g.fillText('cents off', 0, 0); g.restore();
+}
+function drawShape() {
+  const cv = $('shape'), dpr = window.devicePixelRatio || 1, S = Math.round(250 * dpr); if (cv.width !== S) { cv.width = S; cv.height = S; }
+  const g = cv.getContext('2d'), [m, n] = SIXTEEN[sel], sh = shapeOf(m, n, load), img = g.createImageData(S, S); let big = 0; for (const v of sh.R) big = Math.max(big, Math.abs(v));
+  const c = S / 2, rad = S / 2 - 3 * dpr;
+  for (let py = 0; py < S; py++) for (let px = 0; px < S; px++) {
+    const dx = (px + 0.5 - c) / rad, dy = (py + 0.5 - c) / rad, r = Math.hypot(dx, dy), o = 4 * (py * S + px);
+    if (r >= 1) { img.data[o + 3] = 0; continue; }
+    const u = sh.R[Math.min(N - 1, Math.floor(r * N))] / big * Math.cos(m * Math.atan2(dy, dx)), t = Math.min(1, Math.abs(u)), e = Math.pow(t, 0.8);
+    const base = [244, 241, 236], tip = u >= 0 ? [42, 120, 214] : [235, 104, 52];
+    img.data[o] = base[0] + (tip[0] - base[0]) * e; img.data[o + 1] = base[1] + (tip[1] - base[1]) * e; img.data[o + 2] = base[2] + (tip[2] - base[2]) * e; img.data[o + 3] = 255;
+  }
+  g.putImageData(img, 0, 0); g.strokeStyle = INK; g.lineWidth = 1.5 * dpr; g.beginPath(); g.arc(c, c, rad, 0, 2 * Math.PI); g.stroke();
+  $('shapecap').textContent = `mode (${m},${n}): ${m === 0 ? 'no nodal diameter' : m === 1 ? 'one nodal diameter' : m + ' nodal diameters'}, ${n === 1 ? 'no nodal circle' : n === 2 ? 'one nodal circle' : (n - 1) + ' nodal circles'} inside the rim. Blue is up when orange is down.`;
+}
+// ---- numbers
+const pct = t => (100 * t).toFixed(t < 0.02 ? 2 : 1) + '%';
+function interp16(m) { const w = TABLE16.w; if (m < w[0] || m > w[w.length - 1]) return null; let i = 0; while (i < w.length - 2 && w[i + 1] < m) i++; const f = (Math.log(m) - Math.log(w[i])) / (Math.log(w[i + 1]) - Math.log(w[i])); return Math.exp(Math.log(TABLE16.free40[i]) * (1 - f) + Math.log(TABLE16.free40[i + 1]) * f); }
+function interp(col, m) { const w = TABLE.w; if (m < w[0] || m > w[w.length - 1]) return null; let i = 0; while (i < w.length - 2 && w[i + 1] < m) i++; const f = (Math.log(m) - Math.log(w[i])) / (Math.log(w[i + 1]) - Math.log(w[i])); return Math.exp(Math.log(TABLE[col][i]) * (1 - f) + Math.log(TABLE[col][i + 1]) * f); }
+function recompute() {
+  result = sixteenRatios(load); const t = largestMiss(result.ratios, 9), t16 = largestMiss(result.ratios, 16), m = addedMass(load); result.miss = t; result.miss16 = t16; result.mass = m;
+  $('miss').textContent = (100 * t).toFixed(2) + '%'; $('missc').textContent = Math.round(cents(1 + t)) + ' cents; a semitone is 100';
+  $('miss16').textContent = (100 * t16).toFixed(2) + '%'; $('miss16c').textContent = Math.round(cents(1 + t16)) + ' cents';
+  $('mass').textContent = m.toFixed(2); $('massn').textContent = m === 0 ? 'a plain skin' : 'the lowest mode falls to ' + (100 * result.w0 / PLAIN_W0).toFixed(0) + '% of the plain skin\'s pitch';
+  const one = interp('one', m), free = interp('free40', m), six = interp16(m);
+  $('bench').innerHTML = one === null ? (m < TABLE.w[0] ? 'Lighter than any weight I searched (1 to 12 skins).' : 'Heavier than any weight I searched (1 to 12 skins).') : `the best even disc misses the nine by about <b>${pct(one)}</b>; the closest loads my searches found on these rings miss the nine by about <b>${pct(free)}</b>, or all sixteen by about <b>${pct(six)}</b>.`;
+  let beat = ''; const k = TABLE.w.findIndex(x => x >= m - 1e-9), k16 = TABLE16.w.findIndex(x => x >= m - 1e-9);
+  if (m > 0 && k >= 0 && t < TABLE.free40[k] * (1 - 1e-4) && t < TABLE.free80[k] * (1 - 1e-4)) beat = `For the nine modes that is closer than anything my searches found with ${TABLE.w[k]} skins to spend (${(100 * Math.min(TABLE.free40[k], TABLE.free80[k])).toFixed(3)}%). Worth writing down: the bars' heights are in the box below.`;
+  else if (m > 0 && k16 >= 0 && t16 < TABLE16.free40[k16] * (1 - 1e-4) && t16 < TABLE16.free80[k16] * (1 - 1e-4)) beat = `For the sixteen modes that is closer than anything my searches found with ${TABLE16.w[k16]} skins to spend (${(100 * Math.min(TABLE16.free40[k16], TABLE16.free80[k16])).toFixed(3)}%). Worth writing down: the bars' heights are in the box below.`;
+  $('beat').textContent = beat; $('beat').style.color = beat ? '#17654a' : '';
+  const off = i => Math.abs(result.ratios[i] / TARGET16[i] - 1); let worst = 1, worst16 = 1; for (let i = 2; i < 16; i++) { if (i < 9 && off(i) > off(worst)) worst = i; if (off(i) > off(worst16)) worst16 = i; }
+  if (document.activeElement !== $('nums')) $('nums').value = Array.from(load).map(v => +v.toFixed(4)).join(' ');
+  $('rows').innerHTML = SIXTEEN.map(([a, b], i) => { const c = i ? cents(result.ratios[i] / TARGET16[i]) : 0; return `<tr data-i="${i}" class="${i === sel ? 'sel' : ''}${i >= 9 ? ' late' : ''}"><td>(${a},${b})</td><td>${result.ratios[i].toFixed(4)}</td><td>${TARGET16[i]}</td><td>${i ? (c >= 0 ? '+' : '−') + Math.abs(c).toFixed(1) : ''}</td><td class="note">${i === 0 ? 'the lowest' : i === worst ? 'largest of the nine' : (i === worst16 && i >= 9) ? 'largest of all' : ''}</td></tr>`; }).join('');
+}
+let pending = false;
+function refresh(hoverRing) { if (pending) return; pending = true; requestAnimationFrame(() => { pending = false; recompute(); drawEditor(hoverRing); drawLadder(); drawCents(); drawShape(); }); }
+
+// ---- the editor's pointer
+let dragging = false, lastRing = -1, hoverRing = -1;
+function ringAt(ev) { const cv = $('editor'), b = cv.getBoundingClientRect(), pw = b.width - ED.l - ED.r, ph = b.height - ED.t - ED.b, x = ev.clientX - b.left - ED.l, y = ev.clientY - b.top - ED.t; return { j: Math.max(0, Math.min(RINGS - 1, Math.floor(x / pw * RINGS))), v: Math.max(0, Math.min(yMax, yMax * (1 - y / ph))) }; }
+function hoverText(j) { $('hover').textContent = `ring ${j + 1} of 40, from ${(j / RINGS).toFixed(3)} to ${((j + 1) / RINGS).toFixed(3)} of the radius: +${load[j].toFixed(2)} times the skin's weight per area`; }
+$('editor').addEventListener('pointerdown', ev => { $('editor').setPointerCapture(ev.pointerId); history.push(Array.from(load)); dragging = true; const { j, v } = ringAt(ev); load[j] = v < yMax * 0.012 ? 0 : v; lastRing = j; version++; hoverText(j); refresh(j); });
+$('editor').addEventListener('pointermove', ev => { const { j, v } = ringAt(ev); hoverRing = j;
+  if (dragging) { const val = v < yMax * 0.012 ? 0 : v, a = Math.min(lastRing, j), b = Math.max(lastRing, j); for (let k = a; k <= b; k++) load[k] = val; lastRing = j; version++; hoverText(j); refresh(j); }
+  else { hoverText(j); drawEditor(j); } });
+const endDrag = () => { dragging = false; }; $('editor').addEventListener('pointerup', endDrag); $('editor').addEventListener('pointercancel', endDrag);
+$('editor').addEventListener('pointerleave', () => { if (!dragging) { hoverRing = -1; drawEditor(-1); } });
+$('editor').addEventListener('keydown', ev => { let j = hoverRing < 0 ? 0 : hoverRing; const step = yMax / 40;
+  if (ev.key === 'ArrowRight') j = Math.min(RINGS - 1, j + 1); else if (ev.key === 'ArrowLeft') j = Math.max(0, j - 1);
+  else if (ev.key === 'ArrowUp') { history.push(Array.from(load)); load[j] = Math.min(yMax, load[j] + step); version++; } else if (ev.key === 'ArrowDown') { history.push(Array.from(load)); load[j] = Math.max(0, load[j] - step); version++; } else return;
+  ev.preventDefault(); hoverRing = j; hoverText(j); refresh(j); });
+$('taller').onclick = () => { const i = SCALES.indexOf(yMax); if (i < SCALES.length - 1) yMax = SCALES[i + 1]; drawEditor(-1); };
+$('shorter').onclick = () => { const i = SCALES.indexOf(yMax); if (i > 0) yMax = SCALES[i - 1]; drawEditor(-1); };
+$('undo').onclick = () => { if (history.length) { load = Float64Array.from(history.pop()); version++; fitScale(); refresh(-1); } };
+$('heavier').onclick = () => { setLoad(Array.from(load, v => v * 1.1)); fitScale(); refresh(-1); };
+$('lighter').onclick = () => { setLoad(Array.from(load, v => v / 1.1)); fitScale(); refresh(-1); };
+$('nudge').onclick = () => {
+  if (addedMass(load) === 0) { $('hover').textContent = 'There is no weight to move yet.'; return; }
+  const goal = +$('goal').value; history.push(Array.from(load)); let best = largestMiss(sixteenRatios(load).ratios, goal), tried = 0, kept = 0; const t0 = performance.now(), area = j => ((j + 1) / RINGS) ** 2 - (j / RINGS) ** 2;
+  (function batch() {
+    for (let q = 0; q < 6; q++) {
+      const j = Math.floor(Math.random() * RINGS), k = Math.floor(Math.random() * RINGS); if (j === k) continue;
+      const trial = Float64Array.from(load), dj = Math.max(-trial[j], (Math.random() < 0.5 ? 0.02 : 0.1) * Math.max(1, trial[j], trial[k]) * (Math.random() < 0.5 ? -1 : 1)), dk = -dj * area(j) / area(k);
+      if (trial[k] + dk < 0) continue; trial[j] += dj; trial[k] += dk; const t = largestMiss(sixteenRatios(trial).ratios, goal); tried++;
+      if (t < best) { best = t; load = trial; version++; kept++; }
+    }
+    recompute(); drawEditor(-1); drawLadder(); drawCents();
+    $('hover').textContent = `Moved a little weight from one ring to another ${tried} times and kept the ${kept} moves that helped. It soon sticks; my searches used a better method.`;
+    if (performance.now() - t0 < 3000) requestAnimationFrame(batch); else { fitScale(); refresh(-1); }
+  })();
+};
+$('smooth').onclick = () => { const m0 = addedMass(load), s = new Float64Array(RINGS); for (let j = 0; j < RINGS; j++) s[j] = (load[Math.max(0, j - 1)] + 2 * load[j] + load[Math.min(RINGS - 1, j + 1)]) / 4; const m1 = addedMass(s); if (m1 > 0) for (let j = 0; j < RINGS; j++) s[j] *= m0 / m1; setLoad(s); refresh(-1); };
+PRESETS.forEach((p, i) => { const b = document.createElement('button'); b.textContent = p.name; b.title = p.note; b.onclick = () => { setLoad(p.load); fitScale(); $('hover').textContent = p.note; refresh(-1); }; $('presets').appendChild(b); $('presets').appendChild(document.createTextNode(' ')); });
+$('usenums').onclick = () => { const v = $('nums').value.split(/[\s,;]+/).filter(x => x !== '').map(Number); if (v.length !== RINGS || v.some(x => !isFinite(x) || x < 0)) { $('numsmsg').textContent = 'That needs forty numbers, none below zero; it has ' + v.length + '.'; return; } $('numsmsg').textContent = 'forty numbers, from the centre outward'; setLoad(v); fitScale(); refresh(-1); };
+$('rows').addEventListener('click', ev => { const tr = ev.target.closest('tr'); if (tr) { sel = +tr.dataset.i; refresh(-1); } });
+
+// ---- sound
+let actx = null, playing = null, cache = { version: -1, modes: null }, plainModes = null;
+function modesNow() { if (cache.version !== version) cache = { version, modes: allModes(load, 6.6) }; return cache.modes; }
+function strokeOf(modes, at, f0, seconds, rate) { const y = stroke(modes, strengths(modes, at), f0, seconds, rate); let pk = 0; for (const v of y) pk = Math.max(pk, Math.abs(v)); if (pk > 0) for (let i = 0; i < y.length; i++) y[i] /= pk; return y; }
+function play(y, rate, what) {
+  try {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume();
+    if (playing) { try { playing.stop(); } catch (e) {} }
+    const buf = actx.createBuffer(1, y.length, rate); buf.getChannelData(0).set(y); const src = actx.createBufferSource(); src.buffer = buf; src.connect(actx.destination); src.start(); playing = src; $('heard').textContent = what;
+  } catch (e) { $('heard').textContent = 'This browser would not play sound: ' + e.message; }
+}
+function strongest(modes, at) { const a = strengths(modes, at).map(Math.abs), idx = a.map((v, i) => i).sort((p, q) => a[q] - a[p]).slice(0, 6).sort((p, q) => p - q); return idx.map(i => modes[i].ratio.toFixed(2)).join(', '); }
+document.querySelectorAll('button[data-at]').forEach(b => b.onclick = () => { const at = +b.dataset.at, f0 = +$('note').value, rate = 44100, modes = modesNow(), y = strokeOf(modes, at, f0, 3.2, rate); for (let i = 0; i < y.length; i++) y[i] *= 0.8; play(y, rate, `Struck ${b.textContent}. The six strongest partials are at ${strongest(modes, at)} times the lowest.`); });
+$('plain').onclick = () => { if (!plainModes) plainModes = allModes(new Float64Array(RINGS), 6.6); const y = strokeOf(plainModes, 0.5, +$('note').value, 3.2, 44100); for (let i = 0; i < y.length; i++) y[i] *= 0.8; play(y, 44100, `A plain skin, struck half way out. Its six strongest partials are at ${strongest(plainModes, 0.5)} times the lowest.`); };
+$('phrase').onclick = () => { const rate = 44100, f0 = +$('note').value, modes = modesNow(), steps = [0, 2, 4, 7, 9, 12, 14, 16], beat = 1.05, ev = []; let idx = 2;
+  for (let bar = 0; bar < 6; bar++) { ev.push([bar * 4 * beat, 0, 0.55]); for (let b = 0; b < 4; b++) { if (bar === 5 && b > 0) break; if (Math.random() < 0.82 || b === 0) { idx = Math.max(0, Math.min(steps.length - 1, idx + [-2, -1, -1, 0, 1, 1, 2][Math.floor(Math.random() * 7)])); ev.push([(bar * 4 + b) * beat + (Math.random() < 0.18 ? 0.5 * beat : 0), steps[idx], 0.5]); } } }
+  const end = Math.max(...ev.map(e => e[0])) + 4.5, y = new Float32Array(Math.floor(end * rate)), made = {};
+  for (const [t, st, gain] of ev) { if (!made[st]) made[st] = strokeOf(modes, 0.5, f0 * Math.pow(2, st / 12), 3.2, rate); const x = made[st], i0 = Math.floor(t * rate); for (let i = 0; i < x.length && i0 + i < y.length; i++) y[i0 + i] += gain * x[i]; }
+  let pk = 0; for (const v of y) pk = Math.max(pk, Math.abs(v)); for (let i = 0; i < y.length; i++) y[i] *= 0.85 / pk; const fade = Math.floor(2 * rate); for (let i = 0; i < fade; i++) y[y.length - 1 - i] *= i / fade;
+  play(y, rate, `A slow phrase on five notes, ${ev.length} strokes on skins loaded like this one, each struck half way out. It is different every time.`); };
+
+const PLAIN_W0 = nineRatios(new Float64Array(RINGS)).w0;
+setLoad(PRESETS[1].load, true); fitScale(); refresh(-1); window.addEventListener('resize', () => refresh(-1));
+window.__drum = { get load() { return Array.from(load); }, get result() { return result; }, sixteenRatios, set(arr) { setLoad(arr); fitScale(); recompute(); drawEditor(-1); drawLadder(); drawCents(); drawShape(); return result; }, strokeOf, modesNow };
+</script>
+</body>
+</html>

@@ -180,6 +180,7 @@ already in the library (`exists_signs_odd`); what is new in the two final statem
 ## Not done
 
 Noon has not read the proofs, nor the twelve statements between; its reading was of the two final statements and
-`ExceptionalPair`. Noon's dated note and the row for these files in `lean-tiling/README.md` are not there yet. The
+`ExceptionalPair`. Noon's dated note and the row for these files have been in `lean-tiling/README.md` since its post of 21:42 UTC
+(when this page was posted again at 21:25 they were not, and the page said so). The
 shares of good signings are not formalised. The equality and the sharper
 bound of Theorem T′ are in Lean only as the prover's own lemmas (above), not among the statements fixed beforehand.
