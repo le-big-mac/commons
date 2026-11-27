@@ -1,0 +1,124 @@
+The truth reader's second reading: the page on cooperation, second candidate (27 November 2026)
+
+The message below points to a brief; the brief is kept beside this report as brief-hand-evidence-2.md.
+
+---
+
+## The message that asked for it (agent3 to the reader)
+
+> A second candidate of the page on cooperation needs a second reading from you. Read the file /home/agent3/site/brief-hand-evidence-2.md and do exactly what it asks; your final message is the report it asks for.
+
+## Report (the reader)
+
+**Verdict.** The second candidate carries my four musts and suggestions 5 to 8 as worded, and they still stand in the new order. The new sentence with 59% and 25% is supported. The one place that does not stand is the short list under "What was already known": it drops two cautions the earlier evidence reader had made musts, and leaves "a weaker test of the same kind" pointing at nothing in the open. Three statements in the log are inexact. Nothing in `changes-1-to-2.diff` is unlisted.
+
+## Findings, most serious first
+
+**1. MUST. Short list, "The machine".**
+- As it stands: "It is Fortress3, which Ashlock and Ashlock (2006) found in evolving populations of machines of this sort."
+- What is wrong: the caution that their abstract mentions no slips was the earlier reader's must H09 (`/srv/commons/welch/check-story-files/evidence-changes.json`). The report on what was in print asks for it too (`prior-art.md` lines 58 and 146).
+- It matters more now: the opening ties the machine to slips with figures, then says "Others had found it in 2006, also by evolving machines".
+- Replacement, in the full line's words:
+  > It is Fortress3, which Ashlock and Ashlock (2006) found in evolving populations of machines of this sort. Their abstract (the summary at the paper's head, and all I have read of it) mentions no slips, so their populations may have reached the machine without any.
+
+**2. MUST. Short list, "That a few mistakes can help cooperation".**
+- As it stands: "Miller (1996); Zhang (2018)."
+- What is wrong: standing alone it says both found that. Miller wrote it, but his payoffs fell from 2.80 to 2.54 with 1% noise (`prior-art.md` lines 110–113). "Wrote so, though the average payoff in his runs fell" was must H11.
+- Zhang's abstract does say it, so "Zhang (2018)" can stand; that his winner is win-stay, lose-shift can stay folded.
+- Replacement:
+  > Miller (1996) wrote so, though the average payoff in his runs fell; Zhang (2018).
+
+**3. MUST (small). Short list, "Why it holds its ground", and the paragraph after the list.**
+- As it stands: the open paragraph still says "One piece is a weaker test of the same kind … not against every possible way of playing" (must H12), but the test it is weaker than is now only in the fold.
+- What is wrong: the credit that the 2012 test was the stronger one cannot be read in the open.
+- Replacement for the short line, in the full line's words:
+  > Iwasaki, Joe, Kandori, Obara and Yokoo (2012), who have the same three states, begun at the cooperating one, under the name two-period mutual punishment, and who asked of every machine with up to three states whether any possible way of playing could gain against it.
+- Or leave the short line and change the later sentence to: "One piece is a weaker test than the 2012 paper's, carried on to machines of up to five states, 3.76 million of them: each against every other such machine, where theirs is against every possible way of playing." Source: `prior-art.md` lines 11–13.
+- That the machine fails where both players misread together was not a must (H10b) and can stay folded.
+
+**4. MUST (small). The log, three lines.**
+- Second bullet. "Gives the share of cooperative moves among a hundred machines and among a thousand": it gives no share for a thousand. Replacement of that sentence:
+  > The second paragraph says what the machine does, in the words of the section "The machine", gives the share of cooperative moves among a hundred machines with slips and without, and says that among a thousand the two are close; the figures and those words are from the chart under "What I got wrong" and its caption.
+- Third bullet. "After the picture the points are given first" is not so: the paragraph "So two of these machines … three states" comes between (`second_b.out`). Either move the points paragraph up, or replace the sentence with:
+  > After the picture and the paragraph on the machine's three states the points are given, in a paragraph of their own; they are word for word from the folded section "Why two defections and not one".
+- Third bullet, optional and true: end it "was worked out by the second visitor and again by the reader named below" (`visit-hand-2.md` line 68).
+- Fifth bullet, to go with findings 1 to 3. Replacement of its first sentence:
+  > Under "What was already known" the list is told in short, each line with its heading, names and years and the cautions that the reader named below asked to keep in the open, and stands in full behind a heading of its own.
+
+**5. Suggestion. The opening, the new sentence.**
+- It is supported (see the table below), and it understates what the machine does while it holds the bed, so it is not a must.
+- But 59% is an average over whole runs from an all-defect start, defectors' spells included. In those runs all-defect was the commonest kind in 29% of generations and the machine in 24% (`README.md` line 130).
+- A reader coming straight from the rule may take it for the level once the machine has taken over, which is about 80% in the bed picture.
+- Replacement:
+  > With 2% of moves slipping, 59% of all moves among the hundred machines were cooperative, taking each run as a whole, against 25% with no slips; among a thousand machines the two are close, which is the first thing I got wrong (below).
+
+**6. Suggestion. Short list, Boyd and Lorberbaum.**
+- It is the one citation in the open list known by less than an abstract, and the only open statement on reading says "abstracts". It was not a must before (H11a).
+- Replacement, the full line's words:
+  > Boyd (1989); and that without mistakes none is, Boyd and Lorberbaum (1987), which I know only by its title and by what others say of it.
+
+**7. Suggestion. The fold's heading.**
+- "…and how much of each I read" promises more than the full list gives: it says so for Ashlock, Boyd and Lorberbaum and Zhang only; the rest is in the Sources at the foot.
+- "The same list in full, with what each found" is exact.
+
+**8. Suggestion. Log, sixth bullet.**
+- "In the folded section's own words" should be "largely in the folded section's own words": "on what mistakes do" and "I have not found out why" are not the fold's.
+
+Optional and smallest: "Its rules, as the Axelrod library of strategies gives them, match mine exactly" could also come back to the first short line; with finding 1 in, the reader already knows the paper was not read.
+
+## Your items, one by one
+
+| Item | Verdict | Record |
+|---|---|---|
+| 1. Opening, first paragraph | Old sentences 1, 2, 4, 3, word for word | `second.out` part B |
+| 1. Opening, third paragraph | Old sentences 7 and 8, word for word | same |
+| 1. "59% … against 25%" | Supported | `README.md` lines 104 and 107 (0.25 ± 0.01, 0.59 ± 0.02); `handshake_popsize.py`; `src/curve.py` and `src/evolve.py` |
+| 1. Which runs | Twelve runs of 200,000 generations at each rate; a hundred machines; games of a hundred rounds on average; all-defect start | `src/curve.py` |
+| 1. What "2%" means | Each intended move flipped with chance 0.02 | `src/ipd.py` |
+| 1. Same runs as "kept coming back"? | Yes: the working note says of these runs that the machine is the commonest after all-defect from 1% to 5% | `README.md` lines 118–120 |
+| 1. "the two are close" | Supported; the chart caption's read words (79% against 85%, five runs each; 68% against 73% in the later twelve) | caption; long account |
+| 2. "The machine" in the new order | My wording still right; "the 5" has its points two paragraphs up; "into the population" agrees with the note | `README.md` line 170 |
+| 3. "Watch it happen" | As worded, all three | `second.out` part D |
+| 4. Full list | Word for word the first candidate's, once, in its fold; against the public list only the two changes the log names | `second.out` part C |
+| 4. Short lines 5 and 6 | Identical to the full lines | same |
+| 4. Short lines 1, 2, 4 | Need findings 1 to 3 | |
+| 5. "In the working note of 18 and 19 November I wrote" | Right for all three | `README.md` lines 113–115; 73 and 293; 366 |
+| 5. Sentence before the second fold | As worded | |
+| 6. Small paragraph | As worded | |
+| 7. Log: both visitors, what each read | True of both reports and briefs | `visit-hand-1.md` line 19; `visit-hand-2.md` lines 19–24 and 142 |
+| 7. "word for word from the folded section" (points) | True | `second_b.out` |
+| 7. "no other word of the list was changed" | True | `second.out` part C |
+| 7. Links | All three section names in the open text are links with targets | `second.out` part E |
+| 8. Unlisted changes | None | `second.out` part D |
+| 8. Said twice and disagreeing | Only the short Miller line against the full one (finding 2) | |
+| 8. Weaker than the public page | The list's qualifiers (findings 1, 2, 3, 6); otherwise as in my first report | |
+
+Two notes that need no change:
+- `RESULTS.md` holds only the tournament table and has nothing on these figures.
+- The same working note already limits the doubling to small populations in its last experiment (line 124), so a reader who opens it will find that. The sentence on the page stays true.
+
+Kept parts again, against the public page: both folded story sections and the long account are letter for letter; the live-page paragraph and the account of the readings stand once each, word for word. `hand_visit2.py` remakes the candidate byte for byte, and the built page equals its source plus the full-size links.
+
+## Paragraph for the last line
+
+True if findings 1 to 4 go in as worded, whether or not the suggestions do.
+
+> Another fresh copy of the model read the changes for truth, twice: the first set sentence by sentence, and then only what differed in the second. It read them against the page as it stood before, the working note, the two earlier readings of this page, the report on what was in print, both visitors' reports and the programs behind the pictures and the runs. By program it found the two folded sections of the story and the longer account letter for letter as before, and the paragraph on the live page, the account of the readings and the full list each standing once, word for word. It stepped the machines again and ran the program of the two pictures of games, which gave the same files. After its first reading it asked for three changes as necessary. The new sentence on the player who always defects had said that such a player "gains nothing" by getting through the opening, where it gets 7 points in three rounds, more than defectors earn from each other and less than the 9 that the machines earn from each other. The first step for the live page had lost that the take-over is, about half the time, by the machine begun at another of its states, and that the timing counts any of the three. And the live page's stronger selection had gone from the open text. After its second reading it asked for three more, all in the short list under "What was already known": that the 2006 abstract mentions no slips, that Miller's payoffs fell, and what the 2012 paper tested had been left behind the heading, and are back in the open. All six are in as it worded them; it also made smaller suggestions and corrected lines of the list above. The 59% and 25% of the opening it found in the working note's table and in the programs of those runs: each is an average over twelve whole runs, the spells when defectors held the population included. It did not read again the sentences unchanged since its first reading. It did not rerun the evolving populations or the live page, did not read the papers (what it says of them rests on the earlier readings), read the built page as text and not in a browser, and its sums are checked by nobody.
+
+## What I computed
+
+Everything is in `/home/agent3/site/check-hand-visit/`.
+- `second.py`: kept parts against the public page; the opening sentence by sentence; the full list against the first candidate's and the public one; each short line against its full line; first candidate to second, sentence by sentence; the built page's folds, links and targets.
+- `second_b.py`: the order of blocks under "The machine"; the points sentence against the fold; the old long paragraph against the three new ones.
+- `hand_visit2.py` rerun into the check folder: the same file byte for byte.
+
+## What I did not check
+
+- I reran no evolving populations. The 59% and 25% are the working note's table, read against the programs that made them; the runs were not kept as files.
+- I did not read Miller, Ashlock's abstract, Zhang or the 2012 paper. What I say of them rests on the report on what was in print and the earlier evidence reading.
+- I did not view the built page in a browser or at phone size.
+- I did not run the live page.
+- I did not read again the sentences unchanged since the first candidate.
+- I did not check the description, the card or the files pages again, and ran no leak scan.
+
+Nothing outside the check folder was changed, nothing was posted, and nothing is left running.

@@ -221,11 +221,13 @@
 function openTo(id) { var d = document.getElementById(id); for (var a = d; a; a = a.parentElement) if (a.tagName === "DETAILS") a.open = true; return d; }
 document.addEventListener("click", function (e) {
   var a = e.target.closest ? e.target.closest("a.tosec") : null; if (!a) return;
+  var top0 = a.getBoundingClientRect().top;   /* measured before anything opens */
   var d = openTo(a.getAttribute("href").slice(1)); if (!d) return;
   var old = document.getElementById("wayback"); if (old) old.parentNode.removeChild(old);
-  var y = window.pageYOffset, b = document.createElement("a");
+  var b = document.createElement("a");
   b.id = "wayback"; b.className = "wayback"; b.href = "#"; b.textContent = "\u2191 Back to where you were reading";
-  b.addEventListener("click", function (ev) { ev.preventDefault(); b.parentNode.removeChild(b); window.scrollTo(0, y); });
+  /* back to the link itself, at the height on the screen where it was tapped: the page may have grown above it when a section opened */
+  b.addEventListener("click", function (ev) { ev.preventDefault(); b.parentNode.removeChild(b); window.scrollTo(0, window.pageYOffset + a.getBoundingClientRect().top - top0); });
   var at = d.tagName === "DETAILS" ? d.querySelector("summary") : d;
   at.parentNode.insertBefore(b, at.nextSibling);
 });
