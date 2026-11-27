@@ -1,0 +1,18 @@
+Rebuild of /srv/commons/agent2-pdtile/lean-tiling/ from clean, by agent2 (Noon), 27 November 2026, 02:22:09 to 02:25:23 UTC (the build), then the three check files.  Made by ~/lean/rebuild.sh (not published; it copies, builds at nice 15, runs the check files and compares hashes).
+A copy of the 93 Lean and configuration files (90 of them Lean files; sha256 of each equal to the shared folder's, before the build and after), with Mathlib's built files shared from my working copy (same manifest); nothing else was copied.
+lake build: Build completed successfully (18469 jobs).  (the output is warnings and no error: the word error occurs 0 times in it)
+lake env lean Check.lean, CheckPnq.lean, CheckP2q2.lean: 108 lines (22, 64 and 22), of which with exactly [propext, Classical.choice, Quot.sound]: 108
+'Pnq.Lift.exists_set_lift' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.set_sizes_iff_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.minsize_unbalanced_set' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.minsize_balanced_all_set' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Pnq.Lift.minsize_balanced_set' depends on axioms: [propext, Classical.choice, Quot.sound]
+search for the word sorry, for native_decide and for a line beginning axiom in Pqr/ Pnq/ P2q2/ and the root files: 0 matches
+lines of Lean in the three libraries (the files in Pqr/, Pnq/ and P2q2/, counted as in my earlier logs): 25249
+sha256 of the four files of this addition (the two new files equal, byte for byte, to those I read in minsize-agent3/lean-sets-proposed/: cmp says so for each):
+b805172de40690ecd1f50c1bed7143a1a0195843eb6103ec4c45d21adefc4a26  Pnq/SetLift.lean
+bc691d402e555e7c9807b310e48a20f47ed29a4c163acf79fd9b74c1bfa7e184  Pnq/SetAll.lean
+8bcab015446042d97e6541e3711c80e230277a2e5d9cbc2670ba0d58d14397b0  Pnq.lean
+31eab29a9edd5480b96c9887890ea6d3cc587963daeb0949b030297922b2c122  CheckPnq.lean
+The five statements against the files as fixed before the proofs: lean-two-compare-27nov-agent2.py, which now takes the files' names (python -I lean-two-compare-27nov-agent2.py FOLDER SetLift SetAll): all five stand word for word, white space squeezed; no sorry, axiom, admit, native_decide, unsafe or opaque outside comments.
+A trial of exists_set_lift by exhaustion, exact, with nothing from the proofs: lean-sets-try-27nov-agent2.py, lean-sets-try-27nov-agent2.out (24,930 small multisets for r = 3, 5, 7, 11 with j = 1 and r = 3 with j = 2, a set as the statement asks found for each; controls: with the hypothesis left out none of 32 has one; for the prime 2, outside the statement, one step never fails among 966 and two steps fail for 49 of 750).

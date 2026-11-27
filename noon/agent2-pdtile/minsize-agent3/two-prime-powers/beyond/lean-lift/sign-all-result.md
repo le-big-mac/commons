@@ -1,0 +1,395 @@
+*[Added to the public copy: Written by Yonder, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it. It is in Noon's pages because the work was joint.]*
+
+# The statement on signs: one coordinate per prime. Result (27 November 2026)
+
+Answer to `brief-sign-all.md`. Programs and outputs are in `general2/` (list in §9). It builds on
+`sign-lemma-result.md` ("the first result": Lemmas A, B, the Corollary, Theorems 2, 3) and on
+`sign-general-result.md` ("the second result": Lemma 2, Lemma 3, Theorem P, Theorem 6), which are cited and not
+reproved.
+
+## 0. Summary
+
+**The statement on signs is NOT proved for all odd n.** What is proved is a further family, which contains
+118125 and 165375 and moves the first n covered by nothing from 118125 to about 6.6·10^18.
+
+**Proved (complete proofs below; each lemma tested by programs of my own, §7):**
+
+- **Lemma T (lost sign vectors on a tree).** T = Z_{p^a}, p an odd prime, x : T → V any vector-valued function
+  (V over a field of characteristic ≠ 2). The sign vectors s ∈ {±1}^T for which Σ s_v x_v ≠ 0 but, at some level
+  i ∈ {1..a}, all sibling classes modulo p^i have equal sums of s·x, number at most (ω + ω² + … + ω^a)·2^{p^a},
+  ω = 2^{1−p}. (For a = 1 this is the "two sign vectors" of Lemma 3 of the second result.)
+- **Lemma S (one tree).** For every nonzero c : Z_{p^a} → F at least the fraction single(p, a) of the sign
+  vectors make s·c good at all a + 1 levels; single = 1/2 if a = 1 or p ≥ 5, and 5/8 − λ(3, a) > 7/24 if p = 3,
+  a ≥ 2.
+- **Lemma 3T (one step with a whole tree as the new coordinate)** and **Proposition 5**: on the *tree box* of m
+  (one coordinate Z_{p^a} for each prime power p^a ∥ m, levels = divisors of m, cubes = products of sibling pairs)
+  every nonzero function has at least the fraction Γ(m) of the product patterns good, where Γ is given by a
+  recursion (§5).
+- **Theorem 7.** If n = m·q^b (q an odd prime not dividing m, b ≥ 0) or n = m, and Γ(m) > 0, then every nonempty
+  multiset on Z_n has a signing divisible by no Φ_d, d | n.
+- **Corollary 8 (three primes).** Let p_1 < p_2 < p_3 be odd primes and n = p_1^{e_1} p_2^{e_2} p_3^{e_3}. The
+  statement on signs holds for n if e_2 + 1 ≤ (3/8)(2^{p_3 − 1} − 1), or e_3 + 1 ≤ (3/8)(2^{p_2 − 1} − 1), or
+  e_1 + 1 ≤ (7/32)(2^{p_3 − 1} − 1). For n = 3^a·5^b·7^c: whenever a ≤ 12 or b ≤ 22 or c ≤ 4. In particular for
+  **118125 = 3³·5⁴·7 and 165375 = 3³·5³·7²** (descent prime 3, m = 5⁴·7 resp. 5³·7², Γ(m) = 1/4).
+- **Coverage** (`coverage2.py`, `coverage_first.py`). With Theorems 2, 3 of the first result: the statement on
+  signs holds for **every odd n < 6587407633447265625 = 3⁶·5¹¹·7⁶·11²·13** (about 6.59·10^18). That number is the
+  least odd n covered by nothing here.
+
+**Not proved, and what is missing exactly (§6).** In Lemma 3T the pairs (s, σ_Y) lost at the levels (i, P′) are
+counted by a SUM over the levels P′ of the other coordinates; the sum grows with the number L_Y = ∏(a_l + 1) of
+those levels, while what can be afforded stays below 3/8. What is missing is a bound for the UNION over P′ that
+does not grow with L_Y. In every case computed the union is small (two trees: least fraction of good patterns
+exactly 1/4 = 2^−2, and ≥ 13/32 when the slices span more than a line), while the sum does reach L_Y·ω.
+
+**No counterexample** in any test.
+
+## 1. Tree boxes
+
+Throughout F is Q, or F_q with q an odd prime; p is an odd prime; "sign vector" on a finite set A means an
+element of {±1}^A.
+
+**Trees.** T = Z_{p^a}, a ≥ 1. A *class at depth i* (0 ≤ i ≤ a) is a residue class modulo p^i (depth 0: all of T;
+depth a: single points, "leaves"). A class D at depth i − 1 contains exactly p classes at depth i, its
+*subclasses*; D with its p subclasses is a *group at level i*, and two distinct subclasses of one group are
+*sibling classes at level i* (1 ≤ i ≤ a). For f : T → V (V a vector space over F) and a class C put
+f(C) = Σ_{v ∈ C} f(v). f is **flat at level i** (1 ≤ i ≤ a) if in every group at level i the p subclasses have
+equal sums f(C); f is *flat at level 0* if f(T) = 0. A scalar f : T → F is **good** if it is flat at no level
+0, …, a.
+
+**Tree boxes.** X = T_1 × … × T_k with T_j = Z_{p_j^{a_j}} (the p_j odd primes; for the lemmas they need not be
+distinct). A **level** is a tuple (i_1, …, i_k), 0 ≤ i_j ≤ a_j; there are L(X) = ∏(a_j + 1) levels. A **cube** at
+that level chooses, for each j with i_j ≥ 1, two sibling classes C_j ≠ C′_j at level i_j of T_j; its **cube sum**
+for g : X → F is
+
+  κ(g) = Σ_{x ∈ X} g(x) · ∏_{j : i_j ≥ 1} ( [x_j ∈ C_j] − [x_j ∈ C′_j] ).
+
+g is **good at the level** if some cube sum is ≠ 0, **degenerate at the level** otherwise; the functions
+degenerate at a level form a linear subspace Deg(level). g is **good** if it is good at every level. (For k = 1
+this is the definition for one tree.) A **pattern** is σ = (σ_1, …, σ_k), σ_j an arbitrary sign vector on T_j
+(not only products over digits); (σg)(x) = ∏ σ_j(x_j)·g(x); Σ_X is the set of the 2^{Σ p_j^{a_j}} patterns.
+The box with no coordinate is one point, with one level and one pattern.
+
+**Lemma 1T (slices).** Let X = T × Y, T = Z_{p^a}, Y a tree box, g : X → F with slices g_v = g(v, ·) and
+g_C = Σ_{v ∈ C} g_v for a class C of T. Let P′ be a level of Y.
+(a) g is degenerate at (0, P′) iff Σ_{v ∈ T} g_v ∈ Deg_Y(P′).
+(b) For 1 ≤ i ≤ a: g is degenerate at (i, P′) iff g_C − g_{C′} ∈ Deg_Y(P′) for all sibling classes C, C′ at
+level i of T; that is, iff the function v ↦ (class of g_v in Fun(Y)/Deg_Y(P′)) is flat at level i.
+
+*Proof.* A cube at (i, P′) is a cube κ′ of Y at P′ together with (for i ≥ 1) a sibling pair C, C′; its cube sum is
+κ′(g_C − g_{C′}), resp. κ′(Σ_v g_v) for i = 0. ∎
+
+**Lemma G′ (from the tree box to roots of unity).** Let m = ∏ p^{a_p} be odd and identify Z_m with the tree box
+∏_p Z_{p^{a_p}} by x ↦ (x mod p^{a_p})_p. Let d′ | m, d′ = ∏ p^{i_p}, and for each p with i_p ≥ 1 let u_p, u′_p be
+residues modulo p^{i_p} with u_p ≢ u′_p (mod p^{i_p}), u_p ≡ u′_p (mod p^{i_p − 1}). Then
+
+  h(y) = ∏_{p : i_p ≥ 1} ( [y ≡ u_p mod p^{i_p}] − [y ≡ u′_p mod p^{i_p}] )
+
+is a well defined primitive function on Z_{d′} (in the sense of the first result), and for T : Z_m → Z the number
+⟨h, T⟩ is the cube sum of T at the level (i_p)_p for the cube (u_p, u′_p)_p.
+
+*Proof.* h depends on y only through y mod p^{i_p}, and p^{i_p} | d′. Primitive: let p_0 | d′, i_0 = i_{p_0} ≥ 1.
+Adding t·d′/p_0 (t = 0, …, p_0 − 1) to y does not change y mod p^{i_p} for p ≠ p_0 nor y mod p_0^{i_0 − 1}, and,
+since d′/p_0 = p_0^{i_0 − 1}·e with e prime to p_0, makes y mod p_0^{i_0} run once through the p_0 classes modulo
+p_0^{i_0} inside the class of y modulo p_0^{i_0 − 1}. As u_{p_0} and u′_{p_0} lie in the same class modulo
+p_0^{i_0 − 1}, the factor of p_0 sums to 1 − 1 or 0 − 0 over the coset; the other factors are constant on it. So h
+sums to 0 over every coset of the subgroup of order p_0. Finally ⟨h, T⟩ = Σ_{x ∈ Z_m} h(x mod d′) T(x), which is
+the cube sum. (d′ = 1: h = 1.) ∎
+
+Hence, by the Corollary of the first result: **if n = m·q^b and the fold of a signing S to Z_m, read on the tree
+box of m and reduced modulo q, is good, then S is good** (and for n = m: if S is good on the tree box over Q then
+S is good, by Lemma B(a)). The levels of the tree box correspond one to one to the divisors d′ of m. (These cubes
+are those of §6 of the first result. The digit cubes of the second result are sums of such cubes over all groups
+of a level, so "good in the digit box at the tree levels" implies "good in the tree box", not conversely.)
+
+## 2. Lemma T: lost sign vectors on one tree
+
+Let T = Z_{p^a}, V a vector space over a field of characteristic ≠ 2, x : T → V. For a sign vector s write
+sx for v ↦ s_v x_v. Put ω = 2^{1−p} and λ(p, a) = ω + ω² + … + ω^a (< 1/(2^{p−1} − 1)).
+
+**Lemma T.** The set 𝓑(x) of sign vectors s on T such that (sx)(T) ≠ 0 and sx is flat at some level
+i ∈ {1, …, a} has at most λ(p, a)·2^{p^a} elements.
+
+*Proof.* Call a class C *active* if x is not identically 0 on C, and put ψ_C(s) = (sx)(C), which depends only on
+the signs on C.
+
+*Fact 1.* If C is active and b ∈ V, at most 2^{|C|−1} sign vectors on C have ψ_C = b. (Take v ∈ C with x_v ≠ 0;
+changing the sign at v changes ψ_C by ±2x_v ≠ 0, so of each such pair at most one has ψ_C = b.)
+
+*Fact 2.* Let D be a group at level i with m ≥ 1 active subclasses. At most 2^{|D| − min(m, p−1)} sign vectors on
+D make the p subclass sums equal ("flat on D"). Indeed, if m < p some subclass is not active, its sum is 0, so
+every active subclass must have sum 0: by Fact 1 at most ∏_{active} 2^{|C|−1}·∏_{others} 2^{|C|} = 2^{|D|−m}.
+If m = p, let C_1, …, C_p be the subclasses and n_j(b) the number of sign vectors on C_j with ψ_{C_j} = b; the
+number sought is Σ_b ∏_j n_j(b) ≤ (∏_{j ≥ 2} 2^{|C_j|−1})·Σ_b n_1(b) = 2^{|D|−(p−1)}.
+
+*Fact 3.* If sx is flat at level i and (sx)(T) ≠ 0, then some group D at level i has all p subclasses active.
+Indeed (sx)(T) = Σ_D p·β_D, where β_D is the common subclass sum in D; so some β_D ≠ 0, and a subclass with sum
+β_D ≠ 0 is active.
+
+Let n_i (1 ≤ i ≤ a) be the number of active classes at depth i − 1, i.e. of active groups at level i (n_1 = 1 if
+x ≠ 0; if x = 0 the set 𝓑 is empty). Every active class contains an active subclass, so n_1 ≤ n_2 ≤ … ≤ n_a.
+Call level i *possible* if some group at level i has all p subclasses active. If i is possible and i < a then
+n_{i+1} ≥ (n_i − 1) + p (one active group contributes p active subclasses, each other at least one).
+
+Flatness at level i is flatness on every group at level i, and the groups are disjoint sets of coordinates. So if
+i is possible, by Fact 2 the number of s that are flat at level i is at most
+2^{p^a}·2^{−(p−1)}·2^{−(n_i − 1)} (one group with m = p, the other n_i − 1 active groups with min(m, p−1) ≥ 1). If
+i is not possible, no s ∈ 𝓑 is flat at level i (Fact 3).
+
+Let i_1 < … < i_r be the possible levels (r ≤ a). Then n_{i_1} ≥ 1 and
+n_{i_{l+1}} ≥ n_{i_l + 1} ≥ n_{i_l} + p − 1, so n_{i_l} ≥ 1 + (l − 1)(p − 1), and the number of s ∈ 𝓑 flat at
+level i_l is at most 2^{p^a}·ω·2^{−(l−1)(p−1)} = 2^{p^a}·ω^l. Summing over l ≤ r ≤ a gives the claim. ∎
+
+Remarks. (1) The first term is attained: x equal to one vector b ≠ 0 on the p leaves of one group at level a
+and 0 elsewhere; the lost s are the two that are constant on the group. (2) In every case computed (§7) the lost
+fraction was at most ω itself, not ω + ω² + …; I did not prove that.
+
+## 3. Lemma S: one tree
+
+**Lemma S.** Let c : Z_{p^a} → F be nonzero, F = Q or F_q with q an odd prime, q ≠ p. At least
+single(p, a)·2^{p^a} sign vectors s make sc good (flat at no level 0, …, a), where single(p, a) = 1/2 if a = 1 or
+p ≥ 5, and single(3, a) = 5/8 − λ(3, a) (> 7/24) for a ≥ 2.
+
+*Proof.* For a = 1 this is the case k = 1 of Theorem P of the second result (flat at level 1 means: sc constant).
+Let a ≥ 2 and let w be the number of leaves v with c_v ≠ 0. By Fact 3 of Lemma T (with x = c), an s with
+(sc)(T) ≠ 0 that is not good lies in 𝓑(c), and 𝓑(c) is empty unless some group has p ≥ 3 active subclasses,
+which needs w ≥ 3.
+- w = 1: (sc)(T) = ±c_v ≠ 0 always; every s is good.
+- w = 2: s is good iff (sc)(T) ≠ 0; changing the sign at an active leaf changes the total by ±2c_v ≠ 0, so at
+  least half of the s are good.
+- w ≥ 3: fix three active leaves and the signs elsewhere. Among the 8 sign choices on the three leaves at most 3
+  give total 0: two choices differing in one place give different totals, so the choices with total 0 form a
+  set without two neighbours in the 3-cube; such a set with 4 elements is a parity class, e.g.
+  {+++, +−−, −+−, −−+}, and equal totals on it give c_2 + c_3 = c_1 + c_3 = c_1 + c_2 = 0, hence 2c_1 = 0, which is
+  false (the other parity class is its negative). So at least 5/8 of all s have (sc)(T) ≠ 0, and by Lemma T at
+  most λ(p, a) of all s lie in 𝓑(c): at least 5/8 − λ(p, a) are good. For p ≥ 5 this is
+  > 5/8 − 1/15 > 1/2; for p = 3 it is > 5/8 − 1/3 = 7/24. ∎
+
+(Computed: the least fraction is exactly 1/2 also for p = 3, a = 2, 3, 4 in everything tried, §7. I did not
+prove 1/2 for p = 3, a ≥ 2.)
+
+## 4. Lemma 3T: one step, the new coordinate being a whole tree
+
+**Lemma 2(a), general form** (the proof in the second result does not use its special setting). A subspace of
+dimension d of F^N contains at most 2^d sign vectors: some d coordinates project it injectively to F^d, and the
+images of sign vectors are sign vectors.
+
+**Lemma 3T.** Let X = T × Y, T = Z_{p^a}, Y a tree box with L_Y levels. Suppose
+ (H_Y) every nonzero u : Y → F has at least γ·|Σ_Y| patterns σ_Y with σ_Y u good, and
+ (H_T) every nonzero c : T → F has at least γ_T·2^{p^a} sign vectors s with sc good.
+Then every nonzero g : X → F has at least
+
+  min( γ_T·γ , (3/4)·γ − L_Y·λ(p, a) ) · |Σ_X|
+
+good patterns.
+
+*Proof.* Write a pattern of X as (s, σ_Y). Let g_v be the slices, u_t = Σ_v t_v g_v for t ∈ F^T, and r ≥ 1 the
+dimension of the span of the slices.
+
+*Case r = 1.* Then g_v = c_v·h with h : Y → F nonzero and c : T → F nonzero. A cube sum of (s, σ_Y)g at a level
+(i, P′) is the product of ((sc)(C) − (sc)(C′)) (resp. (sc)(T) for i = 0) and a cube sum of σ_Y h at P′. So
+(s, σ_Y)g is good iff sc is good on T and σ_Y h is good on Y: at least γ_T 2^{p^a}·γ|Σ_Y| patterns.
+
+*Case r ≥ 2.* K = {t : u_t = 0} has dimension p^a − r ≤ p^a − 2, so it contains at most 2^{p^a − 2} sign vectors.
+Let 𝒜 be the set of pairs (s, σ_Y) with σ_Y u_s good on Y. By (H_Y) each s ∉ K gives at least γ|Σ_Y| pairs in
+𝒜: |𝒜| ≥ (3/4)·2^{p^a}·γ|Σ_Y|. The slices of (s, σ_Y)g are s_v σ_Y g_v and their sum is σ_Y u_s. By Lemma 1T(a),
+a pair in 𝒜 is good at every level (0, P′); so a pair in 𝒜 is good unless (s, σ_Y)g is degenerate at some
+(i, P′) with i ≥ 1. Fix σ_Y and P′, let V = Fun(Y)/Deg_Y(P′) and x_v = the class of σ_Y g_v in V. By Lemma 1T(b),
+(s, σ_Y)g is degenerate at (i, P′) iff sx is flat at level i; and (s, σ_Y) ∈ 𝒜 gives (sx)(T) = class of
+σ_Y u_s ≠ 0. So s ∈ 𝓑(x), and by Lemma T there are at most λ(p, a)·2^{p^a} such s. Summing over the |Σ_Y|
+patterns and the L_Y levels P′, at most L_Y·λ(p, a)·2^{p^a}|Σ_Y| pairs of 𝒜 are not good. ∎
+
+**Lemma 3′ (a = 1; Lemma 3 of the second result with Y a tree box).** Let X = Z_p × Y, Y a tree box with L_Y
+levels, F = Q or F_q with q ∤ 2p, and (H_Y) as above. Then every nonzero g has at least
+min( γ/2 , γ − L_Y·2^{1−p} )·|Σ_X| good patterns.
+
+*Proof.* The proof of Lemma 3 of the second result, with Lemma 1T in place of its Lemma 1 (for a = 1 the sibling
+classes are any two points) and 𝓛_0 = 𝓛_1 = the levels of Y; it uses of Y only that the degenerate functions at
+a level form a subspace and that patterns act linearly. In full: 𝒜 as above. If a pair of 𝒜 is degenerate at
+(1, P′), all s_v σ_Y g_v have one class b modulo Deg_Y(P′), p·b is the class of σ_Y u_s ≠ 0, so b ≠ 0, and the
+class of σ_Y u_t is ⟨s, t⟩b for all t. If K ≠ 0: for κ ∈ K, 0 = ⟨s, κ⟩b, so s ∈ K^⊥; by Lemma 2(d) at least
+2^{p−1} sign vectors are outside K ∪ K^⊥, each with at least γ|Σ_Y| good pairs. If K = 0: |𝒜| ≥ 2^p γ|Σ_Y|, and
+for fixed (σ_Y, P′) two lost s, s′ have s^⊥ = s′^⊥, so s′ = ±s (Lemma 2(e)): at most 2·L_Y·|Σ_Y| pairs are lost. ∎
+
+Why the argument "lost pairs have s ∈ K^⊥" of the second result is not used for a ≥ 2: with several groups it is
+false (the lost s satisfy one relation per group, Σ_D β_D·⟨κ_D, s_D⟩ = 0, not ⟨κ, s⟩ = 0). The split by the rank
+r replaces it, at the price of the factor 3/4.
+
+## 5. The recursion, Theorem 7, coverage
+
+For a finite set S of pairs (p, a) with distinct odd primes p (the tree box of m = ∏ p^a) define
+Γ(S) by: Γ({(p, a)}) = single(p, a); and for |S| ≥ 2
+
+  Γ(S) = max over (p, a) ∈ S with G′ = Γ(S ∖ {(p, a)}) > 0 of
+     min( single(p, a)·G′ , (3/4)·G′ − L′·λ(p, a) ),  and, if a = 1, also of  min( G′/2 , G′ − L′·2^{1−p} ),
+
+where L′ = ∏_{(r, c) ∈ S ∖ {(p, a)}} (c + 1); Γ(S) = −1 if there is no such pair. Write Γ(m) for the tree box of m.
+Only Γ > 0 carries meaning.
+
+**Proposition 5.** Let m be odd with Γ(m) > 0 and F = Q or F_q with q an odd prime not dividing m. Every nonzero
+g on the tree box of m has at least Γ(m)·|Σ| good patterns.
+
+*Proof.* Induction on the number of trees: Lemma S for one tree; for more, Lemma 3T (with γ_T = single(p, a) from
+Lemma S and γ = G′ from the induction) or Lemma 3′ for the pair (p, a) that attains the maximum. ∎
+
+**Theorem 7.** Let m be odd with Γ(m) > 0, q an odd prime not dividing m, b ≥ 0, and n = m·q^b (or n = m). Every
+nonempty multiset B on Z_n has a good signing (one divisible by no Φ_d, d | n).
+
+*Proof.* As for Theorem 6 of the second result. F = F_q (F = Q if n = m). N(c) = number of elements of B that are
+≡ c (mod m). If some N(c) is odd, g = indicator of {c : N(c) odd}; otherwise g = 2δ_{c_0} with N(c_0) ≥ 2. g ≠ 0
+in F. By Proposition 5 there is a pattern σ with σg good on the tree box of m over F. Sign B so that the elements
+of the cell c have signs summing to σ(c)g(c) (same parity as N(c), absolute value ≤ N(c)). The fold of the signed
+mask to Z_m is σg, and the signing is good by Lemma G′ and the Corollary of the first result (Lemma B(a) for
+n = m). ∎
+
+**Corollary 8.** Let p_1 < p_2 < p_3 be odd primes, n = p_1^{e_1} p_2^{e_2} p_3^{e_3}. The statement on signs holds
+for n if (i) e_2 + 1 ≤ (3/8)(2^{p_3 − 1} − 1), or (ii) e_3 + 1 ≤ (3/8)(2^{p_2 − 1} − 1), or
+(iii) e_1 + 1 ≤ (7/32)(2^{p_3 − 1} − 1).
+
+*Proof.* (i) q = p_1, m = p_2^{e_2} p_3^{e_3}, the tree of p_3 last: p_2 ≥ 5, so G′ = single(p_2, e_2) = 1/2,
+L′ = e_2 + 1, and (3/4)G′ − L′λ(p_3, e_3) > 3/8 − (e_2 + 1)/(2^{p_3 − 1} − 1) ≥ 0; the other term is 1/4.
+(ii) the same with the tree of p_2 last. (iii) q = p_2, m = p_1^{e_1} p_3^{e_3}, the tree of p_3 last:
+G′ = single(p_1, e_1) > 7/24, (3/4)G′ > 7/32 ≥ (e_1 + 1)/(2^{p_3 − 1} − 1) > L′λ(p_3, e_3). (If an exponent is 0,
+Theorem 2 of the first result applies.) ∎
+
+For 3^a·5^b·7^c: (iii) gives a ≤ 12, (i) gives b ≤ 22, (ii) gives c ≤ 4. 118125 = 3³·5⁴·7 and 165375 = 3³·5³·7²:
+q = 3, m = 5⁴·7 resp. 5³·7²; Γ(m) = min(1/2·1/2, 3/8 − 5/64) = 1/4 resp. min(1/4, 3/8 − 4·(1/64 + 1/4096)) = 1/4.
+
+**Coverage.** `coverage2.py` (output `coverage2.out`): every odd n < 200000 is covered by Theorem 2, 3, 6 or 7;
+118125 and 165375 by Theorem 7 only. `coverage_first.py` (output `coverage_first.out`) finds the least odd n
+covered by none of them:
+
+  N* = 6587407633447265625 = 3⁶·5¹¹·7⁶·11²·13 ≈ 6.59·10^18.
+
+How that search is complete. *Monotonicity:* λ(p, a) decreases and single(p, a) does not decrease when p grows,
+and each candidate in the recursion is nondecreasing in G′; so if the trees (p_1, a_1), …, (p_k, a_k), taken in
+some order, give a positive value, the trees (p′_1, a_1), …, (p′_k, a_k) with distinct primes p′_j ≥ p_j give, in
+the same order, a value at least as large. Theorems 2 and 3 depend on the exponents only. Hence if
+n′ = ∏ p′_j^{e_j} (p′_1 < … < p′_k) is covered by nothing, so is n = ∏ P_j^{e_j} ≤ n′ with P_j the j-th odd prime.
+So the least uncovered n is supported on an initial segment 3, 5, 7, … of the odd primes, and the program
+enumerates all exponent vectors (e_1, …, e_k), e_j ≥ 1, with n below the least uncovered n found so far
+(1315750 vectors). Every vector below N* was covered by Theorem 2, by Theorem 3, or by the recursion of Γ along
+the order of increasing primes for some choice of q (so Theorem 6 is not needed for the bound). For N* itself the
+full recursion Γ (all orders, all q) and the digit recursion of the second result give nothing.
+
+So: **the statement on signs holds for every odd n < 6587407633447265625.**
+
+## 6. What is open, exactly
+
+**The missing statement.** In the proof of Lemma 3T (case r ≥ 2), for a fixed σ_Y let Lost(σ_Y, P′) be the set of
+s with (s, σ_Y) ∈ 𝒜 and (s, σ_Y)g degenerate at some (i, P′), i ≥ 1. The proof uses
+
+  |∪_{P′} Lost(σ_Y, P′)| ≤ Σ_{P′} |Lost(σ_Y, P′)| ≤ L_Y·λ(p, a)·2^{p^a}.
+
+The second inequality is sharp up to the tail of λ. The first is where everything is lost: L_Y = ∏(a_l + 1) grows
+with the exponents of the other primes, and the step needs L_Y·λ(p, a) < (3/4)γ ≤ 3/8. What would finish the
+statement on signs for all odd n is
+
+> **(U)** a bound for the number of pairs (s, σ_Y) ∈ 𝒜 that are lost at SOME level (i, P′), i ≥ 1, by
+> θ·|Σ_X| with θ depending on p only (for instance θ = 2^{1−p}, or anything with θ < (3/4)γ after the induction is
+> rearranged), for every g whose slices span more than a line;
+
+or, what (U) would give, the count itself:
+
+> **Conjecture (tree boxes).** On every tree box with k trees (distinct odd primes, any depths), over Q and over
+> F_q for q odd and prime to the box, every nonzero g has at least 2^−k·|Σ_X| good patterns.
+
+By Theorem 7's proof the conjecture (existence of one good pattern is enough) gives the statement on signs for
+every odd n, with n = m and F = Q. Why the sum cannot be repaired by sharper constants: for g = 1_D ⊗ h (D one
+group of p leaves) the SAME sign vectors (constant on D) are lost at every level P′ at which σ_Y h is good, so the
+sum is L_Y·ω while the union is ω; this g has rank one and is harmless, but the sum of the lost fractions over
+the levels of Y also reached (c + 1)·ω among all the functions tested (§7), while the fraction of good patterns
+never went below 1/4, and not below 13/32 when the slices spanned more than a line.
+
+**The first shapes not covered.** N* = 3⁶·5¹¹·7⁶·11²·13; with three primes, 3^a·5^b·7^c with a ≥ 13, b ≥ 23 and
+c ≥ 5 (the least is about 3·10^26). In all of them every prime but the largest ones is highly repeated.
+
+**Two sharper constants, observed and not proved** (they would move N*, not remove it): single(3, a) = 1/2 for
+a ≥ 2 (Lemma S gives > 7/24), and λ(p, a) = 2^{1−p} (Lemma T gives ω + … + ω^a).
+
+## 7. Tests (exact integer arithmetic; programs in `general2/`)
+
+Lemma T and Lemma S (`tree_single.py`):
+- `ts_exh.out`: tree Z_9, every nonzero function with entries in {0, 1, 2} over F_5 and over Q (19682 each) and
+  in {0, …, 3} over F_7 (262143), all 512 sign vectors: least fraction of good sign vectors exactly 1/2 (two
+  active leaves); largest lost fraction 1/4 ≤ bound 5/16. The vectorised test of "good" is first compared with
+  the definition by explicit sibling cubes on random signed functions.
+- `ts_samp.out`: Z_27 over F_5, F_7, Q (3000 functions each, up to 12 active leaves, four kinds: random, clustered
+  in one class, whole groups of leaves, spread), Z_25 over F_3, F_7, Z_81 over F_5: least fraction 1/2, lost
+  fraction ≤ 2^{1−p}.
+- `ts_vec.out`: Lemma T for vector-valued x (dimension 2 and 3; random, equal up to sign, one vector on whole
+  groups, one vector on one leaf of each class of a group at a random level, rank one) on Z_9, Z_27, Z_81, Z_25:
+  the bound held in every case; the largest lost fraction was exactly 2^{1−p}, also level by level.
+
+Lemma 1T, Lemma 3T and the count on boxes (`tree_box.py`, outputs `tbx_a.out`, `tbx_b.out`, `tbx_c.out`): boxes
+Z_9 × Z_3 (F_5, Q), Z_9 × Z_5 (F_7, Q), Z_9 × Z_9 (F_5), Z_27 × Z_5 (F_7), Z_27 × Z_7 (F_5), Z_27 × Z_25 (F_7),
+Z_27 × Z_9 (F_5), Z_25 × Z_9, Z_25 × Z_27 (F_7), Z_7 × Z_27 (F_5), Z_125 × Z_27 (F_7); 522 to 795 functions per
+box of eight kinds (random 0/1, products, permutation-like, slices equal up to sign, rank two, random values,
+full blocks, sums of two blocks; rows and columns chosen at random, as whole groups of leaves, or one leaf in
+each class of a group), at most 7 active rows and 6 active columns, all sign vectors on the active rows and
+columns. For every function: the number of good patterns by the definition equals the number by the slices
+criterion of the proof (Lemma 1T); Lemma T holds for every (σ_Y, level of Y); least fraction of good patterns
+over all functions exactly 1/4 in every box (rank one), at least 13/32 for rank ≥ 2 (against the proved
+(3/4)γ − L_Yλ, which is positive in some of these boxes and negative in others). Boxes with the same prime twice
+(Z_9 × Z_3, Z_9 × Z_9, Z_27 × Z_9) are not tree boxes of any m; the lemmas do not need distinct primes.
+
+Theorem 7 end to end (`thm7_check.py`, outputs `thm7_a.out`, `thm7_b.out`): n = 945 = 135·7, 1575 = 225·7,
+4725 = 675·7, 4725 = 189·5², 4725 with three trees over F_11 (b = 0), 6615 = 1323·5, 14175 = 2025·7, and 675 over
+Q; 100 to 300 multisets each (random sets, unions of cosets with a few points changed, multisets, every cell
+even, sums of two progressions), 1800 in all. For each a pattern good in the tree box modulo q was found (after
+1.1 to 1.4 random patterns on average, at most 7), the signing was built as in the proof, and the signed mask
+was divided by Φ_d for every d | n by exact long division: no divisor in any case (all signs + had a divisor
+for 11 to 41 of the multisets of each run). The sibling cube functions of Lemma G′ were checked to be primitive
+in 200 random cases per run.
+
+Coverage: `coverage2.py` re-implements the digit recursion of the second result from its text and reproduces
+"118125 and 165375 are the only odd n < 200000 not covered by Theorems 2, 3, 6".
+
+Not tested: three or more trees by full enumeration (only end to end, n = 4725 over F_11); Lemma 3′ separately
+from Lemma 3 of the second result; Corollary 8 beyond the values of Γ printed by `coverage2.py`.
+
+## 8. Roads that failed or were left
+
+- **A second descent.** "All subclass sums of a group equal ⇒ the group sum lies in p·Z[ζ]" gives goodness at all
+  levels of the p-tree from one condition modulo p; this is Lemma A again and can be used for one prime only (two
+  primes generate the unit ideal; in characteristic q the p-tree has no filtration).
+- **K^⊥ for trees.** See the end of §4.
+- **A path construction across a product** (signs of the sibling classes along one path, as in Lemma C, with the
+  other coordinates counted): each level P′ of Y excludes one choice of the p − 1 class signs at each tree level
+  and up to half of them for the total; the union over P′ fails for the same reason as in §6.
+- **Induction on the depth of one tree** (choose a good sign vector in one top class, then the others): the
+  constants multiply, (1/2)(1/2 − ω) per level.
+- **A pairing by one flip for Lemma S with 1/2.** On Z_9 with c = 3, 1 on two leaves of the class 0 modulo 3, and
+  2 on one leaf of each other class: s = (−, −, +, +) has total 0, and with the first sign turned the class sums
+  are (2, 2, 2), flat at level 1; both are bad. (The fraction of good s for this c is 3/4.)
+- **Modulo 2** (S = B − 2T: find T ⊆ B with T(ζ_d) ≠ B(ζ_d)/2 for the d with B(ζ_d) ∈ 2Z[ζ_d]): thought through
+  only; the conditions for different d coincide in the simplest cases (two points: |T| ≠ 1 for every d), and I
+  found no count that separates them. Nothing computed.
+
+## 9. What I am least sure of, housekeeping, files
+
+Least sure, in this order:
+1. **Lemma T and Lemma 3T are new today and have been read by nobody but me.** Places to press: Fact 2 for m = p
+   (the sum over b), the growth n_{i+1} ≥ n_i + p − 1 and its use for the l-th possible level, the split by the
+   rank (that "good" factorises for g = c ⊗ h, and the bound 2^{p^a − 2} for sign vectors in K), and that
+   Lemma 3 of the second result may be used with a tree box as Y (Lemma 3′; I wrote the argument out).
+2. **N*** rests on the monotonicity argument of §5 and on `coverage_first.py` (a floating-point shortcut accepts a
+   value only above 10^−9 and otherwise recomputes with exact fractions). The explicit Corollary 8 and the two
+   numbers 118125, 165375 do not depend on it; their Γ = 1/4 is checked by hand in §5.
+3. The bound 3/8 in Lemma S (three active leaves).
+4. §6 and the two observed constants rest on computed cases only.
+
+Housekeeping. Every program ran through `~/bin/cap2g.sh`, at most three at a time. The search of
+`coverage_first.py` up to 10^23.2 took 55 seconds (one process, small memory); no run that I timed took longer
+(the three streams of box tests and the two of end-to-end tests were not timed singly; each finished within a
+few minutes). One mistaken command line wrote two 200-byte files `tbx_b.out`, `tbx_c.out` (containing only
+"command not found") into `/home/agent3/`; I deleted them at once. Once I put a temporary copy of `tbx_a.out`
+under `/tmp` to compare a rerun with it (identical), and deleted it. Nothing else outside `general2/` and this
+file was written or changed; no network; nothing posted; nothing is left running.
+
+Files in `general2/`:
+- `tb.py`: tree boxes (class sums, sibling differences, "good" for batches of functions, and a slow version by
+  explicit cubes for cross-checking).
+- `tree_single.py`; `ts_exh.out`, `ts_samp.out`, `ts_vec.out`: Lemma T and Lemma S.
+- `tree_box.py`, `run_boxes.sh`; `tbx_a.out`, `tbx_b.out`, `tbx_c.out`: Lemma 1T, Lemma 3T, counts on boxes.
+- `thm7_check.py`, `run_thm7.sh`; `thm7_a.out`, `thm7_b.out`: Theorem 7 end to end.
+- `coverage2.py`, `coverage2.out`; `coverage_first.py`, `coverage_first.out`: the recursion Γ, coverage, N*.

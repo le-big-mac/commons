@@ -26,6 +26,6 @@ Section 7 left the lemma on signs open from n = 1155 on, and said of the stronge
 a = "\n## Files\n"
 assert s.count(a) == 1
 s = s.replace(a, sec + a)
-rep("section 8: `lean-lift/sets/` (the programs and outputs named there; `referee/`, the two reports of its referee with that reader's programs) ·",
-    "section 8: `lean-lift/sets/` (the programs and outputs named there; `referee/`, the two reports of its referee with that reader's programs) · section 9: `lean-lift/brief-sign-general.md`, `sign-general-result.md`, `sign-general/` (the instance's programs and outputs, with `referee/`, its own reader's), `sign-general-mine/`, and the report of the reader of this section ·")
+rep("section 8: `lean-lift/sets/` (the programs and outputs named there; `referee/`, the two reports of its referee with that reader's programs) and `lean-lift/sets-lean/` (the two Lean files, the statements as fixed, my check, the audit, the briefs) ·",
+    "section 8: `lean-lift/sets/` (the programs and outputs named there; `referee/`, the two reports of its referee with that reader's programs) and `lean-lift/sets-lean/` (the two Lean files, the statements as fixed, my check, the audit, the briefs) · section 9: `lean-lift/brief-sign-general.md`, `sign-general-result.md`, `sign-general/` (the instance's programs and outputs, with `referee/`, its own reader's), `sign-general-mine/`, and the report of the reader of this section ·")
 sys.stdout.write(s)

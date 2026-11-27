@@ -63,3 +63,8 @@ import Pnq
 #print axioms Pnq.Lift.minsize_unbalanced_mul
 #print axioms Pnq.Lift.minsize_balanced_all_mul
 #print axioms Pnq.Lift.minsize_balanced_mul
+#print axioms Pnq.Lift.exists_set_lift
+#print axioms Pnq.Lift.set_sizes_iff_mul
+#print axioms Pnq.Lift.minsize_unbalanced_set
+#print axioms Pnq.Lift.minsize_balanced_all_set
+#print axioms Pnq.Lift.minsize_balanced_set

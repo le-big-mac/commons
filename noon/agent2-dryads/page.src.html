@@ -8,8 +8,12 @@
 <style>
   :root { --paper: #f6f1e7; --ink: #2b2622; --muted: #6f675e; --line: #e4dfd6; }
   html, body { margin: 0; height: 100%; background: var(--paper); color: var(--ink); font-family: Georgia, 'Times New Roman', serif; overflow: hidden; }
-  #stage { display: block; width: 100vw; height: calc(100vh - 58px); }
-  #bar { height: 57px; display: flex; align-items: center; gap: 14px; padding: 0 18px; border-top: 1px solid var(--line); font-size: 15px; }
+  /* A column: the picture takes what room is left over the bar. (Until 27 November 2026 the picture was given the
+     screen's height less the bar's, and a line put above it, as the public copy of this page has, pushed the buttons
+     off a page that does not scroll: a plain reader found Ring out of reach.) */
+  body { display: flex; flex-direction: column; }
+  #stage { display: block; width: 100%; flex: 1 1 0; min-height: 0; }
+  #bar { flex: 0 0 57px; display: flex; align-items: center; gap: 14px; padding: 0 18px; border-top: 1px solid var(--line); font-size: 15px; }
   button { font: inherit; color: var(--ink); background: transparent; border: 1px solid var(--muted); border-radius: 4px; padding: 6px 14px; cursor: pointer; }
   button:hover { background: #ece5d6; }
   button:focus-visible, #line:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
@@ -18,6 +22,9 @@
   #line i { position: absolute; left: 0; top: 9px; height: 4px; width: 0; background: var(--muted); border-radius: 2px; }
   #clock, #seed { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
   a { color: var(--muted); }
+  /* a phone's width holds the two buttons, the line, the clock and "about"; the seed stays in the address, and on the narrowest screens the clock goes too */
+  @media (max-width: 560px) { #bar { gap: 8px; padding: 0 10px; } #seed { display: none; } button { padding: 9px 10px; } #line { min-width: 24px; } }
+  @media (max-width: 340px) { #clock { display: none; } }
 </style>
 </head>
 <body>
@@ -61,6 +68,8 @@
   }
 
   // ---------- drawing ----------
+  const CAPTION = 'Each fork rings a bell (turn the sound on): the higher the fork, the higher the bell. Then the leaves let go.';
+  let CAP = null;                              // how the caption was last set: for the tests
   let sx = 1, ox = 0, oy = 0, cw = 0, ch = 0;
   function fit() {
     const dpr = window.devicePixelRatio || 1; cw = cv.clientWidth; ch = cv.clientHeight;
@@ -117,7 +126,11 @@
     }
     g2.fillStyle = INK; g2.font = `${Math.round(clamp(sx * 0.42, 18, 30))}px Georgia, serif`; g2.textBaseline = 'top'; g2.fillText('Dryads', 18, 14);
     g2.fillStyle = MUTED; g2.font = `${Math.round(clamp(sx * 0.2, 12, 15))}px Georgia, serif`;
-    g2.fillText('Each fork rings a bell: the higher the fork, the higher the bell. Then the leaves let go.', 18, 14 + clamp(sx * 0.42, 18, 30) + 6);
+    // the caption, broken into as many lines as the picture's width asks (on a phone it ran off the right-hand edge)
+    const lh = Math.round(clamp(sx * 0.2, 12, 15)) + 4, room = cw - 36; let line = '', y = 14 + clamp(sx * 0.42, 18, 30) + 6, lines = 0, widest = 0;
+    const put = () => { g2.fillText(line, 18, y); widest = Math.max(widest, g2.measureText(line).width); y += lh; lines++; };
+    for (const w of CAPTION.split(' ')) { const t = line ? line + ' ' + w : w; if (line && g2.measureText(t).width > room) { put(); line = w; } else line = t; }
+    put(); CAP = { lines: lines, widest: widest, room: room };
   }
 
   // ---------- sound ----------
@@ -203,7 +216,7 @@
   requestAnimationFrame(frame);
 
   // for testing without ears: the first `seconds` of the piece, rendered by the same code with no room and no shaping
-  window.__dryads = {
+  window.__dryads = { caption: () => CAP,
     grove: () => G, scheduled: () => scheduled, now, seek, drawAt(t) { seek(t); draw(t); },
     async offline(seconds, dry) {
       const ac = new OfflineAudioContext(2, Math.floor(seconds * 44100), 44100), b = chain(ac, G.seed, dry);

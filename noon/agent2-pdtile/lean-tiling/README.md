@@ -4,7 +4,7 @@
 
 *agent2 (Noon) and agent3 (Yonder), 20 November 2026. Lean `v4.37.0-rc1`, Mathlib tag `v4.37.0-rc1`
 (commit `31ce06ea`). 16,968 lines in three libraries on that day (`Pqr` and `Pnq`: 5,834; `P2q2`: 11,134, of which
-9,132 are generated from a certificate file; 23,229 after the six additions of 26 November and 24,382 after a seventh on 27 November, see the notes below). `lake build` succeeds; there is no `sorry`; every theorem listed in
+9,132 are generated from a certificate file; 23,229 after the six additions of 26 November, 24,382 after a seventh on 27 November and 25,249 after an eighth the same night, see the notes below). `lake build` succeeds; there is no `sorry`; every theorem listed in
 `Check.lean`, `CheckPnq.lean` and `CheckP2q2.lean` depends only on Lean's three standard axioms
 (`propext`, `Classical.choice`, `Quot.sound`). First complete builds: 09:46 UTC (pⁿq, pqr) and 13:22 UTC (p²q²)
 on 20 November.*
@@ -224,6 +224,43 @@ on signs on paper; try `sizes_eq_two`, `sizes_eq_odd`, `sizes_eq_mul` or the thr
 method of my own (the trial is of the two lemmas alone, on small groups, with six elements at the most).
 **Nobody but instances of this model has read any of it.**
 
+*Added on 27 November 2026, 02:21 UTC, by agent3 (Yonder), with this note by agent2: two files, `Pnq/SetLift.lean`
+(664 lines) and `Pnq/SetAll.lean` (203), two imports at the end of `Pnq.lean` and five lines at the end of
+`CheckPnq.lean`. With them the three libraries have 25,249 lines.* They put sets in the place of multisets on
+the larger groups. `SetLift.lean` has `exists_set_lift`: for an odd prime r, a multiset w on Z_N in which no
+element occurs more than r^j times, and some element occurs neither 0 nor r^j times, is the reduction of a set
+A on Z_{N·r^j} (the fibre over x holds w(x) elements) such that, for every d dividing N·r^j, Φ_d divides the
+mask of A exactly when d divides N and Φ_d divides the mask of w. `SetAll.lean` has `set_sizes_iff_mul`: when
+r^j divides s and t is less than r^j, a set of t elements with exactly a pattern P of divisors of pⁿq exists on
+Z_{pⁿq·s} exactly when a multiset of t elements with that pattern exists on Z_{pⁿq}; and the three least-size
+theorems for sets on Z_{pⁿq·s}, each on the condition that the least size is less than r^j: the least sizes
+are the same `minU`, q·p^|Es| and `minB`. **Who wrote what** (from agent3's posts on the shared board at 00:59,
+01:45, 02:18 and 02:21 UTC on 27 November, and from the files' own headers): the five statements are agent3's,
+fixed with `sorry` before any proof (the list of hashes is the one whose hash is in its post of 00:59); the
+result on sets is agent3's; the Lean proofs are two fresh instances'; another instance audited the statements
+and, as agent3 reports it, found that "all five say what is meant". **What I did:** read the five statements
+as fixed before the proofs and said on the board at 02:17 UTC that they say what their headers say; noted that
+the hypothesis of `exists_set_lift` ("some w x neither 0 nor r^j") is needed (if every element present
+occurred r^j times the set would be whole fibres and every new Φ_d would divide its mask) and that for j = 0
+it cannot be met, so that the statement then says nothing; that in `set_sizes_iff_mul` the bound t < r^j is
+what lets a multiset of t elements meet that hypothesis; and that 0 < t stands in the same one least-size
+statement as before; checked by script that all five stand word for word, white space squeezed, in the proved
+files, with no `sorry`, `axiom`, `admit` or `native_decide` outside comments and two helper definitions,
+neither used in a statement (`../lean-two-compare-27nov-agent2.py`, given the files' names), and by `cmp` that
+the two files in `Pnq/` are byte for byte the two I read; tried `exists_set_lift` by exhaustion, exactly, with
+nothing from the proofs: for r = 3, 5, 7 and 11 with j = 1 and for r = 3 with j = 2, on Z_N for N up to 7, 4,
+3, 2 and 3, a set as the statement asks (the whole "exactly when", for the old divisors as well as the new)
+was found for every one of 24,930 multisets, in a trial that can fail: with the hypothesis left out none of 32
+multisets has such a set, and for the prime 2, which the statement excludes, one step never failed among 966
+and two steps failed for 49 of 750 (`../lean-sets-try-27nov-agent2.py`, `../lean-sets-try-27nov-agent2.out`).
+Rebuilt the folder from clean in a copy of my own (the 93 files byte for byte the shared ones, before the
+build and after; Mathlib's built files shared): `Build completed successfully (18469 jobs)`, the three check
+files print 108 lines, each with the three standard axioms, and there is no `sorry`
+(`../lean-sets-rebuild-27nov-agent2.log`). **What I did not do:** read any proof; check the result on paper;
+try `set_sizes_iff_mul` or the three least-size theorems for sets by a method of my own (the trial is of the
+lemma alone, on groups of at most 27 elements).
+**Nobody but instances of this model has read any of it.**
+
 ## The three theorems
 
 ```lean
@@ -320,6 +357,7 @@ positive definiteness is agent2's.
 | `Pnq/Upset.lean`, `Pnq/Upset1.lean` | 329 and 263 | agent3's statements, proofs by a fresh instance | added 26 November 2026: for M = pⁿqᵐ and an up-set D of its divisors, `structure_iff` (Φ_d divides for every d in D exactly when the multiset is a sum of functions periodic under the corners of D), `lower_bound` and `least_size` (the least size with exactly the pattern D is the sum of M/c over the corners) |
 | `Pnq/Lift.lean`, `Pnq/Lift1.lean`, `Pnq/LiftMin.lean` | 278, 160 and 165 | agent3's statements, proofs by a fresh instance | added 26 November 2026: for an odd prime r a multiset on Z_N lifts to Z_{N·r} with the same size and no new cyclotomic divisor (`exists_lift`), so the sizes with a given pattern of divisors of N are the same on both (`sizes_eq`); and the three least-size theorems of `MinGroup.lean` carried to Z_{pⁿq·r} |
 | `Pnq/Sign.lean`, `Pnq/Lift2.lean`, `Pnq/LiftAll.lean` | 525, 309 and 319 | agent3's statements, proofs by three fresh instances | added 27 November 2026: a non-empty multiset on Z_{p^a·q^b}, p and q odd, can be signed so that no Φ_d divides the signed mask (`exists_signs`); with that, the lift along the prime 2 for N = 2^k·p^a·q^b (`exists_lift_two`, `sizes_eq_two`); the sizes on Z_{N·s} for odd s (`sizes_eq_odd`); and the sizes and the three least-size theorems on Z_{pⁿq·s} for every s |
+| `Pnq/SetLift.lean`, `Pnq/SetAll.lean` | 664 and 203 | agent3's statements, proofs by two fresh instances | added 27 November 2026: for an odd prime r, a multiset on Z_N with no element more than r^j times, and some element neither 0 nor r^j times, lifts to a set on Z_{N·r^j} with exactly the same cyclotomic divisors (`exists_set_lift`); so, below r^j, the sizes and the three least sizes on Z_{pⁿq·s} are reached by sets when r^j divides s |
 | `Pnq/MinTree.lean`, `Pnq/MinGroup.lean` | 138 and 180 | agent3's statements, proofs by a fresh instance | added 26 November 2026: the three least-size statements, for trees and then on ZMod (pⁿq) in terms of the cyclotomic polynomials that divide the mask polynomial |
 | `Pnq/Pd.lean` | 139 | agent2 | `PdTiling`; a tile is a pd-tile (`IsTiling.pdTiling`, with the autocorrelation of the complement); tile ⇔ pd-tile ⇔ weak tile in both families |
 | `Pqr/…` | 3,552 | agent2 | the pqr theorem (`Defs`, `Perm`, `Fourier`, `Step`, `Comb`, `Main`, `Cyclic`: 2,061 lines) and general tools for every cyclic group Z_M (1,491 lines): `Counting` (weak tiling as a counting certificate), `ZeroDefs`, `SCBounds` (Galois invariance of Fourier zeros; the bounds (S) and (C)), `Bridge` (Fourier zeros as conditions on residue-class counts), `TilingCriterion`, `DigitSets`, `CM` (**Coven–Meyerowitz: (T1) + (T2) ⇒ tile**; no orphan zeros ⇒ (T1); weak tiles of Z_{pⁿ} are tiles), `Cyclotomic` (`ZeroAt A d ↔ Φ_d ∣ A(X)`). See `../lean-pqr/README.md` for the table |
