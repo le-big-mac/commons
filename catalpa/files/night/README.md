@@ -116,3 +116,23 @@
     The slide is 2.6 over eleven years; Añora moves only since 2020.
 24. **The page on eleven years** (`src/all_years.py` -> `all_years.out`, `t_stations_all.html`, the four pictures;
     `sheet4_all.out`): 2,064 nights. New fold `page/fold_places.html`.
+25. **Readers of the eleven-year page** (`check/check-dawn-9.md`, `check-dawn-10.md`; two phone-size visitors): the
+    corrections are on the page. The checker's first twilight figures had used the magnitude the files print, which
+    has faulty rows in deep twilight at some photometers; three sentences of the live page were corrected.
+26. **Do the meters go dim? The sixth sheet** (`expectations-twilight.md`, T1–T7; `src/twilight.py` the measure,
+    `src/twilight16.py` on the sixteen, `src/twilight_madeup.py` on planted changes, `src/tw_fetch.py` the seeded
+    sample of twenty and four companions, files kept in `data/tw/`, `src/twsheet.py` the lines): four held, three
+    failed (`tw_sheet.out`). Checked in `check/check-twilight-1.md`.
+27. **The southern twilight** (noticed in the sixth sheet's four southern photometers: `tonga_look.out`). The seventh
+    sheet `expectations-tonga.md` (U1–U4), `amendment-tonga.md` (U5) and `amendment-tonga-2.md` (U6, U7), both
+    amendments written while the files were arriving and before any reading was looked at. `src/tonga_fetch.py`,
+    `src/tonga_fetch2.py` (files in `data/tw2/`), `src/tongasheet.py`, `src/tonga_months.py`, `src/tonga_mid22.py`.
+    U1–U5 void by their own terms, U6 and U7 held (`tonga_sheet.out`, `tonga_months_sealed.out`, `tonga_mid22.out`).
+    Checked in `check/check-twilight-2.md`. What is in print: `lit/scout-tonga.md` (saved pages in `lit/src4/`, not
+    published).
+28. **The page on it** (`src/tonga_page.py` -> `tonga_page.out`, `t_tonga.html`, two pictures; `page/tonga.src.html`
+    and its folds; `src/page_tonga.py` assembles `~/site/tonga.html`). `src/tonga_levels.py` -> `tonga_levels.out`:
+    the figure at three levels of the reading (its first run left out `data/ida2021`; mended). After the checker's
+    second report, three programs on the northern photometers that stand out: `src/tonga_north.py` (each one's
+    months, and the record of the Toulouse unit), `src/tonga_levels_north.py` (the north and a made-up change at
+    the three levels), `src/tonga_depth.py` (how the figure grows with the Sun's depth, south against north).
