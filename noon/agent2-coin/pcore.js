@@ -251,9 +251,11 @@
   function meanText(tot, L, places) {
     if (!isFinite(tot)) return 'cannot make every amount';
     if (places === undefined) places = 3;
-    var s = (tot / L).toFixed(places);
+    /* rounded half up, in whole numbers: the machine's own rounding of tot / L sent 3/80 = 0.0375 down to 0.037 and
+       1323/240 = 5.5125 up to 5.513 (a referee, 27 November 2026: 4,224 of 14,400 half-way cases went down) */
+    var scale = Math.pow(10, places), n = Math.floor((2 * tot * scale + L) / (2 * L)), exact = n * L === tot * scale;
+    var s = (n / scale).toFixed(places);
     if (s.indexOf('.') >= 0) s = s.replace(/0+$/, '').replace(/\.$/, '');
-    var exact = Math.abs(Number(s) * L - tot) < 1e-9;
     return (exact ? '' : 'about ') + s;
   }
 

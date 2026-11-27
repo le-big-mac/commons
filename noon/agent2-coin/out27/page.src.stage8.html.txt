@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Small change</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; background: #0d0d0d; color: #f0efec; font: 16px/1.5 Georgia, 'Times New Roman', serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 18px 16px 40px; }
+  h1 { font-weight: normal; font-size: 26px; margin: 0 0 2px; }
+  h2 { font-weight: normal; font-size: 20px; margin: 26px 0 4px; }
+  p.sub { margin: 0 0 12px; color: #c3c2b7; max-width: 900px; }
+  p.note { color: #c3c2b7; max-width: 900px; }
+  a { color: #9ec5f4; }
+  .viz-root { --surface-1: #1a1a19; --text-primary: #f0efec; --text-secondary: #c3c2b7; --muted: #898781; --grid: #2c2c2a; --axis: #383835;
+    --a: #3987e5; --b: #d95926; font: 14px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: end; margin: 0 0 10px; }
+  .controls label { display: flex; flex-direction: column; gap: 2px; color: var(--text-secondary); font-size: 13px; min-width: 0; max-width: 100%; }
+  .controls select, .controls input { max-width: 100%; min-width: 0; box-sizing: border-box; }
+  select, button, input[type=text], input[type=number] { font: inherit; color: var(--text-primary); background: #262624; border: 1px solid #45453f; border-radius: 5px; padding: 5px 10px; }
+  select, button { cursor: pointer; }
+  @media (hover: hover) { button:hover, select:hover { background: #32322f; } } button[aria-pressed=true] { background: #3d3d39; border-color: #c3c2b7; }
+  button:disabled { color: var(--muted); cursor: default; background: #1f1f1e; }
+  input#coins { width: 330px; } input#L, input#amount { width: 90px; }
+  input[type=range] { width: 320px; accent-color: #3987e5; }
+  :focus-visible { outline: 2px solid #9ec5f4; outline-offset: 2px; }
+  figure { margin: 0 0 14px; background: var(--surface-1); border-radius: 8px; padding: 10px; border: 1px solid rgba(255,255,255,0.10); position: relative; }
+  figcaption { color: var(--text-secondary); margin: 0 0 8px; max-width: 900px; } figcaption b { color: var(--text-primary); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 8px 0 0; padding: 0; list-style: none; color: var(--text-secondary); font-size: 13px; }
+  .legend li { display: flex; align-items: center; gap: 6px; } .legend svg { width: auto; display: inline-block; }
+  .say { margin: 8px 0 0; min-height: 1.4em; color: var(--text-secondary); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; } .say b { color: var(--text-primary); font-weight: 600; }
+  .notice { margin: 0 0 8px; color: #f0efec; border-left: 3px solid #d95926; padding: 2px 0 2px 8px; display: none; } .notice.on { display: block; }
+  .tip { position: absolute; pointer-events: none; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 6px 9px; font-size: 13px; max-width: 300px; display: none; z-index: 2; }
+  .tip b { font-weight: 600; }
+  svg.chart { display: block; width: 100%; height: auto; cursor: crosshair; } svg text { font: 12px system-ui, -apple-system, 'Segoe UI', sans-serif; fill: var(--text-secondary); }
+  .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0 0 12px; }
+  .tile { background: #212120; border-radius: 6px; padding: 8px 12px; min-width: 0; }
+  .tile .k { color: var(--text-secondary); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+  .tile .v { font-size: 30px; line-height: 1.2; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; } .tile .v.words { font-size: 17px; line-height: 1.4; padding: 6px 0; }
+  .tile .d { color: var(--text-secondary); font-size: 13px; overflow-wrap: anywhere; }
+  @media (max-width: 640px) { .tiles { grid-template-columns: 1fr; } }
+  table { border-collapse: collapse; margin: 8px 0 0; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 3px 14px 3px 0; border-bottom: 1px solid var(--grid); font-weight: normal; vertical-align: top; } th { color: var(--text-secondary); }
+  td.l, th.l { text-align: left; }
+  .tables { display: none; overflow: auto; max-height: 300px; } .tables.on { display: block; }
+  .scroll { overflow-x: auto; }
+  .ways { display: grid; gap: 8px; margin: 6px 0 0; }
+  .way { background: #212120; border-radius: 6px; padding: 8px 12px; }
+  .way .k { color: var(--text-secondary); font-size: 13px; margin: 0 0 4px; } .way .k b { color: var(--text-primary); font-weight: 600; }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-height: 40px; }
+  .row .lab { color: var(--text-secondary); font-size: 13px; margin: 0 4px 0 0; } .row .sep { width: 14px; }
+  .coin { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 34px; padding: 0 4px; border-radius: 17px; background: #262624; color: var(--text-primary);
+    font-variant-numeric: tabular-nums; font-size: 13px; box-sizing: border-box; }
+  .coin.over { border: 2px solid #3987e5; } .coin.back { border: 2px dashed #d95926; }
+  .setbtn { padding: 2px 8px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.best { width: 100%; } table.best td.l { padding-right: 6px; } table.best .setbtn { white-space: normal; text-align: left; }
+  @media (max-width: 520px) { table.best th, table.best td { padding-right: 8px; } }
+  h3 { font-weight: normal; font-size: 16px; margin: 14px 0 4px; color: var(--text-primary); }
+  .tile .k { align-items: flex-start; } .tile .k svg { flex: none; margin-top: 4px; }
+  .tables th { position: sticky; top: 0; background: #1a1a19; }
+  .grp { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; }      /* "handed back" keeps with its coins */
+  button.inline { min-height: 32px; margin: 2px 0; }                 /* a button in a sentence looks like the page's other buttons (a visitor took an underlined one for a link) */
+  .or { color: var(--text-secondary); font-size: 13px; margin: 2px 0 0; }
+  #amountSay, #addedSay { min-height: 0; }
+  .setbtn { min-height: 32px; margin: 0 6px 6px 0; }
+  input[type=range] { max-width: 100%; }
+  #fig3 .controls label:nth-child(2) { flex: 1 1 140px; } #fig3 input[type=range] { width: 100%; }
+  @media (max-width: 520px) { h2 { margin-top: 16px; } main { padding-top: 12px; } }
+  html { overflow-anchor: none; }      /* the page itself keeps what is under the finger in its place (steady, in the script) */
+</style>
+</head>
+<body>
+<main>
+  <h1>Small change</h1>
+  <p class="sub" id="lead">To pay 24 cents with American coins takes six coins; or two, if a 25 is handed over and a 1 is handed back. Choose some coins, or type your own, and pay an amount.</p>
+
+  <figure class="viz-root" id="fig0">
+    <div class="controls">
+      <label>Choose coins <select id="preset"></select></label>
+      <label>or type your own <input type="text" id="coins" inputmode="numeric" autocomplete="off" spellcheck="false" aria-describedby="notice"></label>
+      <label>Amounts from 0 to <input type="number" id="L" min="1" max="999" step="1"></label>
+      <button id="apply">Use these</button>
+    </div>
+    <p class="notice" id="notice" role="status"></p>
+  </figure>
+
+  <h2>Pay an amount</h2>
+  <figure class="viz-root" id="fig3">
+    <figcaption>A coin with a <b>solid ring</b> is handed over; a coin with a <b>dashed ring</b> is handed back.</figcaption>
+    <div class="controls">
+      <label>Amount <input type="number" id="amount" min="0" step="1" aria-describedby="amountSay"></label>
+      <label><input type="range" id="amountR" min="0" step="1" aria-label="Amount"></label>
+    </div>
+    <p class="say" id="amountSay" role="status"></p>
+    <div class="ways" id="ways"></div>
+  </figure>
+
+  <h2>On average</h2>
+  <figure class="viz-root" id="fig1">
+    <figcaption id="avgcap">Count every amount once, and take the average number of coins it takes.</figcaption>
+    <p class="say" id="story"></p>
+    <p class="say" id="withThese"></p>
+    <div class="tiles">
+      <div class="tile" id="tile-plain"><div class="k"><svg width="22" height="10" viewBox="0 0 22 10" aria-hidden="true"><line x1="1" y1="5" x2="21" y2="5" stroke="#3987e5" stroke-width="2.5"/></svg> <span><b>Paying exactly</b>, with as few coins as can be</span></div><div class="v"></div><div class="d"></div></div>
+      <div class="tile" id="tile-greedy"><div class="k"><svg width="14" height="12" viewBox="0 0 14 12" aria-hidden="true"><circle cx="7" cy="6" r="4" fill="none" stroke="#f0efec" stroke-width="1.5"/></svg> <span><b>The cashier's way</b> of paying exactly: the largest coin that fits, again and again</span></div><div class="v"></div><div class="d"></div></div>
+      <div class="tile" id="tile-both"><div class="k"><svg width="22" height="10" viewBox="0 0 22 10" aria-hidden="true"><line x1="1" y1="5" x2="21" y2="5" stroke="#d95926" stroke-width="2.5"/></svg> <span><b>Paying with change</b>: coins may be handed back, and every coin that changes hands is counted</span></div><div class="v"></div><div class="d"></div></div>
+    </div>
+    <h3 id="capA">The coins for each amount</h3>
+    <div class="chartwrap"><svg class="chart" id="chartA" viewBox="0 0 1000 300" role="img" aria-label="Number of coins for each amount, paid exactly and paid with change" tabindex="0"></svg></div>
+    <div class="tip" id="tipA"></div>
+    <ul class="legend" aria-label="Legend">
+      <li><svg width="26" height="12" viewBox="0 0 26 12"><line x1="1" y1="6" x2="25" y2="6" stroke="#3987e5" stroke-width="4.5"/></svg> paying exactly (the wider line, so that it shows where the two run together)</li>
+      <li><svg width="26" height="12" viewBox="0 0 26 12"><line x1="1" y1="6" x2="25" y2="6" stroke="#d95926" stroke-width="2.5"/></svg> paying with change</li>
+      <li><svg width="14" height="12" viewBox="0 0 14 12"><circle cx="7" cy="6" r="4" fill="none" stroke="#f0efec" stroke-width="1.5"/></svg> where the cashier's way takes more than need be (the ring stands at the cashier's count)</li>
+      <li><svg width="14" height="14" viewBox="0 0 14 14"><line x1="7" y1="0" x2="7" y2="14" stroke="#898781" stroke-width="1.5" stroke-dasharray="2 3"/></svg> the amount being paid above: tap the picture to change it</li>
+    </ul>
+    <p class="say" id="sayA" aria-live="polite"></p>
+    <div class="controls"><button id="tA" aria-pressed="false" aria-controls="tabA">Show the table</button></div>
+    <div class="tables" id="tabA"></div>
+  </figure>
+
+  <h2>One more coin</h2>
+  <figure class="viz-root" id="fig2">
+    <figcaption>If one more coin were added to these, which should it be? The picture gives the average with each new coin there could be; low is good. (With change, a coin larger than the amount can be handed over, so coins up to one more than twice the largest amount are tried; where the coins in use are large beside the amounts, a still larger coin could do better.)</figcaption>
+    <div class="controls">
+      <button id="addPlain">Add the best coin for paying exactly</button>
+      <button id="addBoth">Add the best coin for paying with change</button>
+    </div>
+    <p class="say" id="addedSay" role="status"></p>
+    <div class="chartwrap"><svg class="chart" id="chartB" viewBox="0 0 1000 300" role="img" aria-label="The average with one more coin, against the value of the coin" tabindex="0"></svg></div>
+    <div class="tip" id="tipB"></div>
+    <ul class="legend" aria-label="Legend">
+      <li><svg width="26" height="12" viewBox="0 0 26 12"><line x1="1" y1="6" x2="25" y2="6" stroke="#3987e5" stroke-width="2.5"/></svg> paying exactly</li>
+      <li><svg width="26" height="12" viewBox="0 0 26 12"><line x1="1" y1="6" x2="25" y2="6" stroke="#d95926" stroke-width="2.5"/></svg> paying with change</li>
+      <li><svg width="26" height="12" viewBox="0 0 26 12"><line x1="1" y1="6" x2="25" y2="6" stroke="#898781" stroke-width="1.5" stroke-dasharray="4 3"/></svg> <span id="nowLegend">the average now (the upper one is for paying exactly)</span></li>
+      <li><svg width="14" height="12" viewBox="0 0 14 12"><circle cx="7" cy="6" r="4.5" fill="none" stroke="#f0efec" stroke-width="1.5"/></svg> <span id="bestLegend">the best coin</span></li>
+    </ul>
+    <p class="say" id="sayB" aria-live="polite"></p>
+    <div class="controls"><button id="tB" aria-pressed="false" aria-controls="tabB">Show the table</button></div>
+    <div class="tables" id="tabB"></div>
+  </figure>
+
+  <h2>The best sets of coins for amounts below 100</h2>
+  <figure class="viz-root" id="fig4">
+    <figcaption>These sets have the lowest average of all that were tried. Paying exactly, every set of one to seven coins up to <span id="plainMax"></span> was tried. Paying with change, every set of one to five coins up to <span id="bothMax"></span>. Press a set to try it at the top of the page. The last column is a floor that comes from counting: with so many kinds of coin there are only so many different handfuls of one coin, of two coins, and so on, so only so many amounts can be paid with few coins. No set of that many coins can get under it, and the best sets often do not reach it.</figcaption>
+    <h3>Paying exactly</h3>
+    <table class="best" id="best-plain"></table>
+    <h3>Paying with change</h3>
+    <p class="say">From two coins up, <b>no best set has a coin of 1</b>. That comes of counting every amount once: count small amounts as likelier and the 1 comes back (the write-up has the figures).</p>
+    <table class="best" id="best-both"></table>
+  </figure>
+
+  <p class="note">The sums are exact: each average is a whole number of coins divided by the number of amounts. Jeffrey Shallit asked in 2003 which coins make the average least, in a paper called "What this country needs is an 18¢ piece". The best sets for paying exactly are in that paper, and in the On-Line Encyclopedia of Integer Sequences (A366013). Shallit says there that others had posted such tables in 2000; and by Thomas Young's own account in the Encyclopedia (A364607), he and three students explored the best four coins in 1995. The counting behind the floor is Shallit's for paying exactly, and is carried over by me to paying with change. The best sets for paying with change I did not find in print; the list of sources beside the write-up names the works on the subject that I have not read, and if one of them has these sets, the credit is theirs. "Never more than need be, however large the amount" is decided by a test of D. Pearson's, as Shallit gives it. The study behind this page, with what was expected beforehand and what two referees changed, is in <a href="README.md">the write-up</a> beside it.</p>
+</main>
+<script>
+/*CORE*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var P = window.pcore, BEST = /*BEST*/null;
+  var PRESETS = [
+    { name: 'United States: 1, 5, 10, 25', coins: [1, 5, 10, 25], L: 100 },
+    { name: "Shallit's: 1, 5, 18, 25", coins: [1, 5, 18, 25], L: 100 },
+    { name: 'the euro: 1, 2, 5, 10, 20, 50, 100, 200', coins: [1, 2, 5, 10, 20, 50, 100, 200], L: 100 },
+    { name: 'United States with 50 and 100', coins: [1, 5, 10, 25, 50, 100], L: 100 },
+    { name: 'Britain before 1971, in pence', coins: [1, 3, 6, 12, 24, 30], L: 240 },
+    { name: 'Canada, to 5 dollars', coins: [1, 5, 10, 25, 100, 200], L: 500 },
+    { name: 'powers of two', coins: [1, 2, 4, 8, 16, 32, 64], L: 100 },
+    { name: 'powers of three', coins: [1, 3, 9, 27, 81], L: 100 },
+    { name: 'best three with change: 16, 19, 21', coins: [16, 19, 21], L: 100 },
+    { name: 'a best four with change: 19, 20, 23, 32', coins: [19, 20, 23, 32], L: 100 },
+    { name: 'best five, paying exactly: 1, 5, 16, 23, 33', coins: [1, 5, 16, 23, 33], L: 100 }
+  ];
+  var MAXCOIN = 5000, MAXCOINS = 16, MAXL = 1000;
+  var S = { coins: PRESETS[0].coins.slice(), L: PRESETS[0].L, amount: 24, plain: null, greedy: null, both: null, addPlain: null, addBoth: null, hoverA: -1, hoverB: -1, pickB: -1, notice: '' };
+  window.__coin = S;
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function fin(v) { return v < P.INF; }
+  function plural(n, w) { return n + ' ' + w + (n === 1 ? '' : 's'); }
+
+  /* ---------- reading what is typed ---------- */
+  function readCoins(text) {
+    var parts = String(text).split(/[\s,;]+/).filter(function (x) { return x.length > 0; }), out = [], seen = Object.create(null), i, v;
+    if (parts.length === 0) return { error: 'Type at least one coin, as whole numbers with commas between.' };
+    for (i = 0; i < parts.length; i++) {
+      if (!/^\d+$/.test(parts[i])) return { error: 'I could not read "' + parts[i] + '" as a coin: coins are whole numbers, such as 1, 5, 10, 25.' };
+      v = Number(parts[i]);
+      if (v < 1 || v > MAXCOIN) return { error: 'A coin must be between 1 and ' + MAXCOIN + ': ' + parts[i] + ' is not.' };
+      if (!seen[v]) { seen[v] = 1; out.push(v); }
+    }
+    if (out.length > MAXCOINS) return { error: 'At most ' + MAXCOINS + ' different coins, please: there are ' + out.length + ' here.' };
+    out.sort(function (a, b) { return a - b; });
+    return { coins: out };
+  }
+  function readL(text) {
+    if (!/^\d+$/.test(String(text).trim())) return { error: 'The largest amount must be a whole number from 1 to ' + (MAXL - 1) + '.' };
+    var v = Number(text);
+    if (v < 1 || v > MAXL - 1) return { error: 'The largest amount must be from 1 to ' + (MAXL - 1) + ': ' + v + ' is not.' };
+    return { L: v + 1 };                                    /* L is the number of amounts, 0 to v */
+  }
+
+  /* ---------- the sums ---------- */
+  function compute() {
+    S.plain = P.plain(S.coins, S.L); S.greedy = P.greedy(S.coins, S.L); S.both = P.both(S.coins, S.L);
+    S.addPlain = P.bestAdd(S.coins, S.L, 'plain', S.L - 1);
+    S.addBoth = P.bestAdd(S.coins, S.L, 'both', 2 * S.L - 1);
+    if (S.amount > S.L - 1) S.amount = S.L - 1;
+    S.pickB = -1;
+  }
+  function cannot(t) { var n = 0, a; for (a = 0; a < t.length; a++) if (!fin(t[a])) n++; return n; }
+  function costText(tot, L) { return P.meanText(tot, L, 3); }
+  function wayText(w) { return w.map(function (e) { return (e[1] > 1 ? e[1] + ' × ' : '') + e[0]; }).join(' + '); }
+  function schemeText(w) {
+    var over = w.filter(function (e) { return e[1] > 0; }), back = w.filter(function (e) { return e[1] < 0; }).map(function (e) { return [e[0], -e[1]]; });
+    return (over.length ? wayText(over) : 'nothing') + ' handed over' + (back.length ? ', ' + wayText(back) + ' handed back' : '');
+  }
+
+  /* ---------- tiles ---------- */
+  function tile(id, value, words, detail) {
+    var t = $(id), v = t.querySelector('.v');
+    v.textContent = value; v.className = 'v' + (words ? ' words' : '');
+    t.querySelector('.d').textContent = detail;
+  }
+  function drawTiles() {
+    var L = S.L, tp = P.total(S.plain), tg = P.total(S.greedy), tb = P.total(S.both), has1 = S.coins[0] === 1, fails, pf, n;
+    $('capA').textContent = 'The coins for each amount from 0 to ' + (L - 1);
+    var us = L === 100 && S.coins.join() === '1,5,10,25', sh = L === 100 && S.coins.join() === '1,5,18,25', btn = function (set, label) { return '<button class="inline" data-set="' + set + '">' + label + '</button>'; };
+    $('story').innerHTML = us ? 'American coins take 4.7 on average. ' + btn('1,5,18,25', 'Swap the 10 for an 18') + ' and it is 3.89, if the coins are well chosen every time; a cashier, who takes the largest coin that fits, would need 4.58 with those coins.'
+      : sh ? 'These are the American coins with the 10 swapped for an 18. They take 3.89 on average if the coins are well chosen every time (American coins take 4.7); a cashier, who takes the largest coin that fits, needs 4.58 with these. ' + btn('1,5,10,25', 'Put the 10 back')
+      : 'For comparison: American coins (1, 5, 10, 25, for the amounts from 0 to 99) take 4.7 on average, and 3.89 with the 10 swapped for an 18. ' + btn('1,5,10,25', 'Try the American coins');
+    $('withThese').textContent = 'With the coins now in use (' + S.coins.join(', ') + '), for the amounts from 0 to ' + (L - 1) + ':';
+    if (isFinite(tp)) tile('tile-plain', costText(tp, L), false, 'coins on average; ' + P.worst(S.plain) + ' at worst.');
+    else { n = cannot(S.plain); tile('tile-plain', 'cannot make ' + plural(n, 'amount'), true, 'of the ' + (L - 1) + ' from 1 to ' + (L - 1) + (has1 ? '.' : ': there is no coin of 1.')); }
+    if (!has1) {
+      n = cannot(S.greedy);
+      tile('tile-greedy', 'gets stuck at ' + plural(n, 'amount'), true, 'Without a coin of 1 the cashier cannot finish every amount.');
+    } else {
+      fails = P.greedyFails(S.coins, L); pf = P.pearson(S.coins);
+      tile('tile-greedy', costText(tg, L), false, pf === 0 ? 'With these coins the cashier never takes more than need be, however large the amount.' :
+        (fails.length ? 'More than need be for ' + plural(fails.length, 'amount') + ' here, first at ' + fails[0] + ': ' + wayText(P.greedyWay(S.coins, fails[0])) + ' against ' + wayText(P.plainWay(S.coins, fails[0])) + '.' :
+          'No more than need be for any amount here, but for ' + pf + ': ' + wayText(P.greedyWay(S.coins, pf)) + ' against ' + wayText(P.plainWay(S.coins, pf)) + '.'));
+    }
+    if (isFinite(tb)) tile('tile-both', costText(tb, L), false, 'coins changing hands on average; ' + P.worst(S.both) + ' at worst.');
+    else { n = cannot(S.both); tile('tile-both', 'cannot make ' + plural(n, 'amount'), true, 'even with change: every coin is a multiple of ' + S.coins.reduce(P.gcd) + '.'); }
+  }
+
+  /* ---------- drawing helpers ---------- */
+  var NS = 'http://www.w3.org/2000/svg';
+  function el(name, attrs, text) {
+    var e = document.createElementNS(NS, name), k;
+    for (k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function niceStep(span, target) {
+    var raw = span / target, p = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), m = raw / p;
+    return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 5 ? 5 : 10) * p;
+  }
+  /* The pictures are drawn at the size they are shown, so that their lettering is the size it says: on a narrow screen
+     the frame is narrower and the names at the right-hand end of the lines are left to the legend beneath. */
+  var BOX = { l: 44, r: 112, t: 26, b: 34, W: 1000, H: 300 };
+  function fit() {
+    var w = Math.round($('chartA').getBoundingClientRect().width) || 1000, narrow = w < 620;
+    BOX = { W: Math.max(260, w), H: narrow ? 250 : 300, l: narrow ? 30 : 44, r: narrow ? 10 : 128, t: 26, b: 34, narrow: narrow };
+  }
+  function frame(svg, x0, x1, y0, y1, xlabel, ylabel, yInt) {
+    var g, v, st, px, py;
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.setAttribute('viewBox', '0 0 ' + BOX.W + ' ' + BOX.H);
+    function X(x) { return BOX.l + (x - x0) / (x1 - x0) * (BOX.W - BOX.l - BOX.r); }
+    function Y(y) { return BOX.H - BOX.b - (y - y0) / (y1 - y0) * (BOX.H - BOX.t - BOX.b); }
+    st = niceStep(y1 - y0, 5); if (yInt && st < 1) st = 1;
+    for (v = Math.ceil(y0 / st - 1e-9) * st; v <= y1 + 1e-9; v += st) {
+      py = Y(v);
+      svg.appendChild(el('line', { x1: BOX.l, x2: BOX.W - BOX.r, y1: py, y2: py, stroke: '#2c2c2a', 'stroke-width': 1 }));
+      svg.appendChild(el('text', { x: BOX.l - 6, y: py + 4, 'text-anchor': 'end' }, String(Math.round(v * 100) / 100)));
+    }
+    st = niceStep(x1 - x0, BOX.narrow ? 5 : 10); if (st < 1) st = 1;
+    for (v = Math.ceil(x0 / st) * st; v <= x1 + 1e-9; v += st) {
+      px = X(v);
+      svg.appendChild(el('line', { x1: px, x2: px, y1: BOX.H - BOX.b, y2: BOX.H - BOX.b + 4, stroke: '#383835', 'stroke-width': 1 }));
+      svg.appendChild(el('text', { x: px, y: BOX.H - BOX.b + 17, 'text-anchor': 'middle' }, String(v)));
+    }
+    svg.appendChild(el('line', { x1: BOX.l, x2: BOX.W - BOX.r, y1: BOX.H - BOX.b, y2: BOX.H - BOX.b, stroke: '#383835', 'stroke-width': 1 }));
+    svg.appendChild(el('text', { x: (BOX.l + BOX.W - BOX.r) / 2, y: BOX.H - 3, 'text-anchor': 'middle' }, xlabel));
+    svg.appendChild(el('text', { x: 2, y: 12, 'text-anchor': 'start' }, ylabel));
+    g = el('g', {}); svg.appendChild(g);
+    return { X: X, Y: Y, g: g };
+  }
+  /* a stepped line through whole-number places; gaps where the value is missing */
+  function stepPath(n, get, X, Y, x0) {
+    var d = '', a, v, open = false, half = (X(1) - X(0)) / 2;
+    for (a = 0; a < n; a++) {
+      v = get(a);
+      if (v === null) { open = false; continue; }
+      if (!open) { d += 'M' + (X(a + x0) - half).toFixed(2) + ',' + Y(v).toFixed(2); open = true; }
+      else d += 'V' + Y(v).toFixed(2);
+      d += 'H' + (X(a + x0) + half).toFixed(2);
+    }
+    return d;
+  }
+  function endLabels(svg, items) {           /* direct labels at the right, kept apart; on a narrow screen the legend does it */
+    if (BOX.narrow) return;
+    items = items.filter(function (i) { return i.y !== null; }).sort(function (p, q) { return p.y - q.y; });
+    for (var i = 1; i < items.length; i++) if (items[i].y - items[i - 1].y < 15) items[i].y = items[i - 1].y + 15;
+    items.forEach(function (it) {
+      svg.appendChild(el('line', { x1: BOX.W - BOX.r + 6, x2: BOX.W - BOX.r + 16, y1: it.y, y2: it.y, stroke: it.color, 'stroke-width': 2.5 }));
+      svg.appendChild(el('text', { x: BOX.W - BOX.r + 20, y: it.y + 4, 'text-anchor': 'start' }, it.text));
+    });
+  }
+  function lastFinite(t) { for (var a = t.length - 1; a >= 0; a--) if (fin(t[a])) return t[a]; return null; }
+
+  /* ---------- picture A: coins for each amount ---------- */
+  var geoA = null;
+  function drawA() {
+    var svg = $('chartA'), L = S.L, top = 1, a, f, d, fails, per;
+    for (a = 0; a < L; a++) { if (fin(S.plain[a]) && S.plain[a] > top) top = S.plain[a]; if (fin(S.both[a]) && S.both[a] > top) top = S.both[a]; if (fin(S.greedy[a]) && S.greedy[a] > top) top = S.greedy[a]; }
+    f = frame(svg, -0.5, L - 0.5, 0, top, 'amount', 'coins', true); geoA = { f: f, top: top }; per = f.X(1) - f.X(0);      /* pixels to an amount */
+    d = stepPath(L, function (i) { return fin(S.plain[i]) ? S.plain[i] : null; }, f.X, f.Y, 0);
+    f.g.appendChild(el('path', { d: d, fill: 'none', stroke: '#3987e5', 'stroke-width': per >= 7 ? 4.5 : per >= 4 ? 3.5 : 2.5, 'stroke-linejoin': 'round', id: 'lineA-plain' }));
+    d = stepPath(L, function (i) { return fin(S.both[i]) ? S.both[i] : null; }, f.X, f.Y, 0);
+    f.g.appendChild(el('path', { d: d, fill: 'none', stroke: '#d95926', 'stroke-width': per >= 4 ? 2 : 1.2, 'stroke-linejoin': 'round', id: 'lineA-both' }));
+    fails = 0;
+    for (a = 0; a < L; a++) if (fin(S.greedy[a]) && fin(S.plain[a]) && S.greedy[a] > S.plain[a]) {
+      fails++;
+      f.g.appendChild(el('circle', { cx: f.X(a).toFixed(2), cy: f.Y(S.greedy[a]).toFixed(2), r: per >= 7 ? 4 : per >= 2.5 ? 3 : 2.5, fill: '#1a1a19', stroke: '#f0efec', 'stroke-width': 1.5, 'class': 'failmark' }));
+    }
+    endLabels(svg, [
+      { y: lastFinite(S.plain) === null ? null : f.Y(lastFinite(S.plain)), color: '#3987e5', text: 'exactly' },
+      { y: lastFinite(S.both) === null ? null : f.Y(lastFinite(S.both)), color: '#d95926', text: 'with change' }]);
+    f.g.appendChild(el('line', { id: 'crossA', x1: 0, x2: 0, y1: BOX.t, y2: BOX.H - BOX.b, stroke: '#c3c2b7', 'stroke-width': 1, visibility: 'hidden' }));
+    f.g.appendChild(el('line', { id: 'pickA', x1: f.X(S.amount), x2: f.X(S.amount), y1: BOX.t, y2: BOX.H - BOX.b, stroke: '#898781', 'stroke-width': 1, 'stroke-dasharray': '2 3' }));
+    svg.setAttribute('aria-label', 'Number of coins for each amount from 0 to ' + (L - 1) + ', paid exactly and paid with change' + (fails ? '; the cashier\'s way takes more at ' + plural(fails, 'amount') : ''));
+    sayA(S.amount);
+    fillTableA();
+  }
+  function describe(a) {
+    var p = S.plain[a], g = S.greedy[a], b = S.both[a], out = [], s;
+    out.push(fin(p) ? 'paid exactly' + (fin(g) && g > p ? ', at best' : '') + ' <b>' + p + '</b>' + (a > 0 ? ' (' + esc(wayText(P.plainWay(S.coins, a))) + ')' : '') : 'paid exactly: cannot be made');
+    if (fin(g) && fin(p) && g > p) out.push('the cashier\'s way <b>' + g + '</b> (' + esc(wayText(P.greedyWay(S.coins, a))) + ')');
+    else if (!fin(g) && fin(p)) out.push('the cashier gets stuck');
+    if (fin(b)) {
+      s = a > 0 ? P.schemes(S.coins, a, 1, 200000) : null;
+      out.push('with change <b>' + b + '</b>' + (fin(p) && b === p && a > 0 ? ' (no fewer)' : s && s.ways.length ? ' (' + esc(schemeText(s.ways[0])) + ')' : ''));      /* (a visitor: "with change 5 (3 × 25 + 1 handed over, 5 handed back) when five coins paid exactly would do. So what?") */
+    } else out.push('with change: cannot be made');
+    return out;
+  }
+  function sayA(a) { $('sayA').innerHTML = 'Amount <b>' + a + '</b>: ' + describe(a).join('; ') + '.'; }
+  function hoverA(a, evt) {
+    var cross = $('crossA'), tip = $('tipA'), fig = $('fig1').getBoundingClientRect(), box = $('chartA').getBoundingClientRect(), x;
+    S.hoverA = a;
+    if (a < 0) { cross.setAttribute('visibility', 'hidden'); tip.style.display = 'none'; sayA(S.amount); return; }
+    cross.setAttribute('x1', geoA.f.X(a)); cross.setAttribute('x2', geoA.f.X(a)); cross.setAttribute('visibility', 'visible');
+    tip.innerHTML = '<b>Amount ' + a + '</b><br>' + describe(a).join('<br>');
+    tip.style.display = 'block';
+    x = box.left - fig.left + geoA.f.X(a) / BOX.W * box.width;
+    tip.style.left = Math.max(4, Math.min(fig.width - tip.offsetWidth - 4, x + 12)) + 'px';
+    tip.style.top = (box.top - fig.top + 8) + 'px';
+    sayA(a);
+  }
+  function amountAt(svg, evt, x0, n) {
+    var box = svg.getBoundingClientRect(), px = (evt.clientX - box.left) / box.width * BOX.W;
+    var a = Math.round((px - BOX.l) / (BOX.W - BOX.l - BOX.r) * n - 0.5) + x0;
+    return a < x0 ? x0 : a > x0 + n - 1 ? x0 + n - 1 : a;
+  }
+  function fillTableA() {
+    var h = '<table><tr><th>amount</th><th>paid exactly, at best</th><th>the cashier\'s way</th><th>with change</th></tr>', a;
+    function c(v) { return fin(v) ? v : 'cannot'; }
+    for (a = 0; a < S.L; a++) h += '<tr><td>' + a + '</td><td>' + c(S.plain[a]) + '</td><td>' + c(S.greedy[a]) + '</td><td>' + c(S.both[a]) + '</td></tr>';
+    $('tabA').innerHTML = h + '</table>';
+  }
+
+  /* ---------- picture B: the coin to add ---------- */
+  var geoB = null;
+  function bestOf(list) { return list.length && isFinite(list[0].total) ? list.filter(function (e) { return e.total === list[0].total; }) : []; }
+  /* the best coins, but only if they lower the cost (or make every amount makeable for the first time) */
+  function helping(list, now) { var b = bestOf(list); return b.length && (!isFinite(now) || b[0].total < now) ? b : []; }
+  function drawB() {
+    var svg = $('chartB'), L = S.L, n = 2 * L - 1, one = new Array(n + 1), two = new Array(n + 1), i, lo = Infinity, hi = -Infinity, f, d, tp = P.total(S.plain), tb = P.total(S.both), bp, bb, labels = [], full = S.coins.length >= MAXCOINS;
+    for (i = 0; i <= n; i++) { one[i] = null; two[i] = null; }
+    S.addPlain.forEach(function (e) { if (isFinite(e.total)) one[e.coin] = e.total / L; });
+    S.addBoth.forEach(function (e) { if (isFinite(e.total)) two[e.coin] = e.total / L; });
+    for (i = 1; i <= n; i++) { [one[i], two[i]].forEach(function (v) { if (v !== null) { if (v < lo) lo = v; if (v > hi) hi = v; } }); }
+    if (isFinite(tp)) { hi = Math.max(hi, tp / L); lo = Math.min(lo, tp / L); } if (isFinite(tb)) { hi = Math.max(hi, tb / L); lo = Math.min(lo, tb / L); }
+    if (!isFinite(lo)) { lo = 0; hi = 1; }
+    if (hi - lo < 0.5) hi = lo + 0.5;
+    lo = Math.max(0, lo - (hi - lo) * 0.12); hi = hi + (hi - lo) * 0.04;
+    f = frame(svg, 0.5, n + 0.5, lo, hi, 'value of the new coin', 'average', false); geoB = { f: f, n: n, one: one, two: two };
+    if (isFinite(tp)) f.g.appendChild(el('line', { x1: BOX.l, x2: BOX.W - BOX.r, y1: f.Y(tp / L), y2: f.Y(tp / L), stroke: '#898781', 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }));
+    if (isFinite(tb)) f.g.appendChild(el('line', { x1: BOX.l, x2: BOX.W - BOX.r, y1: f.Y(tb / L), y2: f.Y(tb / L), stroke: '#898781', 'stroke-width': 1.5, 'stroke-dasharray': '4 3' }));
+    d = stepPath(n, function (k) { return one[k + 1]; }, f.X, f.Y, 1);
+    f.g.appendChild(el('path', { d: d, fill: 'none', stroke: '#3987e5', 'stroke-width': 2, 'stroke-linejoin': 'round', id: 'lineB-plain' }));
+    d = stepPath(n, function (k) { return two[k + 1]; }, f.X, f.Y, 1);
+    f.g.appendChild(el('path', { d: d, fill: 'none', stroke: '#d95926', 'stroke-width': 2, 'stroke-linejoin': 'round', id: 'lineB-both' }));
+    bp = helping(S.addPlain, tp); bb = helping(S.addBoth, tb);
+    bp.forEach(function (e) { f.g.appendChild(el('circle', { cx: f.X(e.coin), cy: f.Y(e.total / L), r: 4.5, fill: '#1a1a19', stroke: '#f0efec', 'stroke-width': 1.5, 'class': 'bestmark' })); });
+    bb.forEach(function (e) { f.g.appendChild(el('circle', { cx: f.X(e.coin), cy: f.Y(e.total / L), r: 4.5, fill: '#1a1a19', stroke: '#f0efec', 'stroke-width': 1.5, 'class': 'bestmark' })); });
+    if (isFinite(tp)) labels.push({ y: f.Y(tp / L), color: '#3987e5', text: 'exactly, now' });
+    if (isFinite(tb)) labels.push({ y: f.Y(tb / L), color: '#d95926', text: 'with change, now' });
+    endLabels(svg, labels);
+    f.g.appendChild(el('line', { id: 'crossB', x1: 0, x2: 0, y1: BOX.t, y2: BOX.H - BOX.b, stroke: '#c3c2b7', 'stroke-width': 1, visibility: 'hidden' }));
+    f.g.appendChild(el('line', { id: 'pickB', x1: 0, x2: 0, y1: BOX.t, y2: BOX.H - BOX.b, stroke: '#898781', 'stroke-width': 1, 'stroke-dasharray': '2 3', visibility: 'hidden' }));
+    $('nowLegend').textContent = isFinite(tp) && isFinite(tb) ? (tp === tb ? 'the average now (the same for paying exactly and with change)' : 'the average now (the upper one is for paying exactly)') : isFinite(tb) ? 'the average now, paying with change (these coins cannot pay every amount exactly)' : 'no average now: these coins cannot pay every amount';
+    $('bestLegend').textContent = 'the best coin' + (!isFinite(tp) && bp.length ? ' (the ring that stands alone is the 1, without which not every amount can be paid exactly)' : '');
+    $('addPlain').disabled = bp.length === 0 || full; $('addBoth').disabled = bb.length === 0 || full;
+    $('addPlain').textContent = full ? 'No coin can be added: ' + MAXCOINS + ' is as many as this page takes' : bp.length ? 'Add a ' + bp[0].coin + (bp.length > 1 ? ': equal best' + others(bp) : ': the best coin') + ' for paying exactly' : 'No coin to add for paying exactly';
+    $('addBoth').textContent = bb.length ? 'Add a ' + bb[0].coin + (bb.length > 1 ? ': equal best' + others(bb) + ', of the coins tried,' : ': the best coin tried') + ' for paying with change' : 'No coin tried helps in paying with change'; $('addBoth').style.display = full ? 'none' : '';
+    sayB(-1);
+    fillTableB();
+  }
+  /* "4 or 9 or 24"; of a long list the first four and how many more */
+  function others(list) { var c = list.slice(1).map(function (e) { return e.coin; }); return c.length === 0 ? '' : c.length <= 2 ? ' with ' + c.join(' and ') : ' with ' + c.length + ' others'; }
+  function names(list) { var c = list.map(function (e) { return e.coin; }); return c.length <= 5 ? c.join(' or ') : c.slice(0, 4).join(', ') + ' or any of ' + (c.length - 4) + ' others'; }
+  function summaryB() {
+    var L = S.L, tp = P.total(S.plain), tb = P.total(S.both), bp = helping(S.addPlain, tp), bb = helping(S.addBoth, tb), out = [];
+    if (S.coins.length >= MAXCOINS) return 'There are ' + MAXCOINS + ' coins, which is as many as this page takes, so no more can be added.';
+    if (bp.length) out.push('Paying exactly, the best coin to add is <b>' + names(bp) + '</b>, bringing the average ' + (isFinite(tp) ? 'from ' + costText(tp, L) + ' ' : '') + 'to <b>' + costText(bp[0].total, L) + '</b>.');
+    else if (!S.addPlain.length) out.push('Paying exactly there is no coin left to try: every value up to ' + (L - 1) + ' is a coin already.');
+    else if (isFinite(tp)) out.push('Paying exactly no single coin lowers the average of ' + costText(tp, L) + '.');
+    else out.push('Paid exactly, no single coin lets every amount be made.');
+    if (bb.length) out.push('With change, of the coins up to ' + (2 * L - 1) + ', it is <b>' + names(bb) + '</b>, ' + (isFinite(tb) ? 'from ' + costText(tb, L) + ' ' : '') + 'to <b>' + costText(bb[0].total, L) + '</b>.');
+    else if (!S.addBoth.length) out.push('With change there is no coin left to try.');
+    else if (isFinite(tb)) out.push('With change no single coin up to ' + (2 * L - 1) + ' lowers the average of ' + costText(tb, L) + '.');
+    else out.push('With change no single coin up to ' + (2 * L - 1) + ' lets every amount be made.');
+    return out.join(' ');
+  }
+  function coinLine(c) {
+    var L = S.L, o = geoB.one[c], t = geoB.two[c];
+    if (S.coins.indexOf(c) >= 0) return 'A coin of <b>' + c + '</b> is already there.';
+    return 'With a coin of <b>' + c + '</b> added: ' + (c <= L - 1 ? 'paying exactly ' + (o === null ? 'cannot make every amount' : '<b>' + costText(Math.round(o * L), L) + '</b>') + '; ' : '') +
+      'with change ' + (t === null ? 'cannot make every amount' : '<b>' + costText(Math.round(t * L), L) + '</b>') + '.';
+  }
+  function sayB(c) { $('sayB').innerHTML = c < 1 ? summaryB() : coinLine(c) + ' ' + summaryB(); }
+  function pickB(c) {                                  /* a tap on the picture keeps its coin's line under the picture */
+    var pick = $('pickB'); S.pickB = c;
+    if (pick) { if (c < 1) pick.setAttribute('visibility', 'hidden'); else { pick.setAttribute('x1', geoB.f.X(c)); pick.setAttribute('x2', geoB.f.X(c)); pick.setAttribute('visibility', 'visible'); } }
+    sayB(c);
+  }
+  function hoverB(c) {
+    var cross = $('crossB'), tip = $('tipB'), fig = $('fig2').getBoundingClientRect(), box = $('chartB').getBoundingClientRect(), x;
+    S.hoverB = c;
+    if (c < 1) { cross.setAttribute('visibility', 'hidden'); tip.style.display = 'none'; sayB(S.pickB); return; }
+    cross.setAttribute('x1', geoB.f.X(c)); cross.setAttribute('x2', geoB.f.X(c)); cross.setAttribute('visibility', 'visible');
+    tip.innerHTML = coinLine(c); tip.style.display = 'block';
+    x = box.left - fig.left + geoB.f.X(c) / BOX.W * box.width;
+    tip.style.left = Math.max(4, Math.min(fig.width - tip.offsetWidth - 4, x + 12)) + 'px';
+    tip.style.top = (box.top - fig.top + 8) + 'px';
+    sayB(c);
+  }
+  function fillTableB() {
+    var L = S.L, h = '<table><tr><th>new coin</th><th>paying exactly</th><th>with change</th></tr>', c, o, t;
+    for (c = 1; c <= geoB.n; c++) {
+      if (S.coins.indexOf(c) >= 0) continue;
+      o = geoB.one[c]; t = geoB.two[c];
+      h += '<tr><td>' + c + '</td><td>' + (c > L - 1 ? '' : o === null ? 'cannot' : costText(Math.round(o * L), L)) + '</td><td>' + (t === null ? 'cannot' : costText(Math.round(t * L), L)) + '</td></tr>';
+    }
+    $('tabB').innerHTML = h + '</table>';
+  }
+
+  /* ---------- settle an amount ---------- */
+  function coinsHtml(list, cls) {
+    var h = '', i, j, shown = 0;
+    for (i = 0; i < list.length; i++) for (j = 0; j < list[i][1]; j++) {
+      if (shown >= 40) return h + '<span class="lab">and ' + (list.reduce(function (s, e) { return s + e[1]; }, 0) - shown) + ' more</span>';
+      h += '<span class="coin ' + cls + '">' + list[i][0] + '</span>'; shown++;
+    }
+    return h;
+  }
+  function drawWays() {
+    var a = S.amount, h = '', p = S.plain[a], g = S.greedy[a], b = S.both[a], s, i, w, over, back, shown;
+    $('amount').value = a; $('amount').max = S.L - 1; $('amountR').max = S.L - 1; $('amountR').value = a;
+    if (a === 0) { $('ways').innerHTML = '<div class="way"><p class="k">Nothing to pay: <b>no coins</b>.</p></div>'; return; }
+    h += '<div class="way" id="way-plain"><p class="k">Paid exactly: ' + (fin(p) ? '<b>' + plural(p, 'coin') + '</b>' : '<b>it cannot be</b> with these coins') + '</p>' +
+      (fin(p) ? '<div class="row">' + coinsHtml(P.plainWay(S.coins, a), 'over') + '</div>' : '') + '</div>';
+    if (fin(p) && (!fin(g) || g > p)) h += '<div class="way" id="way-greedy"><p class="k">The cashier\'s way, the largest coin that fits each time: ' + (fin(g) ? '<b>' + plural(g, 'coin') + '</b>, ' + (g - p) + ' more than need be' : '<b>gets stuck</b>') + '</p>' +
+      (fin(g) ? '<div class="row">' + coinsHtml(P.greedyWay(S.coins, a), 'over') + '</div>' : '') + '</div>';
+    else if (fin(p)) h += '<div class="way" id="way-greedy"><p class="k">The cashier\'s way, the largest coin that fits each time: <b>the same count</b></p></div>';
+    if (!fin(b)) h += '<div class="way" id="way-both"><p class="k">With change: <b>cannot be paid</b> even so</p></div>';
+    else {
+      s = P.schemes(S.coins, a, 12, 3000000); shown = s.ways.length;
+      h += '<div class="way" id="way-both"><p class="k">With change: <b>' + plural(b, 'coin') + '</b> ' + (b === 1 ? 'changes' : 'change') + ' hands' + (fin(p) && b === p ? ', no fewer than paying exactly' : '') +
+        (s.gaveUp ? ' (there are more ways of doing it than I counted' : s.total === 1 ? '' : ' (it can be done in <b>' + s.total + '</b> ways') + (s.total > shown || s.gaveUp ? '; the first ' + shown + ' are shown)' : s.total === 1 ? '' : ')') + '</p>';
+      for (i = 0; i < shown; i++) {
+        w = s.ways[i]; over = w.filter(function (e) { return e[1] > 0; }); back = w.filter(function (e) { return e[1] < 0; }).map(function (e) { return [e[0], -e[1]]; });
+        if (w.reduce(function (t, e) { return t + Math.abs(e[1]); }, 0) > 40) { h += (i ? '<p class="or">or</p>' : '') + '<div class="row scheme words"><span class="lab">' + esc(schemeText(w)) + '</span></div>'; continue; }      /* too many rings to tell one way from the next: in words */
+        h += (i ? '<p class="or">or</p>' : '') + '<div class="row scheme">' + (over.length ? '<span class="grp"><span class="lab">handed over</span>' + coinsHtml(over, 'over') + '</span>' : '') +
+          (back.length ? '<span class="grp"><span class="lab">handed back</span>' + coinsHtml(back, 'back') + '</span>' : '') + '</div>';
+      }
+      h += '</div>';
+    }
+    $('ways').innerHTML = h;
+    var pick = $('pickA'); if (pick && geoA) { pick.setAttribute('x1', geoA.f.X(a)); pick.setAttribute('x2', geoA.f.X(a)); }
+  }
+
+  /* ---------- the table of best sets ---------- */
+  function drawBest() {
+    var head = '<tr><th>coins in the set</th><th class="l">the best sets</th><th>average</th><th>cannot be below</th></tr>', hp = head, hb = head, D, p, b;
+    function btns(r) { return r.sets.map(function (s) { return '<button class="setbtn" data-set="' + s.join(',') + '">' + s.join(', ') + '</button>'; }).join(''); }
+    for (D = 1; D <= BEST.plain.length; D++) {
+      p = BEST.plain[D - 1]; b = BEST.both[D - 1];
+      hp += '<tr><td>' + D + '</td><td class="l">' + btns(p) + '</td><td>' + costText(p.total, BEST.L) + '</td><td>' + costText(p.bound, BEST.L) + '</td></tr>';
+      hb += '<tr><td>' + D + '</td>' + (b ? '<td class="l">' + btns(b) + '</td><td>' + costText(b.total, BEST.L) + '</td><td>' + costText(b.bound, BEST.L) + '</td>' : '<td class="l">not searched</td><td></td><td>' + costText(P.bound(D, BEST.L, 'both'), BEST.L) + '</td>') + '</tr>';
+    }
+    $('best-plain').innerHTML = hp; $('best-both').innerHTML = hb;
+  }
+
+  /* ---------- putting it together ---------- */
+  function notice(msg) { S.notice = msg; var n = $('notice'); n.textContent = msg; n.className = 'notice' + (msg ? ' on' : ''); }
+  function redraw() { compute(); fit(); drawTiles(); drawA(); drawWays(); drawB(); S.hoverA = -1; $('tipA').style.display = 'none'; S.hoverB = -1; $('tipB').style.display = 'none'; }
+  function setCoinage(coins, L, keepPreset) {
+    S.coins = coins.slice(); S.L = L;
+    $('coins').value = coins.join(', '); $('L').value = L - 1;
+    if (!keepPreset) $('preset').value = 'own';
+    notice(''); $('addedSay').textContent = ''; $('amountSay').textContent = ''; redraw();
+  }
+  function matchPreset() {
+    var same = -1;
+    PRESETS.forEach(function (p, i) { if (p.L === S.L && p.coins.join() === S.coins.join()) same = i; });
+    $('preset').value = same >= 0 ? String(same) : 'own';
+  }
+  function still() { return ' The page still shows the coins ' + S.coins.join(', ') + (S.L === 100 ? '' : ' for the amounts from 0 to ' + (S.L - 1)) + '.'; }      /* what is typed has not been taken */
+  function apply() {
+    var c = readCoins($('coins').value), l = readL($('L').value);
+    if (c.error) { notice(c.error + still()); return; }
+    if (l.error) { notice(l.error + still()); return; }
+    notice(''); later(function () { setCoinage(c.coins, l.L, true); matchPreset(); }, $('apply'));
+  }
+  /* A count can take a second or three (large coins, many amounts).  The button that was pressed says "Counting..." first (on the
+     button, so that nothing on the page changes its place), the page waits until the browser has drawn that (the second of two
+     animation frames, or a third of a second, whichever comes first), and only then counts; until it has finished, the boxes and
+     buttons that would start another count are shut, so that no second count is pending and nothing typed meanwhile is written
+     over (the referee: the sign was missing for the slowest cases, and a count could be started twice). */
+  var BUSY = ['coins', 'L', 'apply', 'preset', 'addPlain', 'addBoth'];
+  /* the two boxes are made read-only, not disabled, so that the one being typed in keeps its caret (and a phone its keyboard) */
+  function shut() { return BUSY.map(function (id) { var e = $(id), box = id === 'coins' || id === 'L', d = box ? e.readOnly : e.disabled; if (box) e.readOnly = true; else e.disabled = true; return d; }); }
+  function open(was) { BUSY.forEach(function (id, k) { var e = $(id); if (id === 'coins' || id === 'L') e.readOnly = was[k]; else e.disabled = was[k]; }); }
+  function later(work, btn) {
+    if (S.pending) return;
+    S.pending = true; var was = shut(), label = btn.textContent, done = false;
+    btn.style.minWidth = Math.ceil(btn.getBoundingClientRect().width) + 'px'; btn.textContent = 'Counting\u2026';
+    function go() {
+      if (done) return; done = true; open(was); btn.textContent = label; btn.style.minWidth = ''; S.counts = (S.counts || 0) + 1; work();
+      var left = shut();              /* as the count has left them; a tap made while the page was counting is delivered now, and must find them shut (the referee: a second tap counted twice, and added a coin whose name the visitor had not seen) */
+      setTimeout(function () { open(left); S.pending = false; }, 350);
+    }
+    if (window.requestAnimationFrame) requestAnimationFrame(function () { requestAnimationFrame(go); });
+    setTimeout(go, 300);
+  }
+  function setAmount(a) {
+    if (!(a >= 0)) a = 0; if (a > S.L - 1) a = S.L - 1;
+    S.amount = Math.floor(a); $('amountSay').textContent = ''; drawWays(); if (S.hoverA < 0) sayA(S.amount);
+  }
+  /* What a visitor has a finger on stays under the finger while the page above it changes its length. */
+  function steady(elem, change) { var y = elem.getBoundingClientRect().top; change(); window.scrollBy(0, elem.getBoundingClientRect().top - y); }
+  function addBest(list, now, which, btn) {
+    var b = helping(list, now), before = now, L = S.L, coin, after;
+    if (!b.length) return;
+    coin = b[0].coin; after = b[0].total;
+    later(function () {
+    steady(btn, function () { setCoinage(S.coins.concat([coin]).sort(function (x, y) { return x - y; }), L); matchPreset(); });
+    $('addedSay').innerHTML = 'Added a <b>' + coin + '</b>. The coins are now ' + S.coins.join(', ') + ', and the average ' + which + ' ' + (isFinite(before) ? 'has gone from ' + costText(before, L) + ' to ' : 'is ') + '<b>' + costText(after, L) + '</b>.';
+    }, btn);
+  }
+  function init() {
+    var sel = $('preset');
+    PRESETS.forEach(function (p, i) { var o = document.createElement('option'); o.value = String(i); o.textContent = p.name; sel.appendChild(o); });
+    var own = document.createElement('option'); own.value = 'own'; own.textContent = 'your own'; sel.appendChild(own);
+    sel.addEventListener('change', function () { if (sel.value !== 'own') { var p = PRESETS[Number(sel.value)]; setCoinage(p.coins, p.L, true); } });
+    $('apply').addEventListener('click', apply);
+    $('coins').addEventListener('keydown', function (e) { if (e.key === 'Enter') apply(); });
+    $('L').addEventListener('keydown', function (e) { if (e.key === 'Enter') apply(); });
+    $('L').addEventListener('change', apply);
+    $('amount').addEventListener('input', function () { var v = $('amount').value; if (/^\d+$/.test(v)) { setAmount(Number(v)); if (Number(v) > S.L - 1) $('amountSay').textContent = v + ' is more than ' + (S.L - 1) + ', the largest amount here: the amount is ' + S.amount + '.'; } });
+    $('amount').addEventListener('change', function () {                                    /* an entry that is no amount is put back, and the page says so */
+      var typed = $('amount').value;
+      if (String(typed) !== String(S.amount) && !/^\d+$/.test(typed)) $('amountSay').textContent = (typed === '' ? 'That' : '"' + typed + '"') + ' is not a whole number from 0 to ' + (S.L - 1) + ': the amount is still ' + S.amount + '.';
+      $('amount').value = S.amount;
+    });
+    $('amountR').addEventListener('input', function () { setAmount(Number($('amountR').value)); });
+    var A = $('chartA'), B = $('chartB');
+    A.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') hoverA(amountAt(A, e, 0, S.L), e); });
+    A.addEventListener('pointerleave', function () { hoverA(-1); });
+    A.addEventListener('click', function (e) { var a = amountAt(A, e, 0, S.L); hoverA(-1); steady(A, function () { setAmount(a); }); });
+    A.addEventListener('keydown', function (e) {
+      var a = S.hoverA < 0 ? S.amount : S.hoverA;
+      if (e.key === 'ArrowRight') { hoverA(Math.min(S.L - 1, a + 1)); e.preventDefault(); }
+      else if (e.key === 'ArrowLeft') { hoverA(Math.max(0, a - 1)); e.preventDefault(); }
+      else if (e.key === 'Enter' || e.key === ' ') { setAmount(a); e.preventDefault(); }
+      else if (e.key === 'Escape') hoverA(-1);
+    });
+    A.addEventListener('blur', function () { hoverA(-1); });
+    B.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') hoverB(amountAt(B, e, 1, geoB.n)); });
+    B.addEventListener('pointerleave', function () { hoverB(-1); });
+    B.addEventListener('click', function (e) { hoverB(-1); pickB(amountAt(B, e, 1, geoB.n)); });
+    B.addEventListener('keydown', function (e) {
+      var c = S.hoverB < 1 ? (S.pickB < 1 ? 1 : S.pickB) : S.hoverB;
+      if (e.key === 'ArrowRight') { hoverB(S.hoverB < 1 && S.pickB < 1 ? 1 : Math.min(geoB.n, c + 1)); e.preventDefault(); }
+      else if (e.key === 'ArrowLeft') { hoverB(Math.max(1, c - 1)); e.preventDefault(); }
+      else if (e.key === 'Enter' || e.key === ' ') { pickB(c); e.preventDefault(); }
+      else if (e.key === 'Escape') hoverB(-1);
+    });
+    B.addEventListener('blur', function () { hoverB(-1); });
+    function toggle(btn, tab) { $(btn).addEventListener('click', function () { var on = $(btn).getAttribute('aria-pressed') !== 'true'; $(btn).setAttribute('aria-pressed', on ? 'true' : 'false'); $(btn).textContent = on ? 'Hide the table' : 'Show the table'; $(tab).className = 'tables' + (on ? ' on' : ''); }); }
+    toggle('tA', 'tabA'); toggle('tB', 'tabB');
+    $('addPlain').addEventListener('click', function () { addBest(S.addPlain, P.total(S.plain), 'paying exactly', $('addPlain')); });
+    $('addBoth').addEventListener('click', function () { addBest(S.addBoth, P.total(S.both), 'paying with change', $('addBoth')); });
+    $('fig4').addEventListener('click', function (e) {
+      var t = e.target; if (S.pending) return;                                             /* not while a count is pending (the referee: a best set pressed then was lost, or left a sentence about other coins) */
+      if (t && t.getAttribute && t.getAttribute('data-set')) { setCoinage(t.getAttribute('data-set').split(',').map(Number), BEST.L); matchPreset(); $('fig0').scrollIntoView({ block: 'start' }); }
+    });
+    $('story').addEventListener('click', function (e) {                                       /* the button in the story: it is made afresh each time, so the paragraph listens for it and is what is held steady */
+      var t = e.target; if (S.pending) return;
+      if (t && t.getAttribute && t.getAttribute('data-set')) steady($('story'), function () { setCoinage(t.getAttribute('data-set').split(',').map(Number), 100); matchPreset(); });
+    });
+    var waiting = null, wide = 0;                                                             /* the pictures are drawn again when their width changes */
+    window.addEventListener('resize', function () { clearTimeout(waiting); waiting = setTimeout(function () { var w = Math.round($('chartA').getBoundingClientRect().width); if (w !== wide) { wide = w; fit(); drawA(); drawB(); } }, 120); });
+    drawBest(); $('plainMax').textContent = BEST.plainMax; $('bothMax').textContent = BEST.bothMax;
+    $('preset').value = '0';
+    setCoinage(PRESETS[0].coins, PRESETS[0].L, true);
+    wide = Math.round($('chartA').getBoundingClientRect().width);
+  }
+  init();
+})();
+</script>
+</body>
+</html>

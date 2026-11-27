@@ -198,6 +198,23 @@ ok('a coin given twice is one coin: clean gives each once, sorted; the ways of s
 /* ---- meanText ---- */
 ok('meanText: 470/100 is 4.7; 389/99 is about 3.929; Infinity is said', P.meanText(470, 100) === '4.7' && P.meanText(389, 99) === 'about 3.929' &&
   P.meanText(Infinity, 100) === 'cannot make every amount' && P.meanText(2289, 500) === '4.578', [P.meanText(470, 100), P.meanText(389, 99), P.meanText(2289, 500)].join(' | '));
+/* added 27 November 2026: half up, exactly. Every total from 0 to 12 L for L from 2 to 320, at three places and at two,
+   against whole-number arithmetic done here in BigInt (not the function's own formula in floating point) */
+var halfUp = (function () {
+  var bad = [], half = 0, n = 0, L, tot, places;
+  for (places = 2; places <= 3; places++) for (L = 2; L <= 320; L++) for (tot = 0; tot <= 12 * L; tot++) {
+    var T = BigInt(tot), LL = BigInt(L), sc = places === 3 ? 1000n : 100n, q = (2n * sc * T + LL) / (2n * LL), exact = q * LL === sc * T;
+    if ((2n * sc * T) % LL === 0n && (sc * T) % LL !== 0n) half++;
+    var str = (q / sc) + '.' + String(q % sc).padStart(places, '0'); str = str.replace(/0+$/, '').replace(/\.$/, '');
+    var want = (exact ? '' : 'about ') + str, got = P.meanText(tot, L, places); n++;
+    if (got !== want && bad.length < 5) bad.push(tot + '/' + L + ' to ' + places + ' places: ' + got + ' where ' + want + ' is right');
+  }
+  return { bad: bad, half: half, n: n };
+})();
+ok('meanText: rounded half up, and "about" exactly when the decimal does not end: ' + halfUp.n + ' totals and ranges, ' + halfUp.half + ' of them half-way',
+  halfUp.bad.length === 0 && halfUp.half > 1000 && P.meanText(3, 80) === 'about 0.038' && P.meanText(1323, 240) === 'about 5.513' && P.meanText(1, 16) === 'about 0.063' &&
+  P.meanText(1, 8) === '0.125' && P.meanText(1, 8, 2) === 'about 0.13' && P.meanText(0, 7) === '0',
+  halfUp.bad.join('; ') || [P.meanText(3, 80), P.meanText(1323, 240), P.meanText(1, 16), P.meanText(1, 8), P.meanText(1, 8, 2), P.meanText(0, 7)].join(' | '));
 
 /* ---- the C search against the core, every set tried here too ---- */
 function search(mode, D, L, M) {

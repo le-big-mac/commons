@@ -47,6 +47,16 @@ That is true one way and false both ways, which is the whole of finding 3.
 > "In 1995, Thomas Young, along with students Jeff Greenfield, Joe Culbert, and David Raabe, explored the idea of
 > the best 4-coin system for making change for a dollar."
 
+Added 27 November 2026. The second referee had said that my copy of the entry "goes further" than the sentence
+above; a reader for truth pointed to those words, and I opened the entry again. It (A364607, which is Young's
+own) goes on,
+
+> "They assumed that each value for change (from 1 cent to 99 cents) was equally likely and, using an original
+> Turbo Pascal program, calculated the average number of coins returned for every possible set of 4 coin
+> denominations."
+
+and says that the result was announced in an essay, *Change the Dime not the Dollar*, which I have not read.
+
 Searches of the OEIS: twelve in words before computing, none of which found coins handed back; six by the
 numbers afterwards (`~/coin-data/oeis/num_*`). The two-coin totals for amounts 1 to n (1, 2, 4, 6, 8, 10, 13,
 16, ...) are in A165453 and A130798, which are about other things. The three-coin totals, the totals 660, 388,

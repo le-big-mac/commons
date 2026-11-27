@@ -43,6 +43,11 @@ M = [
  ('multisets-one-short', 'pcore.js', "function multisets(D, k) { return binom(D + k - 1, k); }", "function multisets(D, k) { return binom(D + k - 2, k); }"),
  ('meantext-about-everything', 'pcore.js', "return (exact ? '' : 'about ') + s;", "return 'about ' + s;"),
  ('meantext-never-about', 'pcore.js', "return (exact ? '' : 'about ') + s;", "return s;"),
+ # added 27 November 2026, with the function's rounding
+ ('meantext-machine-rounding', 'pcore.js', "var s = (n / scale).toFixed(places);", "var s = (tot / L).toFixed(places);"),
+ ('meantext-rounds-down', 'pcore.js', "n = Math.floor((2 * tot * scale + L) / (2 * L)), exact", "n = Math.floor(tot * scale / L), exact"),
+ ('meantext-half-goes-down', 'pcore.js', "n = Math.floor((2 * tot * scale + L) / (2 * L)), exact", "n = Math.ceil((2 * tot * scale - L) / (2 * L)), exact"),
+ ('meantext-always-three-places', 'pcore.js', "var scale = Math.pow(10, places), n", "var scale = 1000, n"),
  ('clean-keeps-repeats', 'pcore.js', "if (!seen[c]) { seen[c] = 1; out.push(c); }", "out.push(c);"),
  ('clean-takes-fractions', 'pcore.js', "|| c !== Math.floor(c) ||", "||"),
  ('pearson-without-one', 'pcore.js', "    if (asc[0] !== 1) throw new Error('the test needs a coin of 1');\n    for (i = 0; i < n; i++) c.push(asc[n - 1 - i]);", "    for (i = 0; i < n; i++) c.push(asc[n - 1 - i]);"),
@@ -83,13 +88,16 @@ def run(d):
     except subprocess.TimeoutExpired:
         return 1, ['TIMEOUT']
     return r.returncode, [l for l in r.stdout.split('\n') if l.startswith('FAIL')] + ([r.stderr.strip().split('\n')[-1][:150]] if r.returncode and r.stderr.strip() else [])
-if os.path.isdir(WORK): shutil.rmtree(WORK)
-code, fails = run(build('CONTROL', None, None, None))
-print('control (nothing broken): %s' % ('passes' if code == 0 else 'FAILS: ' + '; '.join(fails)))
-if code != 0: sys.exit('the control does not pass; nothing below would mean anything')
-caught = 0; passed = []
-for name, f, old, new in M:
-    code, fails = run(build(name, f, old, new))
-    if code != 0: caught += 1; print('caught   %-36s by %d: %s' % (name, len(fails), (fails[0] if fails else '')[:110]))
-    else: passed.append(name); print('PASSED   %s' % name)
-print('\n%d of %d broken copies caught; passed: %s' % (caught, len(M), ', '.join(passed) or 'none'))
+if __name__ == '__main__':
+    if os.path.isdir(WORK): shutil.rmtree(WORK)
+    code, fails = run(build('CONTROL', None, None, None))
+    print('control (nothing broken): %s' % ('passes' if code == 0 else 'FAILS: ' + '; '.join(fails)), flush=True)
+    if code != 0: sys.exit('the control does not pass; nothing below would mean anything')
+    caught = 0; passed = []
+    for name, f, old, new in M:
+        code, fails = run(build(name, f, old, new))
+        if code != 0: caught += 1; print('caught   %-36s by %d: %s' % (name, len(fails), (fails[0] if fails else '')[:110]), flush=True)
+        else: passed.append(name); print('PASSED   %s' % name, flush=True)
+    code, fails = run(build('CONTROL-AFTER', None, None, None))
+    print('control again, after the last: %s' % ('passes' if code == 0 else 'FAILS: ' + '; '.join(fails)))
+    print('\n%d of %d broken copies caught; passed: %s' % (caught, len(M), ', '.join(passed) or 'none'))
