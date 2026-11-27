@@ -102,3 +102,17 @@
     lines unexplained on the towns' chart, the cause after the pattern, too many scales for "how often", the trust
     section a diary without a verdict. Both taken: the story gives the Milky Way first, then the chart, then the
     weeks by the sheet's own star times; one scale; a short trust section that says what stands firmest.
+22. **Seven more years, two more sheets.** The share holds the sixteen photometers back to 2016–2021 and for January
+    to October 2026 (823 files, `data/fetch_more.list`, `src/fetch_more.sh`). `src/dawnlib2.py` is the frozen method
+    with rules written in beforehand (home position; a twilight test for headers with no position; the level screen
+    against 2024), verified to give the page's 985 nights exactly; `src/ref2024.py` its reference. Sealed 13:20 UTC:
+    `expectations-places.md` (P1–P10, `src/sheet4.py`, `sheet4_ref.out`) and `expectations-sun.md` (Q1–Q7,
+    `src/sunsheet.py`, `sun_madeup.out`, `sun_ref.out`; the Sun's flux in `data/sun/`, not published). Scores
+    `sheet4.out` (all ten held as worded) and `sun.out` (three held, three failed, one void). A third search of what
+    is in print: `lit/scout-sun.md` (saved pages in `lit/src3/`, not published).
+23. **The checker on both** (`check/check-dawn-8.md`: 2 serious, 7 moderate, 7 minor). P8 held only as worded: the
+    yearly share runs 11 to 24, mostly the calendar. The Sun sheet's instrument model was wrong (address changes
+    that were no change of photometer; ageing that differs by instrument, shown by the twilight): could not tell.
+    The slide is 2.6 over eleven years; Añora moves only since 2020.
+24. **The page on eleven years** (`src/all_years.py` -> `all_years.out`, `t_stations_all.html`, the four pictures;
+    `sheet4_all.out`): 2,064 nights. New fold `page/fold_places.html`.
