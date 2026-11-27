@@ -15,6 +15,18 @@ your programs were read, not run.
 > usually gives, and chance gives as much about one time in ten. The figures and the wording to use are in
 > `check-dawn-9.md`, S1, and `swing9.out`. Nothing else in this report is changed.
 
+> **Second correction by the same checker, 19:24 UTC, 27 November 2026 (eleventh job).** The twilight figures of
+> this report (S2(b), M2, M7, section 4 and `twage.out`) were made from the printed magnitude. At some
+> photometers a few rows in a hundred in deep twilight print a magnitude one to seven magnitudes too bright
+> for their own frequency, and those rows made false crossings. By the raw count: Añora is steady (not "0.7 to
+> 0.8 brighter by 2024"); Madrid's ring road changed by a fifth to a third of a magnitude (not "1.3 to 2.0",
+> and M7's "another twilight than since" is withdrawn); Coslada reads darker by 0.022 a year and Teide
+> brighter by 0.033 (neither is "steady within 0.02"). So: six read darker by 0.06 to 0.12, nine are steady
+> within 0.03, one reads 0.03 brighter; only Arkaroola "stepped", and that is the sky. Also withdrawn: that
+> the twilight loss reaches the night "about all of it" at Valencia and "none" at Àger. Against their
+> neighbours on the same months it is about a third at Valencia and about four tenths at Àger. Figures in
+> `check-twilight-1.md` (S1, M3). The six that read darker, and Nerpio's part in the Sun fit, stand.
+
 ## In short
 
 - **Sealing holds** for both sheets: no sheet and no program was written or changed after the first new file
