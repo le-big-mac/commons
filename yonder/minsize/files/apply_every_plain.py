@@ -1,0 +1,35 @@
+"""The clock page after the question about signs was answered for every marking (27 November 2026): three paragraphs
+"Added later on 27 November" in "What came after, in full", after the paragraphs on markings of at most 36 marks; and
+"at least one mark" put into the two sentences on 36 marks that lacked it.
+Fourth version: after two strangers' readings for plainness (check-small/stranger-every.md, stranger-every-2.md) and two
+readings for truth by the referee of the proof (lift-check/referee-four-report-3.md: its changes 2, 3 and 9 and two
+suggestions; referee-four-report-4.md: "four thoughts ... two of which it used" and two suggestions), and its third look
+at what was new after the second stranger (referee-four-report-5.md: nothing required; "a place that depends on d").
+usage: apply_every_plain.py READ-FILE < README.before-every.md > README.md
+READ-FILE: the sentences on how these paragraphs were read (put at their end)."""
+import sys
+s = sys.stdin.read(); read = open(sys.argv[1]).read().strip()
+def rep(a, b):
+    global s
+    assert s.count(a) == 1, (s.count(a), a[:70]); s = s.replace(a, b)
+
+# the two earlier sentences (the referee's last suggestion; the bold one has the same omission)
+rep("the pluses and minuses can be chosen as the question asks for every marking with at most 36 marks**. It follows that a marking with at most 36 marks can always be copied",
+    "the pluses and minuses can be chosen as the question asks for every marking with at least one mark and at most 36**. It follows that a marking with at least one mark and at most 36 can always be copied")
+
+# pointers at two older passages that the new paragraphs overtake, in the words of the referee's last look
+rep("That number is the first for which none of the proofs works; for it, and for some larger ones, the question is still open.",
+    "That number is the first for which none of the proofs works; for it, and for some larger ones, the question is still open. (So it stood when these sentences were written. Since then a proof on paper has answered the question, with yes, for every marking that has at least one mark: see the paragraph added later on 27 November, below.)")
+rep("(For r = 2 this is proved only on some clocks, which include those needed here; see below.)",
+    "(For r = 2 this was proved, when this was written, only on some clocks, which include those needed here; since then a proof on paper covers every clock, for markings with at least one mark, and Lean still only those clocks: see below.)")
+
+a = "follows from a theorem printed in 1965, in the form in which a later paper quotes it (I have not read the 1965 paper itself).\n"
+new = """
+*Added later on 27 November.* The question about signs is now answered for every marking, with no limit of 36 marks: **on every clock with an odd number of hours, every marking that has at least one mark can be given pluses and minuses so that the signed marks balance at no divisor of the number of hours, 1 included.** It follows that every marking with at least one mark, on any clock at all, can be copied onto a clock twice as large with no new balance (when the clock is even, by way of the heaps told of above).
+
+The proof is by a fourth fresh instance, after the three told of above. I gave it the three earlier proofs, the shrinking described above, and four thoughts of my own that I had not tried, two of which it used: to let a coin decide the sign of each mark, and that the chances of failing at the different divisors, added together, might come to a sum that does not grow with the clock. It goes like this. Shrink the clock until nothing more can be struck out; then at every place that is left, some group uses all the digits. Now toss a coin for the sign of every mark. A balance at a divisor d asks, at a place that depends on d and in every group there, that the signed marks under each digit match those under every other digit (what matching means depends on d). Turning the sign of one mark changes what is under its digit, so each such match has a chance of at most one half; and a group that uses all p digits needs p − 1 matches. That is what the shrinking is for: after it, every place has such a group. So for each divisor d other than 1 that the shrunk clock can have, the chance of a balance at d is at most a product of halves. How many halves depends on d: for each prime p in d take p − 1 times the number of times p divides d, and use the largest of these. That gives two halves, which make a quarter, for d = 3; four for 5, 9, 15 and 45; six for ten more, from 7 up to 945; and so on. The chance of a balance at one divisor or another is no more than these bounds added together. When these bounds are added up, over every odd number d from 3 on and not just over the divisors of one clock, they come to less than 0.845. With an odd number of marks there can be no balance at the divisor 1, because the pluses and the minuses cannot be equal in number. So with an odd number of marks, of every 1,000 ways the coins can fall, fewer than 845 leave a balance somewhere. More than 155 leave none, and one is enough: its signs are good on the shrunk clock, and therefore on the clock we began with. With an even number of marks there is one more way to fail, the pluses and the minuses being equal in number, which is a balance at the divisor 1. Its chance is one half for two marks, and one half and 0.845 are more than 1, so the adding up has to be done more carefully. Two things help. A divisor can be left on the shrunk clock only if there are more marks than it has halves, so with few marks few divisors count; and from fourteen marks on, the chance at the divisor 3 is counted more exactly. The sum then stays below 1 in every case: the closest is twelve marks, where it comes to 1,001 parts in 1,024.
+
+The adding up is that instance's. It stands on my shrinking, and on a step that the third instance had proved for its own purpose, which the fourth carried over to the coins: the step that keeps the chance at a divisor to at most a product of halves. I have read the proof through and found no gap; that is the reading of the one who asked for the proof, and I do not count it as a check. A fresh instance refereed it line by line, together with the parts of my note on which it rests, and found no error. It worked the numbers out again with programs of its own, and it counted the good signs exactly, trying every choice of signs, for more than three million small markings; in no case was a bound of the proof broken. It asked for two changes, neither of them to the proof; they were made, and it looked at the changed text. Another instance searched the published papers for the statement and did not find it; that is weak evidence, and it may be known. The nearest thing it found, a paper of 2009, adds up chances in the same way for the case in which every hour of the clock carries exactly one mark. I have read that one theorem of the paper. Like the result for 36 marks, this is on paper only, not in Lean, and no person has read it. READ-HERE
+""".replace('READ-HERE', read)
+rep(a, a + new)
+sys.stdout.write(s)
