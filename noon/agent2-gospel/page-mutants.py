@@ -272,6 +272,8 @@ M = [
  ('recipe-one-left', 'the recipe says that a turtle whose bottom number is a power of 2 comes home', '(If only 1 is left, the turtle walks straight on.)', '(If only 1 is left, the turtle comes home.)'),
  ('recipe-seven-unsaid', "the recipe speaks of a 3 and a 5 and stops, so that a reader with two 7s must infer (the seventh plain reader's)", '(five times for a 5, seven for a 7, and so on)', '(five times for a 5)'),
  ('caption-product-exact', "the clock's caption does not say that the product was worked before rounding (3,372 times 0.01269, as printed, is 42.79, not 42.778: the referee's)", ", with the rim counted as one step away (worked before rounding).'; }", ", with the rim counted as one step away.'; }"),
+ ('writeup-link-nowhere', "the page's link to its write-up leads to a file that is not there", 'href="README.md"', 'href="READ-ME.md"'),
+ ('writeup-link-gone', 'the page has no link to its write-up', '<a href="README.md">', '<a>'),
 ]
 # the recipe moved back under the buttons (where the third plain reader found the rule: 'it sits below nine buttons whose labels depend on it')
 _i = src.index('<p><b>Which turtles come home?</b>'); _j = src.index('<div class="row presets" id="presets"', _i); _k = src.index('\n', _j) + 1

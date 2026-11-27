@@ -36,7 +36,7 @@
   <div id="line" role="slider" tabindex="0" aria-label="Place in the piece"><i></i></div>
   <span id="clock">0:00</span>
   <span id="seed"></span>
-  <a href="README.md">about</a>
+  <a href="README.html">about</a>
 </div>
 <script>
 // Dryads: a grove grown by space colonization, and the bells it rings as it grows.
@@ -217,6 +217,7 @@
     elClock = document.getElementById('clock'), elSeed = document.getElementById('seed');
   let G = null, work = null;                    // the grove, and per-tree scratch arrays
   let ctx = null, bus = null, started = 0, nextStrike = 0, timer = null, frozenAt = 0, ended = false, scheduled = 0;
+  let touched = false;                         // until Ring is pressed or the line is used, the grove is shown as it will stand when grown (27 November: two visitors met an empty screen)
 
   function load(seed) {
     G = D.grove(seed);
@@ -227,6 +228,7 @@
 
   // ---------- drawing ----------
   const CAPTION = 'Each fork rings a bell (turn the sound on): the higher the fork, the higher the bell. Then the leaves let go.';
+  const BEFORE = 'Five trees, as they will stand when grown. Press Ring, with the sound on, to grow them: each fork rings a bell, the higher the fork, the higher the bell. Then the leaves let go.';
   let CAP = null;                              // how the caption was last set: for the tests
   let sx = 1, ox = 0, oy = 0, cw = 0, ch = 0;
   function fit() {
@@ -237,7 +239,7 @@
   const px = x => ox + x * sx, py = y => oy - y * sx;
   function stepAt(t, clock) { let k = 0; while (k + 1 < clock.length && clock[k + 1] <= t) k++; return k; }   // steps 1..k are complete
 
-  function draw(t) {
+  function draw(t, before) {                     // before: the grown grove shown ahead of the first Ring, with words that say so
     g2.clearRect(0, 0, cw, ch); g2.fillStyle = PAPER; g2.fillRect(0, 0, cw, ch);
     g2.strokeStyle = MUTED; g2.lineWidth = 1; g2.beginPath(); g2.moveTo(0, py(0)); g2.lineTo(cw, py(0)); g2.stroke();
     // leaves that have landed
@@ -287,8 +289,8 @@
     // the caption, broken into as many lines as the picture's width asks (on a phone it ran off the right-hand edge)
     const lh = Math.round(clamp(sx * 0.2, 12, 15)) + 4, room = cw - 36; let line = '', y = 14 + clamp(sx * 0.42, 18, 30) + 6, lines = 0, widest = 0;
     const put = () => { g2.fillText(line, 18, y); widest = Math.max(widest, g2.measureText(line).width); y += lh; lines++; };
-    for (const w of CAPTION.split(' ')) { const t = line ? line + ' ' + w : w; if (line && g2.measureText(t).width > room) { put(); line = w; } else line = t; }
-    put(); CAP = { lines: lines, widest: widest, room: room };
+    for (const w of (before ? BEFORE : CAPTION).split(' ')) { const t = line ? line + ' ' + w : w; if (line && g2.measureText(t).width > room) { put(); line = w; } else line = t; }
+    put(); CAP = { lines: lines, widest: widest, room: room, before: !!before };
   }
 
   // ---------- sound ----------
@@ -335,11 +337,12 @@
     if (t > G.duration) { ended = true; frozenAt = G.duration; ctx.suspend(); elPlay.textContent = 'Ring again'; }
   }
   function seek(t) {
-    t = clamp(t, 0, G.duration - 0.01); frozenAt = t; ended = false;
+    touched = true; t = clamp(t, 0, G.duration - 0.01); frozenAt = t; ended = false;
     if (ctx) { bus.kill(); bus = chain(ctx, G.seed, false); started = ctx.currentTime - t; }
     nextStrike = 0; while (nextStrike < G.strikes.length && G.strikes[nextStrike].t < t) nextStrike++;
   }
   async function toggle() {
+    touched = true;
     if (!ctx) {
       ctx = new (window.AudioContext || window.webkitAudioContext)(); bus = chain(ctx, G.seed, false);
       started = ctx.currentTime - frozenAt + 0.15; nextStrike = 0; while (nextStrike < G.strikes.length && G.strikes[nextStrike].t < frozenAt) nextStrike++;
@@ -351,13 +354,13 @@
   }
   function fresh(seed) {
     if (ctx) { clearInterval(timer); bus.kill(); ctx.close(); ctx = null; }
-    frozenAt = 0; ended = false; scheduled = 0; elPlay.textContent = 'Ring'; load(seed);
+    frozenAt = 0; ended = false; scheduled = 0; touched = false; elPlay.textContent = 'Ring'; load(seed);
   }
 
   // ---------- wiring ----------
   const fmt = t => Math.floor(t / 60) + ':' + String(Math.floor(t % 60)).padStart(2, '0');
   function frame() {
-    const t = now(); draw(t);
+    const t = now(); if (touched) draw(t); else draw(G.grown, true);
     elFill.style.width = (100 * t / G.duration).toFixed(2) + '%'; elClock.textContent = fmt(t) + ' / ' + fmt(G.duration);
     elLine.setAttribute('aria-valuenow', Math.round(t)); elLine.setAttribute('aria-valuemax', Math.round(G.duration));
     requestAnimationFrame(frame);
@@ -374,7 +377,7 @@
   requestAnimationFrame(frame);
 
   // for testing without ears: the first `seconds` of the piece, rendered by the same code with no room and no shaping
-  window.__dryads = { caption: () => CAP,
+  window.__dryads = { caption: () => CAP, before: () => !touched,
     grove: () => G, scheduled: () => scheduled, now, seek, drawAt(t) { seek(t); draw(t); },
     async offline(seconds, dry) {
       const ac = new OfflineAudioContext(2, Math.floor(seconds * 44100), 44100), b = chain(ac, G.seed, dry);

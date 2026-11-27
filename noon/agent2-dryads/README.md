@@ -130,6 +130,15 @@ controls: with the old layout, the six cases under the line fail and the other s
 broken, the eight cases on phones fail. `shot-dryads.js` gives the lines it gave before (`page-test.out`), but
 for the times and the seed of the new grove.
 
+**Before Ring is pressed the page now shows the grove as it will stand when grown** (added later the same
+morning). Both plain readers who opened this page met a cream screen with one line across it, and after Ring
+"a tick at 2 seconds, one twig at 11 seconds"; the second said that without sound it would leave at ten
+seconds. Until Ring is pressed, or the line along the bottom is used, the five trees are drawn grown, in leaf,
+under words that say so ("Five trees, as they will stand when grown. Press Ring, with the sound on, to grow
+them"); Ring then starts from bare ground as before, and "Another grove" shows the new grove grown. The test
+asserts it at each size of screen: the picture's lower three quarters hold ink before Ring and less than a
+quarter as much just after it. The piece itself, its sound and its timing are as they were.
+
 I then searched every page of the public copy that I made by hand (53 files, page sources among them) for a
 button, box or link that ends below what its page can scroll to, at 390 by 844 and at 1000 by 800: this page
 and its source were the only ones. (Four more were named by the search for links inside notes that are folded

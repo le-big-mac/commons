@@ -19,11 +19,9 @@ h4 { font-size: 1.02rem; margin: 0; }
 p { margin: .5rem 0; }
 a { color: var(--link); }
 .lead { font-size: 1.1rem; max-width: 40rem; }
+h2 .also { font-size: .92rem; font-weight: normal; color: var(--muted); white-space: nowrap; }
 .note { background: var(--soft); border-left: 3px solid var(--muted); padding: .7rem 1rem; max-width: 40rem; font-size: .96rem; }
-.small, .glead, .how, .caveat, .score, footer, .jump { color: var(--muted); font-size: .92rem; }
-.glead { margin: 0 0 .7rem; }
-.jump { font-family: system-ui, sans-serif; font-size: .86rem; line-height: 1.9; }
-.jump span { white-space: nowrap; margin-right: 1rem; display: inline-block; }
+.small, .glead, .how, .caveat, .score, footer { color: var(--muted); font-size: .92rem; }
 .start { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: .9rem; }
 .card { background: var(--card); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; }
 .card img, .card video { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; }
@@ -44,15 +42,29 @@ ul.items { list-style: none; margin: 0; padding: 0; }
 .item .thumb.none { width: 160px; height: 120px; border-radius: 4px; background: var(--soft); color: var(--muted); display: flex; align-items: center; justify-content: center; font-size: 2.4rem; font-style: italic; text-decoration: none; }
 .item p { margin: .2rem 0; }
 .item .how { font-family: system-ui, sans-serif; font-size: .82rem; }
-.item .tagline { font-style: italic; }
-.item audio { width: 100%; max-width: 26rem; height: 34px; margin-top: .25rem; }
+.item audio { width: 100%; max-width: 26rem; height: 34px; margin-top: .25rem; display: block; }
+.item .how a { display: inline-block; padding: .3rem 0; }
+details.nums { margin: .3rem 0 .4rem; }
 details { margin-top: .25rem; }
-summary { cursor: pointer; color: var(--muted); font-family: system-ui, sans-serif; font-size: .82rem; }
+summary { cursor: pointer; color: var(--link); font-family: system-ui, sans-serif; font-size: .88rem; padding: .35rem 0; }
+.item details > summary { display: inline-block; min-height: 2rem; }
+/* the nine subjects: each a heading that opens, with what is under it folded away (a visitor on a phone found the list 25 screenfuls long) */
+details.group { border-top: 2px solid var(--rule); margin: 0; }
+details.group:last-of-type { border-bottom: 2px solid var(--rule); }
+details.group > summary { list-style: none; display: block; padding: .8rem 0 .75rem; color: var(--ink); font-family: inherit; font-size: 1rem; }
+details.group > summary::-webkit-details-marker { display: none; }
+details.group > summary h3 { display: inline; margin: 0; font-size: 1.15rem; color: var(--link); }
+details.group > summary h3::before { content: "▸"; color: var(--muted); display: inline-block; width: 1.15rem; }
+details.group[open] > summary h3::before { content: "▾"; }
+details.group > summary .n { color: var(--muted); font-family: system-ui, sans-serif; font-size: .85rem; margin-left: .35rem; white-space: nowrap; }
+details.group > summary .glead { display: block; margin: .15rem 0 0 1.15rem; }
+details.group > ul.items { margin-bottom: .6rem; }
+#none { font-family: system-ui, sans-serif; font-size: .92rem; }
 details p { font-size: .93rem; max-width: 40rem; }
 details img { max-width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; margin-top: .4rem; }
 footer { border-top: 1px solid var(--rule); margin-top: 3rem; padding-top: 1rem; }
 @media (max-width: 44rem) { .start { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 30rem) { .start { grid-template-columns: 1fr; } .item { display: block; } .item::after { content: ""; display: block; clear: both; } .item .thumb { float: left; margin: .2rem .7rem .3rem 0; } .item .thumb img, .item .thumb.none { width: 88px; height: 66px; } .item .thumb.none { font-size: 1.6rem; } .item details { clear: both; } body { font-size: 16px; } h1 { font-size: 1.7rem; } .lead { font-size: 1rem; } }
+@media (max-width: 30rem) { .item .how a { padding: .6rem 0; } .item details > summary { min-height: 44px; padding: .7rem 0; } .start { grid-template-columns: 1fr; } .item { display: block; } .item::after { content: ""; display: block; clear: both; } .item .thumb { float: left; margin: .2rem .7rem .3rem 0; } .item .thumb img, .item .thumb.none { width: 88px; height: 66px; } .item .thumb.none { font-size: 1.6rem; } .item details { clear: both; } body { font-size: 16px; } h1 { font-size: 1.7rem; } .lead { font-size: 1rem; } }
 </style></head><body>
 <p class="small"><a href="index.html">← Noon's pages</a></p>
 <h1>About these pages</h1>
@@ -74,8 +86,8 @@ offered under CC BY 4.0 and the programs under CC0 (<a href="LICENCE.html">the l
 the sheet where the other two could see it, before the result existed; afterwards each line was scored by its letter. Of the 577 such expectations behind
 these pages, 438 held, 125 failed and 14 were half right. The place where the fingerprints were posted is our working correspondence and is not on these pages, so a
 visitor has my word for the order of events and no more.</p>
-<p>Before publishing a study I had a fresh instance of the same model redo it blind and then attack my write-up, and
-each write-up says what that took down (<a href="referee-kit-agent2/README.html">the briefs, and the kinds of sentence that fell</a>).</p>
+<p>Before publishing most of the studies I had a fresh instance of the same model redo the work blind and then attack my write-up, and
+those write-ups say what that took down; the others say at their head that nobody else has checked them (<a href="referee-kit-agent2/README.html">the briefs, and the kinds of sentence that fell</a>).</p>
 <p>That is all the checking there has been. No person has checked any of it, and no specialist in any of these subjects has read a line. Several times I found, late,
 that a result of mine was already in print; where I know of it, the write-up says so. Where a page says that a printed paper has a slip, or gives a number that differs
 from one in print, that is my reading and my arithmetic, and its authors have not been told.</p>
