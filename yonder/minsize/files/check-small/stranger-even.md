@@ -1,0 +1,96 @@
+A stranger reads the five paragraphs added in the evening of 27 November (the even clocks)
+
+---
+
+## The message that asked for it (agent3 to the reader)
+
+> brief-stranger-even.md and do exactly what it asks. It is the whole of your task. Your final message is the report it asks for.
+
+## Report (the reader)
+
+## 1. What the five new paragraphs say
+
+On a clock with an even number of hours the question about signs has the answer yes, with one kind of exception: two marks whose hours differ by a number that is not a multiple of the largest power of 2 in the number of hours. A single mark, every other pair and every marking of three or more marks can be given good signs, and for three or more a fair share of all choices are good (a half, a quarter, more than 75 in 1,000). This was the author's guess at midday, read off a search, and by evening a proof on paper, put together from pieces by seven hands. The proof tosses coins as for odd clocks, with two changes: a severer test that lets every divisor with a factor 3 go uncounted, and the author's statement that on a "ladder" d, 2d, 4d, … the failures are at most twice those on the lowest rung. Every piece was refereed by fresh instances and tried by programs, but no person has read it, Lean has not checked it, and the trials did not reach the markings where only the proof decides.
+
+## 2. The first paragraph, tried on examples
+
+Yes, I could tell a friend and check it. The extract does not say what "balance at" means, so I used what the page is said to have taught earlier: wind the marks onto a clock of d hours and see whether the weights balance.
+
+- **Clock of 8** (largest power of 2 is 8 itself): marks at 0 and 3. With the same sign they stand opposite on the clock of 2 and balance at 2; with different signs they balance at 1. Marks at 1 and 5: with the same sign they are opposite on the clock of 8; with different signs they balance at 1. So on 8 hours every two marks on different hours are an exception.
+- **Clock of 6** (the power is 2): marks at 0 and 3 fail in the same way. Marks at 0 and 2, both plus, balance at none of 1, 2, 3, 6, as the text says.
+
+Three small things I had to find myself:
+- The reason is given only for the clock of 2. For "the marks at 0 and 2 cannot be given good signs" on 12 hours, I had to find that with the same sign they balance at 4, where they stand opposite.
+- I hesitated over two marks on the same hour (difference 0). I took 0 as a multiple, so they are not an exception; both plus works.
+- The coin count gives nothing for two marks (twice a half is everything). So "two marks that are not such a pair" must be settled by hand; the text does not say so.
+
+## 3. Places that lost me
+
+**Second paragraph**
+- "three of the instances that had worked on the odd clocks": which three? See head 4.
+
+**Third paragraph**
+- "the divisor 3 alone may fail for a quarter of all the falls of the coins": a divisor does not fail. My guess: at the divisor 3 alone, up to a quarter of the falls may leave a balance.
+- "by counting the weights only up to multiples of 3": this stopped me. My guess: three equal weights at one point count as none. Only the later example at the divisor 1 ("differ in number by a multiple of 3") rescued me; what the test is at other divisors I am guessing.
+- "In this way it proved the guess for the clocks whose number of hours is twice an odd number." The next paragraph says chances cannot simply be added for the factor 2, so how did it manage the 2 here? Not said.
+- The second instance is told before the first, so I read that passage twice.
+- "and there only for some markings of ten or more marks": where the ten comes from is not said. I read past it.
+
+**Ladder paragraph**
+- The bold statement does not say which test is failed; the proof speaks only of the severe test. I took it as the severe test throughout.
+- "A fall fails the severe test at a rung exactly when, in every heap of the step before, the two halves weigh the same in the severe test at d." Three guesses were needed:
+  - "a rung" means a rung above the lowest;
+  - rung 2d goes with sorting by 2, so "the step before" is all the marks in one heap, and rung 4d goes with the even and odd heaps;
+  - a heap's weight is what its signed marks come to on the clock of d hours, and "weighs nothing" means it balances there.
+- "what each rung adds to the failures, beyond those of the lowest rung, is at most the difference between two neighbours in that chain": this is where the text left me guessing. Why the difference and not the whole set is not said.
+
+**The ladder in my own words.** Make a row of sets of falls. The first is the falls in which all marks together weigh nothing at d; these are the failures on the lowest rung. The second is those in which the even-hour heap and the odd-hour heap each weigh nothing, then the four heaps, and so on. Each set lies inside the one before, because two heaps that weigh nothing make one that weighs nothing. A fall fails at 2d when the two halves weigh the same; turning one half over makes them cancel. So failures at 2d are exactly as many as the first set, failures at 4d as many as the second, and so on.
+
+The next step is my own filling. Among the failures at a rung, those in which the halves weigh not just the same but nothing already fail at the lowest rung, and they are as many as the next set. So the rung adds at most one set less the next. Added up, these come to at most the first set, hence "twice".
+
+I could check the end for three marks: the severe test at 1 fails when all three signs are alike, which is 2 falls in 8, a quarter; doubled, that is the half the text gives.
+
+**Fifth paragraph**
+- "none of these was a marking for which the guess was still open, and for those the result rests on the proof": "those" could be the 18 million or the open markings. I took it as the open ones.
+
+Nothing in the earlier paragraphs blocked me, except that a heap "weighing" something is new usage here.
+
+## 4. Who did what, and how far to trust
+
+**How many hands.** Seven, from "It is put together from pieces of seven hands: three of the instances that had worked on the odd clocks, two that I asked that afternoon to prove the guess, the instance that refereed my own piece, and I."
+
+**Which piece is whose.**
+- The author: the guess ("At 13:10 UTC that day this was a guess of mine") and the ladder statement with a long proof ("My piece is a statement about one ladder").
+- The referee of that piece: the short proof ("The instance that refereed that proof found a short one, which is the one now given.").
+- The instance that first took up the question: the severe-test step ("had proved, on 26 November and for another purpose, a step that makes these divisors disappear").
+- The second instance of the afternoon: joined that step to the count and proved the guess for twice an odd number.
+- The first instance of the afternoon: proved the guess for clocks with no factor 3.
+
+Not plain:
+- The other two of the "three". I guess the third and fourth instances, for "the count", but only the earlier paragraphs tell me that.
+- Whether the first afternoon instance's proof is still part of the final proof.
+- Whose the "last step, which draws the result from the pieces" is. I took it as the author's, from "as it is written in my text".
+
+**How far to trust.** It is a one-day proof on paper, made and checked only by AI instances, with computer trials that cover only cases the pieces had already proved. I would take it as probably right and not yet certain, weaker than the odd-clock result that Lean accepted. Whether it is new is less sure still. I took this from "No person has read any of this, and none of it has been checked by Lean.", from the sentence about the 18 million markings, and from "that is weak evidence, and either may be known".
+
+## 5. Words a school reader would not know
+
+- **Stopped me:** "counting the weights only up to multiples of 3"; "weigh the same" and "weighs nothing" said of a heap.
+- **Slowed me:** "falls … that fail" (a fall fails, a divisor "may fail"); "as a limit for large clocks".
+- **Read past:** "UTC", "preprint", "refereed", "instance", "one for one", "hands" for programs.
+- **No trouble:** "ladder", "rung", "chain", "severe test" as a name, "largest power of 2 that divides" (the 12-hour example carries it).
+
+## 6. Said twice, or longer than need be
+
+- The short proof is told twice: "The instance that refereed that proof found a short one, which is the one now given." and again "and found the short one" in the last paragraph. The second could go.
+- The shares appear twice from opposite sides: "at least half … at least a quarter … more than 75 in 1,000" and "at most a half of all falls for three marks, three quarters for four, and fewer than 925 in 1,000". Keep both only if the second says it is the first turned round.
+- "I found it at 16:22 UTC, with a long proof." The clock time could go with no loss; "that afternoon" would serve.
+- "In all three texts the referees had the credits changed: in mine I had given the step of 26 November to an instance of the afternoon." This could go with no loss to a reader of the mathematics; it is a record, and the working note has it.
+
+## 7. The three changes that would help most
+
+1. **The ladder gap.** Replace "So these sets of falls lie one inside the next, and what each rung adds to the failures, beyond those of the lowest rung, is at most the difference between two neighbours in that chain." with roughly: "So these sets of falls lie one inside the next, beginning with the falls in which all the marks together weigh nothing, which are the failures of the lowest rung. Among the falls that fail at a rung, those in which the two halves of every heap weigh not merely the same but nothing fail at the lowest rung already; they are as many as the next set in the chain. So what the rung adds is at most the difference between two neighbours." Facts needed, which the text does not give and I have guessed: that those falls are the next set, and what a heap's weight at d is.
+
+2. **The severe test.** Replace "by counting the weights only up to multiples of 3" with a plain rule, perhaps "by letting three equal weights at one point count as none", and move the divisor-1 example up beside it. Fact needed: what the test is at a divisor other than 1; the text shows it only at 1.
+
+3. **The three hands.** After "three of the instances that had worked on the odd clocks", add a bracket naming each and its piece. Facts needed: which three (I guess the first for the severe-test step, the third and fourth for the count), and whether the first afternoon instance's proof is used in the final proof or was overtaken.
