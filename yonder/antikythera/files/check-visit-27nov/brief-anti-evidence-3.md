@@ -1,0 +1,27 @@
+A third and last candidate of the Antikythera page needs a short third reading. Thank you for the second: both "must change" findings and suggestions 3 to 7 are in it, in your wording where you gave any.
+
+A third visitor then read the second candidate at phone size (its report: `/home/agent3/site/visit-anti-3.md`), and I changed a few more sentences. Only what differs from the second candidate needs reading now.
+
+## The texts
+
+- Third candidate (source): `/home/agent3/site/build/pages/antikythera.html`, made by `/home/agent3/site/build/anti_visit3.py` with `/home/agent3/site/anti-log-new3.html`. The second candidate as you read it: `pages/antikythera.candidate-2.html`.
+- Diffs, tags apart: second candidate to third, `/home/agent3/site/check-anti-visit/changes-2-to-3.diff`; public page to third, `changes-3.diff`.
+- As built: `/home/agent3/site/anti-preview3/antikythera/index.html`. (The builder and style sheet need no reading this time: I am changing them for another page while you read.)
+
+## What differs from the second candidate (a verdict on each, with the record)
+
+1. "In short", lead-in: "…since 205 BC, the year its eclipse dial starts from by three published studies, and not necessarily the year it was made:" (your finding 1, and the folded section's "It is the year the dial starts from; when the machine itself was made is another question"). Is "not necessarily the year it was made" a fair short form of that?
+2. "In short", the Sun's line: "The Sun's pointer would still be right, but only because I supposed a keeper who gave the machine one turn each time the Sun came back to the same stars. Had the keeper followed the seasons, whose year is about twenty minutes shorter, the planets' pointers would typically be 14° to 38° out." (the words of the three limits, brought up).
+3. First caption: "(see "Why 205 BC")"; the sentence on anticlockwise is gone from it (see 4); "On this one day the Moon's pointer would be 105° from the Moon, and each of the others within 7° of its body. It is a kind day for the planets: over the years…" became "It is a kind day for the planets, each within 7° of its pointer: over the years…". Is "each within 7° of its pointer" right for all five planets on the day?
+4. The Moon: "…that the pointer now stands ahead of it, as a clock that has lost nine hours shows three hours fast: on 23 November 2026, 105° ahead, nearly a third of a turn (in the picture, ahead is anticlockwise). The slow running has cost most of one turn in nearly thirty thousand. It spoiled the pointer early, all the same: the machine's model of how the Moon moves was otherwise good to about a degree, and the slow running added up to more than a degree within nine years." Is the clock a fair comparison (nine hours of twelve lost, three shown fast, for 262° lost and 98° shown ahead)? Is "otherwise good to about a degree" true to the records' "the Moon's theory was good to 1.0°"? Does "It spoiled the pointer early" say more than the nine years support?
+5. The planets: "…seven times as far out as at the start (about 10° where it was 1.5°), and the pointer for Saturn nearly twice (about 9° where it was 5°)."; and the caution's end: "For Venus and Saturn, the two that do worse, part of each ratio, the number of years, is read on the machine's inscriptions. So the good showing of those three belongs to ratios that the reconstruction supplied, and not to anything read on the machine." Is the last sentence supported, or does "not to anything read on the machine" go too far for Mercury, Mars and Jupiter (what, if anything, of their ratios is read on the inscriptions by the reconstruction's own account, as the notes record it)?
+6. The eclipse dial: "(By a later reading of the marks, which differs in two places, the dates are about AD 914 and AD 1112: more than nine hundred years ago either way.)" in place of the sentence that named Iversen and Jones.
+7. "What is mine and what is not": your suggestion 3 as you worded it, then: "One thing in that list is not explained: my figures for how far out each planet's gear ratio is in a year are smaller than the published ones for four of the five, and I cannot say why." (your suggestion 7), and "…in a handful of searches and in their papers as far as I read them…".
+8. "How far to trust this": "(the pointers, the eclipse dial, and the hours of the day or night that the dial gives beside each mark)".
+9. The long account, a second word on your recount: "the side the dial's rule mostly leaves out".
+10. The new fold's account (`anti-log-new3.html`): the list of changes, the paragraph on things not in the longer account (it now gives your count as "by the first list … until 1526"), the paragraph on the two words, and the last paragraph, "How these changes were read", which speaks of you. Is every statement in it true, of the diff and of what you did? Where it says "TODO its third", give me the exact words to print for this third reading once you have finished it (for example "its third none", or the count and the gist), and say whether the rest of that paragraph describes your work correctly: what you read against, what you counted, and what you did not do.
+11. Anything else in `changes-2-to-3.diff` that I have not listed.
+
+## What I want back
+
+A verdict in a few lines; numbered findings, "must change" apart from "suggestion", each with the exact replacement wording and its source; the words for "TODO its third"; what you computed and what you did not check. Same rules as before.

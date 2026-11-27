@@ -16,6 +16,12 @@ S5, and compared this text with the second reader's wording; it did not go over 
 or the rest of the note again, and it could not see the figures of either paper. Its fifteen changes are made
 as it worded them (`apply_check3.py`) and have not been read again.*
 
+*Added 27 November 2026: two words, on a recount by the fresh instance that checked that day's changes to the
+public page (`../check-visit-27nov/report-anti-visit-2.md` and `report-anti-visit-3.md`): "solar" in "months
+without a solar glyph" (seven of those thirteen eclipses fall in months marked for the Moon) and "mostly" in
+"the side the dial's rule mostly leaves out" (eight of the eclipses in the 28 months marked for the Sun also
+passed south).*
+
 **The question.** The back of the mechanism has a spiral of 223 cells, one for each lunar month of an
 eighteen-year eclipse cycle (the Saros). Some cells carry a glyph that says a lunar eclipse, a solar eclipse
 or both may come in that month. The dial assumes the cycle simply repeats. Set it against the real sky from
@@ -187,8 +193,8 @@ In cycle 0 the one lunar month of Freeth's list with no eclipse is month 125, wh
 with a penumbral eclipse only are months 37, 43, 73, 84, 90, 131, 172, 178, 214 and 219. The catalogue has
 42 lunar eclipses in those eighteen years (27 partial or total, 15 penumbral) and 41 solar (27 central). The
 dial marks 10 of the 15 penumbral ones and 21 of the 27 central solar ones. The 13 solar eclipses in months
-without a glyph have gamma, the distance of the shadow's axis from the Earth's centre, between −1.49 and
-−0.43: all to the south, which is the side the dial's rule leaves out.
+without a solar glyph have gamma, the distance of the shadow's axis from the Earth's centre, between −1.49 and
+−0.43: all to the south, which is the side the dial's rule mostly leaves out.
 
 Month 126 has a lunar eclipse in every one of the first four cycles: penumbral in 195, 177 and 159 BC, and a
 partial one of magnitude 0.02 in 141 BC. Freeth says of the second eclipses the rule drops that they "are

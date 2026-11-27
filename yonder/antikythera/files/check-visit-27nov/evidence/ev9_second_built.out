@@ -1,0 +1,45 @@
+--- functions of the builder that differ between the pre-visit copy and now (by their source text) ---
+   differ: ['OPEN_ON_LINK', 'STUDIES', 'build']
+
+--- pages built from pages/<slug>.html: the pre-visit builder against the builder now ---
+hemispheres  bodies identical: True; keys that differ: none
+handshake    bodies identical: True; keys that differ: none
+wikipedia    built from its note; keys of its entry that differ: none; link_sections: None
+minsize      built from its note; keys of its entry that differ: none; link_sections: True
+
+--- the second candidate through the builder, against the preview as built ---
+the body is in the preview letter for letter: True
+the body with section links, heading ids and the script taken out == the body without link_sections: True
+letters in order, source against built body (the full-size links apart): True
+9 section links:
+   "Why 205 BC"                             -> a details; the target lies in: open text; the link stands in: open text
+   "For those who want to check"            -> a details; the target lies in: open text; the link stands in: Why 205 BC
+   "What I got wrong on the way"            -> a h2; the target lies in: For those who want to check; the link stands in: open text
+   "Sources and files"                      -> a h2; the target lies in: For those who want to check; the link stands in: open text
+   "Sources and files"                      -> a h2; the target lies in: For those who want to check; the link stands in: open text
+   "How this page was written and read"     -> a details; the target lies in: open text; the link stands in: open text
+   "For those who want to check"            -> a details; the target lies in: open text; the link stands in: How this page was written and read
+   "Why 205 BC"                             -> a details; the target lies in: open text; the link stands in: How this page was written and read
+   "Why 205 BC"                             -> a details; the target lies in: open text; the link stands in: How this page was written and read
+names of the page's own sections that stand in quotation marks and are NOT links:
+   "The hours" in: For those who want to check
+   "The hours" in: For those who want to check
+   "The hours" in: For those who want to check
+   "The hours" in: For those who want to check
+   "What is mine and what is not" in: How this page was written and read
+   "How far to trust this" in: How this page was written and read
+   "How far to trust this" in: How this page was written and read
+
+folds in the built body: [('fold', 'why-205-bc'), ('fold small-fold', 'what-others-had-already-found'), ('fold', 'for-those-who-want-to-check'), ('fold', 'how-this-page-was-written-and-read')]
+placeholder left: ['TODO the reading']
+
+--- the kept folds, built: public copy against the preview ---
+"Why 205 BC": places where the letters differ: 1 [('insert', '', ',under"Forthosewhowanttocheck",')]
+"For those who want to check": places where the letters differ: 1 [('insert', '', 'solar')]
+
+--- words that the builder and the style sheet put on a page themselves ---
+in the script (shown only after a section link is followed): ['\\u2191 Back to where you were reading']
+style sheet, "content:" rules now:    [('details.fold > summary::after ', '"  (tap or click to open)"'), ('details.fold[open] > summary::after ', '""'), ('details.fold + details.fold:not([open]) > summary::after ', '"  (tap to open)"')]
+style sheet, "content:" rules before: [('details.fold > summary::after ', '"  (tap or click to open)"'), ('details.fold[open] > summary::after ', '""'), ('details.fold + details.fold > summary::after ', '""')]
+preview style.css is the style.css now: True
+rules that hide anything, added: []
