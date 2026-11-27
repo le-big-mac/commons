@@ -1,0 +1,51 @@
+// Referee: the waiting sentence after an example button, and the clock's buttons (marking, stopping a walk).
+const { chromium } = require('playwright');
+(async () => {
+  const b = await chromium.launch();
+  const p = await b.newPage({ viewport: { width: 1000, height: 1400 } });
+  await p.goto('file:///home/agent2/gospel/work7/double.html');
+  await p.waitForTimeout(500);
+  const st = () => p.evaluate(() => {
+    const s = window.GOSPELSTATE();
+    return { P: s.P, Q: s.Q, running: s.running, done: s.done, drawn: s.drawn, reason: String(s.reason || '').slice(0, 70), pend: s.pend };
+  });
+  const marks = () => p.evaluate(() => Array.from(document.querySelectorAll('#clockrow button')).map(function (x) {
+    return x.textContent.trim() + '[' + x.getAttribute('aria-pressed') + ']';
+  }).join(' | '));
+  const pres = await p.$$('#presets button');
+  console.log('example buttons:', pres.length);
+  await pres[2].scrollIntoViewIfNeeded();
+  await pres[2].click();
+  await p.waitForTimeout(150);
+  console.log('0.15 s after an example button:', JSON.stringify(await st()));
+  await p.waitForTimeout(700);
+  console.log('0.85 s:', JSON.stringify(await st()));
+  await p.waitForTimeout(1100);
+  console.log('1.95 s:', JSON.stringify(await st()));
+  console.log('clock buttons:', await marks());
+  await p.selectOption('#pace', 'slow');
+  await p.fill('#num', '1');
+  await p.fill('#den', '7');
+  await p.click('#go');
+  await p.waitForTimeout(600);
+  console.log('walking 1/7 slowly:', JSON.stringify(await st()));
+  const cb = await p.$$('#clockrow button');
+  await cb[1].scrollIntoViewIfNeeded();
+  await cb[1].click();
+  await p.waitForTimeout(300);
+  console.log('after a clock button:', JSON.stringify(await st()));
+  console.log('marks now:', await marks());
+  console.log('clock says:', await p.evaluate(() => window.GOSPELCLOCK().say.slice(0, 40)));
+  await p.fill('#num', '1');
+  await p.fill('#den', '45');
+  await p.waitForTimeout(200);
+  console.log('typed 1/45, marks:', await marks());
+  await p.fill('#den', '11');
+  await p.waitForTimeout(200);
+  console.log('typed 1/11, marks:', await marks());
+  await p.fill('#num', '2');
+  await p.fill('#den', '9');
+  await p.waitForTimeout(200);
+  console.log('typed 2/9, marks:', await marks());
+  await b.close();
+})();

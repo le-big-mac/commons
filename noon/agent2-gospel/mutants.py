@@ -30,12 +30,30 @@ M = [
  ('census-kinds', "the census does not tell a spoilt square from none", "else if (f.squares) { kind[i] = 1; spoilt++; } else plain++;", "else plain++;"),
  ('decimal-taken', "a number with a decimal point is taken", "(\\d{1,7})\\s*$", "(\\d{1,7})(?:\\.\\d+)?\\s*$"),
  ('eight-figures', "eight figures are taken", "(\\d{1,7})", "(\\d{1,8})"),
+ ('clock-skips-tail', 'the clock marks the turns from the first, tail and all', '    for (k = 0; k < f.tail; k++) t = t * 2 % q;\n    var hours = new Int32Array(n)', '    var hours = new Int32Array(n)'),
+ ('clock-clockwise', 'the balance point is reckoned with the hours counted rightwards', 'cx -= Math.sin(t * K); cy += Math.cos(t * K); t = t * 2 % q; }', 'cx += Math.sin(t * K); cy += Math.cos(t * K); t = t * 2 % q; }'),
+ ('clock-step-wrong', 'the polygons are looked for with steps of q over l squared', 'var l = f.factors[i][0], step = q / l, all', 'var l = f.factors[i][0], step = q / (l * l), all'),
+ ('clock-any-hour', "every prime that comes in twice is said to give polygons (the memo's rule, on the clock)", 'if (!mark[(hours[j] + step) % q]) all = false;', 'if (false) all = false;'),
+ ('clock-off-not-mean', "the balance point's distance is the sum's, not the mean's", 'off: Math.hypot(cx, cy) / n };', 'off: Math.hypot(cx, cy) };'),
+ ('polygon-short', 'a polygon is given one corner too few', 'for (k = 0; k < l; k++) out.push((a + k * (q / l)) % q); return out; }', 'for (k = 0; k < l - 1; k++) out.push((a + k * (q / l)) % q); return out; }'),
+ ('clock-once-prime', 'polygons are looked for with a prime that comes in once as well', 'all = f.factors[i][1] >= 2;', 'all = true;'),
+ ('clock-first-hour', 'only the first hour is asked whether its polygon is whole', 'for (j = 0; j < n && all; j++) if (!mark[', 'for (j = 0; j < 1 && all; j++) if (!mark['),
+ ('takeout-once-prime', 'primes that come in once are listed among those taken out', 'if (e < 2) continue;\n      var n1 = order2(f.m / l);', 'var n1 = order2(f.m / l);'),
+ ('takeout-two-out', 'the round is compared with the turtle that has two of the prime taken out', 'var n1 = order2(f.m / l); out.push(', 'var n1 = order2(f.m / l / l); out.push('),
+ ('takeout-long-always', 'every repeated prime is said to make the round l times as long', 'long: f.round === l * n1 });', 'long: true });'),
+ ('takeout-not-same', 'the round is called l times as long whenever it is not the same length', 'long: f.round === l * n1 });', 'long: f.round !== n1 });'),
  ('no-commas', "thousands are not set off", "function commas(n) { return String(n).replace(/\\B(?=(\\d{3})+$)/g, ','); }", "function commas(n) { return String(n); }"),
 ]
 # two broken copies that no turtle can tell from the true one: for this turtle the heading is back exactly when the turn is
 # (after k steps the heading has changed by (2^k - 1) p/q of a turn and the turn is 2^k p/q), so either clause of "home" implies the other
 EQUAL = {'home-any-heading': 'as expected: the heading is back whenever the turn is ((2^k - 1) p/q is whole exactly when 2^k p/q = p/q)',
-         'home-any-turn': 'as expected: the turn is back whenever the heading is ((2^k - 1) p/q is whole exactly when 2^k p/q = p/q)'}
+         'home-any-turn': 'as expected: the turn is back whenever the heading is ((2^k - 1) p/q is whole exactly when 2^k p/q = p/q)',
+         # two more, of the clock (27 November): for a prime l that comes in once, the l-gon through an hour holds an hour that l divides more
+         # often than it divides the hours of the round, and doubling never reaches it; and the hours of a round are one hour's multiples by
+         # powers of 2, so if one hour's polygon is whole every hour's is
+         'clock-once-prime': 'as expected: with a prime that comes in once no round falls into polygons, so asking changes nothing',
+         'clock-first-hour': 'as expected: the hours of a round are the first hour times powers of 2, so one whole polygon means all are whole',
+         'takeout-not-same': 'as expected: a round is always either l times as long as the round with one l out or no longer, so "not the same" is "l times"'}
 for name, what, a, b in M: assert core.count(a) == 1, name
 work = os.path.join(here, 'mutants'); os.makedirs(work, exist_ok=True)
 def run(text):

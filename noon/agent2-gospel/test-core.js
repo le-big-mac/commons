@@ -70,5 +70,42 @@ must(T.val(18, 3) === 2 && T.val(12, 3) === 1 && T.val(4, 3) === 0 && T.val(100,
   must(same && c.closes === closes && c.spoilt === spoilt && c.plain === plain && closes + spoilt + plain === 1000, 'the census of odd denominators from 3 to 2001: bounded, holding a square and not bounded, holding none: as Python\'s sums have them', closes + ', ' + spoilt + ', ' + plain); }
 must(T.commas(1194649) === '1,194,649' && T.commas(45) === '45', 'thousands are set off with commas');
 
+// 8. the clock: the hours of a round, the polygons they fall into, and their balance point
+{ const a = T.clock(1, 9), b = T.clock(1, 45), c = T.clock(1, 63), d = T.clock(1, 36), e = T.clock(1, 441), g = T.clock(1, 225), h = T.clock(1, 7), i = T.clock(3, 8);
+  const sorted = x => Array.from(x.hours).sort((u, v) => u - v).join(' ');
+  must(sorted(a) === '1 2 4 5 7 8' && String(a.kinds) === '3' && a.off < 1e-12 && Array.from(a.hours).join(' ') === '1 2 4 8 7 5', '1/9: the hours 1, 2, 4, 8, 7, 5 are two triangles (1, 4, 7 and 2, 5, 8) and balance');
+  must(sorted(b) === '1 2 4 8 16 17 19 23 31 32 34 38' && String(b.kinds) === '3' && b.off < 1e-12 && [1, 2, 4, 8].every(x => T.polygon(x, 45, 3).every(y => b.hours.indexOf(y) >= 0)) && String(T.polygon(1, 45, 3)) === '1,16,31', '1/45: twelve hours in four triangles (1, 16, 31 and three more)');
+  must(sorted(c) === '1 2 4 8 16 32' && c.kinds.length === 0 && Math.abs(6 * c.off - 3.4846) < 1e-4 && Math.abs(c.off - 0.5808) < 1e-4 && c.hours.indexOf(22) < 0 && c.hours.indexOf(43) < 0, '1/63: six hours, no triangle among them (of 1, 22, 43 only the 1), and their balance point is 0.581 of a radius off the centre: six steps carry 3.485');
+  must(sorted(d) === '4 8 16 20 28 32' && String(d.kinds) === '3' && d.tail === 2 && d.off < 1e-12, '1/36: after the tail of 2 the hours are 4, 8, 16, 32, 28, 20 on a clock of 36: two triangles');
+  must(String(e.kinds) === '7' && e.n === 42 && String(g.kinds) === '3,5' && h.kinds.length === 0 && sorted(h) === '1 2 4' && i.n === 1 && sorted(i) === '0' && Math.abs(i.off - 1) < 1e-12, '1/441: heptagons and no triangles; 1/225: triangles and pentagons both; 1/7: none; 3/8 after its tail: the one hour 0'); }
+{ let agree = 0, kindsOK = 0, worst = 0, n = 0, worstC = 0;
+  for (const m of Object.keys(table.odd).map(Number)) { const py = table.odd[m], c = T.clock(1, m); n++;
+    if ((c.kinds.length > 0) === py[0]) agree++; if (String(c.kinds) === String(py[3])) kindsOK++;
+    worst = Math.max(worst, Math.abs(c.n * c.off - py[2])); worstC = Math.max(worstC, Math.abs(c.cx - py[4]), Math.abs(c.cy - py[5])); }
+  must(n === 1500 && agree === 1500 && kindsOK === 1500, 'the clock for 1/m, every odd m from 3 to 3001: the hours fall into polygons exactly when Python\'s sum of the round is nought, and into the same kinds of polygon as Python finds', agree + ' agree; ' + kindsOK + ' with the same kinds');
+  must(worst < 1e-8 && worstC < 1e-10, '   and the balance point is where Python puts it; the number of hours times its distance from the centre is how far Python\'s round carries the turtle', 'worst difference ' + worst.toExponential(1) + ' steps, ' + worstC.toExponential(1) + ' radii'); }
+{ let agree = 0, worst = 0, hoursOK = 0, withHours = 0;
+  for (const r of table.fracs) { const c = T.clock(r.P, r.Q);
+    if (String(c.kinds) === String(r.kinds) && (c.kinds.length > 0) === r.bounded && c.n === r.round && c.tail === r.tail) agree++;
+    worst = Math.max(worst, Math.abs(c.n * c.off - r.gain));
+    if (r.hours) { withHours++; if (Array.from(c.hours).sort((u, v) => u - v).join(',') === r.hours.join(',')) hoursOK++; } }
+  must(agree === table.fracs.length && worst < 1e-7 && hoursOK === withHours && withHours > 150, 'the clock for the made-up fractions, odd and even q: kinds of polygon, hours (where a round has at most 60) and the distance a round carries, as Python has them', agree + ' of ' + table.fracs.length + '; ' + hoursOK + ' of ' + withHours + ' lists of hours; worst ' + worst.toExponential(1)); }
+
+// 9. the rule in the Lehmers' form: with one l taken out, is the round l times as long?
+{ const a = T.takeOut(1, 9), b = T.takeOut(1, 45), c = T.takeOut(1, 63), d = T.takeOut(1, 441), e = T.takeOut(1, 7), g = T.takeOut(5, 36), h = T.takeOut(1, 1194649), i = T.takeOut(1, 189);
+  must(JSON.stringify(a) === '[{"l":3,"e":2,"n1":2,"long":true}]' && JSON.stringify(b) === '[{"l":3,"e":2,"n1":4,"long":true}]' && JSON.stringify(c) === '[{"l":3,"e":2,"n1":6,"long":false}]',
+    '1/9: with one 3 out the round of 1/3 has 2 steps, and 6 is three times 2; 1/45: 1/15 has 4, and 12 is three times 4; 1/63: 1/21 has 6, and 6 is no more');
+  must(JSON.stringify(d) === '[{"l":3,"e":2,"n1":42,"long":false},{"l":7,"e":2,"n1":6,"long":true}]' && e.length === 0 && JSON.stringify(g) === JSON.stringify(a) && JSON.stringify(h) === '[{"l":1093,"e":2,"n1":364,"long":false}]' && JSON.stringify(i) === '[{"l":3,"e":3,"n1":6,"long":true}]',
+    '1/441: the 3 gives nothing (42 and 42) and the 7 does (6 and 42); 1/7: no repeated prime; 5/36 as 1/9; 1/1093²: 364 and 364; 1/189: 6 and 18'); }
+{ let agree = 0, same = 0, either = 0, n2 = 0;
+  for (const m of Object.keys(table.odd).map(Number)) { const py = table.odd[m], t = T.takeOut(1, m); n2++;
+    if (t.some(x => x.long) === py[0]) agree++; if (JSON.stringify(t.map(x => [x.l, x.e, x.n1])) === JSON.stringify(py[6])) same++;
+    if (t.every(x => py[1] === x.n1 || py[1] === x.l * x.n1)) either++; }
+  let fr = 0; for (const r of table.fracs) { const t = T.takeOut(r.P, r.Q); if (t.some(x => x.long) === r.bounded && JSON.stringify(t.map(x => [x.l, x.e, x.n1])) === JSON.stringify(r.out)) fr++; }
+  must(n2 === 1500 && agree === 1500 && same === 1500 && either === 1500 && fr === table.fracs.length, 'the rule in that form, for every odd m from 3 to 3001 and for the made-up fractions: some repeated prime makes the round l times as long exactly when Python\'s sum of the round is nought; the lengths with one l out are those Python finds by doubling; and a round is always either l times as long or no longer', agree + ', ' + same + ', ' + either + ' of 1500; ' + fr + ' of ' + table.fracs.length); }
+{ // the clock against the walk and the rule, a little wider than Python's table goes (a run to 100,001 is in clock/wide.js)
+  let bad2 = 0, n3 = 0; for (let m = 3; m <= 12001; m += 2) { const f = T.forecast(1, m), c = T.clock(1, m), t = T.takeOut(1, m); n3++; if ((c.kinds.length > 0) !== f.bounded || t.some(x => x.long) !== f.bounded || String(c.kinds) !== String(t.filter(x => x.long).map(x => x.l))) bad2++; }
+  must(n3 === 6000 && bad2 === 0, 'for every odd m from 3 to 12,001 the three ways of telling agree: the forecast\'s rule, the hours falling into polygons, and the round being l times as long with one l out; and the polygons are of exactly the primes for which it is', n3 + ' denominators, ' + bad2 + ' disagreements'); }
+
 console.log('CORE TEST: ' + n + ' assertions, ' + bad + ' failed');
 process.exit(bad ? 1 : 0);

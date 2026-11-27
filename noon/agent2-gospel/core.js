@@ -66,6 +66,40 @@
     return { xs: xs, ys: ys, home: home, there: there, head: head, turn: turn, q: q };
   }
 
+  /* The clock (added 27 November).  The turns of one round, after the tail, as hours on a clock of q hours: the turn after
+     k steps is p 2^k of q-ths of a whole turn.  Hour 0 is at the top and the hours are counted leftwards, the way the turtle
+     turns.  The steps of a round, moved to start at the centre, are hands pointing at these hours, all turned back by the
+     first turn; so a round ends where it began exactly when the hours balance about the centre, and it carries the turtle
+     (number of hours) x (distance of their balance point from the centre).
+     kinds: the odd primes l, coming into q twice or more, for which the hours fall into regular l-gons: with every hour a,
+     the hour a + q/l is marked too.  An l-gon balances, so a round whose hours fall into l-gons closes; the rule says that
+     no other round does, and the tests try that on every round of Python's table. */
+  function clock(P, Q) {
+    var f = forecast(P, Q), q = f.q, n = f.round, t = f.p, k, K = 2 * Math.PI / q;
+    for (k = 0; k < f.tail; k++) t = t * 2 % q;
+    var hours = new Int32Array(n), mark = new Uint8Array(q), cx = 0, cy = 0;
+    for (k = 0; k < n; k++) { hours[k] = t; mark[t] = 1; cx -= Math.sin(t * K); cy += Math.cos(t * K); t = t * 2 % q; }
+    var kinds = [], i, j;
+    for (i = 0; i < f.factors.length; i++) {
+      var l = f.factors[i][0], step = q / l, all = f.factors[i][1] >= 2;
+      for (j = 0; j < n && all; j++) if (!mark[(hours[j] + step) % q]) all = false;
+      if (all) kinds.push(l);
+    }
+    return { q: q, n: n, tail: f.tail, hours: hours, kinds: kinds, cx: cx / n, cy: cy / n, off: Math.hypot(cx, cy) / n };
+  }
+  /* The rule as D. H. and Emma Lehmer put Fuchs's theorem: a round closes exactly when, for some odd prime l that comes into the
+     bottom number twice or more, it is l times as long as the round of the turtle with one l taken out.  For each such prime:
+     l, how many times it comes in, the length n1 of the round with one l out, and whether this round is l times that.
+     (It is either l times as long or no longer.) */
+  function takeOut(P, Q) {
+    var f = forecast(P, Q), out = [], i;
+    for (i = 0; i < f.factors.length; i++) { var l = f.factors[i][0], e = f.factors[i][1]; if (e < 2) continue;
+      var n1 = order2(f.m / l); out.push({ l: l, e: e, n1: n1, long: f.round === l * n1 }); }
+    return out;
+  }
+  // one of the l-gons the hours fall into: the hours a, a + q/l, a + 2q/l, ...
+  function polygon(a, q, l) { var out = [], k; for (k = 0; k < l; k++) out.push((a + k * (q / l)) % q); return out; }
+
   function box(w) {
     var x0 = 0, x1 = 0, y0 = 0, y1 = 0;
     for (var k = 1; k < w.xs.length; k++) { if (w.xs[k] < x0) x0 = w.xs[k]; if (w.xs[k] > x1) x1 = w.xs[k]; if (w.ys[k] < y0) y0 = w.ys[k]; if (w.ys[k] > y1) y1 = w.ys[k]; }
@@ -83,6 +117,6 @@
     return { kind: kind, closes: closes, spoilt: spoilt, plain: plain, top: top };
   }
 
-  var api = { QMAX: QMAX, NEAR: NEAR, gcd: gcd, mod: mod, parse: parse, commas: commas, factor: factor, order2: order2, val: val, forecast: forecast, walk: walk, box: box, census: census };
+  var api = { QMAX: QMAX, NEAR: NEAR, gcd: gcd, mod: mod, parse: parse, commas: commas, factor: factor, order2: order2, val: val, forecast: forecast, walk: walk, box: box, census: census, clock: clock, polygon: polygon, takeOut: takeOut };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.GOSPEL = api;
 })(typeof window !== 'undefined' ? window : this);

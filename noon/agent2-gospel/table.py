@@ -4,7 +4,11 @@ usage: python -I table.py table.json
 odd:      for odd m from 3 to 3001 with numerator 1: is one round of the turns nought when added up (so the turtle is bounded)?
 fracs:    made-up fractions p/q, q odd or even: the tail (steps before the turns repeat), the length of a round, whether the
           round adds up to nought, how far one round carries the turtle, and the first step at which the walked turtle is home
-corners:  for a dozen turtles, where Python's walk stands after chosen steps (the turtle starts facing up the page, turns left, then steps)"""
+corners:  for a dozen turtles, where Python's walk stands after chosen steps (the turtle starts facing up the page, turns left, then steps)
+the clock (added 27 November): for each of the above, the turns of one round marked as hours on a clock of q hours (hour 0 at the
+          top, counted leftwards): the primes l, coming into q twice or more, for which the hours fall into regular l-gons (with
+          every hour a, the hour a + q/l is marked too), and the balance point of the hours, in clock radii; and, for each odd prime l
+          that comes into q twice or more, the length of the round of the turtle with one l taken out"""
 import json, math, random, sys
 from fractions import Fraction
 
@@ -23,17 +27,48 @@ def places(p, q, n):
         if not home and x * x + y * y < 1e-14 and head == 0 and turn == p % q: home = k
     return out, home
 
+def clock(p, q):
+    """the hours of one round, found by doubling; the kinds of polygon they fall into; their balance point"""
+    seen = {}; t = p % q; k = 0
+    while t not in seen: seen[t] = k; t = t * 2 % q; k += 1
+    first = seen[t]; hours = [h for h, i in seen.items() if i >= first]; S = set(hours); kinds = []
+    m = q; l = 3
+    while m % 2 == 0: m //= 2
+    while l * l <= m:
+        if m % l == 0:
+            e = 0
+            while m % l == 0: m //= l; e += 1
+            if e >= 2 and all((a + q // l) % q in S for a in S): kinds.append(l)
+        l += 2
+    cx = -sum(math.sin(2 * math.pi * h / q) for h in hours) / len(hours); cy = sum(math.cos(2 * math.pi * h / q) for h in hours) / len(hours)
+    return sorted(hours) if len(hours) <= 60 else None, kinds, cx, cy
+
+def take_out(q):
+    """for each odd prime l that comes into q twice or more: [l, how many times, the length of the round of 1/(m/l)], m the odd part of q;
+    the lengths found by doubling until 1 comes again"""
+    m = q
+    while m % 2 == 0: m //= 2
+    out = []; x = m; l = 3
+    while l * l <= x:
+        if x % l == 0:
+            e = 0
+            while x % l == 0: x //= l; e += 1
+            if e >= 2: out.append([l, e, tail_round(1, m // l)[1]])
+        l += 2
+    return out
+
 def one(p, q):
     fr = Fraction(p, q); p, q = fr.numerator % fr.denominator, fr.denominator
     s, n = tail_round(p, q); pts, home = places(p, q, s + 3 * n)
     dx, dy = pts[s + n][0] - pts[s][0], pts[s + n][1] - pts[s][1]; gain = math.hypot(dx, dy)
-    return {'p': p, 'q': q, 'tail': s, 'round': n, 'bounded': gain < 1e-9, 'gain': gain, 'home': home}
+    hours, kinds, cx, cy = clock(p, q)
+    return {'p': p, 'q': q, 'tail': s, 'round': n, 'bounded': gain < 1e-9, 'gain': gain, 'home': home, 'hours': hours, 'kinds': kinds, 'cx': cx, 'cy': cy, 'out': take_out(q)}
 
 
 if __name__ == '__main__':
     odd = {}
     for m in range(3, 3002, 2):
-        r = one(1, m); odd[m] = [r['bounded'], r['round'], r['gain']]
+        r = one(1, m); odd[m] = [r['bounded'], r['round'], r['gain'], r['kinds'], r['cx'], r['cy'], r['out']]
     rng = random.Random(20261126)
     picks = [(1, 9), (1, 45), (1, 7), (1, 63), (1, 171), (1, 25), (1, 27), (1, 12), (2, 9), (1, 8), (3, 8), (1, 18), (1, 90), (5, 36), (1, 1), (0, 5), (4, 9), (7, 45), (1, 99), (1, 441), (1, 2525), (1, 9009),
              (1, 72), (1, 50), (11, 100), (1, 189), (1, 513), (2, 45), (44, 45), (-1, 9), (10, 90), (1, 6), (1, 36), (1, 1194649), (1, 19683), (1, 59049), (1, 1048576), (7, 2000000)]
@@ -43,6 +78,7 @@ if __name__ == '__main__':
     picks.append((1635, 1009681))                     # the nearest miss (added 26 November, after the others, so that none of them changes)
     picks += [(1739, 1094420), (12605, 1741011), (2195, 65537), (1008046, 1009681)]     # four more near misses: one after a tail, and the mirror image of the nearest
     picks.append((1, 1000000))                        # a tenth button (added after the plain readers' visits)
+    picks += [(1, 21), (1, 25), (1, 225), (1, 1575), (1, 17325), (1, 99225)]      # for the clock (27 November): no prime twice; pentagons; two kinds; one prime that works beside one that does not; two that do not; three kinds
     fr = [dict(one(p, q), P=p, Q=q) for p, q in picks]
     cor = []
     for p, q in [(1, 9), (1, 45), (1, 7), (1, 63), (1, 171), (1, 25), (1, 27), (1, 12), (2, 9), (3, 8), (-1, 9), (1, 99), (1, 36), (1, 441), (1, 1194649), (1635, 1009681), (1, 1000000)]:

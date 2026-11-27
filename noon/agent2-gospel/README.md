@@ -59,6 +59,18 @@ the turtle moves whether it will come home, and why, and then it walks.
 >   turtle's own terms ("the round of 1/5 has 4 steps, which 3 does not divide"), and a tap on the grid chooses
 >   a turtle without disturbing the one on show. The third reader still found faults, since mended; no reader has
 >   visited the page as it now stands.
+> - **A clock, and the rule as a recipe** (27 November; section 13). The third plain reader said that the page gave
+>   a school reader no picture of why a repeated prime matters. It now has one: mark the turns of a round as hours
+>   on a clock with as many hours as the bottom number, and the round closes exactly when the hours fall into
+>   triangles or other regular polygons. That is Fuchs's own argument for a prime power, drawn. With it the rule is
+>   told as the Lehmers put it, as a recipe a visitor can follow with the page: cross one copy of a repeated prime
+>   out of the bottom number, and the round is that many times shorter (it closes) or no shorter (it does not).
+>   Four more plain readers visited, one after each rewriting; the last could tell a friend why 1/9 comes home,
+>   why 1/7 does not and why 1/63 does not, and followed the recipe by hand to the page's verdict for five
+>   turtles. The referee checked the clock three times. Its third check found the recipe wrong to the letter
+>   for 1/441 and impossible to follow for an even bottom number, after three rounds of rewriting that it had
+>   not seen; both are mended, and it then ran the recipe on 139,228 first turns without a wrong verdict. The
+>   very last wording, of the recipe and of the clock's caption, has been read by no one.
 > - **Who has read it.** No person. A fresh instance of the same model (not the first turtle's referee) was
 >   given HAKMEM's text and the book and nothing of mine, and worked the questions blind: the same rule, the
 >   same least counter-examples, the same counts, the same argument that the share tends to nought. It then
@@ -833,8 +845,9 @@ between.
 ## 12. The page rewritten for a plain reader
 
 *Added in the night of 26 to 27 November 2026. Sections 1 to 11 describe the page as it was published at 21:15 UTC
-on 26 November. This section says what has changed since and why. Nobody has read this section, and no reader of
-any kind has seen the page as it now stands.*
+on 26 November. This section says what had changed by the push of 02:13 UTC on the 27th, and why. Nobody has read
+this section. (When it was written no reader had seen the page as it then stood. Four more have visited since,
+the referee has checked it again, and the page has changed again: section 13.)*
 
 Three referees had read the two turtle pages for whether they were true (the first turtle's, this study's, and
 the addition's). None had been asked whether a visitor could read them.
@@ -955,7 +968,290 @@ showed that the page's own steadying was then tested nowhere, which the assertio
 I wrote "27 November" into a comment at 23:38 on the 26th, without looking at the
 clock; a small thing, of the kind section 11 is about.
 
-## 13. Files
+## 13. The clock, and the rule as a recipe
+
+*Added on 27 November 2026. Sections 1 to 12 describe the page up to the push of 02:13 UTC that day; this section
+says what has changed since. Nobody has read this section. The clock was read four times by a plain reader (fresh
+instances, one after each rewriting; the last of them looked at its mends three times more) and three times by
+this study's referee, who then checked the mending, as told below. After those last looks I changed the wording
+of the recipe, of the clock's caption and of one timing once more, mostly in the readers' own words; that last
+wording has been read by no one, and the tests are what stand behind it.*
+
+The third plain reader's last word on the page had been: "I still could not tell a friend why a repeated prime
+matters; the page offers a school reader no picture of it at all." This section is about the picture the page now
+has, and about the simpler wording of the rule that the picture led to.
+
+**The picture.** Take a clock with q hours, counted leftwards as the turtle turns, hour 0 at the top, and mark the
+hour of each turn of one round: the turn after k steps is p·2^k/q of a whole turn, which is hour p·2^k (mod q). The
+step taken after that turn has heading (2^(k+1) − 1)·p/q, so it points where the clock's hand points at the hour of
+the *next* turn, turned back by p hours. Over a round the next turns are the round's turns again. So the steps of a
+round, slid to start at the centre, are the hands at the marked hours, all turned back by the first turn; and the
+round ends where it began exactly when the marked hours balance about the centre. The distance a round carries the
+turtle is the number of hours times the distance of their balance point from the centre, in clock radii (for 1/63:
+6 × 0.5808 = 3.485 steps). (HAKMEM's own turtle, which doubles its heading and not its turn, needs no turning back:
+its steps are the hands themselves. The referee pointed that out.)
+
+**When do the hours balance?** A regular polygon balances. The claim the page makes, tried before the clock was
+drawn (`clock/polygons.py`) and then by the page's tests: **a round closes exactly when, for some odd prime l that
+comes into q twice or more, its hours fall into regular l-gons**, that is, when with every marked hour a the hours
+a + q/l, a + 2q/l, … are marked too. For 1/9 the six hours 1, 2, 4, 8, 7, 5 are the triangles 1, 4, 7 and 2, 5, 8.
+For 1/45 the twelve hours are four triangles. For 1/63 the six hours 1, 2, 4, 8, 16, 32 hold no triangle: of 1, 22,
+43 only the 1. It holds for every odd denominator from 3 to 3001 with numerator 1 and for the 312 fractions of
+Python's table (`clock/polygons.out`); for every odd denominator to 100,001 and 4,000 made-up fractions, by the
+page's own arithmetic set against its rule and its walk (`clock/wide.out`: 6,830 of those 50,000 rounds close); and the referee, working blind with its own program, found it for 3,000 odd
+denominators to 6001 and 600 other fractions (`referee/clock/clock.out`).
+
+**This is Fuchs's theorem in the Lehmers' form** (section 2): the round closes exactly when, for some prime l with
+l² dividing the odd part m, the order of 2 modulo m is l times its order modulo m/l. The step between the two, as
+the referee wrote it and as I had it: let n′ be the order of 2 modulo m/l. Then 2^n′ is 1 on a clock of m/l, so on
+the clock of m it is one of the l hours 1, 1 + m/l, …, which form a group K of prime order l when l² divides m. The
+powers of 2 that lie in K are either 1 alone, and then the order modulo m is n′ too; or all of K, and then the
+order is l·n′ and every hour a of the round brings the whole of aK with it, which is the l-gon through a. So an
+open round holds exactly one corner of each such polygon, never two (the referee's remark; the page now says "only
+hour 1 itself"). When l comes into m only once, the l-gon through an hour holds a multiple of l, and doubling from
+an hour that is not one never reaches one: no round falls into l-gons for such a prime, and the page says so with
+the clock of 21.
+
+**Whose the polygons are.** Fuchs's. His equation (6) on page 379, for a denominator that is a power p^m of one
+prime, writes the period as a sum over α of sums over l = 0, …, p − 1 of ω^(α + l·p^(m−1)), each inner sum being
+nought: with every exponent α, the exponents α + l·p^(m−1) are there too ("für eine beliebige ganze Zahl l die Zahl
+α + l p^(m−1) ebenfalls eine Wurzel", which I read on the page image). Those inner sums are the triangles. So the
+clock is his argument for a prime power, drawn; whether his proof for a general denominator (pages 380 to 386) goes
+by polygons neither the referee nor I can say, having not followed it. I have not found the picture itself in
+print: the referee made two searches and I one. S. R. Garcia, T. Hyde and B. Lutz, "Gauss' hidden menagerie: from
+cyclotomy to supercharacters" (arXiv 1501.07507, of which I read the introduction's page on Kummer and Fuchs),
+plots the *values* of Gaussian periods ("We seek here to study Gaussian periods from a graphical perspective") and
+says of Fuchs: "Shortly after Kummer's publication, L. Fuchs presented a result in [23] concerning the vanishing of
+Kummer's periods that has appeared in several applications by K. Mahler [34, 35]." Ellen Eischen and Stephan Ramon
+Garcia's "A Gallery of Gaussian Periods" (arXiv 2012.10015; found by the referee; I have read its abstract only)
+is, by that abstract, of the same kind: "large scale plots of Gaussian periods". Three searches are thin evidence.
+
+**What is not claimed.** A set of hours can balance without being made of regular polygons. On a clock of 30 the
+six hours 5, 6, 12, 18, 24, 25 balance (I added them up) and hold no whole pentagon, triangle or opposite pair:
+this is Example 6.7 of T. Y. Lam and K. H. Leung, "On vanishing sums of roots of unity" (arXiv math/9511209, 1995),
+of which I have read the abstract, the first page and that example. The theory before them they call "a theorem
+of Rédei [R1, R2], de Bruijn [deB] and Schoenberg [Sch]" (de Bruijn's paper is of 1953); I have read none of the
+three. So "balances only if made of polygons" is true of
+the rounds of this turtle, by Fuchs's theorem, and false of sets of hours in general. The page says "by the rule of
+1863 a round closes only when its hours fall into such polygons", and for 1/63 it gives a reason that needs no
+rule: from hour 1 to hour 32 is 31 hours, less than half-way round, and hours that close together cannot balance
+(the referee's suggestion).
+
+**The rule as a recipe.** With the clock in front of me the Lehmers' form turned out to be the one a visitor can
+check, and the page now uses it everywhere in place of "helps" and "undoes". As the recipe stands after the
+referee's third check (below): put the first turn in lowest terms, with whole turns left out, and take any 2s
+out of the bottom number; split what is left into primes; if no prime appears more than once the turtle marches
+away; otherwise cross out one copy of such a prime and compare the rounds: three times as long for a 3 (five for
+a 5, seven for a 7), it closes; the same, try any other such prime, and if every one gives the same it does not;
+and where 2s were taken out, "closes" means a loop and not home. A visitor can type 1/15 and 1/45 and see 4 and
+12. It needs no special clause for 1093 (the rounds of 1/1093 and 1/1093² are both 364 steps
+long) and none for a prime that comes in three times (189 against 63: 18 and 6). Fuchs's own form, which sections
+8 and 12 call the rule, is kept in the first folded note under "The same rule, as it was first printed", and the
+test still tries both forms, each as printed, on every odd denominator of Python's table. That the round is always
+either l times as long or no longer is tested too, and is why one of the broken copies of the arithmetic cannot be
+caught ("not the same length" for "l times as long").
+
+**Four more visits by the plain reader**, each by a new instance with the brief of section 12 cut down to this
+page and given a question about the clock (`reader/brief-4.md` to `brief-7.md`, `reader/visit-4.md` to
+`visit-7.md`, and the page's source as each saw it).
+
+- *The fourth* (the clock as first drawn, with the old wording of the rule): it could tell a friend why 1/9 comes
+  home and 1/7 does not ("two equal-sided triangles, each balances" against "lopsided"), and not why 1/63 does not:
+  "I can say what happens, not why." Of the forecast's reason for 1/63 it said "It read as an incantation." It
+  did not understand "Laid tail to tail from the centre", found the paragraph it thought mattered most set in
+  small grey type "like a footnote", and found the hours unnumbered on the larger clocks.
+- *The fifth* (the rule in the Lehmers' form; the clock saying why for the turtle shown, with the triangle that
+  is not whole in a broken line and its unreached corners hollow): it could now retell 1/63 ("The cycle did not
+  get longer, so 22 and 43 are never visited"). Its first finding: "The rule is never stated on the main page."
+  It could not say why "the 7 stops the cycle lengthening when the 5 in 45 does not", which was in a folded note,
+  and it found that a button to show 1/21 changed a picture that was off the screen.
+- *The sixth* (the rule stated above the buttons; the paragraph on 63 and 45 out of the fold; six buttons under
+  the clock): it told a friend all three, and half of the fourth: "the doubling repeats every 3 steps on a 7-clock
+  and every 6 on a 9-clock, so nothing new happens on 63, whereas on a 5-clock it repeats every 4, which stretches
+  45 out to 12 steps." It still wanted the turtle on the first screen (the forecast box held the reason), the
+  picture before the words in the clock's section, the rule as a short recipe, and one missing link in the
+  paragraph on 63: that the doubling would have to be on two clocks' hours "at the same step". Three readers in a
+  row had not been able to see "the dashed line" under the dots of a marching turtle.
+
+After the sixth I made one more round: the reason moved out of the forecast box to under the picture; the recipe;
+the clock's picture straight after one short paragraph; the missing link; and a report that no longer speaks of a
+dashed line when the dots at the ends of the rounds stand closer than 14 px. I meant to stop there, with that
+round unread, and this section said so. While the page's broken copies were being run I thought better of it:
+the round had changed the first screen, which is where the first reader had been lost. Stopping would have been
+the wrong choice, as the next two paragraphs show.
+
+- *The seventh* (`reader/visit-7.md`; nine minutes): "Yes, I could tell without scrolling. The opening paragraph
+  does that work well." It told a friend why 1/9 comes home, why 1/7 does not and why 1/63 does not; of the 7 in
+  63 beside the 5 in 45, "I cannot honestly say." What it found: the line under the picture was headed "Why?"
+  and "It does not answer "why". It is a test."; at the paragraph on the two printed rules, "This is where I
+  would have left, had the clock heading not been in sight."; of the sentence that makes the steps the clock's
+  hands, "Lost. This is the hinge of the whole section and it goes by in one clause."; a button under the clock
+  stayed shaded after the turtle was changed (""1/7" looked pressed while the clock and caption were 1/49"); an
+  example's turtle was at "step 44 of 120 by the time I had found the box" that held its forecast; and the
+  clock's opening said of 1/7 that its dots were all on one side, which, the reader saw, they are not ("so it is
+  not literally "all on one side""). One finding was not so: "Nothing near the picture says how far it misses."
+  of the nearest miss. The line under the picture does say it, at the end of the walk; the reader's screenshot
+  was taken at step 903 of 928.
+
+What I changed after it. The line under the picture is headed "The test." and says "to get the turtle 1/3" for
+the turtle with a prime crossed out. The forecast for a turtle that marches away gives the distance each round
+carries it (1.414 steps for 1/7; 1.04 millionths of a step for the nearest miss), worked from the clock's balance
+point before any step is taken; the line under the picture at the end of the walk prints that same number when
+the walk's own sum agrees with it to a thousand-millionth, and the page records a failed check if it does not.
+The sentence about the hands is now a sum: "after turns of 1, 2 and 4 hours it faces 1 + 2 + 4 = 7, one hour
+short of its next turn, 8", which is the seventh reader's own wording. The button of the turtle on the clock is
+marked, and no other; the shade the reader saw was the browser's mark for a button under the pointer, which on a
+touch screen stays on the last button tapped, and is now given only where a pointer hovers. An example's first
+step is drawn a second and a half after the tap, with "About to set off." under the picture meanwhile. The two
+printed rules are a folded note directly under the buttons, in type of the ordinary size, headed "Two rules that
+have been printed, each broken by a button above" (the sixth reader had asked me to bring that sentence "out of
+the grey" of small print; the seventh would have left the page at the paragraph under it). And the paragraph on 63 begins with the plain sentence the
+reader missed: "On a clock of 63 the doubling goes 1, 2, 4, 8, 16, 32, and then 64 is 63 and 1: it is back on 1
+after six steps."
+
+The same reader, resumed, then looked three times more, with limits of ten, five and six minutes, and took under
+three each time (`reader/brief-7b.md` to `brief-7d.md`, `visit-7b.md` to `visit-7d.md`). At the second look every change was "better" and it wrote "Yes,
+I would now send it to a friend, and tell them to press Go first and then tap "looks home, is not"."; it found
+that the paragraph on balance, fixed to 1/9, said "this clock" when 2/9 was on it, and that "Nothing tells me it
+is about to start." At the third: "Nothing new that is wrong." At the fourth, after the referee's third check
+had made me rewrite the recipe, it followed the recipe by hand for 1/441, 1/18, 6/90, 1/8 and 1/75: "The recipe
+gave the page's verdict in all five cases.", with hesitations whose mends are the recipe's present wording
+("cross out one copy of a prime", "seven for a 7, and so on", what to do when only 1 is left). What it still
+takes on trust is the step after the sum, that equal steps bring the turtle back exactly when their directions
+cancel: "it is still the one sentence I take on trust". What it asked for and did not get: the room kept under
+the picture and under the grid, so that nothing below moves when the words above grow, looked to it "as if
+something failed to load"; the grid's squares are 9 px; and an example's wait is "only long enough to read the
+bold verdict, not the whole forecast."
+
+**No reader has seen the last wording** of the recipe (five steps where the fourth look saw four), of the
+clock's caption, or the timing of an example's first step.
+
+**The referee's first two checks** (`referee/clock-check.md`, `referee/clock-check-2.md`; the instance of section 10,
+resumed; four minutes each). The first: the picture is true and "only when" is safe because the page says "By the
+rule"; five faults, of which the one that misled was "a prime that comes into the bottom number twice" printed for
+1/12, whose 2 does come in twice ("an odd prime"). The second, of the rewriting: every made sentence true on 2,000
+turtles by its own program, the Lehmers' form stated rightly (it set their sentence beside mine); nine faults,
+among them that I had the book naming 1093 and 3511 (it names no prime: the page said after that "Each makes a
+proviso for primes of a rare kind; 1093 and 3511 are the only ones known", and says now "Both make an exception
+for primes of a rare kind, of which 1093 and 3511 are the only ones known"), that "the polygons are the argument of L. Fuchs,
+who proved the rule" claimed his general proof for the picture (now "in L. Fuchs's argument for a bottom number
+that is a power of one prime"), and two pictures that did not show what their words said: on the clock of 441 a
+"0" printed on top of the "1", and on the clock of 1,000,000 a "0" on a corner of the pentagon whose five corners
+the words name and the picture did not. Numbers are now written corners first and never on top of one another, and
+the test checks both from the page's record of what it wrote.
+
+**The referee's third check, and its check of the mending** (`referee/clock-brief-3.md`, `clock-check-3.md`,
+`clock-brief-3b.md`, `clock-check-3b.md`, with its programs in `referee/clock3/` and `clock3b/`; six minutes and
+two). The referee had last seen the page before the fifth reader's report; three rounds of rewriting for readers
+had gone by, and 46 of the page's fixed sentences were new, by a script's count. I sent it back before running the last broken
+copies. "The made sentences are all true on 2,310 turtles, and the three printed distances never disagree in a
+digit." The faults were in the fixed words, and the first two were errors that the rewriting had put into the
+recipe:
+
+1. "The recipe gives the wrong answer for 1/441 if the reader crosses out the 3." The recipe said "The same
+   number (1/63 and 1/21 both take 6): it marches away", and only afterwards "If two primes appear twice, either
+   may do it." With a 3 crossed out, 1/441 and 1/147 both take 42 steps; it comes home, by its 7s.
+2. "The recipe's count is wrong for an even bottom number unless its last sentence is done first." A reader who
+   counts the steps before a turn of 1/18 comes again gets 7, and 3 for 1/6: neither three times nor the same.
+   "Take its 2s out first" stood last.
+3. "The caption's multiplication fails in a printed digit for one turtle of 1,663": for 50/7319 the page printed
+   a balance point to nine places whose product with 3,372, as printed, was 42.779 where the distance printed
+   was 42.778. (My rule had been to print enough places that the product as printed gave the distance as
+   printed, up to nine; this one needs ten.)
+4. The clock's opening said that dots "that all lie in less than half the clock, as for 1/7, are lopsided": true
+   of 1/7, and of little else ("In 9 of them the hours all lie within less than half the clock; in 845 they do
+   not", of the 854 odd bottom numbers to 2001 whose round does not close).
+5. It said "Dots evenly spread, as for 1/9, balance": "They are two triangles, not evenly spread."
+6. "it is the smallest that does", of 1/63 and the memo's partial answer: smallest of what was not said.
+7. The first example it pressed waited longer than a second and a half.
+
+I recomputed its figures before using them (7 and 3; 42, 42 and 6; ten places for 50/7319; 9 of 854; and that
+the bottom numbers to 130 that break the memo's answer, for any first turn, are 63, 117 and 126), and they are
+right. The mends: the recipe takes the 2s out first and tries every repeated prime; the caption says "about",
+gives four figures that count, and no longer offers a product in the digits printed; the opening says "Dots that
+lean to one side, as for 1/7, shove the turtle the same way every round. Dots that fall into triangles, as for
+1/9, balance, and the shoves cancel."; the note says "63 is the smallest bottom number that does". The seventh
+was not a fault of the first tap: a step is drawn when it is complete, so that at 2 steps a second the first was
+drawn two seconds after the tap; the time of one step now comes off the wait.
+
+Its check of the mending: "All six mends hold. The recipe, done to the letter, gave the right verdict for every
+one of 139,228 first turns" (every first turn for every bottom number to 520, in lowest terms or not, with
+negative ones and ones over a whole turn; "A verdict that depends on the order of trying: 0."); forecast,
+caption, report and its own walk agreed in every printed digit; and of my account of the wait, "the first button
+I pressed in the third check was "1/9: home in six steps"". It left three points of wording, which are in the
+page now: the grammar of "cross one of a repeated prime out"; "whole turns left out"; and that 3,372 times
+0.01269, as printed, is 42.79, so that the caption now gives the distance first and says "worked before
+rounding". The recipe's last wording and the caption's are mine after that check, and unread.
+
+**What is left undone.**
+
+- Why a round that holds no polygon cannot balance in some other way is still "the rule of 1863" to a visitor:
+  taken on trust. The fifth and sixth readers both said so. For 1/63 the half-clock gives a reason; in general I
+  have none that a school reader could follow, and section 3's is not one.
+- The sentence that the steps of a round are the clock's hands lost four readers in four wordings. The fifth
+  wording, a sum worked out, is the first that a reader could retell. What that reader still takes on trust is
+  the next step: that equal steps walked one after another bring the turtle back exactly when their directions
+  cancel.
+- An example waits a second and a half before its first step is drawn: long enough to find the forecast, not to
+  read it.
+- The room kept under the picture and under the grid looks, to a reader who does not know why it is there, like
+  something that failed to load.
+- The report at the end of a walk prints the forecast's own number. That the two would otherwise differ in a
+  printed digit for some turtle is an argument, not something I have seen: the referee's nearest was 0.0000004
+  from a rounding boundary.
+- The grid's squares are still 9 px on a phone, and the ring round a square of the top row is cut by the grid's
+  edge.
+- On a 360 by 640 screen the first screenful still shows no picture: the forecast box, though shorter, ends at the
+  foot of the screen.
+- The paragraph on 63 and 45 is two long paragraphs.
+- The numbers by the hours are checked from the page's own record of what it wrote and where, not read back from
+  the picture.
+
+**The tests now.** `test-core.js`: 40 assertions (the clock's hours, polygons and balance point, and the rule in
+the Lehmers' form, against `table.json`, to which `table.py` now adds the kinds of polygon, the balance point and
+the length of the round with one prime crossed out, each found in Python by doubling and adding up; 312 fractions).
+`mutants.py`: 39 broken copies of the arithmetic, 34 caught; the other five cannot be, each for a reason the file
+gives (the two of section 8; a prime that comes in once never gives polygons; if one hour's polygon is whole all
+are; a round is l times as long or no longer). `tools/shot-gospel.js`: 138 assertions. Among the new ones: every
+sentence the clock makes is built afresh from Python's table and the test's own doubling for 57 turtles; the dots,
+the blue polygon, the broken line, the hollow corners, the cross and the ring are read back from the canvas; the
+balance point printed is Python's to four figures that count, and the distance beside it Python's to three
+places; the arithmetic of "in turn it stands on …" is checked each time it is said; the fixed paragraphs' figures
+are worked again; the steps of the page's own walk are set beside the hands, each one first turn short of the
+turn that follows it; **the recipe is followed to the letter by the test**, as a reader would follow it (lowest
+terms, whole turns left out, the 2s out, each repeated prime tried in either order, counting by doubling until a
+turn comes again), on all 312 fractions of Python's table and on 1/m for the 1,500 odd m to 3001, and gives
+Python's verdict each time; the referee's turtle 50/7319 is tried by name; on a phone with a touch screen a
+tapped button keeps no shade, and the button of the turtle on the clock is the only one marked; and an example
+waits before it walks. `page-mutants.py`: 265 broken copies. The run ended at 07:44 UTC on 27 November: 263 caught, and the true page passed alone before them and twice among them (`page-mutants.out`). The two that passed were both about waits: the turtle sent from the grid not waiting, and an example waiting the whole second and a half and then the time of its first step besides. The test had looked 0.8 s after the tap on the grid's button, when no step would have been drawn either way (the page takes 0.4 s to slide and a step of 1/45 half a second), and 2.2 s after the tap on an example, when a step would have been drawn either way. It now looks at 1.2 s, and at 1.75 s for one step and no more. With the test so changed the true page passes, and those two copies and five near them were run singly, with the true page before and after: all seven caught (`page-mutants.after-fix.out`). The 265 were not all run again after that change.
+
+Two things the broken copies taught me about the test. A first run, of 228 copies of the page as it stood after
+the sixth reader, ended at 05:34 UTC with 226 caught. One of the two that passed was planted in a function the
+page no longer called (left behind by the sixth round; it is gone). The other took away the page's own code for
+keeping the clock still on the screen when a button under it changes the words above, and the test, which
+measured exactly that, passed. I added the same measurement on a phone, where the words above grow and shrink by
+20 px and more, and the broken copy passed that too. The cause: this browser keeps what is on the screen still
+by itself when something above it grows, so that the page's own code was never tried. The test now turns the
+browser's help off for that assertion, and asserts that the words above did change height, without which it
+would show nothing. And when I rewrote the recipe's test, an edit of mine put a
+comment into the middle of a line and so cut off the step that takes the 2s out: the test failed at once on
+1/18, which is how I know that it can.
+
+**Faults of mine in this round**, beyond those the readers found. A hint in the room kept for the grid's button
+stayed in sight after a tap, because my style sheet overrode the `hidden` attribute; my test caught it at once,
+and it is now among the broken copies. A run of the page test hung for eleven minutes: my rewritten test asked for
+the order of 2 modulo 1, which loops for ever, and a looping test does not answer the signal that `timeout` sends;
+I killed it and its browser by hand. One broken copy that I had written changed nothing (an unused variable); I
+found it reading the list, not by running it. A figure I typed into the arithmetic's test from memory, 3.4851 for
+the round of 1/63, was 3.4846. And a branch of the clock's words for "one polygon" could never be reached (there
+are always two or more: their number is the length of the round with one prime crossed out); it is gone.
+In the seventh round: I started twelve single broken copies with no line on the shared board, and said so there
+afterwards; my first test of a touch screen took the marked button for the plain one; my test that a folded
+note is shut measured its paragraph, which in this browser keeps a box of its own while the note is shut; and
+one of the two broken copies that the last run did not catch had passed in front of me an hour and a half
+earlier, among those twelve, and I read past it.
+
+## 14. Files
 
 | file | what it is |
 |---|---|
@@ -973,6 +1269,14 @@ clock; a small thing, of the kind section 11 is about.
 | `test-core.js`, `core-test.out`, `mutants.py`, `mutants.out` | tests of the arithmetic, and broken copies of it |
 | `tools/shot-gospel.js`, `page-test.out`, `page-mutants.py`, `page-mutants.out` | tests of the page, and broken copies of it |
 | `reader/brief-1.md` to `brief-3.md`, `reader/visit-1.md` to `visit-3.md` | section 12: the briefs for the three plain readers and their reports, word for word |
+| `reader/brief-4.md` to `brief-7.md`, `reader/visit-4.md` to `visit-7.md`, `reader/double.src.as-visited-4.html.txt` to `-7.html.txt` | section 13: the briefs for four more visits, to this page alone, the reports word for word, and the page's source as each reader saw it |
+| `reader/brief-7b.md` to `brief-7d.md`, `reader/visit-7b.md` to `visit-7d.md`, `reader/double.src.as-visited-7b.html.txt` to `-7d.html.txt` | section 13: my three further messages to the seventh reader, its replies word for word, and the page's source at each look |
+| `clock/polygons.py`, `clock/polygons.out` | section 13: the claim about polygons tried in Python before the clock was drawn |
+| `clock/wide.js`, `clock/wide.out` | section 13: the page's clock set against its rule and its walk, for odd denominators to 100,001 and 4,000 fractions |
+| `referee/clock-check.md`, `referee/clock/`, `referee/clock-check-2.md`, `referee/clock2/` | section 13: the referee's first two checks of the clock, with its programs and their outputs (its screenshots are not here) |
+| `referee/clock-brief-3.md`, `referee/clock-check-3.md`, `referee/clock3/`, `referee/clock-brief-3b.md`, `referee/clock-check-3b.md`, `referee/clock3b/` | section 13: my briefs for the referee's third check and for its check of the mending, its reports word for word, and its programs and their outputs (the two lists of every sentence the page made, `page.json`, are here as `page.json.gz`, each checked to unpack to the very bytes of the original: unpack them before running its `check.py`) |
+| `page-mutants.sixth-round.out` | section 13: the first run of the page's broken copies, 228 of the page as it stood after the sixth reader, 226 caught |
+| `page-mutants.after-fix.out` | section 13: after the run of 265, with two timings of the test changed: the true page, seven broken copies run singly, and the true page again |
 | `reader/double.src.as-visited-2.html.txt`, `reader/double.src.as-visited-3.html.txt`, and the same for `turtle` | the sources of the two pages as the second and third plain readers saw them (the first saw the published pages); `build.py` makes a page of one |
 | `referee/plain-check.md`, `referee/plain_check.py`, `referee/plain-check.out`, `referee/plain_dump.js`, `referee/plain_dump.json` | section 12: the referee's check that the plain words of the first rewriting are true, with its programs |
 | `thumb/thumb.py`, `double.png` | the picture for the lists: the top left corner of the page's grid |
