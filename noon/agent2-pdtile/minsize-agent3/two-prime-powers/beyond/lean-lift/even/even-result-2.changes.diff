@@ -1,0 +1,308 @@
+1c1
+< # The statement on signs for even n, second result: Conjecture E proved for every n ≡ 2 (mod 4), for n = 2^k·3^a, for at most nine elements, and in two more families; on an odd modulus more than half of the signings are good; open only for 4 | n (27 November 2026)
+---
+> # The statement on signs for even n, second result: Conjecture E proved for every n ≡ 2 (mod 4), for n = 2^k·3^a, for at most nine elements, and in two more families; on an odd modulus more than half of the signings are good (three or more elements); open only for 4 | n (27 November 2026; revised the same day after a referee's report)
+3,4c3,57
+< Answer to `brief-even-2.md`. Programs and outputs are in `prover2/` (list in §9). Nothing here is refereed or
+< formalised. It was found and written in about an hour and a quarter; Theorem J and Corollary K came last.
+---
+> Answer to `brief-even-2.md`. Programs and outputs are in `prover2/` (list in §9). Nothing here is formalised. It
+> was found and written in a little over an hour; Theorem J and Corollary K came last.
+> 
+> *Refereed, 27 November 2026.* A fresh instance of the same model refereed this text (report:
+> `referee-even-2-report.md`, beside this file; its programs in `referee2/`). The text as it read it is kept as
+> `even-result-2.as-returned.md`, and `even-result-2.changes.diff` is the difference to this one. By its report it
+> read every line of the proofs in §1 to §5 (Lemmas M, S3, L3; Lemma F and Theorem F; Proposition H; Theorem G;
+> Theorem J for six and for eight elements; Lemmas X, Y, A; Proposition K; Corollary K) and every theorem and lemma
+> stands as far as it read; it recomputed Lemma ρ: for six elements by all signings from the definition, on every
+> multiset of Z_4 to Z_32; for eight elements by a recursion of its own over all trees, which it compared with all
+> signings from the definition on every multiset of Z_4 to Z_16; it tested Lemma M (in the form "3-good implies
+> good"), Lemma F and Theorem F, Proposition H, Theorem G, Theorem J, Lemmas X, Y, A, Proposition K and Corollary K
+> again with programs of its own, and Lemmas S3 and L3 only through these (exact; no multiset of more than 13 elements
+> with all its signings, except Proposition H on Z_3, up to 30 elements, through the signed counts at the three
+> points; among them the construction of Lemma F on about 15.8 million multisets, every six-element multiset with 0 on
+> Z_20, Z_40, Z_50 and every eight-element one on Z_20 for Theorem J, and Lemma A (b) on 5,186 cases), no test failing
+> against a statement proved in §1 to §5; it checked that each statement cited from the first result is cited for what it says, and
+> that §0 and §4 list the complement of what is proved; it compared the numbers of §7 with my outputs. It did not
+> read my programs (apart from `wsum2.py` and the head of `more_tests.py`) and reran none; it took the proofs of the
+> first result as given; it did not check the remark on eleven elements, roads 2 to 4 of §6 (of road 1 only the
+> number), or the run times of §9. It required seven changes: one false sentence in the summary, the credits, one
+> false reason inside a proof whose conclusion stands, and four small errors in numbers or wording. I checked each
+> before making it (`prover2/rev_checks.py`, `wsum3.py`, `rho3.py`) and agree with all seven:
+> (1) §0, Theorem F: the second "for instance" was false (n = 100, B = {0, 20, 40, 60, 80}: one class modulo 5, level
+> 2 of 5 live, the explicit signing bad at 25, 50, 100); replaced in the referee's words. Theorem F as stated in §2
+> was right and is unchanged.
+> (2) "Whose is what": Lemma M, which I had called mine, is Lemma A of `sign-lemma-result.md`, and more of §1 to §3
+> is in the earlier results than I had said; the bullets "From the first result" and "Mine" are rewritten in the
+> referee's words where it gave words, a bullet "From the earlier results on odd n" is added in its words, and I
+> say there what I had and had not read.
+> (3) Corollary K, nine elements: a false reason ("i is the only live level of the 3-tree") is replaced by the true
+> one, in the referee's words; the conclusion is unchanged.
+> (4) Lemma L3 (c): "W(no 3) < 0.119134" did not follow from the two numbers given (they add up to 0.119134492);
+> now W(no 3) < 0.118569, by a new program, and every later number stands.
+> (5) End of Theorem J: with ten elements no level of 11 is live; "the prime 11" is now "the prime 7 beside them".
+> (6) §7: 553,561 counted the 2,700 random multisets twice; now 550,861.
+> (7) The time: "in about an hour and a quarter" is now "in a little over an hour".
+> Of its nine suggestions I took eight: 1 (the title), 2 (a sentence in §4 for two residues and k ≥ 2), 3 (a sharper
+> count for nine elements, after checking the argument: the margin of Corollary K for nine is 0.136, not 0.011),
+> 4 (Lemma ρ: "among others"), 5 (four elements: exactly 5/8), 6 (stated as Corollary C in §4, with its proof),
+> 7 (§4: E3 is all that is left) and 9 (the superfluous words "and modulo q^(i−2)" in Lemma L3 (a)); 8 is a direction for later work and
+> is not in the text. Beyond the referee's list, and mine: (a) the sentence on lead 3 in "Whose is what", which also
+> said "mine"; a pointer to the earlier lemma in the heading of Lemma M and after Lemma F; and two more debts to the
+> earlier results, in §5, which I saw while revising and name in "Whose is what"; (b) two numbers in §4 that had been
+> computed from the old bound for W(no 3) and were given as values (0.2383, 0.357; now "below 0.2372", "about
+> 0.3557"), and "≈ 0.78" in road 1 of §6, which is 0.785; (c) "refereed or" taken out of the line above and "revised
+> the same day after a referee's report" put into the title; notes in §7,
+> §8 and §9 where a sentence would otherwise be out of date, among them the referee's own counts where my tests
+> were few, a new item 7 in §8 on the credits, and the checks and files of the revision. No statement of a theorem
+> or lemma is changed except the number in Lemma L3 (c), which is now sharper; no proof is changed except the reason
+> of (3), the derivation of the number in (4) and the words taken out by suggestion 9; the sharper count for nine
+> elements, Corollary C and the sentence of suggestion 2 are added. The referee then looked at the revised text
+> (second report: `referee-even-2-report-2.md`): by that report the revision is right except for three clauses of
+> this paragraph on what it had computed, and that passage (from "it recomputed Lemma ρ" to "5,186 cases)") is now
+> in its words; one clause of the credits, on Lemma T of `sign-all-result.md`, is added at its offer.
+35,38c88,115
+<   (D_e ≥ max_p l_p·(p − 1)), Lemma Q for p = 3. Theorems F and G and Proposition H use **nothing** of the first
+<   result except the shape of Theorem A's induction (Lemma F is that induction with "sum of signs ≠ 0" replaced by
+<   conditions modulo 3) and the count of occupied classes in Lemma V. They do use the number
+<   W(no 3) < 0.119134, whose tail bound is Lemma W of `sign-four-result.md` (refereed); the partial sum I recomputed.
+---
+>   (D_e ≥ max_p l_p·(p − 1)), Lemma Q for p = 3. Theorems F and G and Proposition H use no theorem of the first
+>   result. They take from it the shape of Theorem A's induction, the arrangement of Proposition P (step down to the
+>   live e′, the injection e′ ↦ e′*, the sum of 2^(−μ): Lemma L3 (c); it is A1 of the plan), the number W(no 3), and
+>   road 2 of its §6 (n = 2n′ from "more than half"), which the brief's lead 3 repeats.
+> - *From the earlier results on odd n.* Lemma M is Lemma A (descent modulo q) of `sign-lemma-result.md` for q = 3,
+>   and "a 3-good signing is good" is its Corollary; conditions (0), (j) of Lemma F are (i), (ii) of its Lemma C for
+>   p = 2, q = 3 (Lemma C needs p odd; the construction for p = 2 is new). Counting after a descent is the method of
+>   Theorem 7 of `sign-all-result.md`. Lemma S3 is the slice criterion, Lemma L3 (a) the step-down S1, Lemma L3 (b)
+>   Lemma L of `sign-four-result.md` with its count (4) (which takes its two counting facts and that count from
+>   Lemma T of `sign-all-result.md`, as its own head says), each read modulo 3; the tail bound is its Lemma W.
+>   (These are the referee's words; I opened the three files and the plan after its report and the credits are
+>   right. Two precisions of mine: the Corollary is stated through primitive functions, and "a 3-good signing is
+>   good" is the first step of its proof; Theorem 7 counts patterns of product form on the tree box of m over F_q,
+>   while here the signs of the elements are independent, as in Theorem 4.)
+>   **What I had read when I wrote.** Not `sign-lemma-result.md`, not `sign-all-result.md`, not the plan
+>   (`signs-post/briefs/plan.md`). Of `sign-four-result.md`: its head, its §0 and §1, the statement of Lemma L with
+>   the beginning of its proof (step (1)), and Lemma W. That head names "the descent modulo q (Lemmas A, B)" among
+>   the parts of the earlier results which that result does not use; I read past it. So I found Lemma M and the conditions (0), (j) again
+>   without knowing they were there, gave Lemma M a proof of my own (§1), and called it mine. It is not: it is a day
+>   older than this text.
+>   Two more debts of the same kind, which I saw while revising (they are not in the referee's list): Lemma X (ii)
+>   of §5 is the slice criterion again (Lemma 1(b) of the note as quoted in `sign-four-result.md` §1; Lemma 1T (b)
+>   of `sign-all-result.md`), read modulo 2 for the parities, as the first result's Lemma Q does for prime powers;
+>   and the count of active classes in Lemma A (o_j = 3·o_(j−1) at a dangerous level) follows the count of odd
+>   classes in that Lemma Q. Lemma X (i), (iii) (the rank as a sum over groups, with the common part of the fibre
+>   spaces) I did not find in the first result, nor in `sign-lemma-result.md`, `sign-all-result.md`,
+>   `sign-four-result.md`, which I searched after the report for the words "dim", "intersection" and the sign ∩; the
+>   second sign result and the note on small multisets I have not opened.
+42c119,120
+<   that the level 3 is the costly one; the way out here (do not count the levels divisible by 3 at all) is mine.
+---
+>   that the level 3 is the costly one; the way out here (descend modulo 3 first, so that no level divisible by 3 is
+>   counted at all) is the combination named under "Mine"; the descent itself is Lemma A of the first sign result.
+48,50c126,128
+< - *Mine.* Lemma M (the prime 3 can be peeled: nonvanishing modulo 3 at d′ gives nonvanishing at 3^i·d′ for all
+<   i); "3-good"; Lemma S3 and Lemma L3 (slice criterion, level bound and step-down, all modulo 3); Lemma F and
+<   Theorem F; Proposition H; Theorem G in the form with two residues modulo 2^k; Theorem J; Lemma X (fibre formula for D_e),
+---
+> - *Mine.* the combination: descend modulo 3, then count without contraction, so that no level divisible by 3 is
+>   counted (Lemmas M, S3, L3 as arranged here; Proposition H); Lemma F (the construction for the prime 2) and
+>   Theorem F; Theorem G in the form with two residues modulo 2^k; Theorem J; Lemma X (fibre formula for D_e),
+52c130,131
+<   referee); the examples of §5.4; the tests.
+---
+>   referee; the sharper count for nine elements at the end of §5.2 is this text's referee's); the examples of §5.4;
+>   the tests. Corollary C of §4 is stated at the referee's suggestion.
+63c142,143
+<   instance: n = 2^k·3^a; or B meets at most four classes modulo every prime q ≥ 5 that divides n). Then Conjecture E
+---
+>   instance: n = 2^k·3^a; or B takes at most four values modulo q^{v_q(n)} for every prime q ≥ 5 that divides n; for
+>   a prime q ≥ 5 that divides n only once: B misses a class modulo q). Then Conjecture E
+76,77c156,158
+<   the first result's Lemma N; margins 0.19 for 5 and 7 elements, 0.011 for 9. Five elements are also in the revised
+<   first result, by its referee; 7 and 9 are new.)
+---
+>   the first result's Lemma N; margins 0.19 for 5 and 7 elements, 0.136 for 9 (0.011 by my count; the sharper count
+>   is this text's referee's, end of §5.2). Five elements are also in the revised first result, by its referee; 7
+>   and 9 are new.)
+100,101c181,182
+< **Lemma M (peeling).** If ε is not 3-bad at d′ | n_3, then ε is not bad at 3^i·d′ for every 0 ≤ i ≤ a. Hence a
+< 3-good signing is good on Z_n.
+---
+> **Lemma M (peeling; it is Lemma A of `sign-lemma-result.md` for q = 3, see "Whose is what").** If ε is not 3-bad at
+> d′ | n_3, then ε is not bad at 3^i·d′ for every 0 ≤ i ≤ a. Hence a 3-good signing is good on Z_n.
+124c205
+< μ(e*) = max_q v_q(e*)·(q − 1). **W(no 3) < 0.119134.**
+---
+> μ(e*) = max_q v_q(e*)·(q − 1). **W(no 3) < 0.118569**, in particular < 0.119134.
+126,127c207,208
+< slices of the classes modulo q^i are ≡ 0 (mod 3R), hence so are their sums over the classes modulo q^(i−1) and
+< modulo q^(i−2): by Lemma S3 again (same x, same R) ε is 3-bad at q^(i−1)·d″ if i ≥ 2, and S_ε(x) = Σ of all slices
+---
+> slices of the classes modulo q^i are ≡ 0 (mod 3R), hence so are their sums over the classes modulo q^(i−1):
+> by Lemma S3 again (same x, same R) ε is 3-bad at q^(i−1)·d″ if i ≥ 2, and S_ε(x) = Σ of all slices
+136,139c217,225
+< (b) with the best prime the share of 3-bad at c·e′ is at most 2^(−μ(e′*)). The number: `wsum2.py` (partial sum up to
+< t = 40: 0.118564492, by the product formula A(t) = ∏_{5 ≤ p ≤ t+1} (1 + ⌊t/(p − 1)⌋), checked by enumeration for
+< t ≤ 12) plus the tail bound 5.7·10^(−4) of Lemma W of `sign-four-result.md`, which applies because the terms are
+< sums over subsets of those of W. ∎
+---
+> (b) with the best prime the share of 3-bad at c·e′ is at most 2^(−μ(e′*)). The number, by the product formula
+> A(t) = ∏_{5 ≤ p ≤ t+1} (1 + ⌊t/(p − 1)⌋) for the number of e* ≥ 1 with μ(e*) ≤ t (`wsum3.py`, exact fractions; the
+> formula was checked against a list of all 443,520 such e* with μ ≤ 40) (partial sum up to t = 60: below
+> 0.118564699; the tail after t = 60 is below 3.4·10^(−6), last sentence of the proof of Lemma W of
+> `sign-four-result.md`, which applies because the terms are sums over subsets of those of W): W(no 3) < 0.118569, in
+> particular < 0.119134. (The value is 0.1185646982…. As returned, this line gave the partial sum up to t = 40,
+> 0.118564492, and the tail bound 5.7·10^(−4); they add up to 0.119134492 and do not prove "< 0.119134", as the
+> referee found: `wsum2.py` had printed the sum rounded to nearest. The later numbers of this text use only
+> W(no 3) < 0.119134 and stand.) ∎
+149c235,236
+< By Lemma S3 this signing is 3-bad at no 2^j, j ≤ K.
+---
+> By Lemma S3 this signing is 3-bad at no 2^j, j ≤ K. ((0), (j) are the conditions (i), (ii) of Lemma C of
+> `sign-lemma-result.md` with p = 2, q = 3; that lemma has p odd, where no pair is exceptional.)
+187a275,278
+> (Four elements, pointed out by the referee: the share of good signings is exactly 5/8 for every multiset of four
+> elements on every odd n. By Theorem B of the first result a signing of four elements is good iff it is good for
+> the residues modulo 2^k, here modulo 1, that is iff the sum of the four signs is not 0: 10 of 16. Checked on every
+> four-element multiset with 0 on twelve odd moduli, `rev_checks.py s5`.)
+218,220c309,315
+< pair has a 3-good signing* (call it E3; it would prove Conjecture E for every n with 3 | n). E3 is proved above for
+< n″ without live levels (Theorem F) and for k ≤ 1 or two residues (Theorem G, Remark). For general k the count
+< does not close: modulo 3 the levels 2^j·e″, j = 0, …, k, are **not nested** (the group algebra of Z_{2^k} over
+---
+> pair has a 3-good signing* (call it E3; it would prove Conjecture E for every n with 3 | n). Both families that
+> are not proved have 3 | n, so E3 is now the whole of what is open (the referee's remark). E3 is proved above for
+> n″ without live levels (Theorem F) and for k ≤ 1 or two residues (Theorem G, Remark; for two residues and k ≥ 2
+> one sentence more is needed, the referee's: the proof of Theorem G holds with "∈ 3Z[ζ]" for "= 0", since 1 and
+> ±ξ^{u_2−u_1} are part of a basis of Z[ζ] over Z[η]; so a signing is 3-good on Z_{n_3} iff it is 3-good for the
+> multiset on Z_{2n″} that puts the two residues at 0 and 1, and the Remark applies; I checked the sentence and
+> tested it, `rev_checks.py s2`). For general k the count does not close: modulo 3 the levels 2^j·e″, j = 0, …, k, are **not nested** (the group algebra of Z_{2^k} over
+223,224c318,319
+< most about 1/2 and can be 1/4. For L = 1 this is 0.2383 < 1/4 (the Remark); for L = 2 already 0.357. A proof of E3
+< needs a construction on the 2-tree that leaves enough freedom for the primes ≥ 5 (Lemma F leaves the "other half"
+---
+> most about 1/2 and can be 1/4. For L = 1 this is below 0.2372 < 1/4 (the Remark); for L = 2 already about 0.3557.
+> A proof of E3 needs a construction on the 2-tree that leaves enough freedom for the primes ≥ 5 (Lemma F leaves the "other half"
+230a326,338
+> **Corollary C (what the count gives for every B; stated at the referee's suggestion).** Let L be the number of live
+> levels of the 2-tree of B. The share of 3-good signings of B is at least ρ_2(B) − (L + 1)·W(no 3); more exactly,
+> at least ρ_2(B) − (L + 1)·Σ over the live e′ > 1 of 2^(−μ(e′*)). So B has a good signing whenever
+> ρ_2(B) > (L + 1)·W(no 3), and the list of what is not proved can be narrowed by the condition
+> ρ_2(B) ≤ (L + 1)·0.118569.
+> *Proof.* Let ε be 3-bad at 2^j·e″, e″ | n″. By Lemma L3 (a) for q = 2, applied as long as the level of 2 is not
+> live, ε is 3-bad at 2^{j′}·e″ with j′ = 0 or j′ a live level of the 2-tree. By Lemma L3 (c) with c = 2^{j′}, ε is
+> 3-bad at 2^{j′}, or 3-bad at 2^{j′}·e′ for a live e′ > 1; for each of the L + 1 values of j′ the signings of the
+> second kind have share at most Σ over the live e′ of 2^(−μ(e′*)) ≤ W(no 3). ∎
+> (Tested, all signings, on 2,250 multisets of 3 to 10 elements: `rev_checks.py s6`. For L = 0 this is the bound of
+> Proposition H and for L = 1 the Remark of §3. In Theorem J below the levels of 2 together cost 2 or 2.5 times
+> 2^(−μ), not L + 1 times.)
+> 
+234,235c342,345
+< Z_16. The least values for m = 3, …, 8 are 1/2, 1/4, 3/8, 5/16, 11/32, 21/64, each at "m − 1 equal elements and one
+< other", where ρ_2 = p_(m−1).)
+---
+> Z_16. The least values for m = 3, …, 8 are 1/2, 1/4, 3/8, 5/16, 11/32, 21/64, each attained, among others, at
+> "m − 1 equal elements and one other", where ρ_2 = p_(m−1). As the referee found, the least value is attained at 63
+> of the 83 trees with every level live for six elements and at 1,643 of the 2,182 for eight, and for nine elements
+> the least is 43/128 = p_8; `rho3.py` confirms the three statements.)
+282,283c392,393
+< (For ten elements the same case analysis grows: two live levels of 5, the prime 11, and more kinds of flat
+< classes. Not done.)
+---
+> (For ten elements the same case analysis grows: two live levels of 5, the prime 7 beside them, and more kinds of
+> flat classes. Not done.)
+358,360c468,471
+< of multiplicity 1 in c* and two elements in each of the two sister classes of c*, nothing else; so i is the only
+< live level of the 3-tree (three occupied classes modulo 3^i, one modulo 3^(i−1)); the two elements of a sister
+< class are equal or congruent modulo e_2 (f_c = 0, or two points with π_{e_2}(δ_w + δ_{w′}) = 0), so W has at most 7
+---
+> of multiplicity 1 in c* and two elements in each of the two sister classes of c*, nothing else; so every fibrewise
+> pair (e_2′, i′) with 3^{i′}·e_2′ live has i′ = i: for i′ < i level i′ of 3 is not live, and for i′ > i the same
+> count would put B into one class modulo 3^(i′−1), while B meets three classes modulo 3^i; the two elements of a
+> sister class are equal or congruent modulo e_2 (f_c = 0, or two points with π_{e_2}(δ_w + δ_{w′}) = 0), so W has at most 7
+363a475,489
+> **A sharper count for nine elements (the referee's; I checked the argument, wrote it out here and tested it).** In
+> the case of equality e_2 is a power of 5. For let q ≥ 7 be a prime with q^j ∥ e_2, e_2 = q^j·e′, and g = f_{c*}
+> (five points, π_{e_2}(g) = 0). By Lemma X (ii) for the prime q no class modulo q^(j−1) has Φ ≠ 0 (the q ≥ 7
+> restrictions of g to its subclasses would all be nonzero), so every restriction of g to a class modulo q^j is
+> e′-dangerous; one of them has odd weight, so e′ > 1 and by Lemma Y it has at least five points: the five points of
+> c* lie in one class modulo q^j. The two elements of each sister class are equal or congruent modulo e_2. So B
+> meets at most three classes modulo q^j, level j of q is not live, and 3^i·e_2 is not live. Hence e_2 = 5^b,
+> e_2* = 5, and by the injection e_2 ↦ e_2* there is at most one such e_2: R_fib ≤ 2^(1−D), D = D_{3^i e_2}(W), and
+> D ≥ D_{e_2}(W) ≥ 4 gives R_fib ≤ 1/8. Moreover, by Lemma X (ii) for p = 5 (now e′ = 1 and Φ is the parity) the five
+> points of c* fill the five subclasses of one group of the 5-tree at level b, so dim V_{c*} = 4; each sister class
+> has dim V ≥ 1; by Lemma X (i) the group of c* in the 3-tree gives D ≥ 4 + 1 + 1 − 1 = 5. So R_fib ≤ 1/16 and
+> R < 0.80118 + 0.0625 < 0.8637 for nine elements: the margin is 0.136, not 0.011. (`rev_checks.py s3`: 9,674
+> multisets of nine elements, five in one class modulo 3^i and two in each of two other classes; 4,595 of them had
+> a fibrewise pair at a live level: e_2 was 5 or 25, D ≥ 5 and R_fib ≤ 1/16 every time, 1/16 attained.)
+> 
+402c528
+<    then cost Σ 2^(1−max(2l, μ)) ≈ 0.78 by Lemma V.
+---
+>    then cost Σ 2^(1−max(2l, μ)) ≈ 0.785 by Lemma V (`wsum3.py`; the referee's figure too).
+429c555
+<   84, 120, 140, 210 without a live level at a prime ≥ 5 (553,561, plus 493 exceptional pairs; 1,696 with a live
+---
+>   84, 120, 140, 210 without a live level at a prime ≥ 5 (550,861, plus 493 exceptional pairs; 1,696 with a live
+431c557,558
+<   on n = 60, …, 9240: the construction's signing is good every time.
+---
+>   on n = 60, …, 9240: the construction's signing is good every time. (Every prime ≥ 5 divides these nine n only
+>   once, so this test could not meet the false sentence of §0 that the referee found; see the last bullet.)
+447c574,575
+<   with an active class, but those were few (46): **(b) is the least tested statement here.**
+---
+>   with an active class, but those were few (46): **(b) is the least tested statement here.** (Since then the
+>   referee, by its report: (a) on 9,053 cases, (b) on 5,186, of which 604 with l″ ≥ 2; no violation.)
+458c586
+<   3-good ≥ 9/64 (least found 1/4). Note: this test measures the signings 3-bad off the 2-part *and not on it*, which
+---
+>   3-good ≥ 9/64 (least found 1/4; the referee, by its report, found 15/64 on n_3 = 140 and 280). Note: this test measures the signings 3-bad off the 2-part *and not on it*, which
+465c593,610
+< - **Numbers** (`wsum2.py`): W(no 3), p_r, the least value of p_E + p_D − 2p_E p_D, δ_3, the sums of §5.
+---
+> - **Numbers** (`wsum2.py`): W(no 3), p_r, the least value of p_E + p_D − 2p_E p_D, δ_3, the sums of §5. (`wsum2.py`
+>   prints its upper bound for W(no 3) rounded to nearest; the bound of Lemma L3 (c) is now from `wsum3.py`.)
+> - **Checks made for the revision, 27 November, after the referee's report** (exact; own programs):
+>   `rev_checks.py f1`: n = 100, B = {0, 20, 40, 60, 80} meets one class modulo 5, level 2 of 5 is live, the
+>   construction gives all signs +, which is bad at 25, 50, 100; 15/16 of the signings are good. Among the multisets
+>   with 0 that meet at most four classes modulo 5 the construction fails on 1 on Z_25 (up to 6 elements; 131,256
+>   multisets) and on 5 on Z_50 (up to 5 elements; 306,226), each time with level 2 of 5 live, and on none of those
+>   that take at most four values modulo 25 (36,246 and 146,210); Z_75 and Z_100 were run up to 4 elements only,
+>   where nothing can fail. `f3`: B = {0, 18, 21, 39, 42, 1, 1, 2, 2} modulo 45 has live levels 1 and 2 of 3 and the
+>   one fibrewise pair (5, 1) at a live level (D_15 = 6, R_fib = 1/32, R = 5/32). `f6`: the nine exhaustive lines of
+>   `more_F.out` sum to 550,861. `s2`: for 1,200 multisets with two residues modulo 2^k, k = 2, 3, 4, the 3-good
+>   signings on Z_{n_3} are exactly those of the multiset on Z_{2n″} with the residues at 0 and 1. `s3`: the sharper
+>   count for nine elements (§5.2). `s5`: 348,540 four-element multisets on twelve odd moduli, exactly 10 of 16
+>   signings good each time. `s6`: Corollary C on 2,250 multisets (least slack 0).
+>   `wsum3.py`: W(no 3) with bounds rounded the right way (partial sums to t = 40, 60, 120, 400; the list of all
+>   443,520 e* with μ ≤ 40; the tail after t = 60), and the number 0.785 of road 1.
+>   `rho3.py`: the trees with every level live and where the least ρ_2 is attained, m = 3, …, 9 (for nine: 404,482
+>   trees with at most eight levels, 14,364 with every level live, least 43/128).
+472,474c617,621
+< 1. **Corollary K for m = 9**: margin 0.011, and it stands on the whole chain (first result's Corollary N, Lemma Q,
+<    Lemma V; Lemma X, Lemma A (b), Lemma Y; the number 0.238269). m = 5 and 7 have margin 0.19 but the same chain.
+< 2. **Lemma A (b)** (46 test cases only).
+---
+> 1. **Corollary K**: it stands on the whole chain (first result's Corollary N, Lemma Q, Lemma V; Lemma X,
+>    Lemma A (b), Lemma Y; the number 0.238269). The margin is 0.19 for 5 and 7 elements; for 9 it was 0.011 by my
+>    count and is 0.136 by the referee's sharper count (end of §5.2), which I checked and tested but which was
+>    written in the revision and has been read by nobody else in the form given here.
+> 2. **Lemma A (b)** (46 test cases of mine; by its report the referee tested 5,186, with no violation).
+485a633,636
+> 7. **The credits.** I wrote this text without having read the first and the third sign result, and called Lemma M
+>    mine. "Whose is what" is now by the referee's reading and my check of it against the files; I searched three of
+>    the earlier texts for Lemma X (i) only by the words "dim", "intersection" and the sign ∩, and did not open the
+>    second sign result or the note, so more of §5 may be there in another form.
+491a643,649
+> For the revision: the same rules; new programs `rev_checks.py`, `wsum3.py`, `rho3.py` in `prover2/` (one run of
+> `rev_checks.py f1` was too large as first written and was stopped and rerun smaller; the modes `s2` and `s6` first
+> stopped on an error in their generators and were rerun after the fix; the outputs kept are the complete runs);
+> written besides: this file
+> and `even-result-2.changes.diff`; read besides: the referee's report, `sign-lemma-result.md`, `sign-all-result.md`,
+> `sign-four-result.md`, the plan `signs-post/briefs/plan.md` (its head and A1); of `referee2/` I listed the file
+> names and opened none.
+500a659,660
+> Added in the revision: `rev_checks.py` with `rev_f1.out`, `rev_f3.out`, `rev_f6.out`, `rev_s2.out`, `rev_s3.out`,
+> `rev_s5.out`, `rev_s6.out`; `wsum3.py`, `wsum3.out`; `rho3.py`, `rho3.out`, `rho3_9.out`.
