@@ -1,0 +1,83 @@
+Part 1. mu(d) for every odd d <= 30000000, from the definition (sieve over prime powers)
+  number of odd d in (1, D] with mu(d) = t:
+    t =  2 : 1
+    t =  4 : 4
+    t =  6 : 10
+    t =  8 : 14
+    t = 10 : 42
+    t = 12 : 255
+    t = 14 : 39
+    t = 16 : 483
+    t = 18 : 930
+    t = 20 : 651
+    t = 22 : 1332
+    t = 24 : 1107
+  sum of 2^(-mu(d)) over odd 1 < d <= D with mu <= 2000 = 0.82852286  (a lower bound for W)
+  sieve agrees with mu(d) by trial division on 20000 random odd d
+    t =  2 : n'_3 = 3 <= D, complete; its divisors d <= D with mu(d) = t: 1  (equal to the sieve count)
+    t =  4 : n'_5 = 45 <= D, complete; its divisors d <= D with mu(d) = t: 4  (equal to the sieve count)
+    t =  6 : n'_7 = 945 <= D, complete; its divisors d <= D with mu(d) = t: 10  (equal to the sieve count)
+    t =  8 : n'_9 = 14175 <= D, complete; its divisors d <= D with mu(d) = t: 14  (equal to the sieve count)
+    t = 10 : n'_11 = 467775 <= D, complete; its divisors d <= D with mu(d) = t: 42  (equal to the sieve count)
+    t = 12 : n'_13 = 638512875 > D, partial; its divisors d <= D with mu(d) = t: 255  (equal to the sieve count)
+    t = 14 : n'_15 = 1915538625 > D, partial; its divisors d <= D with mu(d) = t: 39  (equal to the sieve count)
+    t = 16 : n'_17 = 488462349375 > D, partial; its divisors d <= D with mu(d) = t: 483  (equal to the sieve count)
+    t = 18 : n'_19 = 194896477400625 > D, partial; its divisors d <= D with mu(d) = t: 930  (equal to the sieve count)
+    t = 20 : n'_21 = 32157918771103125 > D, partial; its divisors d <= D with mu(d) = t: 651  (equal to the sieve count)
+    t = 22 : n'_23 = 2218896395206115625 > D, partial; its divisors d <= D with mu(d) = t: 1332  (equal to the sieve count)
+    t = 24 : n'_25 = 3028793579456347828125 > D, partial; its divisors d <= D with mu(d) = t: 1107  (equal to the sieve count)
+Part 2. A(t) by enumeration of divisors (mu by factoring) against the product formula
+  t =  0  A(t) = 1   (divisors of n'_3: 2)
+  t =  2  A(t) = 2   (divisors of n'_5: 6)
+  t =  4  A(t) = 6   (divisors of n'_7: 16)
+  t =  6  A(t) = 16   (divisors of n'_9: 30)
+  t =  8  A(t) = 30   (divisors of n'_11: 72)
+  t = 10  A(t) = 72   (divisors of n'_13: 336)
+  t = 12  A(t) = 336   (divisors of n'_15: 384)
+  t = 14  A(t) = 384   (divisors of n'_17: 1080)
+  t = 16  A(t) = 1080   (divisors of n'_19: 3200)
+  t = 18  A(t) = 3200   (divisors of n'_21: 6336)
+  t = 20  A(t) = 6336   (divisors of n'_23: 13824)
+  t = 22  A(t) = 13824   (divisors of n'_25: 32760)
+  t = 24  A(t) = 32760   (divisors of n'_27: 35280)
+  t = 26  A(t) = 35280   (divisors of n'_29: 86400)
+  the table of A(t), t = 2..40, in the result file equals the product formula; t <= 26 also by enumeration
+  W_m (sum over the divisors d > 1 of n'_m, mu by factoring) equals the partial sum up to t = 2*floor((m-1)/2), m = 2..27
+Part 3. partial sums S(T) = sum over even t <= T of (A(t) - A(t-2)) / 2^t
+  T =  2  S = 1/4 = 0.250000000000   quoted 1/4 : equal
+  T =  4  S = 1/2 = 0.500000000000   quoted 1/2 : equal
+  T =  6  S = 21/32 = 0.656250000000   quoted 21/32 : equal
+  T =  8  S = 91/128 = 0.710937500000   quoted 91/128 : equal
+  T = 10  S = 385/512 = 0.751953125000   quoted 385/512 : equal
+  T = 12  S = 209/256 = 0.816406250000   quoted 209/256 : equal
+  T = 40  S = 7253932573/8589934592 = 0.844468894997   quoted 7253932573/8589934592 : equal
+  T = 60  S = 7428069951793/8796093022208 = 0.844473783194   quoted 7428069951793/8796093022208 : equal
+  T =   80  S = 0.844473784240573843717925228702  (first 40 digits: 8444737842405738054117072220738915433457)
+  T =  100  S = 0.844473784242223635132518211321  (first 40 digits: 8444737842422236071381663653262845939851)
+  T =  200  S = 0.844473784242224079221728061384  (first 40 digits: 8444737842422241280615220194632795705707)
+  T =  400  S = 0.844473784242224079221728061384  (first 40 digits: 8444737842422241280615220194632796730569)
+  T = 1000  S = 0.844473784242224079221728061384  (first 40 digits: 8444737842422241280615220194632796730569)
+Part 4. the tail
+  count of j = +-1 (mod 6) in [5, y] equals floor((y+1)/6) + floor((y-1)/6) and is <= (y-1)/3 for y = 3, 3.125, .., 3000: 0 failures
+  pi'(y) <= 1 + (y-1)/3 for every integer 3 <= y <= 2000000: True
+  A(t) = prod_{k=1}^{t/2} ((k+1)/k)^{pi'(t/k+1)} for even t <= 200: exact
+  sum_{k<2000} ln(1+1/k)/k = 1.2572468244409 ; 1/1999 = 0.00050025013
+  K = sum_{k>=1} ln(1+1/k)/k lies in (1.25774688694, 1.25774688695)
+  x = e^(2*1.2578/3)/4 = 0.5782430322 (< 0.5783: True )
+  growth: A(t) <= (t/2+1)*2^(c t) with c = K/(3 ln 2) < 0.604874
+  ln A(t) <= ln(t/2+1) + K t/3 for every even t <= 2000 (largest ratio 0.8338)
+  sum_{u>=21} (u+1) x^u at x = 0.5783: closed form 0.00056091533, summed 0.00056091533
+  sum_{u>=31} (u+1) x^u at x = 0.5783: closed form 3.3505738e-6, summed 3.3505738e-6
+  upper bounds for W = S(T) + tail(T):
+    T =  40: S(T) = 0.844468894996680, tail < 0.0005609, W < 0.845029810329511048
+    T =  60: S(T) = 0.844473783194303, tail < 3.351e-6, W < 0.844477133768108644
+    T = 100: S(T) = 0.844473784242224, tail < 9.378e-11, W < 0.844473784336005162
+    T = 200: S(T) = 0.844473784242224, tail < 2.327e-22, W < 0.844473784242224128
+    T = 400: S(T) = 0.844473784242224, tail < 7.518e-46, W < 0.844473784242224128
+  cruder bound: r = e^(K/2)/2 < 0.93777317
+    T =  200: W < S(T) + r^(T+2)/(1-r^2) = 0.844492947785147767  (tail 1.916e-5)
+    T =  400: W < S(T) + r^(T+2)/(1-r^2) = 0.844473784292578433  (tail 5.035e-11)
+    T = 1000: W < S(T) + r^(T+2)/(1-r^2) = 0.844473784242224128  (tail 9.135e-28)
+  1 - W > 0.155526
+seconds 38.71
+exit 0

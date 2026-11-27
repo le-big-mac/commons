@@ -1,0 +1,109 @@
+c_k = max_j C(k,j)/2^k; c_(2j-1) = c_(2j) > c_(2j+1) for k < 400
+c_1..c_6 = ['1/2', '1/2', '3/8', '3/8', '5/16', '5/16']
+
+even m <= 12: c_m + W_m (W_m by enumeration of the divisors of n'_m, mu by factoring)
+  m =  2: c_m = 1/2, W_m = 0, sum = 1/2, 1 - sum = 1/2 (stated 1/2: equal)
+  m =  4: c_m = 3/8, W_m = 1/4, sum = 5/8, 1 - sum = 3/8 (stated 3/8: equal)
+  m =  6: c_m = 5/16, W_m = 1/2, sum = 13/16, 1 - sum = 3/16 (stated 3/16: equal)
+  m =  8: c_m = 35/128, W_m = 21/32, sum = 119/128, 1 - sum = 9/128 (stated 9/128: equal)
+  m = 10: c_m = 63/256, W_m = 91/128, sum = 245/256, 1 - sum = 11/256 (stated 11/256: equal)
+  m = 12: c_m = 231/1024, W_m = 385/512, sum = 1001/1024, 1 - sum = 23/1024 (stated 23/1024: equal)
+
+W_m by enumeration equals the formula for m <= 27: True
+W < 0.844473784242224
+
+every even m <= 400: plain sum c_m + W_m, and with 5/32 in place of 1/4 for the level d = 3
+  m =   2: c_m + W_m = 0.500000
+  m =   4: c_m + W_m = 0.625000
+  m =   6: c_m + W_m = 0.812500
+  m =   8: c_m + W_m = 0.929688
+  m =  10: c_m + W_m = 0.957031
+  m =  12: c_m + W_m = 0.977539
+  m =  14: c_m + W_m = 1.025879;  - 3/32: 0.932129
+  m =  16: c_m + W_m = 1.015717;  - 3/32: 0.921967
+  m =  18: c_m + W_m = 1.015427;  - 3/32: 0.921677
+  m =  20: c_m + W_m = 1.014240;  - 3/32: 0.920490
+  m =  22: c_m + W_m = 1.009222;  - 3/32: 0.915472
+  m =  24: c_m + W_m = 1.003999;  - 3/32: 0.910249
+  m =  26: c_m + W_m = 0.998929;  - 3/32: 0.905179
+  m =  28: c_m + W_m = 0.993431;  - 3/32: 0.899681
+  m =  30: c_m + W_m = 0.988640;  - 3/32: 0.894890
+  m =  32: c_m + W_m = 0.984320;  - 3/32: 0.890570
+  m =  34: c_m + W_m = 0.980258;  - 3/32: 0.886508
+  m =  36: c_m + W_m = 0.976487;  - 3/32: 0.882737
+  m =  38: c_m + W_m = 0.973048;  - 3/32: 0.879298
+  m =  40: c_m + W_m = 0.969834;  - 3/32: 0.876084
+  m =  80: c_m + W_m = 0.933402;  - 3/32: 0.839652
+  m = 120: c_m + W_m = 0.917159;  - 3/32: 0.823409
+  m = 160: c_m + W_m = 0.907454;  - 3/32: 0.813704
+  m = 200: c_m + W_m = 0.900822;  - 3/32: 0.807072
+  m = 240: c_m + W_m = 0.895923;  - 3/32: 0.802173
+  m = 280: c_m + W_m = 0.892114;  - 3/32: 0.798364
+  m = 320: c_m + W_m = 0.889042;  - 3/32: 0.795292
+  m = 360: c_m + W_m = 0.886497;  - 3/32: 0.792747
+  m = 400: c_m + W_m = 0.884343;  - 3/32: 0.790593
+plain sum >= 1 exactly for m in [14, 16, 18, 20, 22, 24]
+largest value of c_m + W_m - 3/32 over even 14 <= m <= 400: 0.932129 at m = 14
+c_14 + W - 3/32 < 0.960196  (W replaced by its upper bound; c_m <= c_14 for m >= 14)
+so the fraction of good signings for even m >= 14 is more than 0.039804
+c_24 + W = 1.005654, c_26 + W = 0.999455
+odd m: 1 - W > 0.155526
+
+level d = 3: P(s0 = s1 = s2) for the three classes modulo 3, all triples of class sizes
+  48590 triples with 3 <= m <= 120: P <= c_k0 * c_k1 always, and P <= 5/32 for m >= 14: 0 violations
+  m =   3: largest P = 1/4 = 0.25000 at class sizes (1, 1, 1)   (c_ceil(m/3)/2 = 0.25000)
+  m =   4: largest P = 0 = 0.00000 at class sizes (2, 1, 1)   (c_ceil(m/3)/2 = 0.25000)
+  m =   5: largest P = 3/16 = 0.18750 at class sizes (3, 1, 1)   (c_ceil(m/3)/2 = 0.25000)
+  m =   6: largest P = 5/32 = 0.15625 at class sizes (2, 2, 2)   (c_ceil(m/3)/2 = 0.25000)
+  m =   7: largest P = 5/32 = 0.15625 at class sizes (5, 1, 1)   (c_ceil(m/3)/2 = 0.18750)
+  m =   8: largest P = 1/8 = 0.12500 at class sizes (4, 2, 2)   (c_ceil(m/3)/2 = 0.18750)
+  m =   9: largest P = 35/256 = 0.13672 at class sizes (7, 1, 1)   (c_ceil(m/3)/2 = 0.18750)
+  m =  10: largest P = 55/512 = 0.10742 at class sizes (6, 2, 2)   (c_ceil(m/3)/2 = 0.18750)
+  m =  11: largest P = 63/512 = 0.12305 at class sizes (9, 1, 1)   (c_ceil(m/3)/2 = 0.18750)
+  m =  12: largest P = 49/512 = 0.09570 at class sizes (8, 2, 2)   (c_ceil(m/3)/2 = 0.18750)
+  m =  13: largest P = 231/2048 = 0.11279 at class sizes (11, 1, 1)   (c_ceil(m/3)/2 = 0.15625)
+  m =  14: largest P = 357/4096 = 0.08716 at class sizes (10, 2, 2)   (c_ceil(m/3)/2 = 0.15625)
+  m =  15: largest P = 429/4096 = 0.10474 at class sizes (13, 1, 1)   (c_ceil(m/3)/2 = 0.15625)
+  m =  16: largest P = 165/2048 = 0.08057 at class sizes (12, 2, 2)   (c_ceil(m/3)/2 = 0.15625)
+  m =  17: largest P = 6435/65536 = 0.09819 at class sizes (15, 1, 1)   (c_ceil(m/3)/2 = 0.15625)
+  m =  18: largest P = 9867/131072 = 0.07528 at class sizes (14, 2, 2)   (c_ceil(m/3)/2 = 0.15625)
+  m =  19: largest P = 12155/131072 = 0.09274 at class sizes (17, 1, 1)   (c_ceil(m/3)/2 = 0.13672)
+  m =  20: largest P = 9295/131072 = 0.07092 at class sizes (16, 2, 2)   (c_ceil(m/3)/2 = 0.13672)
+  m =  21: largest P = 46189/524288 = 0.08810 at class sizes (19, 1, 1)   (c_ceil(m/3)/2 = 0.13672)
+  m =  22: largest P = 70499/1048576 = 0.06723 at class sizes (18, 2, 2)   (c_ceil(m/3)/2 = 0.13672)
+  m =  23: largest P = 88179/1048576 = 0.08409 at class sizes (21, 1, 1)   (c_ceil(m/3)/2 = 0.13672)
+  m =  24: largest P = 4199/65536 = 0.06407 at class sizes (20, 2, 2)   (c_ceil(m/3)/2 = 0.13672)
+  m =  25: largest P = 676039/8388608 = 0.08059 at class sizes (23, 1, 1)   (c_ceil(m/3)/2 = 0.12305)
+  m =  26: largest P = 1028755/16777216 = 0.06132 at class sizes (22, 2, 2)   (c_ceil(m/3)/2 = 0.12305)
+  m =  30: largest P = 7614725/134217728 = 0.05673 at class sizes (26, 2, 2)   (c_ceil(m/3)/2 = 0.12305)
+  m =  40: largest P = 835867725/17179869184 = 0.04865 at class sizes (36, 2, 2)   (c_ceil(m/3)/2 = 0.10474)
+  m =  60: largest P = 1417645240658185/36028797018963968 = 0.03935 at class sizes (56, 2, 2)   (c_ceil(m/3)/2 = 0.08810)
+  m = 120: largest P = 71560816448771584023030094183305/2596148429267413814265248164610048 = 0.02756 at class sizes (116, 2, 2)   (c_ceil(m/3)/2 = 0.06269)
+
+even m, 14..60: c_m + W_m - 1/4 + (largest P at level 3 for that m):
+  m = 14: 0.863037
+  m = 16: 0.846283
+  m = 18: 0.840706
+  m = 20: 0.835155
+  m = 22: 0.826455
+  m = 24: 0.818071
+  m = 26: 0.810247
+  m = 28: 0.802324
+  m = 30: 0.795374
+  m = 32: 0.789117
+  m = 34: 0.783304
+  m = 36: 0.777939
+  m = 38: 0.773042
+  m = 40: 0.768488
+  m = 42: 0.764270
+  m = 44: 0.760344
+  m = 46: 0.756676
+  m = 48: 0.753241
+  m = 50: 0.750016
+  m = 52: 0.746979
+  m = 54: 0.744114
+  m = 56: 0.741404
+  m = 58: 0.738837
+  m = 60: 0.736400
+seconds 4.81
+exit 0
