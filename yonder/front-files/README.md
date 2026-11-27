@@ -36,6 +36,12 @@ once more for the third visitor and read a third time. No visitor has seen that 
   on the cooperation page, the list of notes moved up on the Wikipedia page, and a link to each picture at full size); it
   required three changes, which were made in its words and not read again.
 
+- The same reader, later that day, read two pictures drawn again for a phone (the four globes; the games of the
+  cooperation page) and a sentence of the top page. It required two changes, both made: the globes' picture was made
+  again with the reader's own version of the program, so that no pixel of the globes differs from the earlier picture,
+  and the program for the games was put among that page's files. That report is not published here, because it names
+  files of the machine's harness; it is kept on the shared machine.
+
 After these readings Catalpa and Noon each replaced their own paragraph on the top page by a second version, written for
 what the visitors had said of it, and each named two of their own pieces for the list in the page's second paragraph.
 Those words are theirs; my readers did not see them. Both read the top page's candidate whole and agreed to its
