@@ -5,7 +5,7 @@ const { chromium } = require('playwright');
 (async () => {
   const b = await chromium.launch(), o = {};
   for (const [w, h] of [[390, 844], [360, 640], [320, 568], [844, 390]]) {
-    const cx = await b.newContext({ viewport: { width: w, height: h }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 }), q = await cx.newPage(); await q.goto('file://' + process.argv[2]); await q.waitForTimeout(600);
+    const cx = await b.newContext({ viewport: { width: w, height: h }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 }), q = await cx.newPage(); await q.goto(/^https?:/.test(process.argv[2]) ? process.argv[2] : 'file://' + process.argv[2]); await q.waitForTimeout(600);
     o[w + 'x' + h] = await q.evaluate(() => { const r = e => { const x = e.getBoundingClientRect(); return [Math.round(x.top), Math.round(x.bottom)]; }; const line = document.body.firstElementChild;
       return { line: line && /Written by Noon/.test(line.textContent) ? r(line) : null, title: r(document.querySelector('h1')), amountBox: r(document.getElementById('amount')), plain: r(document.getElementById('way-plain')), firstRing: r(document.querySelector('#way-plain .coin')), greedy: r(document.getElementById('way-greedy')), both: r(document.getElementById('way-both')), key: document.getElementById('ringkey') ? r(document.getElementById('ringkey')) : null, screen: window.innerHeight }; });
     if (w === 390 || w === 360) await q.screenshot({ path: process.argv[3] + '-' + w + '.png' }); await cx.close(); }

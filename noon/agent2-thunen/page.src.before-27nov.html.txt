@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The isolated state</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; background: #0d0d0d; color: #f0efec; font: 16px/1.5 Georgia, 'Times New Roman', serif; }
+  main { max-width: 1000px; margin: 0 auto; padding: 18px 16px 40px; }
+  h1 { font-weight: normal; font-size: 26px; margin: 0 0 2px; }
+  p.sub { margin: 0 0 12px; color: #c3c2b7; }
+  p.note { color: #c3c2b7; max-width: 860px; }
+  a { color: #9ec5f4; }
+  /* everything that is chart or control is in the system sans, on the chart surface */
+  .viz-root { --surface-1: #1a1a19; --text-primary: #f0efec; --text-secondary: #c3c2b7; --muted: #898781; --grid: #2c2c2a; --axis: #383835;
+    --ring-1: #cde2fb; --ring-2: #9ec5f4; --ring-3: #6da7ec; --ring-4: #3987e5; --ring-5: #256abf; --ring-6: #184f95; --context: #898781;
+    font: 14px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: end; margin: 0 0 10px; }
+  .controls label { display: flex; flex-direction: column; gap: 2px; color: var(--text-secondary); font-size: 13px; }
+  .controls output { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  select, button { font: inherit; color: var(--text-primary); background: #262624; border: 1px solid #45453f; border-radius: 5px; padding: 5px 10px; cursor: pointer; }
+  button:hover, select:hover { background: #32322f; }
+  button[aria-pressed=true] { background: #3d3d39; border-color: #898781; }
+  input[type=range] { width: 150px; accent-color: #9ec5f4; }
+  :focus-visible { outline: 2px solid #9ec5f4; outline-offset: 2px; }
+  figure { margin: 0 0 14px; background: var(--surface-1); border-radius: 8px; padding: 10px; border: 1px solid rgba(255,255,255,0.10); position: relative; }
+  figcaption { color: var(--text-secondary); margin: 0 0 8px; }
+  figcaption b { color: var(--text-primary); font-weight: 600; }
+  canvas#map { display: block; width: 100%; height: auto; border-radius: 4px; touch-action: none; cursor: crosshair; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 8px 0 0; padding: 0; list-style: none; color: var(--text-secondary); font-size: 13px; }
+  .legend li { display: flex; align-items: center; gap: 6px; }
+  .legend i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+  .legend .line { width: 18px; height: 0; border-top: 2px solid; border-radius: 0; }
+  .legend b { color: var(--text-primary); font-weight: 500; }
+  #readout { margin: 8px 0 0; min-height: 2.8em; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  #readout b { color: var(--text-primary); font-weight: 600; }
+  #tip { position: absolute; pointer-events: none; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 6px 9px; font-size: 13px; max-width: 250px; display: none; z-index: 2; }
+  #tip b { font-weight: 600; } #tip span { color: var(--text-secondary); }
+  svg text { font: 12px system-ui, -apple-system, 'Segoe UI', sans-serif; fill: var(--muted); }
+  svg text.lab { fill: var(--text-secondary); }
+  table { border-collapse: collapse; margin: 8px 0 0; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 2px 12px 2px 0; border-bottom: 1px solid var(--grid); font-weight: normal; }
+  th { color: var(--text-secondary); } th:first-child, td:first-child { text-align: left; }
+  .tables { display: none; } .tables.on { display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>The isolated state</h1>
+  <p class="sub">One great town in the middle of a level plain, and nothing but carts to bring it its bread. J. H. von Thünen's book of 1826 works out what would be grown where. This is the map he said could be drawn.</p>
+  <div class="viz-root">
+    <div class="controls">
+      <label>Begin from <select id="preset"><option value="plain">his first plate: the plain</option><option value="river">his second plate: a river through the town</option><option value="miss">a river that misses the town</option><option value="motley">a motley country</option></select></label>
+      <label>The pointer <select id="tool"><option value="look">looks</option><option value="river">draws a river</option><option value="sand">lays sand (4 Körner)</option><option value="rich">lays rich soil (10 Körner)</option><option value="mend">puts the soil back</option></select></label>
+      <label>Rye in the town <output id="o-a"></output><input id="a" type="range" min="0.6" max="1.5" step="0.05" value="1.5"></label>
+      <label>The soil yields <output id="o-y"></output><input id="y" type="range" min="5" max="10" step="0.5" value="8"></label>
+      <label>A mile by water costs <output id="o-w"></output><input id="w" type="range" min="0.05" max="0.5" step="0.05" value="0.1"></label>
+      <button id="clear">Take the rivers away</button>
+      <button id="tab" aria-pressed="false">Table</button>
+    </div>
+    <figure>
+      <figcaption><b>What is grown where.</b> The map is 120 German miles across; the town is the white dot. Each ring is Thünen's, numbered from the town outward.</figcaption>
+      <canvas id="map" width="960" height="640" tabindex="0" role="img" aria-label="A map of the plain round the town, coloured by which of Thünen's six rings each place belongs to. Arrow keys move a pointer over it; what is at the pointer is read out below."></canvas>
+      <div id="tip"></div>
+      <ul class="legend" id="legend"></ul>
+      <p id="readout" role="status" aria-live="polite"></p>
+    </figure>
+    <figure>
+      <figcaption><b>Why the rings fall where they do.</b> Rent of the land under his two ways of growing grain, by miles of carting from the town, on the soil chosen above. The land goes to whichever pays more, and out of grain where neither pays.</figcaption>
+      <svg id="chart" viewBox="0 0 940 316" role="img" aria-label="Land rent under Koppelwirtschaft and under three-field farming against distance from the town" style="width:100%;height:auto;display:block" tabindex="0"></svg>
+      <ul class="legend" id="legend2"></ul>
+    </figure>
+    <div class="tables" id="tables"></div>
+  </div>
+  <p class="note">Every place is coloured by the ring it would belong to. What decides is how many miles of carting stand between it and the town, and
+  what its soil yields. Thünen took the cost of carting from five years of his own estate's accounts, five miles from Rostock: a wagon of rye
+  eats part of its load on the road, and at {{zero}} miles would eat all of it. From that he reckoned what a Scheffel of rye (a bushel and a half) is worth on a farm at any
+  distance, and from that the rent of the land under a careful system of farming (Koppelwirtschaft) and under a cheap one (three fields). The
+  careful one pays best near the town and gives way to the cheap one at {{r4}} miles; at {{r5}} miles grain pays nothing, and there is only cattle,
+  whose butter can bear the journey, as far out as the town needs it, which he takes to be 50 miles; beyond that, he says, a few hunters. Nearest the town are gardens and milk, and then, which
+  surprises at first, a ring of forest: firewood is too heavy to cart far. The price of rye in the town is not his to choose either: it is what the
+  farthest farm the town still needs must be paid. The slider for it does what his third plate does, and supposes it changed.</p>
+  <p class="note">Draw a river and a mile by water costs a tenth of a mile by land, so the rings run out along it, as on his second plate. Lay sand near
+  the town and it falls to the cattle; lay rich soil far down a river and it rises to the third ring. Those are his own two examples of what a
+  real country's map would look like: "a most interesting and instructive survey", in which the rings "would not follow one another in order, but
+  be mingled in motley". The book's numbers that this page reproduces, the places where it goes beyond the book, and the things on his
+  plates that it does not draw, are in the <a href="README.md">notes</a>.</p>
+</main>
+<script>
+/*CORE*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var T = Thunen, W = 120, H = 80, PX = 8, TOWN = { x: 60, y: 40 };
+  var RAMP = ['#cde2fb', '#9ec5f4', '#6da7ec', '#3987e5', '#256abf', '#184f95'], SURFACE = '#1a1a19', INK = '#f0efec', MUTED = '#898781';
+  var SHORT = ['Freie', 'Forst', 'Fruchtwechsel', 'Koppel', 'Dreifelder', 'Viehzucht'];
+  var GLOSS = ['gardens and milk, with dung bought from the town', 'firewood and timber', 'crops in turn, no fallow', 'seven fields: three of grain, three of pasture, one fallow', 'three fields, one of them fallow', 'cattle; butter goes to the town'];
+  var q = {}; location.hash.replace(/^#/, '').split('&').forEach(function (kv) { var a = kv.split('='); if (a[0]) q[a[0]] = a[1] === undefined ? '1' : a[1]; });
+  var map = document.getElementById('map'), ctx = map.getContext('2d'), tip = document.getElementById('tip'), readout = document.getElementById('readout');
+  var state = { a: 1.5, y: 8, w: 0.1, rivers: [], soil: new Float32Array(W * H), drawing: null, probe: null, tool: 'look' };   // soil: 0 = the country's own yield, else Körner
+  var net, cls = null, cw = 0, ch = 0, cell = 2, pending = null;
+
+  function rgb(hex) { return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)]; }
+  var RAMPRGB = RAMP.map(rgb), SURF = rgb(SURFACE);
+  function yieldAt(x, y) { var i = Math.min(W - 1, Math.max(0, Math.floor(x))), j = Math.min(H - 1, Math.max(0, Math.floor(y))), s = state.soil[j * W + i]; return s || state.y; }
+  function build() { net = new T.Net(TOWN, state.rivers.map(function (r) { return { pts: r, ratio: state.w }; }), 0.5); }
+  // the ring of every cell of `c` screen pixels; then the picture, with a gap of one cell in the surface colour between rings
+  function classify(c) {
+    cell = c; cw = map.width / c; ch = map.height / c; cls = new Uint8Array(cw * ch);
+    for (var j = 0; j < ch; j++) for (var i = 0; i < cw; i++) { var x = (i + 0.5) * c / PX, y = (j + 0.5) * c / PX; cls[j * cw + i] = T.ring(net.eq(x, y), yieldAt(x, y), state.a, state.y); }
+  }
+  function paint() {
+    var img = ctx.createImageData(map.width, map.height), d = img.data, i, j, k, u, v, col;
+    for (j = 0; j < ch; j++) for (i = 0; i < cw; i++) {
+      k = cls[j * cw + i]; var edge = (i + 1 < cw && cls[j * cw + i + 1] !== k) || (j + 1 < ch && cls[(j + 1) * cw + i] !== k);
+      col = k > 6 || (edge && cell <= 2) ? SURF : RAMPRGB[k - 1];
+      for (v = 0; v < cell; v++) for (u = 0; u < cell; u++) { var o = ((j * cell + v) * map.width + i * cell + u) * 4; d[o] = col[0]; d[o + 1] = col[1]; d[o + 2] = col[2]; d[o + 3] = 255; }
+    }
+    ctx.putImageData(img, 0, 0);
+    // where the soil was changed: a hairline round each patch
+    ctx.strokeStyle = MUTED; ctx.lineWidth = 1; ctx.beginPath();
+    for (j = 0; j < H; j++) for (i = 0; i < W; i++) { var s = state.soil[j * W + i];
+      if (i + 1 < W && state.soil[j * W + i + 1] !== s) { ctx.moveTo((i + 1) * PX + 0.5, j * PX); ctx.lineTo((i + 1) * PX + 0.5, (j + 1) * PX); }
+      if (j + 1 < H && state.soil[(j + 1) * W + i] !== s) { ctx.moveTo(i * PX, (j + 1) * PX + 0.5); ctx.lineTo((i + 1) * PX, (j + 1) * PX + 0.5); } }
+    ctx.stroke();
+    // rivers: a line in the ink, ringed in the surface colour
+    function line(pts, width, colour) { if (pts.length < 2) return; ctx.strokeStyle = colour; ctx.lineWidth = width; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(pts[0][0] * PX, pts[0][1] * PX); for (var n = 1; n < pts.length; n++) ctx.lineTo(pts[n][0] * PX, pts[n][1] * PX); ctx.stroke(); }
+    state.rivers.concat(state.drawing ? [state.drawing] : []).forEach(function (r) { line(r, 7, SURFACE); line(r, 3, INK); });
+    if (state.drawing) state.drawing.forEach(function (p) { ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(p[0] * PX, p[1] * PX, 4, 0, 7); ctx.fill(); });
+    // the town: a dot of 12 px ringed in the surface colour
+    ctx.fillStyle = SURFACE; ctx.beginPath(); ctx.arc(TOWN.x * PX, TOWN.y * PX, 8, 0, 7); ctx.fill(); ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(TOWN.x * PX, TOWN.y * PX, 6, 0, 7); ctx.fill();
+    if (cell <= 2) labels();
+    if (state.probe) { var p = state.probe; ctx.strokeStyle = INK; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(p.x * PX - 9, p.y * PX + 0.5); ctx.lineTo(p.x * PX + 9, p.y * PX + 0.5); ctx.moveTo(p.x * PX + 0.5, p.y * PX - 9); ctx.lineTo(p.x * PX + 0.5, p.y * PX + 9); ctx.stroke(); }
+  }
+  // a name on up to four rings, the four that cover most of the map, each where a line of text has most room (the legend names all six)
+  function labels() {
+    var gw = W, gh = H, g = new Uint8Array(gw * gh), dist = new Float32Array(gw * gh), run = new Float32Array(gw * gh), area = [0, 0, 0, 0, 0, 0, 0, 0], i, j, k;
+    for (j = 0; j < gh; j++) for (i = 0; i < gw; i++) { g[j * gw + i] = cls[Math.min(ch - 1, Math.floor((j + 0.5) * PX / cell)) * cw + Math.min(cw - 1, Math.floor((i + 0.5) * PX / cell))]; area[g[j * gw + i]]++; }
+    for (k = 0; k < net.xs.length; k++) { i = Math.floor(net.xs[k]); j = Math.floor(net.ys[k]); if (i >= 0 && j >= 0 && i < gw && j < gh) g[j * gw + i] = 0; }      // the town and every node of a river are in the way
+    for (j = 0; j < gh; j++) for (i = 0; i < gw; i++) { k = j * gw + i; var e = i === 0 || j === 0 || i === gw - 1 || j === gh - 1 || g[k - 1] !== g[k] || g[k + 1] !== g[k] || g[k - gw] !== g[k] || g[k + gw] !== g[k]; dist[k] = e ? 0 : 1e9; }
+    for (j = 1; j < gh; j++) for (i = 1; i < gw - 1; i++) { k = j * gw + i; dist[k] = Math.min(dist[k], dist[k - 1] + 1, dist[k - gw] + 1, dist[k - gw - 1] + 1.4, dist[k - gw + 1] + 1.4); }
+    for (j = gh - 2; j >= 0; j--) for (i = gw - 2; i > 0; i--) { k = j * gw + i; dist[k] = Math.min(dist[k], dist[k + 1] + 1, dist[k + gw] + 1, dist[k + gw + 1] + 1.4, dist[k + gw - 1] + 1.4); }
+    // how far the same ring runs to the left and to the right of each cell, with a mile and a half of room above and below
+    for (j = 0; j < gh; j++) { var left = 0; for (i = 0; i < gw; i++) { k = j * gw + i; left = dist[k] >= 1.5 ? left + 1 : 0; run[k] = left; } var right = 0; for (i = gw - 1; i >= 0; i--) { k = j * gw + i; right = dist[k] >= 1.5 ? right + 1 : 0; run[k] = Math.min(run[k], right); } }
+    ctx.font = '600 13px system-ui, -apple-system, "Segoe UI", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; state.labelled = [];
+    [1, 2, 3, 4, 5, 6].sort(function (p, s2) { return area[s2] - area[p]; }).slice(0, 4).forEach(function (r) {
+      var text = SHORT[r - 1], need = (ctx.measureText(text).width / 2 + 6) / PX, b = -1, bs = -1;
+      for (k = 0; k < gw * gh; k++) if (g[k] === r && run[k] >= need) { var sc = Math.min(run[k], need + 4) + 0.3 * Math.min(dist[k], 6) - 0.03 * Math.abs((k % gw) - TOWN.x) - 0.01 * Math.floor(k / gw); if (sc > bs) { bs = sc; b = k; } }
+      if (b < 0) return;
+      ctx.fillStyle = r <= 3 ? '#0b0b0b' : '#ffffff'; ctx.fillText(text, (b % gw + 0.5) * PX, (Math.floor(b / gw) + 0.5) * PX); state.labelled.push(text); });
+  }
+  function redraw(fine) { classify(fine ? 2 : 8); paint(); if (!fine) { clearTimeout(pending); pending = setTimeout(function () { redraw(true); }, 140); } }
+  function all(fine) { build(); redraw(fine); chart(); tables(); outputs(); tell(); }
+
+  // ---- what is at a place: the same words for the pointer, the keyboard and the table ----
+  function at(x, y) {
+    var wy = net.way(x, y), yl = yieldAt(x, y), b = T.price(wy.eq, state.a), ring = T.ring(wy.eq, yl, state.a, state.y);
+    return { x: x, y: y, crow: wy.crow, eq: wy.eq, land: wy.land, water: wy.node !== 0 && wy.eq < wy.crow - 1e-9, yield: yl, price: b, rk: T.rentKoppel(b, yl), rd: T.rentDrei(b, yl), ring: ring };
+  }
+  function words(p, el) {
+    function add(tag, text) { var n = document.createElement(tag); n.textContent = text; el.appendChild(n); return n; }
+    el.textContent = '';
+    add('b', p.ring <= 6 ? 'Ring ' + p.ring + ', ' + T.NAMES[p.ring - 1] : 'Beyond the rings: wilderness'); add('span', p.ring <= 6 ? ' (' + T.ENGLISH[p.ring - 1] + '). ' : '. ');
+    add('b', p.eq.toFixed(1) + ' miles'); add('span', ' of carting from the town' + (p.water ? ', being ' + p.land.toFixed(1) + ' by land to the water and the rest by water; ' : '; ') + p.crow.toFixed(1) + ' as the crow flies. Rye is worth ');
+    add('b', p.price > 0 ? p.price.toFixed(2) + ' Taler' : 'nothing'); add('span', ' the Scheffel here' + (p.price > 0 ? ' (' + state.a.toFixed(2) + ' in the town)' : '') + '. Soil of ' + p.yield.toFixed(1).replace('.0', '') + ' Körner. Rent: Koppel ');
+    add('b', Math.round(p.rk).toLocaleString('en')); add('span', ', three fields '); add('b', Math.round(p.rd).toLocaleString('en')); add('span', ' Taler.');
+  }
+  function tell() { if (state.probe) words(at(state.probe.x, state.probe.y), readout); else readout.textContent = 'Move the pointer over the map, or click it and use the arrow keys, to read what is at a place.'; }
+  function place(ev) { var r = map.getBoundingClientRect(); return { x: (ev.clientX - r.left) / r.width * W, y: (ev.clientY - r.top) / r.height * H }; }
+  function showTip(ev, p) { words(at(p.x, p.y), tip); tip.style.display = 'block'; var f = map.parentNode.getBoundingClientRect(), x = ev.clientX - f.left + 14, y = ev.clientY - f.top + 14; if (x + 260 > f.width) x -= 280; tip.style.left = x + 'px'; tip.style.top = y + 'px'; }
+
+  // ---- the pointer ----
+  var down = false;
+  function brush(p) { var v = state.tool === 'sand' ? 4 : state.tool === 'rich' ? 10 : 0, R = 3.2, i, j, ch2 = false; for (j = Math.floor(p.y - R); j <= p.y + R; j++) for (i = Math.floor(p.x - R); i <= p.x + R; i++) if (i >= 0 && j >= 0 && i < W && j < H && Math.hypot(i + 0.5 - p.x, j + 0.5 - p.y) <= R && state.soil[j * W + i] !== v) { state.soil[j * W + i] = v; ch2 = true; } return ch2; }
+  map.addEventListener('pointerdown', function (ev) { var p = place(ev); map.focus({ preventScroll: true });
+    if (state.tool === 'river') { if (!state.drawing) state.drawing = []; state.drawing.push([Math.round(p.x * 2) / 2, Math.round(p.y * 2) / 2]); paint(); }
+    else if (state.tool !== 'look') { down = true; map.setPointerCapture(ev.pointerId); if (brush(p)) redraw(false); }
+    else { state.probe = p; paint(); tell(); } });
+  map.addEventListener('pointermove', function (ev) { var p = place(ev); if (down && brush(p)) redraw(false); if (state.tool === 'look' || state.tool === 'river') { showTip(ev, p); if (state.tool === 'look') { state.probe = p; tell(); } } });
+  map.addEventListener('pointerup', function () { if (down) { down = false; redraw(true); } });
+  map.addEventListener('pointerleave', function () { tip.style.display = 'none'; });
+  map.addEventListener('dblclick', function () { endRiver(); });
+  function endRiver() { if (state.drawing && state.drawing.length > 1) { var r = state.drawing.filter(function (p, n, a2) { return n === 0 || p[0] !== a2[n - 1][0] || p[1] !== a2[n - 1][1]; }); if (r.length > 1) state.rivers.push(r); } state.drawing = null; all(false); }
+  map.addEventListener('keydown', function (ev) { var step = ev.shiftKey ? 5 : 1, p = state.probe || { x: TOWN.x, y: TOWN.y }, k = ev.key;
+    tip.style.display = 'none';
+    if (k === 'Enter' && state.drawing) { endRiver(); ev.preventDefault(); return; } if (k === 'Escape' && state.drawing) { state.drawing = null; paint(); return; }
+    if (k === 'ArrowLeft') p.x -= step; else if (k === 'ArrowRight') p.x += step; else if (k === 'ArrowUp') p.y -= step; else if (k === 'ArrowDown') p.y += step; else return;
+    p.x = Math.max(0, Math.min(W, p.x)); p.y = Math.max(0, Math.min(H, p.y)); state.probe = p; paint(); tell(); ev.preventDefault(); });
+
+  // ---- the controls ----
+  function outputs() { document.getElementById('o-a').textContent = state.a.toFixed(2) + ' Taler the Scheffel'; document.getElementById('o-y').textContent = String(state.y) + ' Körner'; document.getElementById('o-w').textContent = (state.w * 100).toFixed(0) + '% of a mile by land'; }
+  document.getElementById('a').oninput = function () { state.a = +this.value; redraw(false); chart(); tables(); outputs(); tell(); };
+  document.getElementById('y').oninput = function () { state.y = +this.value; redraw(false); chart(); tables(); outputs(); tell(); };
+  document.getElementById('w').oninput = function () { state.w = +this.value; all(false); };
+  document.getElementById('tool').onchange = function () { state.tool = this.value; tip.style.display = 'none'; if (state.tool !== 'river' && state.drawing) endRiver(); map.style.cursor = state.tool === 'look' ? 'crosshair' : 'cell'; };
+  document.getElementById('clear').onclick = function () { state.rivers = []; state.drawing = null; all(false); };
+  document.getElementById('tab').onclick = function () { var on = this.getAttribute('aria-pressed') !== 'true'; this.setAttribute('aria-pressed', String(on)); document.getElementById('tables').className = 'tables' + (on ? ' on' : ''); };
+  var PRESETS = {
+    plain: { rivers: [] },
+    // after the book's plate II, which draws one half and says the other is "vollkommen gleich": so the same river, mirrored, above the town
+    river: { rivers: [[[50.5, 0], [52.5, 4], [54.5, 9], [53, 14], [51.5, 19], [53.5, 23], [58, 25], [63, 27], [63.5, 31], [61.5, 35], [60, 40], [61.5, 45], [63.5, 49], [63, 53], [58, 55], [53.5, 57], [51.5, 61], [53, 66], [54.5, 71], [52.5, 76], [50.5, 80]]] },
+    miss: { rivers: [[[18, 0], [24, 14], [36, 26], [52, 31], [70, 30], [88, 36], [104, 52], [112, 80]]] },
+    motley: { rivers: [[[60, 40], [66, 36], [74, 35], [84, 30], [96, 28], [108, 20], [120, 16]]], soil: [[48, 34, 6, 4], [44, 44, 5, 4], [106, 22, 6, 10], [20, 62, 7, 10], [78, 56, 6, 4]] }
+  };
+  function preset(name) { var p = PRESETS[name]; state.rivers = p.rivers.map(function (r) { return r.map(function (v) { return v.slice(); }); }); state.soil.fill(0); state.drawing = null;
+    (p.soil || []).forEach(function (s) { for (var j = 0; j < H; j++) for (var i = 0; i < W; i++) if (Math.hypot(i + 0.5 - s[0], j + 0.5 - s[1]) <= s[2]) state.soil[j * W + i] = s[3]; }); all(true); }
+  document.getElementById('preset').onchange = function () { preset(this.value); };
+
+  // ---- the legends ----
+  (function () { var L = document.getElementById('legend'); RAMP.forEach(function (c, k) { var li = document.createElement('li'), sw = document.createElement('i'), b = document.createElement('b'), s = document.createElement('span'); sw.style.background = c; b.textContent = (k + 1) + ' ' + T.NAMES[k]; s.textContent = GLOSS[k]; li.appendChild(sw); li.appendChild(b); li.appendChild(s); L.appendChild(li); });
+    var li = document.createElement('li'), sw = document.createElement('i'), s = document.createElement('span'); sw.style.background = SURFACE; sw.style.border = '1px solid #45453f'; s.textContent = 'beyond the rings: wilderness'; li.appendChild(sw); li.appendChild(s); L.appendChild(li);
+    var L2 = document.getElementById('legend2'); [[RAMP[3], 'Koppelwirtschaft, where it pays more (ring 4, and ring 3 inside it)'], [RAMP[4], 'three-field farming, where it pays more (ring 5)'], [MUTED, 'either, where the other pays more']].forEach(function (it) { var li2 = document.createElement('li'), k2 = document.createElement('i'), t = document.createElement('span'); k2.className = 'line'; k2.style.borderTopColor = it[0]; t.textContent = it[1]; li2.appendChild(k2); li2.appendChild(t); L2.appendChild(li2); }); })();
+
+  // ---- the chart: rent of the two systems by distance, the land's own use picked out ----
+  var svg = document.getElementById('chart'), NS = 'http://www.w3.org/2000/svg', CH = { l: 62, r: 150, t: 30, b: 58, w: 940, h: 316, xmax: 55 };
+  function el(tag, attrs, text) { var n = document.createElementNS(NS, tag); for (var k in attrs) n.setAttribute(k, attrs[k]); if (text !== undefined) n.textContent = text; svg.appendChild(n); return n; }
+  function chart() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var a = state.a, y = state.y, rr = T.rings(a, y), top = Math.max(400, Math.ceil(T.rentKoppel(a, y) / 400) * 400), bot = -400;
+    var X = function (d) { return CH.l + d / CH.xmax * (CH.w - CH.l - CH.r); }, Y = function (v) { return CH.t + (top - v) / (top - bot) * (CH.h - CH.t - CH.b); };
+    for (var g = bot; g <= top; g += 400) { el('line', { x1: CH.l, x2: CH.w - CH.r, y1: Y(g) + 0.5, y2: Y(g) + 0.5, stroke: g === 0 ? '#383835' : '#2c2c2a', 'stroke-width': 1 }); el('text', { x: CH.l - 8, y: Y(g) + 4, 'text-anchor': 'end' }, g.toLocaleString('en')); }
+    el('text', { x: CH.l - 8, y: CH.t - 14, 'text-anchor': 'end' }, 'Taler');
+    for (var d = 0; d <= CH.xmax; d += 10) el('text', { x: X(d), y: CH.h - CH.b + 34, 'text-anchor': 'middle' }, String(d));
+    el('text', { x: X(CH.xmax), y: CH.h - 6, 'text-anchor': 'end' }, 'miles of carting from the town');
+    // a line is drawn as far as it stays on the plot (rent no lower than the foot of the axis); returns where it ends
+    function path(f, from, to, colour) { var s = '', dd, last = null; for (dd = from; dd <= to + 1e-9; dd += 0.25) { var v = f(T.price(dd, a), y); if (v < bot || v > top) break; s += (s ? 'L' : 'M') + X(dd).toFixed(1) + ' ' + Y(v).toFixed(1); last = [dd, v]; } if (s) el('path', { d: s, fill: 'none', stroke: colour, 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }); return last; }
+    var end = Math.min(CH.xmax - 3, T.distance(0, a));
+    var ek = path(T.rentKoppel, 0, end, MUTED), ed = path(T.rentDrei, 0, end, MUTED);
+    if (rr[3] > rr[1]) path(T.rentKoppel, rr[1], rr[3], RAMP[3]); if (rr[4] > rr[3]) path(T.rentDrei, rr[3], rr[4], RAMP[4]);
+    // direct labels at the right-hand ends of the two lines, with leaders if they would collide
+    // a name at the town end of each line, the upper one above its line and the lower one below
+    el('text', { x: X(1.2), y: Y(Math.min(top, T.rentKoppel(T.price(1.2, a), y))) - 8, class: 'lab' }, 'Koppelwirtschaft'); el('text', { x: X(1.2), y: Y(Math.max(bot, T.rentDrei(T.price(1.2, a), y))) + 18, class: 'lab' }, 'three fields');
+    // the rings as a thin bar under the plot, in the map's colours, a gap between them
+    var x0 = 0; rr.forEach(function (r, k) { var a0 = X(Math.min(x0, CH.xmax)), a1 = X(Math.min(r, CH.xmax)); if (a1 - a0 > 3) el('rect', { x: a0 + 1, y: CH.h - CH.b + 6, width: a1 - a0 - 2, height: 8, rx: 4, fill: RAMP[k] }); x0 = r; });
+    state.chartX = X; state.chartY = Y; state.chartEnd = end; state.chartTop = top; state.chartBot = bot;
+    cross = el('line', { x1: 0, x2: 0, y1: CH.t, y2: CH.h - CH.b + 16, stroke: MUTED, 'stroke-width': 1, visibility: 'hidden' });
+    tipbox = el('g', { visibility: 'hidden' });
+  }
+  var cross, tipbox, chartD = null;
+  function chartAt(dm) {
+    var a = state.a, y = state.y, X = state.chartX, d = Math.max(0, Math.min(CH.xmax, Math.round(dm * 2) / 2)), b = T.price(d, a), ring = T.ring(d, y, a, y); chartD = d;
+    cross.setAttribute('x1', X(d) + 0.5); cross.setAttribute('x2', X(d) + 0.5); cross.setAttribute('visibility', 'visible');
+    while (tipbox.firstChild) tipbox.removeChild(tipbox.firstChild); tipbox.setAttribute('visibility', 'visible');
+    var rows = [[d.toFixed(1) + ' miles', (ring <= 6 ? 'ring ' + ring + ', ' + T.NAMES[ring - 1] : 'wilderness')], [b > 0 ? b.toFixed(2) + ' Taler' : 'nothing', 'rye, the Scheffel'], [Math.round(T.rentKoppel(b, y)).toLocaleString('en') + ' Taler', 'Koppelwirtschaft'], [Math.round(T.rentDrei(b, y)).toLocaleString('en') + ' Taler', 'three fields']];
+    var bx = X(d) + 12, wbox = 250; if (bx + wbox > CH.w - 4) bx = X(d) - wbox - 12; var by = CH.t + 4;
+    function add(tag, attrs, text) { var n = document.createElementNS(NS, tag); for (var k in attrs) n.setAttribute(k, attrs[k]); if (text !== undefined) n.textContent = text; tipbox.appendChild(n); return n; }
+    add('rect', { x: bx, y: by, width: wbox, height: 20 * rows.length + 10, rx: 6, fill: '#0d0d0d', stroke: 'rgba(255,255,255,0.18)' });
+    rows.forEach(function (r, k) { if (k >= 2) add('line', { x1: bx + 8, x2: bx + 20, y1: by + 16 + 20 * k, y2: by + 16 + 20 * k, stroke: k === 2 ? RAMP[3] : RAMP[4], 'stroke-width': 2 });
+      var t1 = add('text', { x: bx + (k >= 2 ? 26 : 8), y: by + 20 + 20 * k }, r[0]); t1.setAttribute('style', 'fill:#f0efec;font-weight:600'); add('text', { x: bx + 122, y: by + 20 + 20 * k, class: 'lab' }, r[1]); });
+  }
+  svg.addEventListener('pointermove', function (ev) { var r = svg.getBoundingClientRect(), xv = (ev.clientX - r.left) / r.width * CH.w; chartAt((xv - CH.l) / (CH.w - CH.l - CH.r) * CH.xmax); });
+  svg.addEventListener('pointerleave', function () { cross.setAttribute('visibility', 'hidden'); tipbox.setAttribute('visibility', 'hidden'); });
+  svg.addEventListener('keydown', function (ev) { var d = chartD === null ? 0 : chartD; if (ev.key === 'ArrowRight') d += ev.shiftKey ? 5 : 0.5; else if (ev.key === 'ArrowLeft') d -= ev.shiftKey ? 5 : 0.5; else return; chartAt(d); ev.preventDefault(); });
+  svg.addEventListener('focus', function () { chartAt(chartD === null ? 0 : chartD); });
+
+  // ---- the same in tables ----
+  function tables() {
+    var box = document.getElementById('tables'), a = state.a, y = state.y, rr = T.rings(a, y); box.textContent = '';
+    function table(caption, head, rows) { var t = document.createElement('table'), c = document.createElement('caption'), tr = document.createElement('tr'); c.textContent = caption; c.style.textAlign = 'left'; c.style.color = '#c3c2b7'; c.style.padding = '10px 0 4px'; t.appendChild(c);
+      head.forEach(function (h) { var th = document.createElement('th'); th.textContent = h; tr.appendChild(th); }); t.appendChild(tr);
+      rows.forEach(function (r) { var row = document.createElement('tr'); r.forEach(function (v) { var td = document.createElement('td'); td.textContent = v; row.appendChild(td); }); t.appendChild(row); }); box.appendChild(t); }
+    var x0 = 0, rows = []; rr.forEach(function (r, k) { rows.push([(k + 1) + ' ' + T.NAMES[k], r > x0 + 1e-9 ? x0.toFixed(1) : 'none', r > x0 + 1e-9 ? r.toFixed(1) : '']); x0 = r; });
+    table('The rings on a plain with no river, rye at ' + a.toFixed(2) + ' Taler in the town, soil of ' + y + ' Körner: from and to, in miles', ['ring', 'from', 'to'], rows);
+    var rows2 = []; for (var d = 0; d <= 50; d += 5) { var b = T.price(d, a); rows2.push([String(d), b > 0 ? b.toFixed(3) : '0', Math.round(T.rentKoppel(b, y)).toLocaleString('en'), Math.round(T.rentDrei(b, y)).toLocaleString('en')]); }
+    table('By miles of carting: what rye is worth on the farm, and the rent of 100,000 square rods under each system, in Taler', ['miles', 'rye', 'Koppel', 'three fields'], rows2);
+  }
+
+  if (q.a) { state.a = +q.a; document.getElementById('a').value = q.a; } if (q.y) { state.y = +q.y; document.getElementById('y').value = q.y; }
+  window.__thunen = { state: state, at: at, preset: preset, classAt: function (x, y) { return cls[Math.min(ch - 1, Math.floor(y * PX / cell)) * cw + Math.min(cw - 1, Math.floor(x * PX / cell))]; }, cell: function () { return cell; }, redraw: redraw, all: all, endRiver: endRiver, chartAt: chartAt };
+  preset(q.preset || 'plain'); if (q.preset) document.getElementById('preset').value = q.preset;
+})();
+</script>
+</body>
+</html>

@@ -22,7 +22,7 @@ const { chromium } = require('playwright'); const path = require('path');
     for (let dx = -12; dx <= 12; dx += 1) res.rings.push(t.at(end[0] + dx, end[1] - 1).ring); for (const pt of riv) for (let dx = -8; dx <= 8; dx += 2) if (t.at(pt[0] + dx, pt[1]).ring >= 6) res.six++; return res; });
   console.log(`second plate: a mile above the foot of the map, rings from 12 miles left of the river to 12 right: ${pl.rings.join(' ')}; places within 8 miles of the river in the sixth ring or beyond: ${pl.six}`);
   // the pointer and the keyboard give the same words
-  const box = await p.locator('#map').boundingBox(); await p.mouse.move(box.x + box.width * 0.75, box.y + box.height * 0.5); await p.waitForTimeout(100);
+  let box = await p.locator('#map').boundingBox(); await p.mouse.move(box.x + box.width * 0.75, box.y + box.height * 0.5); await p.waitForTimeout(100);
   const tipText = await p.evaluate(() => document.getElementById('tip').textContent), read1 = await p.evaluate(() => document.getElementById('readout').textContent);
   console.log('pointer at three quarters across, half way down: ' + read1); console.log('the tooltip says the same: ' + (tipText === read1));
   await p.locator('#map').focus(); await p.keyboard.press('ArrowRight'); await p.keyboard.press('Shift+ArrowDown'); const read2 = await p.evaluate(() => document.getElementById('readout').textContent);
@@ -35,11 +35,14 @@ const { chromium } = require('playwright'); const path = require('path');
   console.log('chart, keyboard to 10 miles: ' + ct);
   // drawing a river with the pointer
   await p.selectOption('#preset', 'plain'); await p.locator('#a').fill('1.5'); await p.locator('#y').fill('8'); await p.selectOption('#tool', 'river');
+  // 27 November 2026: the map is measured afresh here and before the sand below. The first measure was taken before the page had scrolled, and on the page
+  // as built for the public site, which has a line above it, the clicks then fell elsewhere on the map (the page places a click rightly; the test did not).
+  await p.locator('#map').scrollIntoViewIfNeeded(); box = await p.locator('#map').boundingBox();
   for (const [fx, fy] of [[0.5, 0.5], [0.7, 0.35], [0.95, 0.3]]) await p.mouse.click(box.x + box.width * fx, box.y + box.height * fy);
   await p.locator('#map').focus(); await p.keyboard.press('Enter'); await p.waitForTimeout(500); await p.selectOption('#tool', 'look');
   const dr = await p.evaluate(() => ({ n: window.__thunen.state.rivers.length, pts: window.__thunen.state.rivers[0], far: window.__thunen.at(112, 25).ring, mirror: window.__thunen.at(8, 55).ring }));
   console.log(`a river drawn by three clicks and Enter: ${dr.n} river of ${dr.pts.length} points; the ring near its far end (112, 25) is ${dr.far}, and at the place opposite across the town (8, 55) it is ${dr.mirror}`);
-  await p.selectOption('#tool', 'sand'); await p.mouse.move(box.x + box.width * 0.42, box.y + box.height * 0.5); await p.mouse.down(); await p.mouse.move(box.x + box.width * 0.44, box.y + box.height * 0.52); await p.mouse.up(); await p.waitForTimeout(400); await p.selectOption('#tool', 'look');
+  await p.selectOption('#tool', 'sand'); await p.locator('#map').scrollIntoViewIfNeeded(); box = await p.locator('#map').boundingBox(); await p.mouse.move(box.x + box.width * 0.42, box.y + box.height * 0.5); await p.mouse.down(); await p.mouse.move(box.x + box.width * 0.44, box.y + box.height * 0.52); await p.mouse.up(); await p.waitForTimeout(400); await p.selectOption('#tool', 'look');
   const sd = await p.evaluate(() => { const a = window.__thunen.at(50.5, 40.2); return [a.ring, a.yield, a.eq.toFixed(1)]; }); console.log(`sand laid 9.5 miles west of the town: ring ${sd[0]}, soil ${sd[1]} Körner, ${sd[2]} miles of carting`);
   await p.screenshot({ path: path.join(out, 'page.png'), fullPage: true });
   console.log('script errors:', JSON.stringify(errs));

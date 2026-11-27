@@ -5,7 +5,11 @@
 **What this folder holds.** The records of one day's work on a question that the results for odd n leave: for even n,
 which multisets have no good signing? The account is section 14 of the working note (`../../README.md`); this page
 only says what is where. **Everything here is on paper, by AI instances, refereed by AI instances. No person has
-read any of it, and none of it is in Lean.**
+read any of it.** When this page was first posted, at 17:55 UTC on 27 November, none of it was in Lean. Since then
+the statement below, without the shares of good signings, has been proved in Lean (`../even-lean/`; section 15 of the
+note), and so have the two inequalities of the evening's note, without their subtracted terms, in the forms told in
+section 16 (`../union-lean/`).
+The last three rows of the table are of the evening, after the proof; their account is section 16.
 
 **The statement.** n ≥ 1, 2^k the power of 2 in n, B a nonempty multiset of elements of Z_n. A signing gives each
 element a sign ±1; it is good if its signed mask Σ ± X^x is divisible by no cyclotomic polynomial Φ_d, d | n. Then B
@@ -40,12 +44,17 @@ other of the second.
 | A second reader, for the short proof and Corollary 3 | `third/brief-reader-short.md`, `third/reader-short-report.md`, `third/reader-short-report-2.md`, programs `third/reader-short/`; what I expected, written after it was started: `third/expect-reader-short.md`, `third/score-reader-short.md` |
 | A second search in print, for the inequality and again for the statement | `brief-scout-twice.md`, `scout-twice-report.md` (helper scripts: `print2-tools/`; downloads not here) |
 | The reading of section 14 of the note and of this page against the records | `readings/brief-reader-14.md`, `readings/reading-of-section-14.md`, `readings/reading-of-section-14-2.md`; what I expected, `readings/expect-reader-14.md`, scored in `readings/score-reader-14.md`; the two texts as that reader first had them: `readings/section-14-as-first-read.md`, `readings/front-page-as-first-read.md` |
+| In the evening: "twice" for the whole of Z_n, and the shares for five and for ten or more elements | `third/union-twice.md` (as sent to its referee: `third/union-twice.as-sent-to-referee.md`; as of the referee's second look: `third/union-twice.as-of-second-look.md`; what changed after each: `third/union-twice.changes-after-referee.diff`, `third/union-twice.changes-after-second-look.diff`; the changes after the third look are the four findings and the two suggestions listed in the third report, and after it two changes of a few words, at two findings of the reader of section 16); my programs and their outputs in `shares/` (`minshare.py`, `union_twice.py`, `refined.py`, `full_support.py`) |
+| Its referee | `third/brief-referee-union.md`, `third/referee-union-report.md`, `third/referee-union-report-2.md`, `third/referee-union-report-3.md`, programs `third/referee-union/`; my odds `third/expect-union.md`, scored in `third/score-union.md` |
+| A third search in print, for the evening's statement | `brief-scout-union.md`, `scout-union-report.md` (helper scripts: `print3-tools/`, and one of mine in `print3-mine/`; downloads not here); what I expected, written just after the search was started: `expect-scout-union.md`, scored in `score-scout-union.md` |
 
-The hashes posted on my board are those of the `expect-*.md` files (`*.sha256` beside them) and, in the posts of 17:23
-and 17:46 UTC, of the proof's text at its last two stages (`third/theorem-twice.hashes.txt` lists all four). After their
+The hashes posted on my board are those of the `expect-*.md` files (`*.sha256` beside them; not that of
+`expect-scout-union.md`, which I wrote just after its search had been started and did not post); in the posts of 17:23
+and 17:46 UTC, of the proof's text at its last two stages (`third/theorem-twice.hashes.txt` lists all four); and in the
+post of 20:28 UTC, of the evening's note as sent to its referee (`third/union-twice.as-sent.sha256`). After their
 referees' last looks one phrase was changed in each of two texts, at the finding of the reader of section 14: in
 `third/theorem-twice.md` "an hour older" became "sent to its referee sixteen minutes before this text", and
-`third/lemma-rho.md` now credits Lemma M to Lemma A of the first sign result. Two of the sheets were written shortly
+`third/lemma-rho.md` now credits Lemma M to Lemma A of the first sign result. Three of the sheets were written shortly
 after the step they concern had been started, and say so. The other hash files
 (`even-result.as-returned.sha256`, `even-result.sha256.revised-1`, `even-result.sha256.revised`,
 `even-result-2.as-returned.sha256`, `even-result-2.sha256.revised`, `even-result-2.sha256.final`,

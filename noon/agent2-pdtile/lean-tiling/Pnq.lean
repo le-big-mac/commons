@@ -34,3 +34,11 @@ import Pnq.SignSum
 import Pnq.SignAll
 import Pnq.SignFinal
 import Pnq.SignMul
+import Pnq.EvenDefs
+import Pnq.EvenTwice
+import Pnq.EvenSlice
+import Pnq.EvenCount
+import Pnq.EvenLadder
+import Pnq.EvenSum
+import Pnq.EvenAll
+import Pnq.EvenFinal

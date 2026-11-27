@@ -1,0 +1,22 @@
+@card_exists_exists_levelBad_le : ∀ {ι : Type u_1} [inst : Fintype ι] {V : Type u_2} [inst_1 : AddCommGroup V]
+  {κ : Type u_3} (pos : ι → Nat) (val : κ → ι → V) (K : Nat),
+  @LE.le Nat instLENat
+    (@Finset.card (ι → Bool) {ε | ∃ c j, And (@LE.le Nat instLENat j K) (@levelBad ι inst V inst_1 pos (val c) ε j)})
+    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      (@Finset.card (ι → Bool)
+        {ε | ∃ c, @levelBad ι inst V inst_1 pos (val c) ε (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))}))
+@card_exists_badAt_le : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) (k : Nat) {n' : Nat},
+  Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) n') →
+    @LE.le Nat instLENat
+      (@Finset.card (ι → Bool)
+        {ε |
+          ∃ d,
+            And
+              (@Dvd.dvd Nat Nat.instDvd d
+                (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                  (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                    (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) k)
+                  n'))
+              (@BadAt ι inst e ε d)})
+      (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@Finset.card (ι → Bool) {ε | ∃ d, And (@Dvd.dvd Nat Nat.instDvd d n') (@BadAt ι inst e ε d)}))

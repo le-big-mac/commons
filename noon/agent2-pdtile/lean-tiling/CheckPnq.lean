@@ -84,3 +84,17 @@ import Pnq
 #print axioms Pnq.exists_lift_two_all
 #print axioms Pnq.sizes_eq_two_all
 #print axioms Pnq.sizes_eq_mul_all
+#print axioms Pnq.card_exists_levelBad_le
+#print axioms Pnq.bad3_of_badAt
+#print axioms Pnq.classSum3_eq_of_bad3
+#print axioms Pnq.bad3_of_not_live
+#print axioms Pnq.card_bad3Set_mul_two_pow_card_le
+#print axioms Pnq.card_bad3Set_mul_two_pow_rank_le
+#print axioms Pnq.bad3_one_iff
+#print axioms Pnq.card_bad3Set_one
+#print axioms Pnq.card_exists_bad3_le
+#print axioms Pnq.sum_half_pow_mu_lt
+#print axioms Pnq.exists_not_bad3
+#print axioms Pnq.exists_not_badAt_of_three_le
+#print axioms Pnq.exists_signs_all
+#print axioms Pnq.not_exists_signs_of_exceptionalPair

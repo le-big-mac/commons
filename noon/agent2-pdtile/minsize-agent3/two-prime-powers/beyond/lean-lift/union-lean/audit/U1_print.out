@@ -1,0 +1,109 @@
+@Pnq.card_exists_exists_levelBad_le.{u_1, u_2,
+    u_3} : ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι] {V : Type u_2} [inst_1 : AddCommGroup.{u_2} V] {κ : Type u_3}
+  (pos : ι → Nat) (val : κ → ι → V) (K : Nat),
+  @LE.le.{0} Nat instLENat
+    (@Finset.card.{u_1} (ι → Bool)
+      (@Finset.filter.{u_1} (ι → Bool)
+        (fun (ε : ι → Bool) =>
+          @Exists.{u_3 + 1} κ fun (c : κ) =>
+            @Exists.{1} Nat fun (j : Nat) =>
+              And (@LE.le.{0} Nat instLENat j K) (@Pnq.levelBad.{u_1, u_2} ι inst V inst_1 pos (val c) ε j))
+        (fun (a : ι → Bool) =>
+          Classical.propDecidable
+            (@Exists.{u_3 + 1} κ fun (c : κ) =>
+              @Exists.{1} Nat fun (j : Nat) =>
+                And (@LE.le.{0} Nat instLENat j K) (@Pnq.levelBad.{u_1, u_2} ι inst V inst_1 pos (val c) a j)))
+        (@Finset.univ.{u_1} (ι → Bool)
+          (@Pi.instFintype.{u_1, 0} ι (fun (a : ι) => Bool)
+            (fun (a b : ι) => Classical.propDecidable (@Eq.{u_1 + 1} ι a b)) inst fun (a : ι) => Bool.fintype))))
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      (@Finset.card.{u_1} (ι → Bool)
+        (@Finset.filter.{u_1} (ι → Bool)
+          (fun (ε : ι → Bool) =>
+            @Exists.{u_3 + 1} κ fun (c : κ) =>
+              @Pnq.levelBad.{u_1, u_2} ι inst V inst_1 pos (val c) ε
+                (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))))
+          (fun (a : ι → Bool) =>
+            Classical.propDecidable
+              (@Exists.{u_3 + 1} κ fun (c : κ) =>
+                @Pnq.levelBad.{u_1, u_2} ι inst V inst_1 pos (val c) a
+                  (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0)))))
+          (@Finset.univ.{u_1} (ι → Bool)
+            (@Pi.instFintype.{u_1, 0} ι (fun (a : ι) => Bool)
+              (fun (a b : ι) => Classical.propDecidable (@Eq.{u_1 + 1} ι a b)) inst fun (a : ι) => Bool.fintype)))))
+@Pnq.card_exists_badAt_le.{u_1} : ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι] (e : ι → Nat) (k : Nat) {n' : Nat}
+  (hn' : Not (@Dvd.dvd.{0} Nat Nat.instDvd (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) n')),
+  @LE.le.{0} Nat instLENat
+    (@Finset.card.{u_1} (ι → Bool)
+      (@Finset.filter.{u_1} (ι → Bool)
+        (fun (ε : ι → Bool) =>
+          @Exists.{1} Nat fun (d : Nat) =>
+            And
+              (@Dvd.dvd.{0} Nat Nat.instDvd d
+                (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                  (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                    (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+                    (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) k)
+                  n'))
+              (@Pnq.BadAt.{u_1} ι inst e ε d))
+        (fun (a : ι → Bool) =>
+          Classical.propDecidable
+            (@Exists.{1} Nat fun (d : Nat) =>
+              And
+                (@Dvd.dvd.{0} Nat Nat.instDvd d
+                  (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+                    (@HPow.hPow.{0, 0, 0} Nat Nat Nat
+                      (@instHPow.{0, 0} Nat Nat (@NPow.toPow.{0} Nat (@Monoid.toNPow.{0} Nat Nat.instMonoid)))
+                      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) k)
+                    n'))
+                (@Pnq.BadAt.{u_1} ι inst e a d)))
+        (@Finset.univ.{u_1} (ι → Bool)
+          (@Pi.instFintype.{u_1, 0} ι (fun (a : ι) => Bool)
+            (fun (a b : ι) => Classical.propDecidable (@Eq.{u_1 + 1} ι a b)) inst fun (a : ι) => Bool.fintype))))
+    (@HMul.hMul.{0, 0, 0} Nat Nat Nat (@instHMul.{0} Nat instMulNat)
+      (@OfNat.ofNat.{0} Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      (@Finset.card.{u_1} (ι → Bool)
+        (@Finset.filter.{u_1} (ι → Bool)
+          (fun (ε : ι → Bool) =>
+            @Exists.{1} Nat fun (d : Nat) => And (@Dvd.dvd.{0} Nat Nat.instDvd d n') (@Pnq.BadAt.{u_1} ι inst e ε d))
+          (fun (a : ι → Bool) =>
+            Classical.propDecidable
+              (@Exists.{1} Nat fun (d : Nat) =>
+                And (@Dvd.dvd.{0} Nat Nat.instDvd d n') (@Pnq.BadAt.{u_1} ι inst e a d)))
+          (@Finset.univ.{u_1} (ι → Bool)
+            (@Pi.instFintype.{u_1, 0} ι (fun (a : ι) => Bool)
+              (fun (a b : ι) => Classical.propDecidable (@Eq.{u_1 + 1} ι a b)) inst fun (a : ι) => Bool.fintype)))))
+@card_exists_exists_levelBad_le.{u_1, u_2,
+    u_3} : ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι] {V : Type u_2} [inst_1 : AddCommGroup.{u_2} V] {κ : Type u_3}
+  (pos : ι → ℕ) (val : κ → ι → V) (K : ℕ),
+  LE.le.{0} (Finset.card.{u_1} {ε | ∃ c j, LE.le.{0} j K ∧ levelBad.{u_1, u_2} pos (val c) ε j})
+    (HMul.hMul.{0, 0, 0} 2 (Finset.card.{u_1} {ε | ∃ c, levelBad.{u_1, u_2} pos (val c) ε 0}))
+@card_exists_badAt_le.{u_1} : ∀ {ι : Type u_1} [inst : Fintype.{u_1} ι] (e : ι → ℕ) (k : ℕ) {n' : ℕ},
+  ¬Dvd.dvd.{0} 2 n' →
+    LE.le.{0}
+      (Finset.card.{u_1}
+        {ε | ∃ d, Dvd.dvd.{0} d (HMul.hMul.{0, 0, 0} (HPow.hPow.{0, 0, 0} 2 k) n') ∧ BadAt.{u_1} e ε d})
+      (HMul.hMul.{0, 0, 0} 2 (Finset.card.{u_1} {ε | ∃ d, Dvd.dvd.{0} d n' ∧ BadAt.{u_1} e ε d}))
+def Pnq.csum.{u_1, u_2} : {ι : Type u_1} →
+  [Fintype ι] → {V : Type u_2} → [AddCommGroup V] → (ι → ℕ) → (ι → V) → (ι → Bool) → ℕ → ℕ → V :=
+fun {ι} [Fintype ι] {V} [AddCommGroup V] pos val ε M r => ∑ k, if pos k % M = r then sg (ε k) • val k else 0
+def Pnq.levelBad.{u_1, u_2} : {ι : Type u_1} →
+  [Fintype ι] → {V : Type u_2} → [AddCommGroup V] → (ι → ℕ) → (ι → V) → (ι → Bool) → ℕ → Prop :=
+fun {ι} [Fintype ι] {V} [AddCommGroup V] pos val ε x =>
+  match x with
+  | 0 => ∑ k, sg (ε k) • val k = 0
+  | j.succ => ∀ r < 2 ^ j, csum pos val ε (2 ^ (j + 1)) r = csum pos val ε (2 ^ (j + 1)) (r + 2 ^ j)
+def Pnq.sg : Bool → ℤ :=
+fun b => if b = true then 1 else -1
+def Pnq.P.{u_1} : {ι : Type u_1} → [Fintype ι] → (ι → ℕ) → (ι → Bool) → Polynomial ℤ :=
+fun {ι} [Fintype ι] e ε => ∑ k, Polynomial.C (sg (ε k)) * Polynomial.X ^ e k
+def Pnq.BadAt.{u_1} : {ι : Type u_1} → [Fintype ι] → (ι → ℕ) → (ι → Bool) → ℕ → Prop :=
+fun {ι} [Fintype ι] e ε d => Polynomial.cyclotomic d ℤ ∣ P e ε
+'Pnq.card_exists_exists_levelBad_le' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Pnq.card_exists_badAt_le' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Pnq.card_exists_levelBad_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+real	0m14.220s
+user	0m3.275s
+sys	0m10.794s
