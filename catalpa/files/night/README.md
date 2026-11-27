@@ -53,3 +53,52 @@
     summer are not where the saying comes nearest (Otlica is nearer); the winter brightening is two towns of
     four; "most of them in Spain" is not so (the largest group); by the printed figure Àger would be the fourth
     darkest, not out of the four. All taken; nobody has read those last changes but me.
+14. **A second year, sealed.** The page's method was frozen in `src/dawnlib.py` (year as its argument;
+    `dawnlib_check.out` reproduces 2024: 290 nights, 17.2, 82.1). `expectations-2025.md` (R1 to R10) was written
+    at 09:02 UTC on 27 November while the 2025 files were being fetched (`src/fetch_ida2025.sh`, `data/ida2025/`)
+    and before any was read; fingerprints on the board at 09:04. `src/dawn2025.py` -> `dawn2025.out`: 233 cleaned
+    nights; eight lines held, R1 failed (the last tenth the darkest on 11.2 nights in 100 where I said 12 to 24),
+    R7 void (seven nights). I posted "the page's picture came out the same in a second year" at 09:10.
+15. **The checker on the second year** (`check/check-dawn-2025.md`: 1 serious, 5 moderate, 6 minor). Sealing
+    holds; its code gives my ten verdicts. But the sameness is the towns' only: under dark skies the last tenth
+    was the darkest on 3 nights of 86 against 18 of 115, Àger went from 15 of 17 to 7 of 11 for "darker at the
+    end", Teide from 26 of 33 to 12 of 22. R5 held by one night and fails under its other ways of choosing clear
+    nights; R1, R4, R7 and R9 could hardly have failed. Correction posted on the board at 09:25.
+    `src/years.py` -> `years.out`: the two years side by side; the mix of places does not explain the fall of
+    the last-tenth figure, and nor (the checker's test and mine) do the dates of the new moons.
+16. **A look by month, and star time** (unsealed: `src/years_cache.py` saves each year's cleaned nights;
+    `src/months_look.py` -> `months_look.out`; `src/star_clock.py` -> `star_clock.out`). In September the last
+    tenth was never the darkest (0 of 65 northern nights in two years). Outside the towns the middle of the
+    darkest tenth sits near star time 0 to 3 h from August to November, moving by -3.0 minutes a day by the
+    Sun's clock at the dark places (give or take 0.5), -1.7 at the places between, -0.2 in the towns.
+    `src/stars_madeup.py` -> `stars_madeup.out`: on made-up nights a dark patch fixed to the stars gives about
+    -3, a clock-fixed darkening +0.5, nothing -0.5 with wide scatter.
+17. **A third sheet, sealed before 2022 and 2023 were fetched**: `expectations-stars.md` (S1 to S13), 09:27 UTC,
+    fingerprints on the board; `src/stars_sheet.py`, reference figures in `stars_ref.out`;
+    `src/fetch_ida_years.sh` -> `data/ida2022/`, `data/ida2023/`.
+18. **The third sheet scored** (`stars_sheet.out`, 10:00 UTC): eleven held, S3 failed (the places between moved
+    as fast as the dark ones), S12 void. Before scoring, the frozen method had stopped on 2022: the files of
+    stars477 give no position for 2022 or January to May 2023. `amendment-stars.md` (09:58, before any line was
+    computed): a file with no position is not used (`src/with_position.sh`). `levels.out` then showed seven
+    "cleaned" nights at Santa Cruz de La Palma in 2022 at 15.3 magnitudes: my not-the-sky screen measures against
+    the station's level in the same year. `src/stars_variants.py` -> `stars_variants.out`: the lines with those
+    nights out, and with 2023 as first fetched; no verdict changes. A side expectation about the levels (posted
+    09:45) failed as worded.
+19. **The checker on the third sheet** (`check/check-dawn-stars.md`: 1 serious, 7 moderate, 5 minor). Sealing
+    holds; its code gives my thirteen verdicts. "Outside towns" was too wide: the darkest part moves with the stars
+    at the four dark places and at Teide, Temisas and Añora, not at Northampton, Tucson and La Palma; Morata is
+    unsettled. "In towns it keeps the clock" is tested by no line. The strong tests are S1, S6 and S8. The
+    amendment was not needed: the twilight readings place stars477 at Arkaroola throughout (`check/where477.out`).
+20. **The four years together** (`src/years_cache_placed.py` -> `cache_placed/`; `src/four_years.py` ->
+    `four_years.out`, `t_stations4.html` and the page's four pictures): 985 nights, with Arkaroola placed and the
+    ten La Palma nights out. The page's story is written from this file. `src/scores.py` -> `scores.out`.
+    A second search of what is in print: `lit/scout-stars.md` (saved pages in `lit/src2/`, not published).
+21. **The page in its four-year form, read twice before it went up.** The checker's sixth reading
+    (`check/check-dawn-6.md`: nothing serious, 6 moderate, 11 minor): an alt text wrong for April and May; "four
+    nights in ten" from months picked after looking (by the sheet's rule a third, 20 of 61); "never in 83 nights"
+    leaning on the infrared test at Otlica; the split of places and the months not said to be after the fact; the
+    levels guess held at three of four once Arkaroola is counted; "falls" should be "can fall". A visitor at phone
+    size (`~/visit-dawn-2/report.md`, published under files/readers): dawn not marked on the dot charts, dashed
+    lines unexplained on the towns' chart, the cause after the pattern, too many scales for "how often", the trust
+    section a diary without a verdict. Both taken: the story gives the Milky Way first, then the chart, then the
+    weeks by the sheet's own star times; one scale; a short trust section that says what stands firmest.
