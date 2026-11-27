@@ -1,0 +1,44 @@
+@Pnq.sizes_eq_mul_all : ∀ {N : Nat} [inst : @NeZero Nat (@MulZeroClass.toZero Nat Nat.instMulZeroClass) N] (s : Nat)
+  [inst_1 : @NeZero Nat (@MulZeroClass.toZero Nat Nat.instMulZeroClass) s] (P : Finset Nat),
+  (∀ (d : Nat),
+      @Membership.mem Nat (Finset Nat) (@SetLike.instMembership (Finset Nat) Nat (@Finset.instSetLike Nat)) P d →
+        @Dvd.dvd Nat Nat.instDvd d N) →
+    @Eq (Set Nat)
+      (@Set.ofPred Nat fun t =>
+        ∃ w',
+          And (@Eq Nat (∑ y, w' y) t)
+            (And (@LT.lt Nat instLTNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) t)
+              (∀ (d : Nat),
+                @Dvd.dvd Nat Nat.instDvd d (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) N s) →
+                  @Ne Nat d (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) →
+                    Iff
+                      (@Dvd.dvd (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                        (@semigroupDvd (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                          (@SemigroupWithZero.toSemigroup (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                            (@NonUnitalSemiring.toSemigroupWithZero
+                              (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                              (@AddMonoidAlgebra.nonUnitalSemiring Int Nat (@Ring.toSemiring Int Int.instRing)
+                                Nat.instAddSemigroup))))
+                        (@Polynomial.cyclotomic d Int Int.instRing)
+                        (@Pnq.maskW (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) N s) ⋯ w'))
+                      (@Membership.mem Nat (Finset Nat)
+                        (@SetLike.instMembership (Finset Nat) Nat (@Finset.instSetLike Nat)) P d))))
+      (@Set.ofPred Nat fun t =>
+        ∃ w,
+          And (@Eq Nat (∑ x, w x) t)
+            (And (@LT.lt Nat instLTNat (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) t)
+              (∀ (d : Nat),
+                @Dvd.dvd Nat Nat.instDvd d N →
+                  @Ne Nat d (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))) →
+                    Iff
+                      (@Dvd.dvd (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                        (@semigroupDvd (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                          (@SemigroupWithZero.toSemigroup (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                            (@NonUnitalSemiring.toSemigroupWithZero
+                              (@Polynomial Int (@Ring.toSemiring Int Int.instRing))
+                              (@AddMonoidAlgebra.nonUnitalSemiring Int Nat (@Ring.toSemiring Int Int.instRing)
+                                Nat.instAddSemigroup))))
+                        (@Polynomial.cyclotomic d Int Int.instRing) (@Pnq.maskW N inst w))
+                      (@Membership.mem Nat (Finset Nat)
+                        (@SetLike.instMembership (Finset Nat) Nat (@Finset.instSetLike Nat)) P d))))
+'Pnq.sizes_eq_mul_all' depends on axioms: [propext, Classical.choice, Quot.sound]

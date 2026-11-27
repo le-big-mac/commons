@@ -12,7 +12,8 @@
   h1 { font-size: 26px; font-weight: normal; margin: 6px 0 4px; }
   p { line-height: 1.5; margin: 8px 0; font-size: 16px; }
   .lead { font-size: 17px; }
-  #scene { display: block; width: 100%; border-radius: 6px; background: var(--sky); touch-action: none; cursor: crosshair; }
+  #scene { display: block; width: 100%; border-radius: 6px; background: var(--sky); touch-action: pan-y; cursor: crosshair; }      /* a swipe up or down on the picture scrolls the page (pinned, it made the top of a phone's screen dead to scrolling); the listener is dragged sideways */
+  #scene.drawing { touch-action: none; }             /* while a stroke is drawn, the finger goes any way */
   #trace { display: block; width: 100%; height: 118px; margin-top: 6px; }
   .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0 6px; }
   button { font: inherit; font-size: 15px; color: var(--ink); background: transparent; border: 1px solid var(--muted); border-radius: 4px; padding: 7px 12px; cursor: pointer; }
@@ -20,12 +21,24 @@
   button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
   button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
   #strike { font-size: 17px; padding: 8px 18px; border-color: var(--ink); border-width: 2px; }
-  label { font-size: 15px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
-  #say { font-size: 16px; min-height: 3em; }
-  #say b { font-weight: normal; border-bottom: 1px solid var(--muted); }
+  label { font-size: 15px; color: var(--muted); display: inline-flex; gap: 8px; align-items: center; min-height: 44px; cursor: pointer; }
+  input[type="checkbox"] { width: 22px; height: 22px; margin: 0; accent-color: var(--ink); }      /* (they were 13 px: a visitor with a phone) */
+  #say { font-size: 16px; min-height: 3em; padding: 8px 12px; border-left: 3px solid var(--muted); background: #fbf7ee; }
+  #say b { font-weight: 600; }               /* (they were underlined, and looked like things to tap) */
+  /* on a phone the picture and Strike stay at the top of the screen while the buttons and the things to try are read (pinned within the block that holds them):
+     a visitor chose a stroke down among the tips and had to scroll back up to hear it */
+  #brief { display: none; }                 /* the sentence in short, for a phone, where the sentence itself is off the screen while a tip is read */
+  @media (max-width: 520px) { #pin { position: sticky; top: 0; z-index: 2; background: var(--paper); box-shadow: 0 7px 6px -6px rgba(43, 38, 34, 0.45); } #say { min-height: 17.5em; }
+    #strikerow { display: flow-root; } #strike { float: left; margin: 0 8px 4px 0; }      /* the short form runs beside Strike and on beneath it */
+    #brief { display: block; min-height: 5em; font-size: 13px; line-height: 1.25; color: var(--muted); } }
+  @media (max-width: 340px) { #say { min-height: 21em; } #brief { min-height: 6.25em; } }      /* (and room is kept for the longest sentence, so that the things to try do not slide as it changes) */
+  #strikerow { margin: 6px 0 4px; }
   .small { font-size: 14px; color: var(--muted); }
   a { color: var(--muted); }
   ul { margin: 6px 0; padding-left: 20px; } li { margin: 4px 0; line-height: 1.45; }
+  /* in "Things to try" a stroke's name, and "tick crooked", can be pressed where they are read */
+  button.tip { font: inherit; font-style: italic; color: inherit; background: transparent; border: 0; border-bottom: 1px solid var(--ink); border-radius: 0; padding: 3px 1px 1px; cursor: pointer; }
+  button.tip:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 </style>
 </head>
 <body>
@@ -34,17 +47,19 @@
 <h1>Why thunder rumbles</h1>
 <p class="lead">Lightning is over in a moment, and its whole length makes its sound at once. The sound from each part
 reaches you when it has had time to travel, so the stroke is read out to you from its nearest point to its
-farthest. Press <b>Strike</b> and watch the ring: it is the sound you are hearing at that moment, and it marks
-where on the stroke that sound set out.</p>
+farthest. Turn your sound on, press <b>Strike</b> and watch the ring: it is the sound you are hearing at that
+moment, and it marks where on the stroke that sound set out.</p>
 
+<div id="play">
+<div id="pin">
 <canvas id="scene" width="1200" height="620" aria-label="A lightning stroke seen from the side, a listener on the ground, and a ring growing outward from the listener at the speed of sound"></canvas>
+<div class="row" id="strikerow"><button id="strike">Strike</button><span id="brief" aria-hidden="true"></span></div>
+</div>
 <canvas id="trace" width="1200" height="150" aria-label="The pressure at the listener against the time since the flash"></canvas>
 
 <div class="row">
-  <button id="strike">Strike</button>
   <label><input type="checkbox" id="skip" checked> skip the silence before the first sound</label>
 </div>
-<p id="say" aria-live="polite"></p>
 <div class="row" role="group" aria-label="The stroke">
   <button id="b-stroke">Another stroke</button>
   <button id="b-straight">A straight one</button>
@@ -53,26 +68,33 @@ where on the stroke that sound set out.</p>
   <button id="b-draw" aria-pressed="false">Draw your own</button>
   <label><input type="checkbox" id="jag" checked> crooked, as lightning is</label>
 </div>
+<p id="say" aria-live="polite"></p>
 
-<p><b>Things to try.</b></p>
+<p><b>Things to try</b> (press Strike after each).</p>
 <ul>
-  <li>Drag the listener along the ground, or press where you want to stand. Close in, at half a kilometre, the thunder begins with its loudest part. Far off it comes later (about three seconds a kilometre), quieter and shorter, and usually with its loudest part somewhere in the middle. The foot of the stroke goes dim: the bending of sound in the air hides it from you.</li>
-  <li><i>A bow about you</i> (it is drawn smooth): every part of it is the same distance away, so all of its sound arrives at once. One crack, the loudest thing on this page. Now tick "crooked": the crack becomes a bang of half a second or more, about a hundred times lower in pressure (the page plays it about three times quieter).</li>
-  <li><i>Pointing away</i>: the stroke lies along your line of sight. Its sound is strung out over many seconds and is much the quietest here, about a tenth of the energy of an upright stroke, since few stretches of it face you. That is a rumble. Untick "crooked" and all that is left is a click from each end.</li>
-  <li><i>A straight one</i> (drawn smooth): one crack, as the ring first touches it, and then nothing. The rumble of thunder is the crookedness of lightning: tick "crooked" to give it back.</li>
-  <li><i>Draw your own</i>, then drag across the sky.</li>
+  <li>Drag the listener along the ground, or press where you want to stand. Close in, at half a kilometre, the thunder nearly always begins with its loudest part. Far off, at 8 km, it comes later (about three seconds a kilometre), quieter and shorter, and usually with its loudest part somewhere in the middle. The foot of the stroke goes dim: the bending of sound in the air hides it from you.</li>
+  <li><button class="tip" data-kind="bow">A bow about you</button> (it is drawn smooth): every part of it is the same distance away, so all of its sound arrives at once. One crack, as loud as this page plays anything. Now <button class="tip" data-kind="bow" data-jag="on">tick “crooked”</button>: the crack becomes a bang of about a third of a second to a second, something like a hundred times lower in pressure than the crack, and is played three to four times quieter.</li>
+  <li><button class="tip" data-kind="away">Pointing away</button>: the stroke lies along your line of sight. Its sound is strung out over many seconds and carries about a tenth of the energy of an upright stroke heard from 3 km, where the page opens, since few stretches of it face you. That is a rumble. <button class="tip" data-kind="away" data-jag="off">Untick “crooked”</button> and all that is left is a click from each end.</li>
+  <li><button class="tip" data-kind="straight">A straight one</button> (drawn smooth): one crack, as the ring first touches it, and then next to nothing, with a faint click from its far end. From far off the crack is much weaker and the click is not, so that the crack no longer stands alone: from 9 km the click has a third of the pressure of this stroke’s own crack. The rumble of thunder is the crookedness of lightning: <button class="tip" data-kind="straight" data-jag="on">tick “crooked”</button> to give it back.</li>
+  <li><button class="tip" data-draw="1">Draw your own</button>, then drag across the sky.</li>
 </ul>
+</div>
 
 <p class="small">What this is: each point of the stroke gives off one short pulse of pressure, shaped like the letter N
 and five thousandths of a second long; the pulses travel at 343 metres a second, weaken as one over the distance,
 lose their high notes to the air as they go, and add up. Sound also bends upward in the air, which hides the lowest
-part of a far stroke; that part is drawn dim. All of this is the model of H. S. Ribner and D. Roy (1982) as
+part of a far stroke; that part is drawn dim. The model is that of H. S. Ribner and D. Roy (1982) as
 A. Glassner describes it (2000), and Glassner's article already says that a clap comes from a stretch of channel
-lying on a circle about the listener. What this leaves out: the stroke is flat, in the plane of the picture; there
-are no branches, no echoes from hills, no wind, and no second and third strokes down the same path. Most of this
+lying on a circle about the listener. Three things in it are this page's own, matched to nothing that has been checked:
+how fast the air takes the high notes away, how the hidden part fades, and most of the recipe for its made-up crooked
+strokes. What this leaves out: the stroke is flat, in the plane of the picture; there
+are no branches, no echoes from hills, no wind, and no second and third strokes down the same path. Two things
+that Glassner's program has are left out as well: small random shifts in each sound's time of flight, for the
+unsteadiness of the air; and bending that changes the length of the waves and curves their paths, where here it
+only hides the foot of a stroke. Most of this
 sound lies below 200 cycles a second, which small loudspeakers hardly give: use headphones if you can. The page
-squeezes loudness four to one, or the quiet thunder could not be heard beside the loud: a sound ten decibels weaker
-is played two and a half decibels quieter. <a href="README.html">How it was made and checked.</a></p>
+squeezes loudness, or the quiet thunder could not be heard beside the loud: a sound a hundred times lower
+in pressure is played about three times quieter. <a href="README.html">How it was made and checked.</a></p>
 </main>
 
 <script>
@@ -138,17 +160,48 @@ is played two and a half decibels quieter. <a href="README.html">How it was made
   }
 
   function km(m) { return (m / 1000).toFixed(1) + ' km'; }
+  /* A word of lettering in a picture is drawn, and put on record, by this one function, so that what the tests read is what was drawn
+     (the referee made a copy of the page whose ground read 1, 3, 5, 7, 9 km while a record kept beside the drawing said 0, 2, 4, 6, 8). */
+  function letter(c, list, word, x, y, at, tick, size) {
+    c.fillText(word, x, y);
+    list.push({ word: word, at: at, tick: tick, x: x, y: y, w: c.measureText(word).width, h: size, font: c.font, fill: c.fillStyle, across: c.canvas.width, align: c.textAlign, base: c.textBaseline });
+  }
   function hiddenCount() { var n = 0, h = st.res.hidden; for (var i = 0; i < h.length; i++) if (h[i] < 0.5) n++; return n; }
-  function decibels(x) { return 20 * Math.log(x) / Math.LN10; }
+  function shown(x) { return x < 9.95 ? Number(x.toFixed(1)) : Number(x.toPrecision(2)); }      // a figure as times() prints it: the fourth root is taken of that, so that a reader who takes it gets the figure printed beside it (the referee found 68 sentences of 659 one out in the last place)
+  function times(x) { return x < 9.95 ? x.toFixed(1) : Number(x.toPrecision(2)).toLocaleString('en-US'); }      // "3.4 times", "130 times", "1,500 times"
+  /* How loud, in words, from the peak alone: against the crack of the smooth bow (REF), which is also what plays at full volume.
+     Within 6% of it (half a decibel) a sound is called as loud; q, how many times quieter it is played, is the fourth root of rel. */
+  function loudness(peak) {
+    if (!(peak > 0)) return '.';                    // (silence has its own sentence; this is never reached on the page)
+    var rel = REF / peak, CRACK = 'the crack that \u201cA bow about you\u201d makes';
+    return rel < 1.06 && rel > 1 / 1.06 ? ', as loud as this page plays anything.'
+      : rel <= 1 / 1.06 ? ', with about ' + times(1 / rel) + ' times the pressure of ' + CRACK + '; the page plays it no louder than that crack.'
+      : ', with about ' + times(rel) + ' times less pressure than ' + CRACK + '; ' + (times(Math.pow(shown(rel), 0.25)) === '1.0' ? 'the page plays it very nearly as loud.' : 'it is played about ' + times(Math.pow(shown(rel), 0.25)) + ' times quieter (loudness is squeezed: see the foot of the page).');
+  }
+  /* The same in short, kept beside Strike on a phone: which stroke, crooked or smooth, how long it lasts and how loud it is. */
+  var NAME = { stroke: 'An upright stroke', straight: 'A straight one', bow: 'A bow about you', away: 'Pointing away', own: 'Your own stroke' };
+  function which() { return NAME[st.kind] + (document.getElementById('jag').checked ? ', crooked' : ', smooth') + '. '; }
+  function loudShort(peak) {
+    if (!(peak > 0)) return '';
+    var rel = REF / peak;
+    return rel < 1.06 && rel > 1 / 1.06 ? 'as loud as this page plays anything.'
+      : rel <= 1 / 1.06 ? 'about ' + times(1 / rel) + ' times the pressure of the bow\u2019s crack.'
+      : 'about ' + times(rel) + ' times less pressure than ' + (st.kind === 'bow' ? 'when smooth.' : 'the bow\u2019s crack.');      /* (of a crooked bow a visitor asked: which bow?) */
+  }
+  var brief = document.getElementById('brief');
   function describe() {
     var r = st.res, len = TH.measure(st.pts).length, fh = r.firstHeard;
-    if (fh === null) { say.textContent = 'The stroke is ' + km(len) + ' long, and nearly all of it lies in the shadow that the bending of sound makes: by this model you would hear next to nothing.'; return; }
+    if (fh === null) { say.textContent = 'The stroke is ' + km(len) + ' long, and nearly all of it lies in the shadow that the bending of sound makes: by this model you would hear next to nothing.';
+      brief.textContent = which() + 'Next to nothing to hear from here.'; return; }
     var dur = r.last - fh, lasts = dur < 0.1 ? Math.round(dur * 1000) + ' thousandths of a second' : dur.toFixed(1) + ' s';
-    var down = Math.max(0, -decibels(r.peak / REF)), played = Math.max(0, -decibels(level(r.peak) / 0.9));
+    var loud = loudness(r.peak);
     say.innerHTML = 'The stroke is ' + km(len) + ' long. The first sound comes <b>' + fh.toFixed(1) + ' s</b> after the flash, from <b>' + km(fh * C)
       + '</b> away; the last from ' + km(r.farthest) + ', so the thunder lasts <b>' + lasts + '</b>. It is loudest ' + r.tpeak.toFixed(1) + ' s after the flash'
-      + (down < 0.5 ? ', as loud as this page plays anything.' : ': in pressure ' + Math.round(down) + ' decibels below the loudest the page plays, and played ' + Math.round(played) + ' below.')
+      + loud.replace(/about ([\d.,]+ times)/, 'about <b>$1</b>')
       + (hiddenCount() > 0 ? ' The dim part of the stroke is more than half hidden from you by the bending of sound.' : '');
+    var into = (Number(r.tpeak.toFixed(1)) - Number(fh.toFixed(1))).toFixed(1);          /* how far into the thunder its loudest moment is, from the two figures as the sentence prints them */
+    brief.textContent = (which() + 'First sound ' + fh.toFixed(1) + ' s, from ' + km(fh * C) + '; lasts ' + lasts + (dur < 0.1 ? '' : into === '0.0' ? ', loudest at its start' : ', loudest ' + into + ' s in') + '; ' + loudShort(r.peak))
+      .replace(/(\d) (s|km|times|thousandths)\b/g, '$1\u00a0$2').replace(/(\d\u00a0s) in\b/g, '$1\u00a0in');      /* a figure is not parted from its unit at a line's end (a visitor: "lasts 7.7 / s", "loudest 0.4 s / in") */
   }
 
   function drawScene() {
@@ -161,8 +214,10 @@ is played two and a half decibels quieter. <a href="README.html">How it was made
     sc.fillStyle = 'rgba(200,205,215,0.10)'; sc.fillRect(0, 0, W, wz(5000));
     sc.fillStyle = '#1b2118'; sc.fillRect(0, wz(0), W, H - wz(0));
     sc.fillStyle = 'rgba(244,239,226,0.62)'; sc.font = FONT + 'px Georgia, serif'; sc.textBaseline = 'top';
-    for (var k = 0; k <= 8; k += 2) { var x = wx(k * 1000); sc.fillRect(x, wz(0), 1.5 * U, 0.4 * FONT); sc.fillText(k + ' km', x + 0.25 * FONT, wz(0) + 0.3 * FONT); }
-    sc.fillStyle = 'rgba(244,239,226,0.45)'; sc.fillText('cloud', 0.5 * FONT, wz(5000) - 1.25 * FONT);
+    st.words = [];                                             /* the picture's other words, with where they stand */
+    st.marks = [];                                             /* each mark's lettering, with the place in the world where its tick is drawn: for the tests */
+    for (var k = 0; k <= 8; k += 2) { var x = wx(k * 1000); sc.fillRect(x, wz(0), 1.5 * U, 0.4 * FONT); letter(sc, st.marks, k + ' km', x + 0.25 * FONT, wz(0) + 0.3 * FONT, X0 + x / scene.width * (X1 - X0), x, FONT); }
+    sc.fillStyle = 'rgba(244,239,226,0.45)'; letter(sc, st.words, 'cloud', 0.5 * FONT, wz(5000) - 1.25 * FONT, null, null, FONT);
     // the ring: the sound being heard now set out from points this far away
     if (st.playing || st.t > 0) {
       var R = Math.max(0, C * st.t);
@@ -200,8 +255,8 @@ is played two and a half decibels quieter. <a href="README.html">How it was made
     sc.fillRect(lx - 3 * U, lz - 18 * U, 6 * U, 18 * U);
     var flip = lx > W - 5.5 * FONT;
     sc.fillStyle = 'rgba(244,239,226,0.85)'; sc.textBaseline = 'bottom'; sc.textAlign = flip ? 'right' : 'left';
-    sc.fillText('you (drag)', lx + (flip ? -14 : 14) * U, lz - 12 * U); sc.textAlign = 'left';
-    if (st.draw) { sc.fillStyle = 'rgba(255,217,138,0.95)'; sc.textBaseline = 'top'; sc.fillText('Drag across the sky to draw', 0.5 * FONT, wz(5000) + 0.4 * FONT); }
+    letter(sc, st.words, 'you (drag)', lx + (flip ? -14 : 14) * U, lz - 12 * U, null, lx, FONT); sc.textAlign = 'left';
+    if (st.draw) { sc.fillStyle = 'rgba(255,217,138,0.95)'; sc.textBaseline = 'top'; letter(sc, st.words, 'Drag across the sky to draw', 0.5 * FONT, wz(5000) + 0.4 * FONT, null, null, FONT); }
   }
 
   function drawTrace() {
@@ -225,11 +280,12 @@ is played two and a half decibels quieter. <a href="README.html">How it was made
     var room = span / (3.2 * F), stepS = 1;                      /* as many labels as there is room for */
     while (tmax / stepS > room) stepS = stepS === 1 ? 2 : stepS === 2 ? 5 : stepS * 2;
     var lastRight = -Infinity;                                    /* a label is left out if it would touch the one before it or run off the end */
+    st.ticks = [];                                                /* each label, with the time at the place where its tick is drawn: for the tests */
     for (var s = 0; s <= tmax; s += stepS) {
       tc.fillRect(tx(s), H - 1.6 * F, Math.max(1, DPR), 0.3 * F);
       var word = s === 0 ? 'flash' : s + ' s', wide = tc.measureText(word).width, x0 = s === 0 ? tx(0) : tx(s) - wide / 2;
       if (x0 < lastRight + 0.6 * F || x0 + wide > W - 2 * DPR) continue;
-      tc.textAlign = 'left'; tc.fillText(word, x0, H - 1.2 * F); lastRight = x0 + wide;
+      tc.textAlign = 'left'; letter(tc, st.ticks, word, x0, H - 1.2 * F, (tx(s) - left) / span * tmax, tx(s), F); lastRight = x0 + wide;
     }
     tc.textAlign = 'left';
     if (st.playing || st.t > 0) { tc.fillStyle = '#b8862b'; tc.fillRect(tx(Math.min(st.t, tmax)) - DPR, 2 * DPR, 2 * DPR, H - 1.9 * F); }
@@ -246,7 +302,11 @@ is played two and a half decibels quieter. <a href="README.html">How it was made
     buf.getChannelData(0).set(x);
     return buf;
   }
-  var REF = 0.5;                                   // a peak of this size or more is played at full volume: about the smooth bow
+  /* The yardstick: the peak of the crack that "A bow about you" makes when smooth, every point of it 3 km from the listener.  A peak of
+     this size or more is played at full volume, and the sentence under the picture sets every thunder against it.  (Until 27 November
+     full volume was a peak of 0.5, and the crack stood 1.44 times above it: then the two figures in the sentence, one against the crack
+     and one against full volume, did not go together as "four to one", and a visitor with a calculator found it.) */
+  var REF = TH.thunder(TH.arc(0, 0, 3000, 150, 95), [0, 0]).peak;
   function level(peak) { return 0.9 * Math.min(1, Math.sqrt(Math.sqrt(peak / REF))); }     // below that, a quarter of the decibels: loudness is squeezed four to one
 
   function stop() {
@@ -290,11 +350,25 @@ is played two and a half decibels quieter. <a href="README.html">How it was made
     var b = scene.getBoundingClientRect(), gz = b.top + wz(0) / scene.height * b.height;
     return ev.clientY > gz - 6;
   }
-  scene.addEventListener('pointerdown', function (ev) {
+  /* A browser on a touch screen may hand a tap to a neighbour of the thing under the finger.  A tap on the picture's ground within a finger's
+     breadth of Strike went to Strike (27 November: a visitor's quick taps moved nothing, and played); and once the picture answered clicks, a tap
+     on Strike within ten pixels of its corners went to the picture (found by the page's test).  The pointer events still carry the finger's own
+     place, so the page goes by that: the picture answers a finger that is on the picture, and Strike a finger that is on Strike, whichever of
+     the two the browser chose.  A tap in the gap between them never moves the listener. */
+  var down = null, strikeBtn = document.getElementById('strike');
+  strikeBtn.style.minWidth = Math.ceil(strikeBtn.getBoundingClientRect().width) + 'px';      /* "Stop" is a shorter word: the button keeps the width of "Strike", so that nothing beside it shifts while the thunder plays */
+  function within(el, pt, g) { var r = el.getBoundingClientRect(); g = g || 0; return pt.x >= r.left - g && pt.x <= r.right + g && pt.y >= r.top - g && pt.y <= r.bottom + g; }
+  document.addEventListener('pointerdown', function (ev) {
+    down = { x: ev.clientX, y: ev.clientY, t: ev.timeStamp };
+    if (ev.target !== scene && within(scene, down)) sceneDown(ev);          /* handed to a neighbour, but the finger is on the picture */
+  }, true);
+  scene.addEventListener('pointerdown', sceneDown);
+  function sceneDown(ev) {
+    if (!within(scene, { x: ev.clientX, y: ev.clientY })) return;           /* handed to the picture, but the finger is not on it */
     if (nearListener(ev) || onGround(ev)) { stop(); st.t = 0; st.dragging = true; moveListener(ev); capture(ev); ev.preventDefault(); return; }
     if (st.draw) { stop(); st.t = 0; st.drawing = [inSky(toWorld(ev))]; st.drawn = 0; capture(ev); ev.preventDefault(); }
     /* a press in the sky when not drawing does nothing */
-  });
+  }
   function inSky(w) { return [Math.max(X0, Math.min(X1, w[0])), Math.max(0, Math.min(Z1, w[1]))]; }
   var LONGEST = 60000;                                        /* a drawn stroke stops growing at 60 km */
   function moveListener(ev) {
@@ -303,7 +377,7 @@ is played two and a half decibels quieter. <a href="README.html">How it was made
     var d = TH.distances(st.pts, st.L);
     st.res.r = d.r;                                           // enough to redraw; the sound is worked out when the hand lets go
     for (var i = 0; i < st.pts.length; i++) st.res.hidden[i] = TH.shade(Math.abs(st.pts[i][0] - st.L[0]), st.pts[i][1] - st.L[1], TH.BEND);
-    say.textContent = 'Nearest point ' + km(d.nearest) + ', farthest ' + km(d.farthest) + '.';
+    say.textContent = 'Nearest point ' + km(d.nearest) + ', farthest ' + km(d.farthest) + '.'; brief.textContent = say.textContent.replace(/(\d) km/g, '$1\u00a0km');
     drawScene();
   }
   scene.addEventListener('pointermove', function (ev) {
@@ -321,25 +395,43 @@ is played two and a half decibels quieter. <a href="README.html">How it was made
     if (st.dragging) { st.dragging = false; if (st.kind === 'bow' || st.kind === 'away') rebuild(); else compute(); }
   }
   scene.addEventListener('pointerup', up); scene.addEventListener('pointercancel', up);
+  scene.addEventListener('click', function () { if (down && within(strikeBtn, down, 1)) strike(); });      /* the finger was on Strike (a pixel of grace: half a pixel above its box the browser already counts the finger as on it: the referee) */
 
-  function setDraw(on) { st.draw = on; document.getElementById('b-draw').setAttribute('aria-pressed', on ? 'true' : 'false'); drawScene(); }
+  function setDraw(on) { st.draw = on; document.getElementById('b-draw').setAttribute('aria-pressed', on ? 'true' : 'false'); scene.classList.toggle('drawing', on); drawScene(); }
   var CROOKED = { stroke: true, straight: false, bow: false, away: true };       /* each kind opens as its sentence in "Things to try" describes it */
-  function choose(kind) { return function () { setDraw(false); st.kind = kind; st.seed++; document.getElementById('jag').checked = CROOKED[kind]; rebuild(); }; }
-  document.getElementById('strike').addEventListener('click', strike);
+  function showScene() {                         // on a wide screen: if the picture is not wholly in sight, put its top at the top
+    if (getComputedStyle(document.getElementById('pin')).position === 'sticky') return;      // (on a phone it is pinned in sight, and nothing need move)
+    var r = scene.getBoundingClientRect(); if (r.top < 0 || r.bottom > window.innerHeight) window.scrollBy(0, Math.round(r.top - 8));
+  }
+  function choose(kind, crooked) { return function () { setDraw(false); st.kind = kind; st.seed++; document.getElementById('jag').checked = crooked === undefined ? CROOKED[kind] : crooked; rebuild(); showScene(); }; }
+  strikeBtn.addEventListener('click', function (ev) {      /* not if this click is the end of a tap whose finger went down on the picture, a second and a half ago at most; a press from the keyboard has no finger, and detail 0 */
+    if (ev.detail > 0 && down && within(scene, down) && ev.timeStamp - down.t < 1500) return;
+    strike(); });
   document.getElementById('b-stroke').addEventListener('click', choose('stroke'));
   document.getElementById('b-straight').addEventListener('click', choose('straight'));
   document.getElementById('b-bow').addEventListener('click', choose('bow'));
   document.getElementById('b-away').addEventListener('click', choose('away'));
   document.getElementById('b-draw').addEventListener('click', function () { stop(); st.t = 0; setDraw(!st.draw); });
-  document.getElementById('jag').addEventListener('change', function () { rebuild(); });
+  document.getElementById('jag').addEventListener('change', function () { rebuild(); showScene(); });
+  [].forEach.call(document.querySelectorAll('button.tip'), function (b) {      // the same as the buttons and the box above, pressed from inside a tip
+    b.addEventListener('click', function () {
+      var kind = b.getAttribute('data-kind'), jag = b.getAttribute('data-jag'), j = document.getElementById('jag'), want = jag === 'on';
+      if (b.getAttribute('data-draw')) { stop(); st.t = 0; setDraw(true); showScene(); }
+      else if (!jag) choose(kind)();
+      else if (st.kind !== kind) choose(kind, want)();          /* "tick crooked" in a tip is about that tip's stroke: if another is showing, choose it first (the referee) */
+      else { if (j.checked !== want) { j.checked = want; rebuild(); } else if (st.playing) strike(); showScene(); }      /* (already so, and playing: stop, so that Strike reads Strike, as "press Strike after each" supposes: the referee) */
+    });
+  });
 
   // for the tests: what the page holds, and the sound it would play, without playing it
+  window.THUNDERLOUD = function (peak) { return loudness(peak); }; window.THUNDERLOUDSHORT = function (peak) { return loudShort(peak); };      // the page's own words for a given peak, for the tests
+  window.THUNDERREF = function () { return REF; };
   window.THUNDERSTATE = function () {
     var r = st.res;
     return { kind: st.kind, seed: st.seed, pieces: st.pts.length - 1, listener: st.L.slice(), playing: st.playing, t: st.t, ring: C * st.t, draw: st.draw,
              first: r.first, last: r.last, nearest: r.nearest, farthest: r.farthest, peak: r.peak, tpeak: r.tpeak, samples: r.p.length, energy: r.energy,
              early: early(0.02), ends: early(0.02) + late(0.03), hidden: hiddenCount(), crooked: document.getElementById('jag').checked, firstHeard: r.firstHeard, extent: extent(),
-             strikes: st.strikes, ended: st.ended, computed: st.computed, level: level(r.peak), offset: st.offset, audio: st.ctx ? st.ctx.state : 'none', say: say.textContent,
+             strikes: st.strikes, ended: st.ended, computed: st.computed, level: level(r.peak), offset: st.offset, audio: st.ctx ? st.ctx.state : 'none', say: say.textContent, brief: brief.textContent, marks: st.marks, ticks: st.ticks, words: st.words, lines: [wz(5000), wz(0), scene.height], sayHTML: say.innerHTML,
              view: [X0, X1, Z0, Z1], length: TH.measure(st.pts).length, kink: TH.measure(st.pts).kink, first3: st.pts.slice(0, 3), last1: st.pts[st.pts.length - 1] };
   };
   function early(sec) {                                       // the share of the sound's energy in its first `sec` seconds

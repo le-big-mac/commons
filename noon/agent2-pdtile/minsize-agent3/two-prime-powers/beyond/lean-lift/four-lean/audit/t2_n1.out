@@ -1,0 +1,68 @@
+mu t is even and >= 2 for every odd t, 3 <= t < 10^6: yes (499999 values)
+Tmax(m) below 10^6 against the sieve, m = 1..34: mismatches 0
+explicit enumeration of Tmax(m): m, |Tmax|, lhsN1 m Tmax (exact), decimal, margin 1 - lhs
+  m =  1  |Tmax| =        0  lhs = 0 = 0.000000  margin 1.000000
+  m =  2  |Tmax| =        0  lhs = 1/2 = 0.500000  margin 0.500000
+  m =  3  |Tmax| =        1  lhs = 1/4 = 0.250000  margin 0.750000
+  m =  4  |Tmax| =        1  lhs = 5/8 = 0.625000  margin 0.375000
+  m =  5  |Tmax| =        5  lhs = 1/2 = 0.500000  margin 0.500000
+  m =  6  |Tmax| =        5  lhs = 13/16 = 0.812500  margin 0.187500
+  m =  7  |Tmax| =       15  lhs = 21/32 = 0.656250  margin 0.343750
+  m =  8  |Tmax| =       15  lhs = 119/128 = 0.929688  margin 0.070312
+  m =  9  |Tmax| =       29  lhs = 91/128 = 0.710938  margin 0.289062
+  m = 10  |Tmax| =       29  lhs = 245/256 = 0.957031  margin 0.042969
+  m = 11  |Tmax| =       71  lhs = 385/512 = 0.751953  margin 0.248047
+  m = 12  |Tmax| =       71  lhs = 1001/1024 = 0.977539  margin 0.022461
+  m = 13  |Tmax| =      335  lhs = 209/256 = 0.816406  margin 0.183594
+  m = 14  |Tmax| =      335  lhs = 1973/2048 = 0.963379  margin 0.036621
+  m = 15  |Tmax| =      383  lhs = 839/1024 = 0.819336  margin 0.180664
+  m = 16  |Tmax| =      383  lhs = 31235/32768 = 0.953217  margin 0.046783
+  m = 17  |Tmax| =     1079  lhs = 6799/8192 = 0.829956  margin 0.170044
+  m = 18  |Tmax| =     1079  lhs = 62451/65536 = 0.952927  margin 0.047073
+  m = 19  |Tmax| =     3199  lhs = 27461/32768 = 0.838043  margin 0.161957
+  m = 20  |Tmax| =     3199  lhs = 249493/262144 = 0.951740  margin 0.048260
+  m = 21  |Tmax| =     6335  lhs = 27559/32768 = 0.841034  margin 0.158966
+  m = 22  |Tmax| =     6335  lhs = 496355/524288 = 0.946722  margin 0.053278
+  m = 23  |Tmax| =    13823  lhs = 55235/65536 = 0.842819  margin 0.157181
+  m = 24  |Tmax| =    13823  lhs = 3948935/4194304 = 0.941499  margin 0.058501
+  m = 25  |Tmax| =    32759  lhs = 1769887/2097152 = 0.843948  margin 0.156052
+  m = 26  |Tmax| =    32759  lhs = 7855335/8388608 = 0.936429  margin 0.063571
+  m = 27  |Tmax| =    35279  lhs = 7079863/8388608 = 0.843985  margin 0.156015
+  m = 28  |Tmax| =    35279  lhs = 31236875/33554432 = 0.930931  margin 0.069069
+  m = 29  |Tmax| =    86399  lhs = 14162921/16777216 = 0.844176  margin 0.155824
+  m = 30  |Tmax| =    86399  lhs = 62152225/67108864 = 0.926140  margin 0.073860
+  m = 31  |Tmax| =   294911  lhs = 14166179/16777216 = 0.844370  margin 0.155630
+  m = 32  |Tmax| =   294911  lhs = 1979593379/2147483648 = 0.921820  margin 0.078180
+  m = 33  |Tmax| =   528767  lhs = 28334185/33554432 = 0.844425  margin 0.155575
+  m = 34  |Tmax| =   528767  lhs = 3941741779/4294967296 = 0.917758  margin 0.082242
+formula against explicit enumeration, m = 1..34: mismatches 0
+largest lhsN1 m Tmax over m = 1..2000: at m = 12, 1001/1024 = 0.977539
+   odd m         largest at m = 1999: 0.844473784 (margin 0.155526216)
+   even m <= 12  largest at m =   12: 0.977539062 (margin 0.022460938)
+   even m >= 14  largest at m =   14: 0.963378906 (margin 0.036621094)
+   every m <= 2000 has lhsN1 m Tmax < 1: True
+   even m, the six fractions of the plan (m = 2..12): ['1/2', '5/8', '13/16', '119/128', '245/256', '1001/1024']
+   even m >= 14, first values: ['14: 0.96338', '16: 0.95322', '18: 0.95293', '20: 0.95174', '22: 0.94672', '24: 0.94150', '26: 0.93643', '28: 0.93093', '30: 0.92614', '32: 0.92182', '34: 0.91776', '36: 0.91399', '38: 0.91055', '40: 0.90733']
+   without the "- 1/16" the left side at Tmax would be >= 1 for m in [14, 16, 18, 20, 22, 24]
+   Tmax without 3 (no 1/16 taken, no 1/4 for t = 3): >= 1 for m in []
+   (a check of the direction: taking 1/16 away only for 3 in T and m >= 14 even; for odd m and even m <= 12 nothing is taken)
+halving step (1): 1 + u//k <= 2 (1 + (u//2)//k): holds for u <= 3000, k <= 201: True; for u < 400, all k <= u + 1: True
+step a(u) <= 2^pi(u) a(u//2) for u <= 3000: True
+step (2): 3 pi(u) <= 2u + 5 for u <= 3000: True ; 2 pi(u) <= 3 (u - u//2) for 20 <= u <= 3000: True ; it fails for u in [2, 6]
+step (3): a(u)^2 <= 8^u for u <= 3000: True ; a(u) <= 3 * 8^(u//2): True
+   largest a(u)^2 / 8^u: 1.000000 at u = 0
+   U =   19: partial sum of W = 0.844463357702, tail below 3.340e-03, so W < 0.847803201452
+   U =   60: partial sum of W = 0.844473784242, tail below 2.252e-09, so W < 0.844473786494
+   U =  200: partial sum of W = 0.844473784242, tail below 1.908e-30, so W < 0.844473784242
+   U = 1000: partial sum of W = 0.844473784242, tail below 7.388e-151, so W < 0.844473784242
+   W is between 0.844473784242 and 0.844473784242
+   odd m: lhsN1 <= W < 1 for every m: margin 0.155526
+   even m > 2000: lhsN1 <= c_m + W - 1/16 <= 0.017839 + 0.844474 - 0.0625 < 1: True (c_m decreases: checked for even m <= 2000: True)
+   the plan's crude bound for even m >= 14: c_14 + W - 1/16 = 0.991446 (margin 0.008554); exact largest value is above
+plan's route: sum_{u<=19} (a(u)-a(u-1))/4^u = 0.844463; + 15/2^11 = 0.851788; plan says "below 0.8518": True; 1 + 1/16 - c_14 = 0.853027; bound below it: True
+   partial sums for u = 1..6: ['1/4', '1/2', '21/32', '91/128', '385/512', '209/256']
+   A(s) for s = 2, 4, .., 40: [2, 6, 16, 30, 72, 336, 384, 1080, 3200, 6336, 13824, 32760, 35280, 86400, 294912, 528768, 559872, 3064320, 3225600, 9313920]
+
+real	0m33.889s
+user	0m35.410s
+sys	0m0.262s

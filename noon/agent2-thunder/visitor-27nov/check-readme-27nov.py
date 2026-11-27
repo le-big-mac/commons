@@ -1,0 +1,111 @@
+"""Is every quotation in the write-up's section of 27 November in the report it is given to, word for word, and every figure in the
+record it comes from?   python -I check-readme-27nov.py > check-readme-27nov.out"""
+import re, os
+H = '/home/agent2/thunder/'
+def rd(p): return re.sub(r'\s+', ' ', open(p if p.startswith('/') else H + p, encoding='utf8').read())
+if __name__ == '__main__':
+    R = re.sub(r'\s+', ' ', open(H + 'README.md', encoding='utf8').read()); bad = 0; n = 0
+    Q = [   # (words that must stand in the write-up, the file they are quoted from, the words as they stand there)
+     ('"in pressure 42 decibels below the loudest the page plays, and played 11 below"', '/home/agent2/public-pass/front-visit-1.md', 'in pressure 42 decibels below the loudest the page plays, and played 11 below'),
+     ('"in pressure 42 decibels below the loudest the page plays, and played 11 below"', '/home/agent2/public-pass/front-visit-2.md', 'in pressure 42 decibels below the loudest the page plays, and played 11 below'),
+     ('the picture being off the screen above the buttons', '/home/agent2/public-pass/front-visit-1.md', 'the picture was off-screen above the buttons, so I saw no change until I scrolled up'),
+     ('"turn your sound on"', '/home/agent2/public-pass/front-visit-2.md', 'Put "turn your sound on" on the thunder page\'s first screen'),
+     ('the boxes to tick were 13 px across', '/home/agent2/public-pass/front-visit-1.md', 'the two checkboxes are 13 by 13 px'),
+     ('"A bow about you, crooked. First sound 8.4 s, from 2.9 km; lasts 0.6 s, loudest 0.4 s in; about 87 times less pressure than when smooth."', 'reader-visit6-27nov.md', 'A bow about you, crooked. First sound 8.4 s, from 2.9 km; lasts 0.6 s, loudest 0.4 s in; about 87 times less pressure than when smooth.'),
+     ('"about 60 times less pressure than this page plays at full volume"', 'reader-visit-27nov.md', 'about 60 times less pressure than this page plays at full volume'),
+     ('"much the quietest here"', 'reader-visit-27nov.md', 'is much the quietest here'),
+     ('"the thunder lasts 4.2 s"', 'reader-visit-27nov.md', 'the thunder lasts 4.2 s'),
+     ('250 to 480 px', 'reader-visit-27nov.md', 'moves the pressed button by 250 to 480 px'),
+     ('"Why is something 130 times weaker played only 3.4 times quieter?"', 'reader-visit-27nov.md', 'Why is something 130 times weaker played only 3.4 times quieter?'),
+     ('2. 10:53.', 'reader-visit2-27nov.md', 'start Fri Nov 27 10:53:07 UTC 2026'),
+     ('Strike and the line of sound were hidden beneath it', 'reader-visit2-27nov.md', 'Hidden behind it that I needed:** Strike and the sound trace'),
+     ('a swipe that began on the picture did nothing', 'reader-visit2-27nov.md', 'a swipe that starts on the picture does nothing, up or down'),
+     ('the tips slid by up to 96 px', 'reader-visit2-27nov.md', 'the tips, by up to 96 px, as the sentence changes length'),
+     ('"a quick tap on the ground no longer moves the listener"', 'reader-visit3-27nov.md', 'a quick tap on the ground no longer moves the listener'),
+     ('3. 11:11.', 'reader-visit3-27nov.md', 'start Fri Nov 27 11:11:55 UTC 2026'),
+     ('"What is left: the sentence the page prints is off the screen while I read any tip."', 'reader-visit4-27nov.md', 'What is left: the sentence the page prints is off the screen while I read any tip.'),
+     ('4. 11:33.', 'reader-visit4-27nov.md', 'Began Fri Nov 27 11:33:38 UTC 2026'),
+     ('"does not say where I stand or when the first sound comes"', 'reader-visit5-27nov.md', 'does not say where I stand or when the first sound comes'),
+     ('"Strike" is 92 px wide and "Stop" 80', 'reader-visit5-27nov.md', '"Strike" is 92 px wide and "Stop" is 80'),
+     ('5. 12:22.', 'reader-visit5-27nov.md', 'Began Fri Nov 27 12:22:32 UTC 2026'),
+     ('"I would send it now."', 'reader-visit6-27nov.md', 'I would send it now.'),
+     ('Three of the first tip\'s four claims could be checked from the short form without leaving the tip', 'reader-visit6-27nov.md', "The short text carries enough to check three of tip 1's four claims without leaving the tip."),
+     ('6. 12:47.', 'reader-visit6-27nov.md', 'Began Fri Nov 27 12:47:02 UTC 2026'),
+     ('"about 190 / times"', 'reader-visit7-27nov.md', '"about 190 / times less pressure"'),
+     ('"\'four to one\' sounded like dividing by four, and a hundred to three is not that."', 'reader-visit7-27nov.md', '"four to one" sounded like dividing by four, and a hundred to three is not that.'),
+     ('7. 13:11.', 'reader-visit7-27nov.md', 'Began Fri Nov 27 13:11:46 UTC 2026'),
+     ('8. 13:27. "190 times" held.', 'reader-visit8-27nov.md', '"190 times" and "5 thousandths" now hold'),
+     ('had become the hardest in the small print', 'reader-visit8-27nov.md', 'is now the hardest in the small print'),
+     ('9. 13:41.', 'reader-visit9-27nov.md', 'Began Fri Nov 27 13:41:20 UTC 2026'),
+     ('but for its last clause ("where here")', 'reader-visit9-27nov.md', 'I stumbled at "where here"'),
+     ('1. 10:56 (470 states).', 'referee/check-27nov.md', 'in all 470 states I drove'),
+     ('1. 10:56', 'referee/check-27nov.md', 'Start 10:56:33 UTC'),
+     ('(a hundredth at 500 m, a half at 8 km)', 'referee/check-27nov.md', 'At 500 m it is a hundredth, at 8 km a half'),
+     ('(a stroke heard from its foot has more pressure)', 'referee/check-27nov.md', 'a made-up stroke with the listener 3 m from its foot: "with about 1.8 times the pressure'),
+     ('failed for 18 crooked bows in 100', 'referee/check-27nov.md', '"half a second or more" fails for 18 of 100 crooked bows'),
+     ('2. 11:11 (680 states).', 'referee/check-27nov-b.md', 'in all 680 states I drove'),
+     ('one sentence in ten a digit out', 'referee/check-27nov-b.md', 'In 68 of 659 "quieter" sentences the two differ by one in the last place'),
+     ('3. 11:33 (696 states; each of the seven tip buttons from 40 starting states)', 'referee/check-27nov-c.md', '**The sentence, 696 states**'),
+     ('in 32 starting states of 40', 'referee/check-27nov-c.md', '| "tick “crooked”" (bow tip) | "the crack becomes a bang…" | 32 of 40 | 16 |'),
+     ('from 9 km a ninth of the energy comes after the crack', 'referee/check-27nov-c.md', '| 9 km | 2.98 | 8.1 | 11.2% |'),
+     ('true from about 8 km (29 of 40) and of half the strokes at 5 and 6 km', 'referee/check-27nov-c.md', '| in the middle, of 40 | 0 | 1 | 11 | 18 | 16 | 18 | 20 | 29 | 29 | 31 |'),
+     ('Three broken copies of the page passed my test.', 'referee/check-27nov-c.md', '**2. Three broken copies pass your test.**'),
+     ('4. 12:22.', 'referee/check-27nov-d.md', 'Began 12:22:09 UTC'),
+     ('was swallowed by the browser', 'referee/check-27nov-d.md', 'The other button is swallowed too, so this is the browser\'s doing'),
+     ('six taps of nine did nothing', 'referee/check-27nov-d.md', 'six of nine taps did nothing'),
+     ('with the button above reading Stop', 'referee/check-27nov-d.md', 'The button then reads "Stop"'),
+     ('Two broken copies passed.', 'referee/check-27nov-d.md', '**2. Only two broken copies pass your test'),
+     ('at 0.4 s it played', 'referee/check-27nov-d.md', '| quick | 400 ms | played | no click |'),
+     ('"4.1 times quieter", played 4.04', 'referee/check-27nov-c.md', '("270 times less… 4.1 times quieter", played 4.04)'),
+     ('5. 12:46.', 'referee/check-27nov-e.md', 'Began 12:46:46 UTC'),
+     ('403 taps inside Strike all played once', 'referee/check-27nov-e.md', '| inside Strike, 3 px grid | 403 | 403 played once; none moved the listener |'),
+     ('280 on the ground all moved the listener and none played', 'referee/check-27nov-e.md', '| ground, 3 px rows | 280 | 280 put the listener under the finger; 0 played |'),
+     ('part by part, in 353 states', 'referee/check-27nov-e.md', 'desktop width, 353 states'),
+     ('the ground read 1, 3, 5, 7, 9 km', 'referee/check-27nov-e.md', 'the kilometre marks on the ground read 1, 3, 5, 7, 9 km'),
+     ('The referee thought it right to leave.', 'referee/check-27nov-e.md', 'I think that is the right call.'),
+     ('6. 13:11.', 'referee/check-27nov-f.md', 'Began 13:11:26 UTC'),
+     ('could be right with the screen wrong, and a copy showed it', 'referee/check-27nov-f.md', 'The lettering on the screen can be wrong while the record is right, and a copy shows it.'),
+     ('"Matched to no measurement" was not exact', 'referee/check-27nov-f.md', '"Matched to nothing I have checked" would be exact.'),
+     ('7. 13:27.', 'referee/check-27nov-g.md', 'Began 13:27:40 UTC'),
+     ('"delays" for its "random variation to the time of flight"', 'referee/check-27nov-g.md', 'I apply a small amount of random variation to the time of flight of the WM-waves'),
+     ('"lengthens" for "changes the length of"', 'referee/check-27nov-g.md', '"Changes the length of" is the article\'s word.'),
+     ('"random variation to the time of flight"', 'dl/03-glassner2000/plain.txt', 'amount of random variation to the time of flight of the WM-waves'),
+     ('8. 13:41.', 'referee/check-27nov-h.md', 'Began 13:41:40 UTC'),
+     ('"None that I would refuse"', 'referee/check-27nov-h.md', 'None that I would refuse. Three I would sign only with a note:'),
+     ('(three crooked bows in its 300 print 2.8 or 2.9)', 'referee/check-27nov-h.md', '297 print between 3.0 and 3.7; three print 2.8 or 2.9'),
+     ('a word written in the sky still passes', 'referee/check-27nov-h.md', 'A false word written in the sky, outside `letter`, still passes all 97 assertions.'),
+     ('had Strike answer 16 of 54 taps on the ground', 'referee/check-27nov-c.md', 'had Strike answer 16 of the 54 ground taps'),
+     ('over 300 crooked bows the referee found 0.32 to 1.22 s, six of them over a second, and 64 to 186 times, the middle one 118', 'referee/check-27nov-c.md', '| times lower in pressure | 75 to 187 | 63.7 to 186, median 118 |'),
+     ('six of them over a second', 'referee/check-27nov-c.md', '| under a third of a second / over a second | 1 / 5 | 1 / 6 |'),
+     ('0.32 to 1.22 s', 'referee/check-27nov-c.md', '| lasts | 0.318 to 1.16 s | 0.320 to 1.22 s |'),
+     ('43 of my 60 have their loudest moment between a tenth and nine tenths', 'out/try5/tips-own.out', 'in the middle, of 60: 1 4 13 24 19 33 38 41 43 51 49'),
+     ('59 of 60 begin with it', 'out/try5/tips-own.out', 'in the first tenth: 59 56 47 36 41 27 22 18 17 8 9'),
+     ('divided by 67 from 3 km and by 2.98 from 9 km', 'out/try5/tips-own.out', '9000 m: crack 2.432e-4, click 8.169e-5 (crack/2.98)'),
+     ('divided by 67 from 3 km', 'out/try5/tips-own.out', '3000 m: crack 5.603e-3, click 8.346e-5 (crack/67.13)'),
+     ('(0.0000838 to 0.0000814 in pressure)', 'out/try5/tips-own.out', '9700 m: crack 1.894e-4, click 8.144e-5'),
+     ('caught 16 of 16, 20 of 20 and 16 of 16', 'out/page-mutants.try5-27nov.out', '16 of 16 broken copies of the page caught'),
+     ('caught 16 of 16, 20 of 20 and 16 of 16', 'out/page-mutants.try6-27nov.out', '20 of 20 broken copies of the page caught'),
+     ('caught 16 of 16, 20 of 20 and 16 of 16', 'out/page-mutants.try9-27nov.out', '16 of 16 broken copies of the page caught'),
+     ('the smooth bow\'s crack (a peak of 0.72, in units of length over distance)', 'page.src.html', "var REF = TH.thunder(TH.arc(0, 0, 3000, 150, 95), [0, 0]).peak;"),
+     ('138 were caught in the full run', 'page-mutants.out', '138 of 141 broken copies of the page caught; the true page run among them 4 times passed 4 times; 4 at a time, 82 minutes'),
+     ('(four at a time, 82 minutes; the true page, run four times among them under the same load, passed four times)', 'page-mutants.out', 'the true page run among them 4 times passed 4 times; 4 at a time, 82 minutes'),
+     ('a run of those three faults alone caught all three, the true page passing three times among them', 'out/page-mutants.three-27nov.out', '3 of 3 broken copies of the page caught (a part of the list of 141, by name); the true page run among them 3 times passed 3 times'),
+     ('98 assertions, among them the short form', 'page-test.out', 'PAGE TEST: 98 assertions, 0 failed'),
+     ('every one of the 424 states the test reads', 'page-test.out', '[424 states; forms met:'),
+     ('after each of nine changes, the same referee checked it after each of the last eight', 'truth-27nov.md', '**Eight checks, rounds 2 to 9.**'),
+     ('the referee checked every round from the second on (nobody but the reader saw the first)', 'truth-27nov.md', 'So "after each" is true of the reader and false of the referee for round 1'),
+     ('that one answered a second after the drag, not at 0.4 s', 'referee/check-27nov-d.md', '| quick | 1,000 ms | played | chosen |'),
+     ('the figure for the air\'s blur and the shape of the easing in the shadow are mine', 'referee/check-27nov-e.md', 'the figure for the air\'s blur and the shape of the easing in the shadow are yours'),
+    ]
+    for inR, f, there in Q:
+        n += 1; a = re.sub(r'\s+', ' ', inR) in R; b = re.sub(r'\s+', ' ', there) in rd(f)
+        if not (a and b): bad += 1; print('NOT SO: %s  [%s in the write-up; %s in %s]' % (inR[:90], 'stands' if a else 'IS NOT', 'stands' if b else 'IS NOT', f))
+    # the near count of 400, from its own program's output as kept
+    near = rd('out/try5/near-one.out') if os.path.exists(H + 'out/try5/near-one.out') else ''
+    n += 1
+    if 'of 400 strokes (seeds 1 to 400) from 500 m: 9 have the loudest moment after the first tenth' not in near or '391 of 400' not in R: bad += 1; print('NOT SO: 391 of 400 (out/try5/near-one.out)')
+    src = open(H + 'page-mutants.py', encoding='utf8').read(); i = src.index('M = ['); j = src.index('\n]\n', i); ns = {}; exec(src[i:j + 3], ns); n += 1
+    if len(ns['M']) != 141 or 'Of 141 planted faults' not in R: bad += 1; print('NOT SO: 141 planted faults (the list has %d)' % len(ns['M']))
+    n += 1
+    if open(H + 'page.src.html', encoding='utf8').read() != open(H + 'out/page.src.round9-27nov.html', encoding='utf8').read(): bad += 1; print('NOT SO: the page is not the ninth round\'s, which the reader and the referee saw last')
+    print('%d sentences of the write-up set beside their sources; %d not so' % (n, bad))
