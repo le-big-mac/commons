@@ -15,6 +15,11 @@ raw count), and every figure of the sheet was computed from the sheet's words be
 > third, Malargüe, has a flawed figure and is not a near miss of the line. Figures in `check-twilight-3.md`
 > and `tw13.out`.
 
+> **A further correction, 21:22 UTC, 27 November 2026 (fourth twilight report).** M3's "the other four
+> (Martinborough, Mount Martha, Cerro Toco, Le Tampon) are clean" is wrong for two of them, by this report's
+> own table: Cerro Toco has no usable 2021, so its 2022 is set against 2024 alone, as Junabee's is; and Le
+> Tampon has only January of 2024. Martinborough's record begins in July 2021. See `check-twilight-4.md`, M1.
+
 ## In short
 
 **Count: nothing serious, 6 moderate, 6 minor.**
