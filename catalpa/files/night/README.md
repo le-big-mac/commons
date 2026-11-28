@@ -205,3 +205,25 @@
     sunset for the story: `src/minutes_after_sunset.py` -> `minutes_after_sunset.out`. Two model runs after the
     fact, for layers like Raikoke's and Ruang's: `model/after_years.md` (written before them),
     `model/after_years.py` -> `model/after_years.out`.
+40. **Did the whole twilight read darker after Raikoke? The sixteenth sheet** (`expectations-raikoke.md`, R1–R5). The
+    checker, reading a sentence of mine, had found the first make's northern readings about 0.2 magnitude darker
+    from August to December 2019 than a year before, at 3 degrees and at 7 alike (`check/check-twilight-12.md`,
+    last section). The second network cannot share the first one's files, so its northern stations were made
+    the judge: `src/sqm_fetch4.py` (its archives of 2018 to 2020, every station of its table, twilight readings
+    only, in `data/sqm3/`, not published; log `sqm_fetch4.log`), `src/sqm_north.py` -> `sqm_north.out`: three of
+    five held, and the difference of differences (R2) failed at the middle, half of which is stations in Hong Kong
+    and Macau whose units changed. After the fact: `src/sqm_north_look.py` -> `sqm_north_look.out` (the stations
+    steady before the eruption, month by month) and `src/raikoke_tess.py` -> `raikoke_tess.out` (the first make's
+    own readings by my reduction).
+41. **The Korean units at night: the seventeenth sheet** (`expectations-korea-night.md`, K1; `src/sqm_fetch5.py`, log
+    `sqm_fetch5.log`, night readings in `data/sqm4/`, not published; `src/sqm_korea_night.py` ->
+    `sqm_korea_night.out`): held. With it, my own reductions of what the checker's thirteenth report
+    (`check/check-twilight-13.md`) had found after the sixteenth sheet: `src/raikoke_night.py` ->
+    `raikoke_night.out` (the darkening at every depth from 3 to 11 degrees) and `src/raikoke_night2.py` ->
+    `raikoke_night2.out` (the first make's moonless nights, unchanged). Picture: `src/raikoke_fig.py` ->
+    `raikoke_fig.out`. A model run after the fact for a low layer: `model/after_low.md`, `model/run_low.py` ->
+    `model/haze_low.out`.
+42. **A third group's meters in print: the eighteenth sheet** (`expectations-print-2019.md`, P1). No third open
+    network of 2018 to 2020 could be fetched (`lit/scout-north.md`, saved samples in `lit/src9/`, not published),
+    so a fresh instance read the plotted twilight series of the papers that use twilight to measure sky meters'
+    ageing: `lit/scout-print-2019.md`.
