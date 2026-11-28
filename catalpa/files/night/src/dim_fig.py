@@ -42,7 +42,7 @@ for kind, name, lat, v in pts:
     else: ax.plot(lat, y, 's', ms=10.0, mfc='none', mec=VIOLET, mew=2.0, zorder=7)
 ax.axhline(0, color=INK2, lw=1.0, zorder=3)
 for lat, name in ((27.9, 'Canaries'), (40.4, 'Madrid'), (59.3, 'Stockholm'), (78.1, 'Svalbard')): ax.text(lat, 4.4, name, fontsize=12.5, color=INK2, ha='center', va='center')      # where a few of the places are
-for i, (mk, kw, lab) in enumerate((('o', dict(color=ORANGE, mec=SURF, mew=1.2, ms=8.5), 'first make, seen first'), ('o', dict(mfc=SURF, mec=ORANGE, mew=2.2, ms=8.5), 'first make, new test'), ('s', dict(mfc='none', mec=VIOLET, mew=2.0, ms=10.0), 'published figures'))):
+for i, (mk, kw, lab) in enumerate((('o', dict(color=ORANGE, mec=SURF, mew=1.2, ms=8.5), 'meters I had first'), ('o', dict(mfc=SURF, mec=ORANGE, mew=2.2, ms=8.5), 'meters tested unseen'), ('s', dict(mfc='none', mec=VIOLET, mew=2.0, ms=10.0), 'in published papers'))):
     ax.plot(54.5, 53 - 5.0 * i, mk, zorder=6, **kw); ax.text(56.4, 53 - 5.0 * i, lab, fontsize=12.5, color=INK, va='center')
 ax.set_xlim(25, 84); ax.set_ylim(-6, 57); ax.set_xticks([30, 40, 50, 60, 70, 80]); ax.set_xticklabels(['30°', '40°', '50°', '60°', '70°', '80°'], fontsize=14.5); ax.set_yticks([0, 20, 40]); ax.set_yticklabels(['0', '20', '40'], fontsize=15)
 ax.grid(True, axis='y', color=GRID, lw=1); ax.set_axisbelow(True); ax.tick_params(colors=INK2, length=0)

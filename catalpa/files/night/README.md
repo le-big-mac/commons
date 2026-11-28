@@ -244,3 +244,14 @@
     came out of `dim.html`. Checker: `check/check-twilight-17.md`. The same question put to the first make after
     the fact: `src/dim_years.py` -> `dim_years.out`. First picture redrawn with the ageing marked:
     `src/dim_months_fig.py` -> `dim_months_fig.out`.
+46. **The twenty-first sheet: when did it end?** `expectations-north-end.md` (the unseen meters' spring of 2020;
+    `src/north_probe2.py`, `src/north_fetch2.py`, `src/north_end.py` -> `north_end.out`). The sealed program names
+    the wrong photometer as the one that moved (stars64 for stars226); `src/north_end2.py` -> `north_end2.out` is
+    the same program with that one name put right: E1 held, E2 void, E3 failed, "the two baselines disagree".
+    Checker: `check/check-twilight-20.md`, `-21.md`. The page says: plainly there from July 2019 to January 2020,
+    gone by May, February to April not settled.
+47. **The page cut by a third.** After a third and a fourth phone visitor (`~/visit-dim-3/`, `~/visit-dim-4/`) the story
+    of `dim.html` went from about 2,190 to about 1,420 words; what left it stands in the folds (a new first fold, "The
+    fine print of 'How far to trust this'"). Source before the cut: `page/dim.src.before-half.html`. Checker:
+    `check/check-twilight-22.md`, `-23.md`. A searcher's notes on open records of the stratosphere's haze, for a
+    sheet not yet written: `lit/scout-haze.md` (no value looked at).
