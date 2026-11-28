@@ -1,0 +1,142 @@
+21,22c21,23
+< > cnt(N)·2^(−(N−2))·γ(m, N) (§5). Computed: √m·B(m) < 1 for every odd m ≥ 85, and √m·B(m) ≤ 1.9636 for every even
+< > m ≥ 48.
+---
+> > cnt(N)·2^(−(N−2))·γ(m, N) (§5). Computed: √m·β(m) < 1 for every odd m ≥ 85, and ≤ 1.9636 (by Theorem 4: ≤ 1.6039)
+> > for every even m ≥ 48; for m ≤ 3000 by the computed sums, each pattern with N > 61 bounded by Lemma B, beyond by
+> > Proposition 1 and §6.
+28,29c29,31
+< > **Theorem 4 (even m, explicit).** For even m, β(m) ≤ B_E(m) (§6); computed: √m·B_E(m) ≤ 1.6039 for every even
+< > m ≥ 48 (the largest value is at m = 48; at most 1.5481 from m = 50 on).
+---
+> > **Theorem 4 (even m, explicit).** For even m, β(m) ≤ B_E(m) (§6); computed: √m·β(m) ≤ 1.6039 for every even
+> > m ≥ 48 (at most 1.5481 from m = 50 on); for m ≤ 3000 by the computed sums, each pattern with N > 61 bounded by
+> > Lemma B (the largest is at m = 48), beyond by §6.
+181,183c183,187
+< weak, and above 1/2 up to m = 24; it is made for large m). `bound.py sup 3000 21` computes B(m) for m ≤ 3000
+< in floating point (terms N ≤ 61 as defined; for m > 61 the terms N > 61 replaced by the larger √(2/(πm))·5.5·10^(−5)
+< of Lemma B and the tail; `sup_3000.out`):
+---
+> weak, above 1/2 for every even m from 4 to 24 and every odd m from 5 to 13; it is made for large m).
+> `bound.py sup 3000 21` computes in floating point, for m ≤ 3000, the *computed sum*: B(m) itself for m ≤ 61; for
+> m > 61 the terms N ≤ 61 of B(m) as defined and, in place of the terms N > 61, the number √(2/(πm))·5.5·10^(−5), which
+> bounds the share of all the patterns with N > 61 by Lemma B and the tail of §4. So the computed sum is a bound for
+> β(m); for m > 61 it is not B(m) itself, though the program prints it under that name (`sup_3000.out`):
+185c189
+< | | largest √m·B(m) | at |
+---
+> | | largest √m·(computed sum) | at |
+267a272,273
+> Convention, as in the programs: LC(m, N) := 0 and Fb(m, p, k, g) := 0 if N = k + p − 1 > m (a divisor with a positive
+> share has m ≥ N: every cell has at least two elements and one has at least p, so m ≥ 2(k − 1) + p ≥ N, as in §4).
+275c281
+< for k ≥ G + q, LC(m, k + p − 1) ≤ LC(m, G + q + p − 1) by monotony. ∎
+---
+> for k ≥ G + q, LC(m, k + p − 1) ≤ LC(m, G + q + p − 1) by monotony and the convention. ∎
+277c283,284
+< `bound_even.py 3000` (`even_3000.out`; floating point, the patterns with N > 61 as in §5; for even m ≤ 110 also
+---
+> `bound_even.py 3000` (`even_3000.out`; floating point; B_E(m) itself for m ≤ 61, for m > 61 the computed sum, each
+> pattern with N > 61 bounded by Lemma B as in §5, printed under the name B_E(m); for even m ≤ 110 B_E(m) also
+283c290
+< | largest √m·B_E from there to 3000 | 1.6039 (at 48) | 1.5481 (at 50) | 1.4788 (at 64) | 1.4067 | 1.3160 | 1.2865 | 1.2766 |
+---
+> | largest √m·(computed sum) from there to 3000 | 1.6039 (at 48) | 1.5481 (at 50) | 1.4788 (at 64) | 1.4067 | 1.3160 | 1.2865 | 1.2766 |
+314,315c321,323
+< in n); replacing the terms of the patterns 3^j in Theorem 2 by this number gives β(m) ≤ B3(m), and
+< √m·B3(m) ≤ 0.99788 for odd 47 ≤ m ≤ 400, the largest value at m = 47 (`mixed.py`, `mixed_400.out`; for
+---
+> in n); replacing the terms of the patterns 3^j in Theorem 2 (for m > 61: in its computed sum, §5) by this number
+> gives β(m) ≤ B3(m), and
+> √m·B3(m) < 0.997875 for odd 47 ≤ m ≤ 400, the largest value, 0.9978749, at m = 47 (`mixed.py`, `mixed_400.out`; for
+320c328,329
+< min(b, T2)·√m is 1.55281, at m = 26 (T2(26) = 0.304530; `evenconst.py`); β(2) = 1/2. 48 ≤ m ≤ 400: Theorem 4 with
+---
+> min(b, T2)·√m is 1.55281, at m = 26 (T2(26) = 0.304530; `evenconst.py`); β(2) = 1/2. 48 ≤ m ≤ 400: Theorem 4 (for
+> m > 61: its computed sum, §6) with
+324c333
+< 1.5481 from m = 50 on, so the first text's Theorem B is needed at m = 48 only). 400 < m ≤ 3000: √m·B_E(m) ≤ 1.316. m > 3000: 1.4215. So
+---
+> 1.5481 from m = 50 on, so the first text's Theorem B is needed at m = 48 only). 400 < m ≤ 3000: √m·β(m) ≤ 1.316 by the computed sums of §6. m > 3000: 1.4215. So
+387c396
+< computed values of √m·B(m) and √m·B_E(m) at m ≤ 3000 lie below them near 3000), and the tail of the weights beyond
+---
+> computed sums of §5 and §6 at m ≤ 3000, times √m, lie below them near 3000), and the tail of the weights beyond
+454a464,540
+> 
+> ## 12. Changes after the referee's report
+> 
+> The report is `../report-referee-one.md` (a fresh referee, briefed by the author of the brief; it read this file as
+> it stood before this section, kept as `../one-result.as-sent-to-referee.md`). Its verdict: "I found no gap and no
+> wrong number"; it requires three changes of wording or definition, none to a result. The status paragraph at the
+> head stands as it was sent ("read by nobody, no referee"): since then this one referee has read the text. No
+> theorem, lemma or constant is changed. Made, place by place:
+> 
+> **Required change 1** (for m > 3000 what is proved is a bound for β(m), not for B(m) or B_E(m); for 61 < m ≤ 3000 the
+> programs bound the patterns with N > 61 by Lemma B, which the text called "the larger" without proof).
+> - *Head, Theorem 2.* Old: "Computed: √m·B(m) < 1 for every odd m ≥ 85, and √m·B(m) ≤ 1.9636 for every even m ≥ 48."
+>   New (the referee's wording): "Computed: √m·β(m) < 1 for every odd m ≥ 85, and ≤ 1.9636 (by Theorem 4: ≤ 1.6039) for
+>   every even m ≥ 48; for m ≤ 3000 by the computed sums, each pattern with N > 61 bounded by Lemma B, beyond by
+>   Proposition 1 and §6."
+> - *Head, Theorem 4.* Old: "computed: √m·B_E(m) ≤ 1.6039 for every even m ≥ 48 (the largest value is at m = 48; at
+>   most 1.5481 from m = 50 on)." New: "computed: √m·β(m) ≤ 1.6039 for every even m ≥ 48 (at most 1.5481 from m = 50
+>   on); for m ≤ 3000 by the computed sums, each pattern with N > 61 bounded by Lemma B (the largest is at m = 48),
+>   beyond by §6."
+> - *§5, the sentence before the table, and the head of the table.* Old: "`bound.py sup 3000 21` computes B(m) for
+>   m ≤ 3000 in floating point (terms N ≤ 61 as defined; for m > 61 the terms N > 61 replaced by the larger
+>   √(2/(πm))·5.5·10^(−5) of Lemma B and the tail; `sup_3000.out`)", table head "largest √m·B(m)". New: "`bound.py sup
+>   3000 21` computes in floating point, for m ≤ 3000, the *computed sum*: B(m) itself for m ≤ 61; for m > 61 the terms
+>   N ≤ 61 of B(m) as defined and, in place of the terms N > 61, the number √(2/(πm))·5.5·10^(−5), which bounds the
+>   share of all the patterns with N > 61 by Lemma B and the tail of §4. So the computed sum is a bound for β(m); for
+>   m > 61 it is not B(m) itself, though the program prints it under that name (`sup_3000.out`)", table head "largest
+>   √m·(computed sum)". The text no longer says that the tail is the larger; nothing needs it.
+> - *§6, the sentence before the table, and the first cell of its second row.* Old: "(`even_3000.out`; floating
+>   point, the patterns with N > 61 as in §5; for even m ≤ 110 also in exact fractions …", "largest √m·B_E from there
+>   to 3000". New: "(`even_3000.out`; floating point; B_E(m) itself for m ≤ 61, for m > 61 the computed sum, each
+>   pattern with N > 61 bounded by Lemma B as in §5, printed under the name B_E(m); for even m ≤ 110 B_E(m) also in
+>   exact fractions …", "largest √m·(computed sum) from there to 3000".
+> - *§7, three places.* Old: "replacing the terms of the patterns 3^j in Theorem 2 by this number"; new: "… in
+>   Theorem 2 (for m > 61: in its computed sum, §5) by this number". Old: "48 ≤ m ≤ 400: Theorem 4 with the terms";
+>   new: "48 ≤ m ≤ 400: Theorem 4 (for m > 61: its computed sum, §6) with the terms". Old: "400 < m ≤ 3000:
+>   √m·B_E(m) ≤ 1.316."; new: "400 < m ≤ 3000: √m·β(m) ≤ 1.316 by the computed sums of §6."
+> - *§9, "Not tested by exact enumeration".* Old: "the computed values of √m·B(m) and √m·B_E(m) at m ≤ 3000 lie below
+>   them near 3000"; new: "the computed sums of §5 and §6 at m ≤ 3000, times √m, lie below them near 3000".
+> - *A program's message* (the referee's remark on the last lines of `sup_3000.out`). In `bound.py`, the last line
+>   printed by `sup`: old "for every m > 3000: sqrt(m) B(m) <= …", new "for every m > 3000: sqrt(m) beta(m) <= …".
+>   `sup_3000.out` was written again by the program; compared with the old output before it was replaced, only that
+>   last line differs. No other program and no other output is changed; the lines of `sup_3000.out` and
+>   `even_3000.out` for m > 61 still carry the names B(m) and B_E(m) for the computed sums, as §5 and §6 now say.
+> 
+> **Required change 2** (the definition of PPE against the programs). *§6, after the definition of PPE.* Added:
+> "Convention, as in the programs: LC(m, N) := 0 and Fb(m, p, k, g) := 0 if N = k + p − 1 > m (a divisor with a
+> positive share has m ≥ N: every cell has at least two elements and one has at least p, so m ≥ 2(k − 1) + p ≥ N, as in
+> §4)." *Proof of Theorem 4, last line.* Old: "by monotony"; new: "by monotony and the convention". Without the
+> convention the definition as written gave larger values of B_E(m) than the programs for some even m ≤ 18 (by the
+> report: m = 4, 6, 8, 10, 14, 16, 18). No number quoted here has to change: every value of B_E in this text came
+> from the programs; the smallest m at which one is quoted is 28 (§7), where by the report the two definitions agree
+> (they agree from m = 20 on); for the constant 1.88 of §7 Theorem Q's bounds alone are smaller for even m ≤ 24 (at
+> most (47/128)·√24 < 1.80), whatever B_E is there; and the tests of §9 compared the shares with the programs'
+> B_E(m), which is what the text now defines.
+> 
+> **Required change 3.** *§5.* Old: "for small m the bound is weak, and above 1/2 up to m = 24"; new: "for small m
+> the bound is weak, above 1/2 for every even m from 4 to 24 and every odd m from 5 to 13" (`exact_40.out`: among
+> m ≤ 40, B(m) > 1/2 exactly for m = 4, …, 14, 16, 18, 20, 22, 24).
+> 
+> **A suggestion taken** ("0.99788" against 0.997875). *§7, odd m.* Old: "√m·B3(m) ≤ 0.99788 for odd 47 ≤ m ≤ 400, the
+> largest value at m = 47"; new: "√m·B3(m) < 0.997875 for odd 47 ≤ m ≤ 400, the largest value, 0.9978749, at m = 47".
+> The old bound was right, a value rounded up; the value is 0.99787486… (`mixed_400.out` has it as 0.99787 to five
+> places, `mixed_exact.out` as 0.997875 to six; computed once more in exact fractions for this section, with the test
+> 47·B3(47)² < 0.997875², by an inline script through the cap, not kept).
+> 
+> **What the referee did and did not check, in its words (its part 5):** "Author's files not read: `test_lemmas.py`,
+> `test_config.py`, `kheavy.py`, `family.py`, `totals.py`, the run scripts, `tests_*.out`, `first-batch/`. I replaced
+> them by my own tests. I did check that the counts quoted in §9 match `totals.out`, `totals_c.out`, `config_a.out` and
+> `config_b.out`"; the second text "read whole; proofs of Lemmas 1, 2, 3, 5 and the statement of Theorem A checked.
+> Its tables and programs were not recomputed"; of the first text the statements of Theorems A, B, Q, Lemma R and
+> `table.out`: "Its proofs and recursion were not read"; of `sign-four-result.md` "the tail proof checked"; "Corollary
+> U itself is not checked"; "Nothing in print (no network): Sperner, Erdős and Wallis from memory."
+> 
+> Housekeeping for these changes: the edits of this file and of the one line of `bound.py` were made with the editor,
+> and this section was appended from the shell; `bound.py sup 3000 21` was run twice (once to compare, once to write
+> `sup_3000.out`) and one short inline script once, all through the cap; nothing else in this folder or outside it
+> was changed; nothing is left running.

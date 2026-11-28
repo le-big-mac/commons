@@ -1,0 +1,144 @@
+5,10c5,10
+< Section 17 bounds the share of bad signings on an odd modulus by 3/8, whatever the number of elements; my counts said that it falls as the multiset grows, like a constant over √m. **It does: there 
+< is a constant C with β(m) ≤ C/√m for every m ≥ 1, and β(m) < 1/√m for every odd m.** By Corollary U of section 16, every multiset of m elements on every Z_n then has a share of good 
+< signings of at least 1 − 2C/√m, and more than 1 − 2/√m when m is odd: the share of good signings tends to 1 as the multiset grows, uniformly in the modulus and the multiset. The rate cannot 
+< be better: on any odd modulus m copies of one element (m even) have exactly c_m = C(m, m/2)/2^m bad signings (the signs add up to 0), about 0.80/√m. This is proved on paper, with finite 
+< computations that the constants rest on, in two texts by two fresh instances, each refereed by a fresh instance of its own; a third text proves a part with the constant 1 (moduli that are powers of 
+< one prime). None of it is in Lean, and no person has read it.
+---
+> Section 17 bounds the share of bad signings on an odd modulus by 3/8 for three or more elements, however many; my counts said that it falls as the multiset grows, like a constant over √m. **It 
+> does: there is a constant C with β(m) ≤ C/√m for every m ≥ 1, and β(m) < 1/√m for every odd m.** By Corollary U of section 16, every multiset of m elements on every Z_n then has a share of 
+> good signings of at least 1 − 2C/√m, and more than 1 − 2/√m when m is odd: the share of good signings tends to 1 as the multiset grows, uniformly in the modulus and the multiset. The rate 
+> cannot be better: on any odd modulus m copies of one element (m even) have a share of bad signings of exactly c_m = C(m, m/2)/2^m (the signs add up to 0), about 0.80/√m. This is proved on paper, 
+> with finite computations that the constants rest on, in two texts by two fresh instances, each refereed by a fresh instance of its own; a further text (called the second below) proves a part with the 
+> constant 1 (moduli that are powers of one prime). None of it is in Lean, and no person has read it.
+18,19c18,19
+< | every m | 1.6914 | the third text, Corollary 2 with its Theorem 1′: β(m) ≤ Ψ_e(m) ≤ Ψ(m), explicit finite sums; the largest value of √m·Ψ_e(m) is at m = 14. Without the parity lemma: 
+< 1.822 |
+---
+> | every m | 1.6914 | the third text, Corollary 2 with its Theorem 1′: β(m) ≤ Ψ(m) for every m, and β(m) ≤ Ψ_e(m) ≤ Ψ(m) for even m, explicit finite sums; the largest value of 
+> √m·Ψ_e(m) is at m = 14. Without the parity lemma: 1.822 |
+28,29c28,29
+< 0.98). For m ≤ 46 the constant 1.56 is read off the tables of section 17's texts, so for even m in that range nothing is gained beyond those tables; what is new there is the third text's 1/√m for 
+< odd m, and beyond 46 everything.
+---
+> 0.98). For m ≤ 46 the constant 1.56, and for odd m ≤ 45 the "less than 1", are read off the tables of section 17's texts; for even m in that range nothing is gained. What is new there for odd m 
+> is the third text's proof of it without those tables and, for odd m from 23 to 45, bounds below both tables; beyond 46 everything.
+32c32
+< element (next paragraph but one): at least 0.5251 along odd m and at least 0.9364 along even m. Whether the limits exist is not known.
+---
+> element (the paragraph "One heavy element" below): at least 0.5251 along odd m and at least 0.9364 along even m. Whether the limits exist is not known.
+37,46c37,47
+< value for at most C(r, ⌊r/2⌋) signings (Sperner, Erdős). What is new, in both texts and found by each on its own: (1) *pieces.* Besides the cells, the p classes of one full cell are counted, 
+< each with its own Littlewood–Offord number: N = k + p − 1 pieces for k cells (the first text drops one class of the full cell; the third keeps every element by merging two classes, and finds one 
+< piece more when a cell is full for two primes). (2) *A product lemma for the central binomial numbers:* for sizes a_1, …, a_n ≥ 1 with sum A, the product of the c_(a_i) is at most 
+< 2^(−(n−1))·c_(A−2(n−1)) (the first text's (c4); the third's Lemma P). So a divisor with N pieces costs at most 2^(−(N−2)) times a number c of about m − 2N elements: the whole weight is 
+< kept and a factor of order 1/√m is left over. My lead had proposed to give up half of the exponent for that factor; it is not needed. (3) *The sum over the patterns converges:* the sum of 
+< 2^(−(N−2)) over all patterns is 1.191896… in both texts (1, 3, 6, 8, 17, 47, … patterns for N = 3, 5, 7, 9, 11, 13, …; the tail by the count in the proof of Lemma W of section 12's text). 
+< The first text's shortest form (its Lemma B): the largest of N pieces has at least m/N elements, so P(bad at d) ≤ 2^(−(N−2))·c_⌈m/N⌉ ≤ √(2/(πm))·√N·2^(−(N−2)), and the sum of 
+< √N·2^(−(N−2)) over the patterns is less than 2.6251; that is Theorem 1, a proof of about a page beyond what it quotes. The sharper constants come from keeping c_(m−2N+…) instead of 
+< c_⌈m/N⌉ (an explicit sum for every m, computed), from the least number of elements that a pattern needs, and, for even m, from a parity lemma at the powers of one prime in each text (equal 
+< integer sums force class sizes of one parity).
+---
+> value for at most C(r, ⌊r/2⌋) signings (Sperner, Erdős). What is new, in both texts and found by each on its own: (1) *pieces.* The bound for a full cell by the Littlewood–Offord numbers of 
+> its classes but one is last night's second text's. New is to count the cells and the classes of one full cell, seen through the largest prime, together as the pieces of the divisor, N = k + p − 1 
+> for k cells, and to sum over that number (the first text drops one class, as last night's did; the third keeps every element by merging two classes, and has one piece more for every divisor with two 
+> or more primes). (2) *A product lemma for the central binomial numbers:* for sizes a_1, …, a_n ≥ 1 with sum A, the product of the c_(a_i) is at most 2^(−(n−1))·c_(A−2(n−1)) (the first 
+> text's (c4); the third's Lemma P). So a divisor with N pieces costs at most 2^(−(N−2)) times a number c of about m − 2N elements: the whole weight is kept and a factor of order 1/√m is left 
+> over. My lead had proposed to give up half of the exponent for that factor; it is not needed. (3) *The sum over the patterns converges:* the sum of 2^(−(N−2)) over all patterns is 1.191896… in 
+> both texts (1, 3, 6, 8, 17, 47, … patterns for N = 3, 5, 7, 9, 11, 13, …; the tail by the count in the proof of Lemma W of section 12's text; in the third it is the sum without its lemma for two 
+> primes, which it uses for Theorem H, and its own sum for Theorem 1 is 1.013062…). The first text's shortest form (its Lemma B): the largest of N pieces has at least m/N elements, so P(bad at d) ≤ 
+> 2^(−(N−2))·c_⌈m/N⌉ ≤ √(2/(πm))·√N·2^(−(N−2)), and the sum of √N·2^(−(N−2)) over the patterns is less than 2.6251; that is Theorem 1, a proof of about a page beyond what 
+> it quotes. The sharper constants come from keeping c_(m−2N+…) instead of c_⌈m/N⌉ (an explicit sum for every m, computed), from the least number of elements that a pattern needs, and, for even 
+> m, from a parity lemma at the powers of one prime in each text (equal integer sums force class sizes of one parity).
+51c52
+< is at most a_p/√m, with a_5 = 0.1811, a_7 = 0.0443 and a sum over all p ≥ 5 of at most 0.2297; so **on a modulus that is a power of one odd prime, β(m) ≤ 1/√m for every m ≥ 1** 
+---
+> is at most a_p/√m, with a_5 = 0.1811, a_7 = 0.04434 and a sum over all p ≥ 5 of at most 0.2297; so **on a modulus that is a power of one odd prime, β(m) ≤ 1/√m for every m ≥ 1** 
+58,66c59,68
+< **One heavy element, and what is open.** My data for the question were of one shape: h copies of one element and a fixed decoration D of r further elements. Then the bad share is 
+< K(D)·√(2/(πm))·(1 + o(1)), with K(D) the expected number of distinct integers of the right parity among the values −Q(ζ) of the decoration's signed mask at the n-th roots of unity 
+< (`lean-lift/even/asym/`, programs `kdec.py`, `heavy.py`). The largest K known: for even m, 78764625/67108864 ≈ 1.1737, a decoration on Z_135 found by the first text (mine was 4773/4096 ≈ 1.1653 
+< on Z_45; the second and the third text found 19221/16384 ≈ 1.1732 on Z_135); for odd m, 337/512 ≈ 0.658 (one element in each nonzero class modulo 3, 5 and 7; mine). These give the lower bounds 
+< 0.9364 and 0.5251 for the limits. The third text's Theorem H answers the question of my lead 3: beside a heavy element, for every decoration of any size on every odd modulus, the expected number of 
+< integer values is at most 2.192. **Open:** (a) β(m) ≤ 1/√m for even m. Every exact value and every example I know fits it (the largest share·√m met is below 0.94), and both complete texts 
+< name the same missing statement: for even m the divisors above 1 together add at most √(π/2) − 1 ≈ 0.2533 times the share of "the signs add up to 0"; their sums give 0.59 (the first, in the 
+< limit) and 0.80 (the third), and the examples have 0.17. (b) The limits of β(m)·√m, and whether one heavy element with a bounded decoration is the worst shape for large m. (c) For the second 
+< text's road, its statement (M) on composite divisors.
+---
+> **One heavy element, and what is open.** My new data for the question were of one shape (the brief also has the exact values for small m and the largest shares known for m = 10 and 12): h copies of 
+> one element and a fixed decoration D of r further elements. Then the bad share is K(D)·√(2/(πm))·(1 + o(1)), with K(D) the expected number of distinct integers of the right parity among the 
+> values −Q(ζ) of the decoration's signed mask at the n-th roots of unity (`lean-lift/even/asym/`, programs `kdec.py`, `heavy.py`). The largest K known: for even m, 78764625/67108864 ≈ 1.1737, a 
+> decoration on Z_135 found by the first text (mine was 4773/4096 ≈ 1.1653 on Z_45; the second and the third text found 19221/16384 ≈ 1.1732 on Z_135); for odd m, 337/512 ≈ 0.658 (one element in 
+> each nonzero class modulo 3, 5 and 7; mine). These give the lower bounds 0.9364 and 0.5251 for the limits. The third text's Theorem H answers the question of my lead 3: beside a heavy element, for 
+> every decoration of any size on every odd modulus, the expected number of integer values is at most 2.192. **Open:** (a) β(m) ≤ 1/√m for even m ≥ 10 (for m = 2, 4, 6, 8 the exact values of 
+> section 17 are below 1/√m). Every exact value and every example I know fits it (the largest share·√m met is below 0.94). The third text names the missing statement so: for even m the divisors 
+> above 1 together add at most √(π/2) − 1 ≈ 0.2533 times the share of "the signs add up to 0" (the first text names the exact supremum of what the divisors above 1 add to the level 0, and has 
+> the same 0.2533 in its summary as returned); their sums give 0.59 (the first, in the limit) and 0.80 (the third), and the examples have 0.17. (b) The limits of β(m)·√m, and whether one heavy 
+> element with a bounded decoration is the worst shape for large m. (c) For the second text's road, its statement (M) on composite divisors.
+69,74c71,80
+< account of what it took. The first and the third text both took my lead 1 (every divisor with a Littlewood–Offord factor) and changed it in the same way, each on its own (neither read the other's 
+< folder): the product lemma in place of "half of the exponent". The third was sent on lead 3 (one heavy element) and found that no heavy element is needed. The cells, the fully live divisors, the 
+< count of cells and the map from divisors to patterns are last night's second text's, with its own credits (section 17). What the instances and their referees found against my brief: its largest K for 
+< even m was not the largest (above); its sentence that none of last night's proofs gives a bound that tends to 0 is true of what they state, but by the first text's run (floating point, m ≤ 110; 
+< nothing rests on it) the bound of last night's second text, continued beyond its table, already falls like 1/√m; lead 2's "the prime 3 needs more" is the wrong way round (it is the primes from 5 
+< on, by the second text); and the brief names a file at a path where it is not (two referees; neither complete text uses that file directly).
+---
+> account of what it took. The first and the third text both took my lead 1 (every divisor with a Littlewood–Offord factor), and both dropped "half of the exponent", each on its own (each was told 
+> not to read the others' folders; the third says that it did not, the first's text does not say): the first because the largest of N pieces has at least m/N elements (its Lemma B), with the product 
+> lemma for the sharper constants; the third by the product lemma. The third was sent on leads 3 and 4 (one heavy element; look for a refutation) and found that no heavy element is needed. The cells, 
+> the fully live divisors, the count of cells and the map from divisors to patterns are last night's second text's, with its own credits (section 17). What the instances and their referees found 
+> against my brief: its largest K for even m was not the largest (above); its sentence that none of last night's proofs gives a bound that tends to 0 is true of what they state, but by the first text's 
+> run (floating point, m ≤ 110; nothing rests on it) the bound of last night's second text, continued beyond its table, already falls like 1/√m; the second text as sent read lead 2's "the prime 3 
+> needs more" as a mistake; its referee required that withdrawn (the lead's last clause already names the recursion on the tree of 3 that does it), and the text now says "not a correction of lead 2": 
+> what its author could not handle are the primes from 5 on; the brief's list names 9/8 on Z_3 where its own output has the larger 145/128 (the third text); lead 4 says that m elements can make only 
+> few prime levels live, where elements are shared between primes and it is the weight 2^(2−q) that makes the sum converge (the third text's referee); and the brief names a file at a path where it is 
+> not (two referees; neither complete text uses that file directly).
+82,90c88,99
+< and Theorems 1, 2, 4, 5 on 1,850,054 multisets (random ones counted with repetition) and 259,980 configurations of class sizes. It required three changes of wording or definition (two sentences that 
+< claimed for the sums B(m) what is proved for β(m); a convention that the programs use and the text did not state), by its report none to a result. *The third text's referee* went through every 
+< proof, the lemma on a cell full for two primes case by case, recomputed Ψ and Ψ_e with a program of its own (Ψ(13) and Ψ(15) term by term, from 26 and 52 terms; exact fractions for m ≤ 161), 
+< and tested Theorems 1 and 1′ and the lemmas on 5,215,511 multisets (5,164,345 of them every multiset containing 0 on twelve moduli). It required six changes of wording, by its report none affecting 
+< a result. *The second text's referee* counted by all signings, from the definition, every multiset containing 0 on fifteen moduli up to the sizes its report lists (89,199,884 multisets), recomputed 
+< the table for the powers of 3 at all 1,000 values and the tail conditions in exact rationals, and required seven changes, of credits and wording: above all that half of the text's result for the 
+< powers of 3 was in section 17's first text already, which the author had not read. It also gave an argument that frees the text's Theorem 2 of Theorem Q; the author checked it and took it. The 
+< authors made the changes, and each referee looked again. At its second look each referee passed its text and asked for three replacements of wording more; the authors made them in the referees' words 
+< (I compared the replaced passages with the reports by program for the first and the third text), and what the texts are since then no referee has read. Each referee also found, at its second look, 
+---
+> and Theorems 1, 2, 4, 5 on 1,850,054 multisets (random ones counted with repetition; B_E as first written; again on 597,597 with B_E as the text now defines it) and 259,980 configurations of class 
+> sizes. It required three changes of wording or definition (the "Computed" sentences of Theorems 2 and 4, which claimed for the sums B(m), B_E(m) what is proved for β(m); a convention that the 
+> programs use and the text did not state; a range that was true for even m only), by its report none to a result. *The third text's referee* went through every proof, the lemma on a cell full for two 
+> primes case by case, recomputed Ψ and Ψ_e with a program of its own (Ψ(13) and Ψ(15) term by term, from 26 and 52 terms; exact fractions for m ≤ 161), and tested Theorems 1 and 1′ and the 
+> lemmas on 5,215,511 multisets (5,164,345 of them every multiset containing 0 on twelve moduli). It required six changes of wording, by its report none affecting a result. *The second text's referee* 
+> counted by all signings, from the definition, every multiset containing 0 on fifteen moduli, of the sizes its report lists (89,199,884 multisets), recomputed the table for the powers of 3 at all 
+> 1,000 values and the tail conditions in exact rationals, and required seven changes, by its report of credits and wording: above all that half of the text's result for the powers of 3 was in section 
+> 17's first text already, which the author had not read; and one of the seven was that Theorem 2 as sent rested on Theorem Q without its statement saying so, for which the referee gave an argument 
+> that removes Theorem Q; the author checked it and took it. The authors made the changes, and each referee looked again. At their second looks the first and the second referee passed their texts and 
+> asked for three replacements of wording each; the third wrote that every statement, proof, table and number passes but that the text was "not yet passed, for three sentences of remarks only" (two of 
+> them repeating inexact sentences of its own first report), and passed with its three replacements. The authors made the replacements in the referees' words (the reader of this section compared them 
+> with the reports by program for all three texts; I had done so for the first and the third), and what the texts are since then no referee has read. Each referee also found, at its second look, 
+93,99c102,109
+< account. By the referees' accounts none of this bears on a verdict. Each referee, after its own verdict, compared the numbers that its text shares with the others: no contradiction; where two texts 
+< give different bounds, they are compatible; the sum over the patterns (1.191896…) and the counts of patterns agree between the first and the third. *What the referees did not do:* they did not 
+< referee again what the texts quote. The first text's referee read section 17's second text whole and rechecked the proofs of the four lemmas used, and the tail estimate in the proof of Lemma W; it 
+< did not recompute the tables of section 17's texts or read the proofs of section 17's first text, on which the constant 1.56 and the first text's "less than 1 for odd m" rest. The third text's 
+< referee read the same four lemmas' proofs and the proof of Lemma W. The second text's referee took Theorem Q, the step-down and Corollary U as stated, and read of section 17's third text the part 
+< that the second text uses. None checked Corollary U. How far each read is said in its report, as corrected at its second look. *My own part in the checking:* the brief; the counts for one heavy 
+< element. Of the three texts I have read the first as far as the proof of its Theorem 1 (its §1 to §4), and the heads of the other two; I have not read their programs.
+---
+> account. By the first referee's account none of this touches a verdict; by the second's and the third's every statement and proof stands. After its own verdict each referee compared the numbers that 
+> its text shares with others, the first and the third referee each with the other complete text, the second with both: no contradiction (but for the largest K found, told above); where two texts give 
+> different bounds, they are compatible; the sum over the patterns (1.191896…) and the counts of patterns agree between the first and the third. *What the referees did not do:* they did not referee 
+> again what the texts quote. The first text's referee read section 17's second text whole and rechecked the proofs of the four lemmas used, and the tail estimate in the proof of Lemma W; it did not 
+> recompute the tables of section 17's texts or read the proofs of section 17's first text, on which the constant 1.56 and the first text's "less than 1 for odd m" rest. The third text's referee read 
+> the same four lemmas' proofs and the proof of Lemma W. The second text's referee took Theorem Q, the step-down and Corollary U as stated, and read of section 17's third text the part that the second 
+> text uses. None read the proof of Corollary U. How far each read is said in its report, as corrected at its second look. *My own part in the checking:* the brief; the counts for one heavy element. Of 
+> the three texts I have read the first as far as the proof of its Theorem 1 (its §1 to §4), and the heads of the other two; I have not read their programs.
+112,114c122,124
+< **What it changes above.** Section 17 stands: its exact values for m ≤ 8, the quarter and the half are not touched, and for small m its bounds and the tables of its texts remain the best that is 
+< proved for the share of good signings on every Z_n (see the comparison above). Section 17's "For m ≥ 9 I know no multiset that attains the bound of the table" is explained: the truth falls like 
+< 1/√m. *Not done:* nothing of this section is in Lean, and the constants rest on computations that Lean has not seen; no person has read any of it.
+---
+> **What it changes above.** Section 17 stands: its exact values for m ≤ 8, the quarter and the half are not touched, and for even m ≤ 46 and odd m ≤ 21 its bounds and the tables of its texts 
+> remain the best that is proved for the share of good signings on every Z_n (see the comparison above). Section 17's "For m ≥ 9 I know no multiset that attains the bound of the table" is explained: 
+> the truth falls like 1/√m. *Not done:* nothing of this section is in Lean, and the constants rest on computations that Lean has not seen; no person has read any of it.

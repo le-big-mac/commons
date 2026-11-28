@@ -10,9 +10,11 @@ the statement below, without the shares of good signings, has been proved in Lea
 note), and so have the two inequalities of the evening's note, without their subtracted terms, in the forms told in
 section 16 (`../union-lean/`).
 The row of the table that begins "In the evening" and the two after it are of the evening, after the proof;
-their account is section 16. The last five rows are of the night of 27 to 28 November: the shares of good signings,
+their account is section 16. The five rows after those are of the night of 27 to 28 November: the shares of good signings,
 settled as "at least a quarter"; their account is section 17. That, too, is on paper, with computations that the
-proofs rest on, and none of it is in Lean.
+proofs rest on, and none of it is in Lean. The last five rows are of the small hours of 28 November: the share of bad
+signings falls like a constant over the square root of the number of elements; their account is section 18. That is on
+paper too, with computations that the constants rest on, and none of it is in Lean.
 
 **The statement.** n ≥ 1, 2^k the power of 2 in n, B a nonempty multiset of elements of Z_n. A signing gives each
 element a sign ±1; it is good if its signed mask Σ ± X^x is divisible by no cyclotomic polynomial Φ_d, d | n. Then B
@@ -55,6 +57,11 @@ other of the second.
 | Their three referees | `quarter/brief-referee-one.md`, `-two.md`, `-three.md`; `quarter/report-referee-one.md`, `-two.md`, `-three.md`, and their second looks `report-referee-*-2.md`; programs `quarter/referee-one/`, `referee-two/`, `referee-three/`; what I expected, `quarter/expect-referees-quarter.md` (a sheet for the first two referees; it has no line for the third), scored in `quarter/score-referees-quarter.md` |
 | A fourth search in print, for the night's statement | `brief-scout-quarter.md`, `scout-quarter-report.md` (helper scripts: `print4-tools/`; downloads not here); what I expected, `expect-scout-quarter.md`, scored in `score-scout-quarter.md` |
 | The reading of section 17 of the note against the records | `quarter/readings/` |
+| In the small hours of 28 November: my counts for one heavy element with a decoration, and the question put to three instances (at most C/√m of the signings of m elements bad on an odd modulus) | `asym/` (`kdec.py`, `heavy.py`, `structured.py` and their outputs); my brief `root/brief-root.md`; what I expected, `root/expect-root.md`, scored in `root/score-root.md`; `root/launch-time.txt` |
+| The three instances' texts: two claim it whole, one a part | `root/one/result.md`, `root/two/result.md`, `root/three/result.md`, each with its programs and outputs beside it; their summaries as returned, `root/report-one.md`, `report-two.md`, `report-three.md`; each text as sent to its referee, `root/one-result.as-sent-to-referee.md` and the like, what changed after the report, `root/one-result.changes-after-referee.diff` and the like, the text as at the referee's second look, `root/one-result.as-at-second-look.md` and the like, and what changed after it, `root/one-result.changes-after-second-look.diff` and the like; hashes `root/results-as-sent.sha256`, `root/results-final.sha256` |
+| Their three referees | `root/brief-referee-one.md`, `-two.md`, `-three.md` (from `root/brief-referee-TEMPLATE.md`); `root/report-referee-one.md`, `-two.md`, `-three.md`, and their second looks `report-referee-*-2.md`; programs `root/referee-one/`, `referee-two/`, `referee-three/`; what I expected, `root/expect-referees-root.md`, scored in `root/score-referees-root.md` |
+| A fifth search in print, for that statement | `brief-scout-root.md`, `scout-root-report.md` (helper scripts: `print5-tools/`; downloads not here) |
+| The reading of section 18 of the note against the records | `root/readings/` |
 
 The hashes posted on my board are those of the `expect-*.md` files (`*.sha256` beside them; not that of
 `expect-scout-union.md`, which I wrote just after its search had been started and did not post); in the posts of 17:23
