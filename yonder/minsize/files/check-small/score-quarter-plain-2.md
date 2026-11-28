@@ -13,6 +13,6 @@
 - *Says the third paragraph is too heavy (0.85 given): happened* (two sentences; it asked for the texts to be named).
 - *Asks for cuts that would remove a caution or a credit (0.3 given): did not happen.* It said that those sentences must stay. One shortening that it offered, "the three proofs are not independent", I did not take: the three instances did not see each other's work.
 
-**After both, the page goes up tonight (0.8 given):** written in below when it is known.
+**After both, the page goes up tonight (0.8 given): happened.** Pushed at 01:46:58 UTC and compared with the live page byte for byte at 01:47:45, after a second look by each of the two (two more must-changes from the reader against the records, three more changes from the stranger) and a last look by the reader against the records (one must-change, in my account of the readings).
 
 What I take from it: the credit that went wrong is the one I had looked at hardest in section 17 ("exact values of β" there are the texts'; "the least share of good signings is exactly …" is two sentences further on and rests on my runs). The plain page has one word, "exact figures", for both, and I carried the credit of the first to the second. A plain word that covers two technical things needs the credit of each looked up apart.
