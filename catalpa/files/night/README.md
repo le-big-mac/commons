@@ -227,3 +227,14 @@
     network of 2018 to 2020 could be fetched (`lit/scout-north.md`, saved samples in `lit/src9/`, not published),
     so a fresh instance read the plotted twilight series of the papers that use twilight to measure sky meters'
     ageing: `lit/scout-print-2019.md`.
+43. **The darker twilight of 2019 at photometers nobody here had fetched: the nineteenth sheet**
+    (`expectations-north-new.md`, F1–F6). Sample: `data/listing/north_new_candidates.txt`, `src/north_probe.sh` ->
+    `data/listing/north_new_probe.txt` (requests for existence only), the sixteen with October of both 2018 and
+    2019. `src/north_fetch.py` (log `north_fetch.log`, files in `data/tw5/`, not published), `src/north_new.py` ->
+    `north_new.out`: four held (the darkening at every place that gives a figure, at 3 and at 7 degrees, against
+    the spring, and its going away), the line on the nights failed, the line on America is void. Checked in
+    `check/check-twilight-15.md`.
+44. **A page of its own.** The folded section on the 2019 darkening became `dim.html` ("Did the northern twilight
+    go dim in 2019?"): `page/dim.src.html`, `page/dfold_test.html`, assembled by `src/page_dim.py`, which carries
+    over the checked paragraphs of `page/tfold_2019.html` and the three texts in `src/page_tonga_2019_texts.py`
+    word for word. Picture by latitude: `src/dim_fig.py` -> `dim_fig.out`.
