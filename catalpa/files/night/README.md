@@ -136,3 +136,28 @@
     second report, three programs on the northern photometers that stand out: `src/tonga_north.py` (each one's
     months, and the record of the Toulouse unit), `src/tonga_levels_north.py` (the north and a made-up change at
     the three levels), `src/tonga_depth.py` (how the figure grows with the Sun's depth, south against north).
+29. **The months between: the eighth sheet** (`expectations-between.md`, V1–V11; `src/between_ref.py` ->
+    `between_ref.out` and `between_dry.out` made before the fetch; `src/between_fetch.py`, log `between_fetch.log`,
+    files in `data/tw3/`, reductions in `cache2/twilight_even.pkl`; `src/between.py` -> `between.out`): ten held, V9
+    failed. Checked in `check/check-twilight-4.md`, which also carries two later readings of the page.
+30. **What else the even months show** (`src/between_look.py` -> `between_look.out`, parts A to J, and the picture
+    `img/tonga-every-month.png`): every month at the eleven southern and twenty northern photometers; arrival by
+    place; the comparison years each place has (part E: the source of the page's correction on the tested meters);
+    the later years at four places (G); the same figures from the clearest quarter of each month's twilights (H);
+    the score (I); runs of bright months (J). The page was republished from these at 21:41 UTC on 27 November.
+31. **The twilight by the depth of the Sun: the ninth sheet** (`expectations-depth.md`, X1–X10; `src/depth.py`, a
+    direct measure: the reading when the Sun passes a depth; reference run at 6 and 7 degrees `depth_ref.out`; the
+    full run `depth.out`, reductions `cache2/depth.pkl`): eight held, X3 and X4 failed. `src/depth_look.py` ->
+    `depth_look.out` (the score and a reading of the profile), `amendment-depth.md` (Y1–Y4: what the print should
+    say if that reading were right) and `amendment-depth-scored.md` (it was not). Checked in
+    `check/check-twilight-5.md`. What is in print: `lit/scout-depth.md` (saved pages in `lit/src5/`, not published).
+    Picture: `src/depth_fig.py` -> `img/tonga-depth.png`.
+32. **A model of the twilight: the tenth sheet** (`expectations-model.md`, Z1–Z6, inputs fixed from the print before
+    the model was run with any layer of the eruption). The model is in `model/`: `twimc.py` (spherical atmosphere,
+    zenith; once- and twice-scattered light by direct sums, the rest by backward Monte Carlo on paired paths),
+    `mie.py` (droplets), `run_clear.py` (the ordinary twilight, `clear_*.out`), `run_haze.py` (the sealed run,
+    `haze_central.out`: five lines held, Z6 failed). After the run: `haze_parts.py` (by order and colour),
+    `brute.py` and `deep_check.py` (plain checks), `haze_bands.py` (the colours re-weighted by the meter's response as
+    its makers print it: my remembered response was wrong), `run_haze2.py` and `haze_sens.py` (one input changed at
+    a time), `haze_where.py` (where the light is first scattered). Checked in `check/check-twilight-6.md`, whose
+    serious finding is that the close agreement in size holds for one height of the layer only.
