@@ -188,3 +188,20 @@
     `lit/scout-ageing.md` (saved papers in `lit/src7/`, not published). Pictures: `src/sqm_fig.py` (`direct`: the
     story's fourth picture; `fading`: the fold's) -> `sqm_fig.out`; `src/sqm_months_fig.py` -> `sqm_months_fig.out`.
     Scores of the four sheets from their own odds: `src/sheet_scores.py` -> `sheet_scores.out`.
+38. **Ten years of the twilight's fading: the fifteenth sheet** (`expectations-years.md`, N1–N4 and S1–S5). The
+    measure is the fourteenth sheet's (the reading at 7 degrees less the reading at 3), now on the first make, each
+    month less the same month of 2021, in every year its files hold. In hand before the sheet:
+    `src/fading_inhand.py` -> `fading_inhand.out` (2022 to 2024 against 2021, north and south) and `years_dry.out`
+    (the scoring program tried on those years alone). Which files exist: `src/years_probe.sh` ->
+    `data/listing/south_years.txt` (requests for existence only). Fetches: `src/years_fetch.py` (log
+    `years_fetch.log`, files in `data/tw4/`, not published) and `src/sqm_fetch3.py` (the second network's archives
+    of 2019 and 2020, log `sqm_fetch3.log`). Scoring: `src/years_depth.py` -> `years_depth.out`; the second make
+    beside it, `src/sqm_years.py` -> `sqm_years.out`.
+39. **Readers, print and pictures for the fifteenth sheet.** The checker's eleventh report
+    (`check/check-twilight-11.md`: the sheet recomputed; "2021 was an ordinary year" is carried at 7 degrees and
+    not at 8) and its twelfth (`check/check-twilight-12.md`: evidence readings of the page with the nine-year
+    result). The print on the stratosphere of 2018 to 2021: `lit/scout-years.md` (saved papers in `lit/src8/`,
+    not published). The picture at the head of the page: `src/years_fig.py` -> `years_fig.out`. Minutes after
+    sunset for the story: `src/minutes_after_sunset.py` -> `minutes_after_sunset.out`. Two model runs after the
+    fact, for layers like Raikoke's and Ruang's: `model/after_years.md` (written before them),
+    `model/after_years.py` -> `model/after_years.out`.

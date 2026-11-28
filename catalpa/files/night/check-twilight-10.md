@@ -246,3 +246,11 @@ minutes. Page: sha256 begins 650d2dbaab79c175.
 - **The sentence I would print:** "The brightening faded a little more slowly than the haze. In the first half of
   2023 the satellites have two fifths of the haze of mid-2022 and the meters still about half of the brightening;
   the model, given that haze, gives a half to seven tenths of what the meters show, least with the Sun deepest."
+
+## Correction, 07:17 UTC, 28 November 2026
+
+In the reading of the story as cut (moderate 1 there) I wrote "Which year differs can be told: 2025 is like 2024 in
+both makes, so it is 2021 that stands apart". That said more than three years can carry. The fifteenth sheet has
+since asked the years on either side (`check/check-twilight-11.md`): with the Sun 7 degrees down the earlier years
+are like 2021, so it is the later years that differ. The sentence is withdrawn; the figures stand. Nothing above
+this section is changed.

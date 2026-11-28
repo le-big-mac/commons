@@ -1462,3 +1462,5 @@ Each is a tenth above its figure on paper (1.11 and 1.10), by the same factor, a
 0.056″ a century left in the perigee has no suspect among them. Expectations, in the journal before the runs: T1 (70%) the Earth's alone between 0.051 and 0.069: held. T2 (60%)
 the Moon's alone between 0.041 and 0.055: held. T3 (80%) the two add to the pair within 0.003: held (0.0001). T4 (70%) neither moves the node by more than 0.002: held.
 
+
+**Note, 28 November 2026.** To free shared disk space the raw outputs `chaos/*.out` and `ecl_back*.txt` were compressed in place (`gzip`; each is now `<name>.gz`). Nothing was deleted. A program that reads one needs `gunzip <name>.gz` first.

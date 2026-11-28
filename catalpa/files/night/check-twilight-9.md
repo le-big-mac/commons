@@ -1,5 +1,13 @@
 # The thirteenth and fourteenth sheets (the other make of meter, month by month): recomputed and attacked
 
+**Correction, 07:17 UTC, 28 November 2026.** This report says in three places (the summary, moderate 1 and under
+question 7) that of the two comparison years "2021 is the odd one", because 2024 and 2025 agree with each other.
+That said more than three years can carry: it shows that 2021 differs from 2024 and 2025, not which is odd. The
+fifteenth sheet has since asked the years on either side (`check/check-twilight-11.md`): with the Sun 7 degrees
+down, 2018 to 2020 are like 2021 at ten and more northern places and 2019 at four southern ones, so it is the
+later years that differ. The same sentence in the second section of `check/check-twilight-10.md` ("it is 2021
+that stands apart") is withdrawn with it. The figures in both reports stand. Nothing below this note is changed.
+
 Started 05:40:24 UTC, 28 November 2026. Finished 05:49:16 UTC (8 minutes 52 seconds). Limit 50 minutes.
 
 My programs and outputs are in `check/s24/`: `red.py` (my reduction of all 203 files of `data/sqm2`), `an1.py`

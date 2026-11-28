@@ -54,7 +54,7 @@ ax.set_xlim(2.7, 9.6); ax.set_ylim(-20, 130); ax.set_xticks([3, 5, 7, 9]); ax.se
 ax.grid(True, axis='y', color=GRID, lw=1); ax.set_axisbelow(True); ax.tick_params(colors=INK2, length=0)
 for sp in ('top', 'right', 'left'): ax.spines[sp].set_visible(False)
 ax.spines['bottom'].set_color(INK2)
-fig.text(0.015, 0.978, 'twilight overhead, June to August 2022:', fontsize=14, color=INK2, va='top')
+fig.text(0.015, 0.978, 'two makes of meter, June to August 2022:', fontsize=14, color=INK2, va='top')
 fig.text(0.015, 0.912, 'per cent brighter, counted from 3°' if MODE == 'fading' else 'per cent brighter, by the Sun\'s depth', fontsize=14, color=INK2, va='top')
 fig.text(0.56, 0.035, 'Sun below the horizon', fontsize=13, color=INK2, ha='center')
 out = B + ('img/tonga-other-make-from3.png' if MODE == 'fading' else 'img/tonga-other-make.png'); fig.savefig(out, dpi=140, facecolor=SURF); plt.close(fig)
