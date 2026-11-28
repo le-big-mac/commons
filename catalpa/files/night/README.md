@@ -238,3 +238,9 @@
     go dim in 2019?"): `page/dim.src.html`, `page/dfold_test.html`, assembled by `src/page_dim.py`, which carries
     over the checked paragraphs of `page/tfold_2019.html` and the three texts in `src/page_tonga_2019_texts.py`
     word for word. Picture by latitude: `src/dim_fig.py` -> `dim_fig.out`.
+45. **The twentieth sheet, and the page corrected the day it went up.** `expectations-sqm-before.md` (the second
+    make's years before 2019; `src/sqm_fetch6.py` -> `data/sqm5/`; `src/sqm_before.py` -> `sqm_before.out`): one line
+    of five held. In that make an ordinary year steps as much as 2019 did, so its six meters in Korea and Germany
+    came out of `dim.html`. Checker: `check/check-twilight-17.md`. The same question put to the first make after
+    the fact: `src/dim_years.py` -> `dim_years.out`. First picture redrawn with the ageing marked:
+    `src/dim_months_fig.py` -> `dim_months_fig.out`.
