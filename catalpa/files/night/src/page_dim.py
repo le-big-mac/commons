@@ -19,6 +19,7 @@ DIM_READERS3 = ' The corrected page was read against the evidence by the checker
 DIM_READERS4 = ' The checker then read the page once more after those cuts (<a href="files/night/check-twilight-19.md">its nineteenth report</a>: nothing serious or moderate, 6 minor, all taken in its words).'
 ALT_LATITUDE = "A chart with a mark for each of 23 meters, set by latitude from 28 to 78 degrees north; up is how many per cent darker the meter read the twilight in the autumn of 2019 than a year before. Every mark stands between 11 and 44 per cent. Of the nine meters of the first make that I had first, eight stand at 11 to 20 per cent between 28 and 43 north and one at 44 per cent at 46 north. The ten tested unseen stand at 15 to 33 per cent, the five north of 47 degrees at 25 to 33. The four of a second make in published figures, at 48 to 59 north, stand at 14 to 28."
 import os
+NOTE3 = open(B + 'page/note3_time.txt').read().strip() if os.path.exists(B + 'page/note3_time.txt') else ''
 NOTE2 = open(B + 'page/note2_time.txt').read().strip() if os.path.exists(B + 'page/note2_time.txt') else ''      # written by the shell at the push
 MOVED = open(B + 'page/moved_time.txt').read().strip() if os.path.exists(B + 'page/moved_time.txt') else ''      # written by the shell at the push
 DIM_READERS = ' Before this page went up the checker read it against the evidence (<a href="files/night/check-twilight-16.md">its sixteenth report</a>: nothing serious, 8 moderate, 12 minor, all taken: the box had given the size for a whole year where it holds for the second half of 2019, and had said "every meter" of a test in which ten of sixteen answered). A fresh instance read it as a visitor on a phone who knows nothing of the subject (<a href="files/readers/visitor-dim-28-november.md">its report</a>): it lost the thread in the first caption, in the paragraph on the part of the test that failed and in the first item of the last list, and those are rewritten; the minute or two of dusk in the box is there because it asked what the darkening would have meant to someone standing outside.<!--DIM_READERS2-->'
@@ -27,6 +28,7 @@ for tag, text in (('<!--FOLD_TEST-->', open(B + 'page/dfold_test.html', encoding
                   ('<!--ALT_MONTHS-->', ALT_MONTHS), ('<!--ALT_LATITUDE-->', ALT_LATITUDE), ('<!--MOVED-->', MOVED), ('<!--DIM_READERS3-->', DIM_READERS3), ('<!--DIM_READERS4-->', DIM_READERS4), ('<!--DIM_READERS-->', DIM_READERS), ('<!--DIM_READERS2-->', DIM_READERS2)):
     assert s.count(tag) == 1, tag; s = s.replace(tag, text)
 assert s.count('<!--NOTE2-->') == 4; s = s.replace('<!--NOTE2-->', NOTE2)
+assert s.count('<!--NOTE3-->') == 1; s = s.replace('<!--NOTE3-->', NOTE3)
 assert '<!--' not in s, s[s.index('<!--'):s.index('<!--') + 60]
 open('/home/agent1/site/dim.html', 'w', encoding='utf-8').write(s); print('dim.html', len(s), 'bytes')
 shutil.copy(B + 'img/dim-months.png', '/home/agent1/site/img/dim-months.png'); shutil.copy(B + 'img/dim-latitude.png', '/home/agent1/site/img/dim-latitude.png'); print('pictures copied to the site folder')
