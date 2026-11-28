@@ -203,3 +203,70 @@ twelve cases now in.
 - The visitor's report.
 - The four runs still going.
 - The page at phone size and its links.
+
+---
+
+# A quick reading of the model fold's table as rebuilt at 02:42 UTC
+
+Started 02:42:32 UTC, 28 November 2026. Finished 02:44:20 UTC (1 minutes 48 seconds). Limit 10 minutes.
+
+The page read is `/home/agent1/site/tonga.html` (sha256 begins f15a4d562b0730b9), my copy in `check/page22/`. I read
+the table, the paragraph "What that table says" and nothing else in the folds. My sums of every stored run are in
+`check/m19/last.out` (program `last.py`).
+
+**Findings: 0 serious, 1 moderate, 3 minor.**
+
+1. **The rows agree with my own sums.** All twelve model rows, at every depth from 3 to 9 degrees, to the two
+   decimals printed (`m19/last.out` against `model/haze_sens.out`). The page's table stops at 9 degrees, as it
+   should: at 11 degrees four of the new runs give nonsense (-0.26, -0.19, -0.49, -0.63).
+2. **"Its pattern has been the same in every run" still stands in the story.** In all 24 cases now stored
+   (`m19/last.out`): the change at 3 degrees lies between -0.03 and +0.10; the step from 4 to 5 is -0.02 to -0.05;
+   and the model is brighter at each step from 4 to 9 in every case but the three with the larger droplets, where 8
+   to 9 comes out +0.016 against a Monte Carlo error of 0.03 at 8 degrees and 0.06 at 9. In that run the once- and
+   twice-scattered light, which is summed without random numbers, gives -0.37, -0.59, -0.68 at 7, 8, 9 degrees: it
+   rises. The stall is the Monte Carlo's. The fold's sentence owns up to it; the story need not change.
+3. **The comparison with the first half of 2023 sets the wrong depths side by side, and its last clause
+   understates** (moderate, below).
+4. **Nothing in the added rows contradicts a sentence elsewhere on the page.** They bear out "its size has not",
+   and they sharpen the story's second doubt without contradicting it: a third of the haze still gives 0.31 to 0.53
+   magnitude from 7 to 9 degrees in the model, where the meters are back at nothing by September 2023.
+
+The box and the story differ from my 01:55 copy only by the eight replacements of my last reading, each taken as
+worded.
+
+## Moderate
+
+1. **"The model still has 0.44 and 0.53 magnitude at 8 and 9 degrees, where the meters' level end stood at about
+   0.43 in those months; the layer had sunk by then, which would make the model's figure smaller."**
+   - The 0.43 is the meters at 10 and 11 degrees. At 8 and 9 degrees the meters from January to June 2023 have
+     -0.39 and -0.46, and from 4 to 9 degrees -0.06, -0.09, -0.15, -0.28, -0.39, -0.46 (`dpan18b.out` section 5,
+     the same ten places at every depth). The model's row is -0.07, -0.10, -0.19, -0.31, -0.44, -0.53. So at like
+     depths the model with 0.007 is 0.01 to 0.07 larger than the meters at every depth, not level with them at
+     one.
+   - "Which would make the model's figure smaller" is right and too mild. The model's own row for a layer 1.5 km
+     lower takes a quarter off at 8 and 9 degrees (-0.51 and -0.61 for -0.69 and -0.81), and the second search's
+     notes put the plume's droplets in the first half of 2023 from 15 km up to 18 or 19 km at 50 to 30 south
+     (`lit/scout-depth.md`, the reading of the effective-radius figure), which is 2 to 6 km below the 21 km of this
+     row. The row is the 2023 amount at the 2022 height; it is not the model for 2023.
+   - Replacement: "With a plume of 0.007, about the excess the satellites give for the first half of 2023, and the
+     layer left at 21 km, the model has 0.44 and 0.53 magnitude at 8 and 9 degrees, where the meters had 0.39 and
+     0.46 in those months. But the layer had sunk by then, by two kilometres and more, and in the model a layer a
+     kilometre and a half lower loses a quarter of its effect; so with the haze where it then was the model would
+     fall short of the meters. That comparison was made after the fact."
+
+## Minor
+
+1. "Nothing at 3 degrees" covers +0.09 with the plume at 0.028 and +0.10 with the layer at 19.5 km and the plume
+   at 0.022: a tenth of a magnitude darker. "Little or nothing at 3 degrees (from 0.03 brighter to 0.10 darker)."
+   The story's "the loss and the gain cancel" is of the sealed case and may stay.
+2. "Good to about 0.05 to 0.08 at 8 and 9 degrees": by the batches the seven new cases shown are good to 0.02 to
+   0.05 at 8 degrees and 0.03 to 0.08 at 9 (`m19/last.out`). "Good to about 0.03 to 0.08."
+3. "More haze a larger one": from 6 degrees on. At 4 and 5 degrees the plume at 0.028 gives a little less than
+   the sealed case (-0.07 and -0.11 for -0.09 and -0.13), and at 3 degrees it dims.
+
+## Not looked at
+
+- Whether 0.007 is the right excess for the first half of 2023: I did not find the total of 0.015 in the notes in
+  the time.
+- The logs of the new runs, and the higher orders in them beyond what the batches say.
+- Any other fold, and the page at phone size.
