@@ -161,3 +161,30 @@
     its makers print it: my remembered response was wrong), `run_haze2.py` and `haze_sens.py` (one input changed at
     a time), `haze_where.py` (where the light is first scattered). Checked in `check/check-twilight-6.md`, whose
     serious finding is that the close agreement in size holds for one height of the layer only.
+33. **The other make of sky meter: the eleventh sheet** (`expectations-sqm.md`, S1–S6: what the model says a meter
+    that sees little red light should show; `model/haze_sqm.py` -> `model/haze_sqm.out`). A search found public
+    records of that make in the south (`lit/scout-sqm.md`; the network's monthly files, of which only the rows of
+    four stations are kept: `src/sqm_fetch.py`, log `sqm_fetch.log`, files `data/sqm/`, not published).
+    `src/sqm_depth.py` -> `sqm_depth.out`: five of the six lines failed. The stations brighten in June to August
+    2022 as the first make does, by about half as much; the model had said next to nothing or a dimming.
+34. **The decline: the twelfth sheet** (`expectations-decline.md`, D1–D6: the model with the haze of 2023 as the
+    satellite reports print it, against the meters in January to June and September to November 2023).
+    `model/run_haze2.py` -> `model/haze_2023a.pkl`, `haze_2023b.pkl`; `src/depth_stretch.py` -> `depth_stretch.out`;
+    `model/decline.py` -> `model/decline.out`: all six lines held.
+35. **The other make month by month: the thirteenth sheet** (`expectations-sqm-months.md`, T1–T7; `src/sqm_fetch2.py`,
+    log `sqm_fetch2.log`, every month of 2021 to 2025 of the four stations in `data/sqm2/`, not published;
+    `src/sqm_months.py` -> `sqm_months.out`): four of seven held. The three that failed are what a meter reading
+    darker each year would do, which the checker's eighth report (`check/check-twilight-8.md`) had found in the
+    eleventh sheet's months before this one was scored.
+36. **The same lines by a measure that ageing cannot touch: the fourteenth sheet** (`expectations-sqm-fading.md`,
+    U1–U8, fixed before its output existed but with the readings already here, as it says; `src/sqm_steep.py` ->
+    `sqm_steep.out`): the fading of the twilight from 3 to 7 degrees. All eight held.
+37. **Readers and print for sheets eleven to fourteen.** The checker's eighth report (`check/check-twilight-8.md`:
+    sheets eleven and twelve recomputed; its serious finding is that below 7 degrees the other make's figure turns on
+    the comparison year), its ninth (`check/check-twilight-9.md`: sheets thirteen and fourteen recomputed and the
+    fading measure attacked; the two comparison years differ in both makes) and its tenth
+    (`check/check-twilight-10.md`: two evidence readings of the page with the second make written in). What is in
+    print on these meters' ageing, on the stratosphere of 2021 to 2025 and on twilights after the eruption:
+    `lit/scout-ageing.md` (saved papers in `lit/src7/`, not published). Pictures: `src/sqm_fig.py` (`direct`: the
+    story's fourth picture; `fading`: the fold's) -> `sqm_fig.out`; `src/sqm_months_fig.py` -> `sqm_months_fig.out`.
+    Scores of the four sheets from their own odds: `src/sheet_scores.py` -> `sheet_scores.out`.
