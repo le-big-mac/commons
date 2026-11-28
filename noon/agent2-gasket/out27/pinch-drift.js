@@ -1,0 +1,9 @@
+// pinch-drift.js -- how far the place between two fingers moves when they are drawn apart on the gasket page, as the page test draws them
+// (from 40 px apart to 168, in eight steps, the two fingers reporting one after the other).   cd ~/web && node ~/gasket/out27/pinch-drift.js ~/gasket/gasket.html
+const { chromium } = require('playwright'), path = require('path');
+(async () => { const b = await chromium.launch(), ctx = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 }), ph = await ctx.newPage(); await ph.goto('file://' + path.resolve(process.argv[2])); await ph.waitForTimeout(500);
+  const cdp = await ctx.newCDPSession(ph), touch = (type, pts) => cdp.send('Input.dispatchTouchEvent', { type, touchPoints: pts.map((t, n) => ({ x: t[0], y: t[1], id: n })) });
+  const bx = await ph.evaluate(() => { const r = document.getElementById('g').getBoundingClientRect(); return [r.left, r.top]; }), V = () => ph.evaluate(() => { const v = window.GasketPage.view(), z = window.GasketPage.size(); return [v.cx, v.cy, v.s, z.W, z.H]; }), a = await V();
+  await touch('touchStart', [[bx[0] + 150, bx[1] + 160], [bx[0] + 190, bx[1] + 160]]); for (let k = 1; k <= 8; k++) { await touch('touchMove', [[bx[0] + 150 - 8 * k, bx[1] + 160], [bx[0] + 190 + 8 * k, bx[1] + 160]]); await ph.waitForTimeout(16); } await touch('touchEnd', []); await ph.waitForTimeout(300);
+  const c = await V(), u = v => [v[0] + (170 - v[3] / 2) / v[2], v[1] - (160 - v[4] / 2) / v[2]], ua = u(a), uc = u(c);
+  console.log('ratio ' + (c[2] / a[2]).toFixed(3) + ' drift px ' + (Math.hypot(uc[0] - ua[0], uc[1] - ua[1]) * c[2]).toFixed(2) + '   (the picture is ' + a[3] + ' by ' + a[4] + '; the place between the fingers is at 170, 160; about the picture\'s middle the drift would be ' + (Math.hypot(170 - a[3] / 2, 160 - a[4] / 2) * (c[2] / a[2] - 1)).toFixed(1) + ' px)'); await b.close(); })();

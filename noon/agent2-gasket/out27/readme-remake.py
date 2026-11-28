@@ -1,0 +1,40 @@
+"""readme-remake.py -- puts the remake into the write-up: README.md is made afresh, each time this is run, from
+out27/README.before-remake.md.txt (the write-up as it stood on 27 November) and out27/README-section.md (the new section), with the
+figures of the last whole run of broken copies read from page-mutants.out.       python -I out27/readme-remake.py"""
+import os, re
+HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); rd = lambda n: open(os.path.join(HERE, n), encoding='utf-8').read()
+def rep(s, a, b, n=1):
+    assert s.count(a) == n, (s.count(a), a[:90]); return s.replace(a, b)
+WRITTEN = 'between 02:10 and 03:50 UTC'          # set by hand from `date -u` when the section was finished; the checker compares it with the files' times
+def main():
+    s = rd('out27/README.before-remake.md.txt'); sec = rd('out27/README-section.md'); pm = rd('page-mutants.out')
+    m = re.search(r'(\d+) of (\d+) broken copies of the page caught \((\d+) by assertions that fail at the end of a whole run, (\d+) by assertions that fail before the test stops, (\d+) only by the test stopping, (\d+) by the test not finishing\); the true page run among them (\d+) times passed (\d+) times; (\d+) at a time, (\d+) minutes', pm)
+    assert m, 'page-mutants.out has no tally'; caught, total, a_end, a_stop, only_stop, nofin, ctl, ctl_ok, jobs, mins = map(int, m.groups()); assert total == 155 and ctl == ctl_ok
+    missed = re.findall(r'^(\S+) .* -- NOT caught', pm, re.M); assert len(missed) == total - caught
+    f5 = re.search(r'(\d+) of (\d+) broken copies of the page caught .*?\((\d+) by assertions that fail at the end of a whole run, (\d+) by assertions that fail before the test stops, (\d+) only by the test stopping, (\d+) by the test not finishing\); the true page run among them (\d+) times passed (\d+) times', rd('out27/short-run-5.out')); assert f5 and f5.group(2) == '18' and f5.group(7) == f5.group(8)
+    assert f5.group(5) == '0' and f5.group(6) == '0', 'the fifth run has a copy caught only by a stop: write the sentence by hand'
+    sec = rep(sec, '@@FIFTH@@', f5.group(1), 2)
+    assert (caught, total, a_end, a_stop, only_stop, nofin, ctl, jobs, mins) == (154, 155, 150, 3, 1, 0, 4, 5, 55) and missed == ['refusal-keeps-the-old-list'], 'the last whole run is not as the section tells it'
+    sec = rep(sec, '@@WRITTEN@@', WRITTEN)
+    sec = rep(sec, '@@TRUTH@@', rd('out27/README-truth-note.md').strip()); sec = rep(sec, '@@PUBLIC@@', rd('out27/README-public-note.md').strip())
+    # the head
+    s = rep(s, "*Added by Noon on 27 November 2026, at 21:43 UTC. On a phone this page was wider than the screen,",
+               "*Added by Noon on 28 November 2026. The page has been remade for a visitor with a phone: the section \"27 and 28 November: the page remade for a visitor with a phone\", near the foot, describes it, says who read it, and lists what is not done. The section \"The page\", and the paragraph \"Breaking the page\" in \"The tests, and whether they can fail\", describe the page and its test as they stood on 24 November; a note at the head of the first, and one after the second, say what is no longer so. The study itself (the sealed sheet, the runs, the program and its tests) is as it was. The note of 27 November that follows is left as it stood: what it calls not mended is what the new section is about.*\n\n"
+               "*Added by Noon on 27 November 2026, at 21:43 UTC. On a phone this page was wider than the screen,")
+    s = rep(s, "For twenty years the conjecture was that\nevery large enough whole number that passes a test of remainders on division by 24 turns up as a curvature.", "The conjecture, made in 2003 and revised in 2011, was that\nevery large enough whole number that passes a test of remainders on division by 24 turns up as a curvature.")
+    s = rep(s, "6. **The tests can fail, and three times the fault was where they were not looking.** As they stand, the", "6. **The tests can fail, and three times the fault was where they were not looking.** *As it stands now (28\n   November): the page's test has 127 assertions and there are 155 broken copies of the page, of which the last whole\n   run caught %d (the one that passed is caught since); see the section on the remake. What follows is this item as written on 24 November, of the page\n   before it.* As they stand, the" % caught)
+    s = rep(s, "## The page\n\n", "## The page\n\n*As it stands now (28 November 2026): the page was remade on 27 and 28 November, and the section on the remake\ndescribes it. What is below describes the page of 24 November. Of that, these are no longer so. The seventh\ngasket's name in the menu is \"the paper's figure\", and what the menu said of it is now a sentence under the menus,\ngiven as following from the figure's caption and the paper's table. A circle is still drawn when its bounding\nsquare meets the view, but it is counted, and listed in the table, only when some of it is in the picture. The\nsecond picture's scale is written out and its rows are named in words. The third panel speaks of numbers, not\ncurvatures, and says what it found about fourth powers before it says how. The test described under \"Checked in a\nheadless browser\" has grown from 37 assertions to 127; its output of 24 November is kept as\n`out27/page-test.before-remake.out`, and `page-test.out` is the output of the test as it now is. The 27 further\nviews of `page-extra.out` were run again on the page as it now is and give the same circles, with nothing left\nout and no error (`out27/page-extra.remade.out`).*\n\n")
+    s = rep(s, "counts them for every light, and **eight of eight are caught** (`page-mutants.out`).\n", "counts them for every light, and **eight of eight are caught** (`page-mutants.out`).\n\n*As it stands now (28 November 2026): `page-mutants.py` was written again for the remade page and makes 155 broken\ncopies, these eight among them, pointed at the page as it now is. Its output of 24 November, which the paragraph\nabove describes, is kept as `out27/page-mutants.before-remake.out`; `page-mutants.out` is the last whole run of the\n155. See the section on the remake.*\n")
+    s = rep(s, "how the page behaves on a\n  telephone or under touch.", "how the page behaves on a\n  telephone or under touch. (The second was asked on 27 and 28 November: see the section on the remake.)")
+    s = rep(s, "## Files\n\n| | |\n|---|---|\n", sec.rstrip('\n') + "\n\n## Files\n\n| | |\n|---|---|\n")
+    s = rep(s, "| `tools/shot-gasket-extra.js`, `page-extra.out` | 27 more views, tried after the mending |\n",
+               "| `tools/shot-gasket-extra.js`, `page-extra.out` | 27 more views, tried after the mending |\n"
+               "| `tools/pinned-words.json` | the remade page's unchanging words, which its test holds it to |\n"
+               "| `out27/` | the remake: nine scripts for the page's stages and eight for the test's, the page's source after each stage, the runs of broken copies, the outputs of the old test and the old list of broken copies, `pin-words.js`, `preview.py` (the page as built, as the readers were given it), `readme-remake.py` and the section it puts in |\n"
+               "| `reader27/` | the plain reader's seven visits to the page as it was remade: my briefs word for word, its reports, the page as visited |\n"
+               "| `referee27/` | the referee of the remake: my five briefs, its five reports, its blind figures set beside mine (`compare-blind.js`, `compare-blind.out`), and its own programs and what they printed (`its-files/`) |\n"
+               "| `truth27/` | the reading of the new section for truth: my briefs and the reader's reports |\n"
+               "| `out27/check-readme-remake.py`, `out27/check-readme-remake.out` | the new section's figures and quotations against the files |\n")
+    open(os.path.join(HERE, 'README.md'), 'w', encoding='utf-8').write(s); print('README.md:', len(s.split('\n')), 'lines;', 'last whole run %d of %d' % (caught, total))
+if __name__ == '__main__':
+    main()

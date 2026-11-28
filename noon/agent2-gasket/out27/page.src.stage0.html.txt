@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A gasket with numbers missing</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; background: #0d0d0d; color: #f0efec; font: 16px/1.5 Georgia, 'Times New Roman', serif; }
+  main { max-width: 1024px; margin: 0 auto; padding: 18px 16px 40px; }
+  h1 { font-weight: normal; font-size: 26px; margin: 0 0 2px; }
+  h2 { font-weight: normal; font-size: 20px; margin: 26px 0 4px; }
+  p.sub { margin: 0 0 12px; color: #c3c2b7; }
+  p.note { color: #c3c2b7; max-width: 860px; }
+  a { color: #9ec5f4; }
+  .viz-root { --surface-1: #1a1a19; --text-primary: #f0efec; --text-secondary: #c3c2b7; --muted: #898781; --grid: #2c2c2a; --axis: #383835;
+    --spor: #3987e5; --fam: #d95926; font: 14px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: end; margin: 0 0 10px; }
+  .controls label { display: flex; flex-direction: column; gap: 2px; color: var(--text-secondary); font-size: 13px; }
+  select, button, input[type=text] { font: inherit; color: var(--text-primary); background: #262624; border: 1px solid #45453f; border-radius: 5px; padding: 5px 10px; }
+  select, button { cursor: pointer; } button:hover, select:hover { background: #32322f; }
+  select, input[type=text] { max-width: 100%; box-sizing: border-box; } .controls label { max-width: 100%; min-width: 0; }      /* 27 November 2026: a menu was as wide as its longest option, and wider than a phone */
+  button[aria-pressed=true] { background: #3d3d39; border-color: #c3c2b7; }
+  :focus-visible { outline: 2px solid #9ec5f4; outline-offset: 2px; }
+  figure { margin: 0 0 14px; background: var(--surface-1); border-radius: 8px; padding: 10px; border: 1px solid rgba(255,255,255,0.10); position: relative; }
+  figcaption { color: var(--text-secondary); margin: 0 0 8px; max-width: 860px; }
+  figcaption b { color: var(--text-primary); font-weight: 600; }
+  canvas#g { display: block; width: 1000px; max-width: 100%; height: auto; border-radius: 4px; touch-action: none; cursor: crosshair; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 8px 0 0; padding: 0; list-style: none; color: var(--text-secondary); font-size: 13px; }
+  .legend li { display: flex; align-items: center; gap: 6px; } .legend i { width: 12px; height: 12px; display: inline-block; border-radius: 50%; } .legend i.tick { width: 2px; height: 14px; border-radius: 0; }
+  .legend b { color: var(--text-primary); font-weight: 500; }
+  .say { margin: 8px 0 0; min-height: 1.4em; color: var(--text-secondary); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .say b { color: var(--text-primary); font-weight: 600; }
+  .tip { position: absolute; pointer-events: none; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 6px 9px; font-size: 13px; max-width: 270px; display: none; z-index: 2; }
+  .tip span { color: var(--text-secondary); }
+  svg { display: block; width: 100%; height: auto; } svg text { font: 12px system-ui, -apple-system, 'Segoe UI', sans-serif; fill: var(--text-secondary); }
+  table { border-collapse: collapse; margin: 8px 0 0; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 3px 14px 3px 0; border-bottom: 1px solid var(--grid); font-weight: normal; vertical-align: top; }
+  th { color: var(--text-secondary); } th:first-child, td:first-child, td.l, th.l { text-align: left; }
+  .tables { display: none; overflow-x: auto; max-height: 320px; overflow-y: auto; } .tables.on { display: block; }
+  .nums { font-variant-numeric: tabular-nums; color: var(--text-secondary); overflow-wrap: anywhere; } .nums b { color: var(--text-primary); font-weight: 600; }
+  .nums b::before { content: ''; display: inline-block; width: 7px; height: 7px; background: var(--fam); border-radius: 1px; margin-right: 3px; }
+  sup { font-size: 0.72em; line-height: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>A gasket with numbers missing</h1>
+  <p class="sub">Three circles that touch one another leave a gap, and exactly one circle fits the gap touching all three. Fill every gap for ever and you have an Apollonian gasket. Begin with four circles whose curvatures (one over the radius) are whole numbers, and every curvature in it is a whole number. Which whole numbers? For twenty years the conjecture was: all of them, past some point, that pass a test of remainders on division by 24. In 2023 four mathematicians showed that this is false: in many gaskets a whole family, such as the squares, never appears.</p>
+
+  <div class="viz-root">
+    <h2>The gasket</h2>
+    <figure id="gfig">
+      <figcaption>Each circle is marked with its curvature. Scroll or use the buttons to magnify, drag to move: the numbers are worked out exactly at any depth the page allows. Choose a kind of number to light up. In <b>(&minus;3, 5, 8, 8)</b> no square will ever light, however far you go; in <b>(&minus;4, 5, 20, 21)</b>, whose curvatures leave the same remainders on division by 24, squares do turn up, and no number twice a square ever does.</figcaption>
+      <div class="controls">
+        <label>The gasket begun from <select id="pack"></select></label>
+        <label>Light up curvatures that are <select id="hi">
+          <option value="none">nothing</option><option value="1" selected>squares, n²</option><option value="2">twice a square, 2n²</option><option value="3">three times a square, 3n²</option><option value="6">six times a square, 6n²</option><option value="q">fourth powers: n⁴, 4n⁴, 9n⁴, 36n⁴</option><option value="five">multiples of 5</option>
+        </select></label>
+        <button id="zin">Magnify ×2</button><button id="zout">Draw back ÷2</button><button id="home">The whole gasket</button><button id="gtab" aria-pressed="false">Table</button>
+      </div>
+      <canvas id="g" width="1000" height="620" tabindex="0" role="img" aria-label="An Apollonian gasket with the curvature written in each circle. Arrow keys move, plus and minus magnify, Home shows the whole."></canvas>
+      <div class="tip" id="gtip"></div>
+      <ul class="legend"><li><i style="background:var(--fam)"></i><b id="hiName">a square</b></li><li><i style="border:1px solid var(--muted);box-sizing:border-box"></i>any other curvature</li></ul>
+      <p class="say" id="gsay" aria-live="polite"></p>
+      <div class="tables" id="gtable"></div>
+    </figure>
+
+    <h2>The numbers that never come</h2>
+    <figure id="cfig">
+      <figcaption>For six gaskets I ran through every circle with curvature up to a hundred million and listed the whole numbers that pass the test of remainders and are not there. They are of two kinds. Some belong to a family the 2023 paper proves can never appear (<b>orange</b>). The rest (<b>blue</b>) give out: after the last of them, every number that passes the test is there, as far as I looked. The scale is logarithmic.</figcaption>
+      <div class="controls"><label>Gasket <select id="cpack"></select></label><button id="ctab" aria-pressed="false">Table</button></div>
+      <svg id="chart" viewBox="0 0 960 190" role="img" aria-label="Missing curvatures on a logarithmic scale" tabindex="0"></svg>
+      <div class="tip" id="ctip"></div>
+      <ul class="legend"><li><i class="tick" style="background:var(--spor)"></i><b>missing, in no family</b> (the paper calls these sporadic)</li><li><i class="tick" style="background:var(--fam)"></i><b>missing, in a family that never appears</b></li></ul>
+      <p class="say" id="csay" aria-live="polite"></p>
+      <div class="tables" id="ctable"></div>
+    </figure>
+
+    <h2>Any gasket</h2>
+    <figure>
+      <figcaption>Four whole-number curvatures of circles that all touch one another (they must satisfy Descartes's equation, (a + b + c + d)² = 2(a² + b² + c² + d²); a negative one is the circle round the rest).</figcaption>
+      <div class="controls">
+        <label>Four curvatures <input id="quad" type="text" value="-11, 21, 24, 28" size="22" autocomplete="off"></label>
+        <label>Look as far as <select id="upto"><option value="10000">10,000</option><option value="100000" selected>100,000</option><option value="1000000">1,000,000</option></select></label>
+        <button id="try">Look</button><button id="show" disabled>Draw it above</button>
+      </div>
+      <p class="say" id="tsay" aria-live="polite"></p>
+      <p class="nums" id="tnums"></p>
+    </figure>
+  </div>
+
+  <p class="note">The theorem and the table of families are from S. Haag, C. Kertzer, J. Rickards and K. E. Stange, <i>The local-global conjecture for Apollonian circle packings is false</i> (Annals of Mathematics 200, 2024). The conjecture they overturned was made by Graham, Lagarias, Mallows, Wilks and Yan (2003) and by Fuchs and Sanden (2011). The six lists in the second picture were computed here, and are the same, number for number, as the lists the paper's authors have published. Nothing on this page is new mathematics.</p>
+  <p class="note">What is certain and what is not: that a family never appears is the paper's theorem. That the blue numbers give out is not known; the paper conjectures it, and the lists only show that nothing else is missing up to a hundred million (the authors looked at least a hundred times further). In the third panel, the kind of gasket and its families are worked out from the four numbers by the paper's rules, and the list of missing numbers by going through the circles.</p>
+</main>
+<script>
+/*CORE*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var G = Gasket, DATA = /*DATA*/[];
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function group(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function qname(q) { return '(' + q.map(function (x) { return x < 0 ? '−' + (-x) : x; }).join(', ') + ')'; }
+  function famName(u) { return u === 1 ? 'n²' : u + 'n²'; }
+  var PRESETS = [[-3, 5, 8, 8], [-4, 5, 20, 21], [-1, 2, 2, 3], [0, 0, 1, 1], [-3, 4, 12, 13], [-2, 3, 6, 7], [-23, 48, 49, 52]];
+  var NOTE = { '-3,5,8,8': 'no squares, no 6n²', '-4,5,20,21': 'no 2n², no 3n²', '-1,2,2,3': 'the bug-eye: no family', '0,0,1,1': 'the strip: no family', '-3,4,12,13': 'no 2n², no 6n²', '-2,3,6,7': 'no 2n²', '-23,48,49,52': 'the paper’s first figure: by its caption, no n⁴, 4n⁴, 9n⁴, 36n⁴' };
+
+  // ---------------------------------------------------------------- the gasket
+  var cv = $('g'), g = cv.getContext('2d'), W = 1000, H = 620, pack = null, view = null, drawn = [], hover = -1, custom = null, lastRes = null, leftOutMost = 0;
+  function setPack(q) { var pl = G.place(q), t = G.type(q); pack = { root: q, place: pl, type: t }; home(); }
+  function home() { var c = pack.place.circles[0]; if (pack.place.strip) view = { cx: 1, cy: 0, s: 150 }; else view = { cx: c[1] / c[0], cy: c[2] / c[0], s: 295 * Math.abs(c[0]) }; draw(); }
+  function fourth(b) { var k, u = [1, 4, 9, 36], r; for (k = 0; k < 4; k++) if (b % u[k] === 0) { r = Math.round(Math.sqrt(Math.sqrt(b / u[k]))); if (r * r * r * r === b / u[k]) return true; } return false; }
+  function hiTest() { var h = $('hi').value; if (h === 'none') return null; if (h === 'five') return function (b) { return b % 5 === 0; }; if (h === 'q') return function (b) { return b > 0 && fourth(b); }; var u = +h; return function (b) { return b > 0 && b % u === 0 && G.isSquare(b / u); }; }
+  function hiWords() { var h = $('hi').value; return h === 'none' ? 'nothing lit' : h === 'five' ? 'a multiple of 5' : h === 'q' ? 'a fourth power, or 4, 9 or 36 times one' : h === '1' ? 'a square' : (h === '2' ? 'twice' : h === '3' ? 'three times' : 'six times') + ' a square'; }
+  function draw() {
+    var test = hiTest(), lit = 0, i, c, b, r, px, py, digits, fs;                       // each circle drawn is [b, X, Y, wx, wy]: (wx / b, wy / b) is its centre measured from the view's centre
+    drawn = []; var res = lastRes = G.inView(pack.place, { cx: view.cx, cy: view.cy, hw: W / 2 / view.s, hh: H / 2 / view.s }, 0.7 / view.s, function (b, X, Y, wx, wy, k) { drawn.push([b, X, Y, wx, wy, k]); }, 600000); if (res.leftOut > leftOutMost) leftOutMost = res.leftOut;
+    g.fillStyle = '#1a1a19'; g.fillRect(0, 0, W, H); g.lineWidth = 1; g.textAlign = 'center'; g.textBaseline = 'middle';
+    for (i = 0; i < drawn.length; i++) { c = drawn[i]; b = c[0];
+      if (b === 0) { py = H / 2 - (c[2] - view.cy) * view.s; g.strokeStyle = '#898781'; g.beginPath(); g.moveTo(0, py); g.lineTo(W, py); g.stroke(); continue; }       // the strip's two lines, y = -1 and y = 1
+      r = view.s / Math.abs(b); px = W / 2 + c[3] / b * view.s; py = H / 2 - c[4] / b * view.s;
+      if (r > 3e6) { var at2 = drawBig(px, py, r, b > 0 && test && test(b)); if (b > 0 && test && test(b)) lit++; if (b > 0 && at2 && at2[0] > 30 && at2[0] < W - 30 && at2[1] > 12 && at2[1] < H - 12) { g.font = '15px system-ui, -apple-system, "Segoe UI", sans-serif'; g.fillStyle = '#f0efec'; g.fillText(String(b), at2[0], at2[1]); } continue; }                 /* too large for the canvas's arc: drawn as its tangent line across the view */
+      g.beginPath(); g.arc(px, py, Math.max(0.5, r - (b > 0 ? 0.5 : 0)), 0, 6.2832);
+      if (b > 0 && test && test(b)) { lit++; g.fillStyle = '#d95926'; g.fill(); g.strokeStyle = '#1a1a19'; g.stroke(); } else { g.strokeStyle = b < 0 ? '#c3c2b7' : '#898781'; g.stroke(); }
+      if (b > 0 && r >= 9) { digits = String(b).length; fs = Math.min(26, r * 1.55 / Math.max(2, digits * 0.62)); if (fs >= 8) { g.font = Math.round(fs) + 'px system-ui, -apple-system, "Segoe UI", sans-serif'; g.fillStyle = '#f0efec'; g.fillText(String(b), px, py); } } }
+    if (hover >= 0 && drawn[hover] && drawn[hover][0] && view.s / Math.abs(drawn[hover][0]) <= 3e6) { c = drawn[hover]; b = c[0]; g.strokeStyle = '#f0efec'; g.lineWidth = 2; g.beginPath(); g.arc(W / 2 + c[3] / b * view.s, H / 2 - c[4] / b * view.s, view.s / Math.abs(b), 0, 6.2832); g.stroke(); g.lineWidth = 1; }
+    var t = pack.type, fams = t.quad || [], words = hiWords();
+    $('hiName').textContent = words; var mag = view.s / (pack.place.strip ? 150 : 295 * Math.abs(pack.root[0]));
+    var ncirc = drawn.filter(function (c) { return c[0] !== 0; }).length;
+    var insideOf = 0; for (i = 0; i < drawn.length && !insideOf; i++) { c = drawn[i]; if (c[0] > 0 && (1 - Math.sqrt(c[3] * c[3] + c[4] * c[4])) * view.s / c[0] >= 589) insideOf = c[0]; }                 /* the whole view (half a diagonal is 589 px) lies inside this circle */
+    $('gsay').innerHTML = '<b>' + qname(pack.root) + '</b>: ' + group(ncirc) + (ncirc === 1 ? ' circle drawn' : ' circles drawn') + ($('hi').value === 'none' ? '' : ', <b>' + group(lit) + '</b> of them ' + words) + (res.visits > 600000 ? ' (the page stopped looking; magnify to see the rest)' : '') + (res.leftOut ? ' (some circles may be missing here: their numbers are too large to hold exactly)' : '') + '. Magnified ' + (mag >= 100 ? group(Math.round(mag)) : +mag.toPrecision(3)) + ' times.' + (insideOf ? ' The whole view lies inside the circle of curvature ' + group(insideOf) + '.' : '') + ' Its curvatures leave the remainders ' + t.res.join(', ') + ' on division by 24' + (t.quad === null ? '; the page could not work out its sign, and so not its families' : fams.length ? '; the paper proves it has no curvature of the form ' + fams.map(famName).join(' or ') : '; the paper\u2019s theorem names no family of squares barred from it') + (t.quartic ? ' (for this kind there may be a family of fourth powers as well: see the third panel)' : '') + '.';
+    if ($('gtable').classList.contains('on')) gtable();
+  }
+  // a circle far larger than the view: near the view its edge is all but straight.  The point of the edge nearest the view's
+  // centre and the direction of the edge there are found from the centre (px, py) and radius r, in pixels.
+  function drawBig(px, py, r, lit) { var dx = W / 2 - px, dy = H / 2 - py, d = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / d, uy = dy / d, ex = px + ux * r, ey = py + uy * r, L = 2000, inside = d < r;
+    if (lit) { g.fillStyle = '#d95926'; if (inside && r - d > 1200) { g.fillRect(0, 0, W, H); return null; }                                 /* the view is deep inside a lit circle: all orange, and no place for its number */ g.beginPath(); g.moveTo(ex - uy * L, ey + ux * L); g.lineTo(ex + uy * L, ey - ux * L); g.lineTo(ex + uy * L - ux * 2 * L, ey - ux * L - uy * 2 * L); g.lineTo(ex - uy * L - ux * 2 * L, ey + ux * L - uy * 2 * L); g.closePath(); g.fill(); }
+    if (Math.abs(r - d) < 1200) { g.strokeStyle = '#898781'; g.beginPath(); g.moveTo(ex - uy * L, ey + ux * L); g.lineTo(ex + uy * L, ey - ux * L); g.stroke(); }
+    return [ex - ux * 18, ey - uy * 18]; }                                            /* a place for its number, just inside its edge */
+  function zoomAt(f, px, py) { var wx = view.cx + (px - W / 2) / view.s, wy = view.cy - (py - H / 2) / view.s, s = view.s * f, lim = (pack.place.strip ? 150 : 295 * Math.abs(pack.root[0])); if (s < lim / 8) s = lim / 8; if (s > lim * 1e11) s = lim * 1e11; if (s > 1.4e15) s = 1.4e15; /* past this the curvatures would outrun exact floating numbers */ view.s = s; view.cx = wx - (px - W / 2) / s; view.cy = wy + (py - H / 2) / s; hover = -1; $('gtip').style.display = 'none'; draw(); }
+  function at(ev) { var r = cv.getBoundingClientRect(); return [(ev.clientX - r.left) * W / r.width, (ev.clientY - r.top) * H / r.height]; }
+  function pick(px, py) { var wx = (px - W / 2) / view.s, wy = -(py - H / 2) / view.s, best = -1, bb = -1, i, c, b, dx, dy; for (i = 0; i < drawn.length; i++) { c = drawn[i]; b = c[0]; if (b <= 0) continue; dx = wx - c[3] / b; dy = wy - c[4] / b; if (dx * dx + dy * dy <= 1 / (b * b) && b > bb) { bb = b; best = i; } } return best; }
+  function frac(n, d) { n = BigInt(n); d = BigInt(d); var a = n < 0n ? -n : n, b = d < 0n ? -d : d, t; while (b) { t = a % b; a = b; b = t; } if (a > 1n) { n /= a; d /= a; } if (d < 0n) { n = -n; d = -d; } return d === 1n ? String(n) : (n < 0n ? '−' : '') + String(n < 0n ? -n : n) + '/' + d; }
+  function trueX(c) { return BigInt(c[1]) + 2n * BigInt(c[5] || 0) * BigInt(c[0]); }                    /* in the strip the circle drawn is one of the first period moved along by c[5] periods */
+  function tipFor(i) { var c = drawn[i], b = c[0], h = '<b>curvature ' + group(b) + '</b><br><span>radius 1/' + group(b) + ', centre (' + frac(trueX(c), b) + ', ' + frac(c[2], b) + ')</span><br><span>remainder ' + (b % 24) + ' on division by 24</span>', u;
+    [1, 2, 3, 6].forEach(function (u) { if (b % u === 0 && G.isSquare(b / u)) h += '<br>' + (u === 1 ? '' : u + ' × ') + group(Math.round(Math.sqrt(b / u))) + '²'; }); return h; }
+  var drag = null;
+  cv.addEventListener('pointerdown', function (e) { var p = at(e); drag = { x: p[0], y: p[1], cx: view.cx, cy: view.cy, moved: false }; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointermove', function (e) { var p = at(e), t = $('gtip'), r, cr; if (drag) { if (Math.abs(p[0] - drag.x) + Math.abs(p[1] - drag.y) > 3) drag.moved = true; if (drag.moved) { view.cx = drag.cx - (p[0] - drag.x) / view.s; view.cy = drag.cy + (p[1] - drag.y) / view.s; hover = -1; t.style.display = 'none'; draw(); } return; }
+    var i = pick(p[0], p[1]); if (i !== hover) { hover = i; draw(); } if (i < 0) { t.style.display = 'none'; return; } t.innerHTML = tipFor(i); t.style.display = 'block'; r = $('gfig').getBoundingClientRect(); cr = cv.getBoundingClientRect(); var x = e.clientX - r.left + 14; if (x + 280 > r.width) x -= 300; t.style.left = Math.max(4, x) + 'px'; t.style.top = (e.clientY - r.top + 12) + 'px'; });
+  cv.addEventListener('pointerup', function () { drag = null; }); cv.addEventListener('pointerleave', function () { if (!drag) { hover = -1; $('gtip').style.display = 'none'; draw(); } });
+  cv.addEventListener('wheel', function (e) { e.preventDefault(); var p = at(e); zoomAt(e.deltaY < 0 ? 1.5 : 1 / 1.5, p[0], p[1]); }, { passive: false });
+  cv.addEventListener('dblclick', function (e) { var p = at(e); zoomAt(2, p[0], p[1]); });
+  cv.addEventListener('keydown', function (e) { var k = e.key, d = 60 / view.s; if (k === 'ArrowLeft') view.cx -= d; else if (k === 'ArrowRight') view.cx += d; else if (k === 'ArrowUp') view.cy += d; else if (k === 'ArrowDown') view.cy -= d; else if (k === '+' || k === '=') { zoomAt(2, W / 2, H / 2); e.preventDefault(); return; } else if (k === '-' || k === '_') { zoomAt(0.5, W / 2, H / 2); e.preventDefault(); return; } else if (k === 'Home') { home(); e.preventDefault(); return; } else return; e.preventDefault(); draw(); });
+  $('zin').addEventListener('click', function () { zoomAt(2, W / 2, H / 2); }); $('zout').addEventListener('click', function () { zoomAt(0.5, W / 2, H / 2); }); $('home').addEventListener('click', home);
+  $('hi').addEventListener('change', draw);
+  function gtable() { var rows = drawn.filter(function (c) { return c[0] > 0; }).sort(function (a, b) { return a[0] - b[0]; }).slice(0, 40), test = hiTest();
+    $('gtable').innerHTML = '<table><tr><th>curvature</th><th>centre</th><th>remainder on division by 24</th><th class="l">' + esc(hiWords()) + '?</th></tr>' + rows.map(function (c) { return '<tr><td>' + group(c[0]) + '</td><td>(' + frac(trueX(c), c[0]) + ', ' + frac(c[2], c[0]) + ')</td><td>' + (c[0] % 24) + '</td><td class="l">' + (test ? (test(c[0]) ? 'yes' : 'no') : '') + '</td></tr>'; }).join('') + '</table><p class="say">The forty largest circles in view.</p>'; }
+  $('gtab').addEventListener('click', function () { var on = $('gtable').classList.toggle('on'); this.setAttribute('aria-pressed', on); if (on) gtable(); });
+  function fillPacks() { var h = ''; PRESETS.forEach(function (q, i) { h += '<option value="' + i + '">' + qname(q) + ' — ' + NOTE[q.join(',')] + '</option>'; }); if (custom) h += '<option value="c">' + qname(custom) + ' — from the third panel</option>'; $('pack').innerHTML = h; }
+  $('pack').addEventListener('change', function () { setPack(this.value === 'c' ? custom : PRESETS[+this.value]); });
+
+  // ---------------------------------------------------------------- the chart of missing numbers
+  var cur = null, marks = [];
+  function X(v) { return 60 + 880 * Math.log10(v) / 8; }
+  function chart() {
+    var d = DATA[+$('cpack').value], svg = '', i, e, u, n, v, rows = [{ name: 'in no family', col: 'var(--spor)', list: d.sporadic }], t = G.type(d.root), res = t.res, y;
+    d.families.forEach(function (u) { var list = []; for (n = 1; u * n * n <= d.N; n++) { v = u * n * n; if (res.indexOf(v % 24) >= 0) list.push(v); } rows.push({ name: famName(u), col: 'var(--fam)', list: list, u: u }); });
+    cur = { d: d, rows: rows }; marks = [];
+    for (e = 0; e <= 8; e++) { svg += '<line x1="' + X(Math.pow(10, e)) + '" y1="20" x2="' + X(Math.pow(10, e)) + '" y2="' + (30 + rows.length * 44) + '" stroke="#2c2c2a"/><text x="' + X(Math.pow(10, e)) + '" y="' + (48 + rows.length * 44) + '" text-anchor="middle">' + (e < 4 ? group(Math.pow(10, e)) : '10' + '<tspan dy="-5" font-size="9">' + e + '</tspan>') + '</text>'; }
+    rows.forEach(function (r, k) { y = 28 + k * 44; svg += '<text x="54" y="' + (y + 20) + '" text-anchor="end" fill="#f0efec">' + esc(r.name) + '</text>';
+      var path = ''; r.list.forEach(function (v) { var x = X(v); path += 'M' + x.toFixed(2) + ' ' + y + 'v32'; marks.push([x, k, v]); }); svg += '<path d="' + path + '" stroke="' + r.col + '" stroke-width="1" fill="none"/>'; });
+    var last = d.sporadic[d.sporadic.length - 1]; svg += '<line x1="' + X(last) + '" y1="16" x2="' + X(last) + '" y2="62" stroke="#f0efec" stroke-dasharray="2 2"/><text x="' + (X(last) + 5) + '" y="14">the last, ' + group(last) + '</text>';
+    svg += '<line id="cx" x1="0" y1="20" x2="0" y2="' + (30 + rows.length * 44) + '" stroke="#f0efec" visibility="hidden"/>';
+    $('chart').setAttribute('viewBox', '0 0 960 ' + (60 + rows.length * 44)); $('chart').innerHTML = svg;
+    $('csay').innerHTML = '<b>' + qname(d.root) + '</b>, every circle with curvature up to ' + group(d.N) + ': <b>' + group(d.sporadic.length) + '</b> missing numbers in no family, the last of them ' + group(last) + (d.families.length ? '; and <b>' + group(d.inFamilies) + '</b> in the famil' + (d.families.length > 1 ? 'ies ' : 'y ') + d.families.map(famName).join(' and ') + ', not one of whose members that passes the test of remainders is a curvature' : '; the paper finds no family barred from this gasket') + '.';
+    if ($('ctable').classList.contains('on')) ctable();
+  }
+  function ctable() { var d = cur.d; $('ctable').innerHTML = '<p class="nums">' + (d.families.length ? 'In a family: every ' + d.families.map(famName).join(' and every ') + ' that leaves one of the remainders ' + G.type(d.root).res.join(', ') + ' on division by 24. ' : '') + 'In no family (' + group(d.sporadic.length) + '): ' + d.sporadic.map(group).join(' · ') + '</p>'; }
+  function cmove(px) { var r = $('chart').getBoundingClientRect(), x = (px - r.left) * 960 / r.width, best = null, bd = 1e9, i, m; for (i = 0; i < marks.length; i++) { m = marks[i]; if (Math.abs(m[0] - x) < bd) { bd = Math.abs(m[0] - x); best = m; } }
+    var t = $('ctip'), line = document.getElementById('cx'); if (!best || bd > 12) { t.style.display = 'none'; line.setAttribute('visibility', 'hidden'); return null; }
+    line.setAttribute('x1', best[0]); line.setAttribute('x2', best[0]); line.setAttribute('visibility', 'visible'); var row = cur.rows[best[1]], v = best[2];
+    t.innerHTML = '<b>' + group(v) + '</b><br><span>' + (row.u ? 'never a curvature here: ' + (row.u === 1 ? '' : row.u + ' × ') + group(Math.round(Math.sqrt(v / row.u))) + '²' : 'missing, in no family') + '</span><br><span>remainder ' + (v % 24) + ' on division by 24</span>'; t.style.display = 'block';
+    var fr = $('cfig').getBoundingClientRect(), xx = r.left - fr.left + best[0] * r.width / 960 + 10; if (xx + 280 > fr.width) xx -= 300; t.style.left = Math.max(4, xx) + 'px'; t.style.top = (r.top - fr.top + 6) + 'px'; return best; }
+  $('chart').addEventListener('pointermove', function (e) { cmove(e.clientX); }); $('chart').addEventListener('pointerleave', function () { $('ctip').style.display = 'none'; var l = document.getElementById('cx'); if (l) l.setAttribute('visibility', 'hidden'); });
+  var kpos = 0; $('chart').addEventListener('keydown', function (e) { if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return; e.preventDefault(); var list = cur.rows[0].list; kpos = Math.max(0, Math.min(list.length - 1, kpos + (e.key === 'ArrowRight' ? 1 : -1) * (e.shiftKey ? 20 : 1))); var r = $('chart').getBoundingClientRect(); cmove(r.left + X(list[kpos]) * r.width / 960); });
+  $('cpack').addEventListener('change', function () { kpos = 0; chart(); });
+  $('ctab').addEventListener('click', function () { var on = $('ctable').classList.toggle('on'); this.setAttribute('aria-pressed', on); if (on) ctable(); });
+
+  // ---------------------------------------------------------------- any gasket
+  function look() { var m = $('quad').value.replace(/−/g, '-').match(/-?\d+/g), q, rootq, t, N = +$('upto').value, h, en, miss, fam, spor, list, i, v, wit, u, n, may = [], no = []; $('show').disabled = true; $('tnums').innerHTML = '';
+    if (!m || m.length !== 4) { $('tsay').innerHTML = 'Four whole numbers, please.'; return; } q = m.map(Number);
+    if (q.some(function (x) { return Math.abs(x) > 1e6; }) || !G.isDescartes(q)) { $('tsay').innerHTML = 'Those four do not satisfy Descartes’s equation' + (q.some(function (x) { return Math.abs(x) > 1e6; }) ? ' (or are too large for this page)' : '') + ', so they are not the curvatures of four circles that all touch. Try −11, 21, 24, 28 or −6, 11, 14, 15.'; return; }
+    if (!G.isPrimitive(q)) { $('tsay').innerHTML = 'Those four have a common divisor; divide it out first.'; return; }
+    rootq = G.reduce(q); t = G.type(rootq); fam = t.quad || []; en = G.enumerate(rootq, N); miss = G.missing(rootq, N, en); spor = miss.filter(function (v) { return !G.inFamily(v, fam); });
+    h = (rootq.join() === q.slice().sort(function (a, b) { return a - b; }).join() ? '<b>' + qname(rootq) + '</b> is the root of its gasket (its four largest circles). ' : 'These circles belong to the gasket whose four largest circles are <b>' + qname(rootq) + '</b>. ');
+    h += 'Its curvatures leave the remainders <b>' + t.res.join(', ') + '</b> on division by 24, and its sign (the paper’s χ<sub>2</sub>) is <b>' + (t.chi2 === null ? 'not found by the page' : t.chi2 > 0 ? '+1' : '−1') + '</b>. ';
+    h += t.quad === null ? 'Without the sign the page cannot say which families are barred. ' : fam.length ? 'By the paper’s theorem no curvature in it is of the form <b>' + fam.map(famName).join('</b> or <b>') + '</b>. ' : 'The paper’s theorem names no family of squares barred from it. ';
+    if (t.quartic) { [1, 4, 9, 36].forEach(function (u) { for (n = 1; u * Math.pow(n, 4) <= N; n++) { v = u * Math.pow(n, 4); if (en.has(v)) { (u === 1 || u === 4 ? may : no).push(v); } } });
+      h += 'For a gasket of this kind the paper has a second sign, which decides whether a family of fourth powers is barred; the page does not work that sign out, but looks for a witness: ';
+      if (t.k === 1) h += may.length + no.length ? 'the curvature ' + group((may.concat(no))[0]) + ' is of the form n⁴, 4n⁴, 9n⁴ or 36n⁴, so no such family is barred here. ' : 'no curvature up to ' + group(N) + ' is of the form n⁴, 4n⁴, 9n⁴ or 36n⁴, which is what the paper proves for one of the two kinds; the page cannot tell which kind this is. ';
+      else h += may.length ? 'the curvature ' + group(may[0]) + ' is of the form n⁴ or 4n⁴, so the barred family is 9n⁴ and 36n⁴. ' : no.length ? 'the curvature ' + group(no[0]) + ' is of the form 9n⁴ or 36n⁴, so the barred family is n⁴ and 4n⁴. ' : 'no witness up to ' + group(N) + '. '; }
+    h += '<br>Going through its ' + group(en.circles) + ' circles with curvature up to ' + group(N) + ': <b>' + group(miss.length) + '</b> numbers that pass the test of remainders are missing' + (fam.length ? ', ' + group(miss.length - spor.length) + ' of them in the barred famil' + (fam.length > 1 ? 'ies' : 'y') + ' (marked with an orange square) and ' + group(spor.length) + ' not' : '') + '.';
+    $('tsay').innerHTML = h; list = miss.slice(0, 600).map(function (v) { return G.inFamily(v, fam) ? '<b>' + group(v) + '</b>' : group(v); }).join(' · '); $('tnums').innerHTML = miss.length ? 'Missing: ' + list + (miss.length > 600 ? ' … (' + group(miss.length - 600) + ' more)' : '') : '';
+    custom = rootq; $('show').disabled = false; }
+  $('try').addEventListener('click', look); $('quad').addEventListener('keydown', function (e) { if (e.key === 'Enter') look(); });
+  $('show').addEventListener('click', function () { if (!custom) return; fillPacks(); $('pack').value = 'c'; setPack(custom); $('gfig').scrollIntoView({ behavior: 'smooth' }); });
+
+  fillPacks(); $('cpack').innerHTML = DATA.map(function (d, i) { return '<option value="' + i + '">' + qname(d.root) + (d.nick ? ' — ' + d.nick : '') + '</option>'; }).join(''); $('cpack').value = '2';
+  setPack(PRESETS[0]); chart(); look();
+  window.GasketPage = { view: function () { return view; }, leftOut: function () { return [lastRes ? lastRes.leftOut : -1, leftOutMost]; }, pack: function () { return pack; }, drawn: function () { return drawn.map(function (c) { return [c[0], c[1], c[2], c[5] || 0]; }); }, setView: function (cx, cy, s) { view = { cx: cx, cy: cy, s: s }; draw(); }, setPack: setPack, marks: function () { return marks; } };
+})();
+</script>
+</body>
+</html>

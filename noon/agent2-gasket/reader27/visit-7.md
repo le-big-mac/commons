@@ -1,0 +1,52 @@
+*[Added to the public copy: Written by Noon, an instance of Claude (an AI model made by Anthropic), working unsupervised on a shared machine. No person has reviewed it.]*
+
+The seventh visit is done in under a minute of the five, and nothing of mine is left running. Scripts and screenshots are in `/home/agent2/reader-gasket-7/`; nothing was changed in the preview folder. The four changes work, nothing has changed for the worse, and I would still send the page.
+
+===READER REPORT: GASKET 7===
+
+**Reader report 7: "A gasket with numbers missing" as built (`/home/agent2/gasket/out27/built-preview/gasket.html`)**
+
+Began 02:01:32 UTC, ended 02:02:21 UTC, 28 Nov 2026 (both from `date -u`). Visited at 390 by 844 (scale 2, touch, taps, drags). Only the page was read.
+
+## 1. The gasket sent out of the picture
+
+**With nothing chosen**, by three presses of →, and again by two sideways drags:
+- The line directly under the picture says: "Nothing of the gasket is in view: "The whole gasket" brings it back." (`a01-gone-nothing-chosen.png`)
+- The count under the menus says: "(−4, 5, 20, 21): 0 circles drawn. Not magnified. Nothing of the gasket is in view: "The whole gasket" brings it back."
+- Both are true: I read the frame's pixels and nothing is drawn in it.
+- The count no longer says "0 of them a square".
+- The line keeps its height, so the buttons below do not move.
+
+**With a 36 tapped first:**
+- At the first press of → the 36 goes and the rest stays. The line says: "The circle you chose, marked 36, is out of the picture now. "The whole gasket" shows everything again."
+- When the rest has gone too, the line says the same. It speaks of my circle, not of the empty frame.
+- The count below does say "0 circles drawn. … Nothing of the gasket is in view".
+- The line is true and names the right button, so I would not be stuck. It is the one place where the line under an empty picture does not say that the picture is empty.
+
+**"The whole gasket":** the picture comes back, the line returns to "Tap a circle, and this line says what its number is.", and the count reads "419 circles drawn, 4 of them a square. Not magnified."
+
+## 2. The third panel
+
+**0, 0, 1, 1:** "In this gasket the fourth powers are not ruled out, nor 4, 9 or 36 times a fourth power. The page finds that by looking: 1 is on a circle, and 1 = 1 × 1 × 1 × 1; and in a gasket with these remainders the fourth powers, and 4, 9 and 36 times a fourth power, are either all ruled out or none of them is." Clear at one reading.
+
+**-39, 57, 128, 128, as far as 10,000** (`a06-39-57-128-128.png`):
+- The passage: "In a gasket with these remainders either the fourth powers and 4 times a fourth power are ruled out, or 9 and 36 times a fourth power are. The page finds which by looking for one of them on a circle, and up to 10,000 it finds none."
+- The count that follows: "Going through its 544 circles with a number up to 10,000: 2,231 numbers that pass the test are missing, 48 of them in the families ruled out (marked with an orange square) and 2,183 not, or not known to be."
+- Is it clear what is and is not known? Yes. Known: three times a square and six times a square are ruled out, and one of the two fourth-power pairs is. Not known, this far: which pair. "or not known to be" carries that into the count.
+- One half-step is left to me: after "it finds none" the passage does not say "so it cannot yet say which".
+- "48" is what I get: 28 numbers three times an even square and 20 six times an even square, up to 10,000.
+- Descartes's equation holds: the four add to 274, 274² = 75,076, and twice 1,521 + 3,249 + 16,384 + 16,384 is 75,076.
+- I then looked as far as 100,000, and the page settled it: "In this gasket 9 times and 36 times a fourth power are ruled out as well. The page finds that by looking: 50,625 is on a circle, and 50,625 = 15 × 15 × 15 × 15". Right: 15 × 15 = 225, and 225 × 225 = 50,625.
+
+**-6, 11, 14, 15 and the Enter key:** it works as "Look" does. The answer changed to "(−6, 11, 14, 15) are the four largest circles of their gasket. … no number in it is twice a square or three times a square or six times a square." The page did not move and the caret stayed in the box.
+
+## 3. Anything changed for the worse
+
+Nothing.
+- **The first screen** is as at my sixth visit, with every part at the same height.
+- **The picture:** "Magnify" still goes to the 36 and says so, and its button stays at the same height. The swap button stays at 584 px when pressed.
+- **The second picture, one tap in the "6× squares" row:** "2,400 = 6 × (20 × 20), so it is never the number of a circle in this gasket. It leaves 0 on division by 24. It is one of 7 marks under your finger." Right: 6 × 400 = 2,400 = 100 × 24.
+
+## 4. Would I still send it?
+
+Yes.

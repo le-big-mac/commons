@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A gasket with numbers missing</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; background: #0d0d0d; color: #f0efec; font: 16px/1.5 Georgia, 'Times New Roman', serif; }
+  main { max-width: 1024px; margin: 0 auto; padding: 18px 16px 40px; }
+  h1 { font-weight: normal; font-size: 26px; margin: 0 0 2px; }
+  h2 { font-weight: normal; font-size: 20px; margin: 26px 0 4px; }
+  p.sub { margin: 0 0 12px; color: #c3c2b7; }
+  p.note { color: #c3c2b7; max-width: 860px; }
+  a { color: #9ec5f4; }
+  .viz-root { --surface-1: #1a1a19; --text-primary: #f0efec; --text-secondary: #c3c2b7; --muted: #898781; --grid: #2c2c2a; --axis: #383835;
+    --spor: #3987e5; --fam: #d95926; font: 14px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-primary); }
+  .controls { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: end; margin: 0 0 10px; }
+  .controls label { display: flex; flex-direction: column; gap: 2px; color: var(--text-secondary); font-size: 13px; }
+  select, button, input[type=text] { font: inherit; color: var(--text-primary); background: #262624; border: 1px solid #45453f; border-radius: 5px; padding: 5px 10px; }
+  select, button { cursor: pointer; } button:hover, select:hover { background: #32322f; }
+  select, input[type=text] { max-width: 100%; box-sizing: border-box; } .controls label { max-width: 100%; min-width: 0; }      /* 27 November 2026: a menu was as wide as its longest option, and wider than a phone */
+  button[aria-pressed=true] { background: #3d3d39; border-color: #c3c2b7; }
+  :focus-visible { outline: 2px solid #9ec5f4; outline-offset: 2px; }
+  figure { margin: 0 0 14px; background: var(--surface-1); border-radius: 8px; padding: 10px; border: 1px solid rgba(255,255,255,0.10); position: relative; }
+  figcaption { color: var(--text-secondary); margin: 0 0 8px; max-width: 860px; }
+  figcaption b { color: var(--text-primary); font-weight: 600; }
+  canvas#g { display: block; width: 1000px; max-width: 100%; height: auto; border-radius: 4px; touch-action: pan-y; cursor: crosshair; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 8px 0 0; padding: 0; list-style: none; color: var(--text-secondary); font-size: 13px; }
+  .legend li { display: flex; align-items: center; gap: 6px; } .legend i { width: 12px; height: 12px; display: inline-block; border-radius: 50%; } .legend i.tick { width: 2px; height: 14px; border-radius: 0; }
+  .legend b { color: var(--text-primary); font-weight: 500; } .legend li { flex-wrap: wrap; } @media (max-width: 480px) { .legend li { display: block; } .legend i { margin-right: 6px; vertical-align: -1px; } }
+  .say { margin: 8px 0 0; min-height: 1.4em; color: var(--text-secondary); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+  .say b { color: var(--text-primary); font-weight: 600; }
+  .tip { position: absolute; pointer-events: none; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 6px 9px; font-size: 13px; max-width: 270px; display: none; z-index: 2; }
+  .tip span { color: var(--text-secondary); }
+  svg { display: block; width: 100%; height: auto; } svg text { font: 12px system-ui, -apple-system, 'Segoe UI', sans-serif; fill: var(--text-secondary); }
+  table { border-collapse: collapse; margin: 8px 0 0; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 3px 14px 3px 0; border-bottom: 1px solid var(--grid); font-weight: normal; vertical-align: top; }
+  th { color: var(--text-secondary); } th:first-child, td:first-child, td.l, th.l { text-align: left; }
+  .tables { display: none; overflow-x: auto; max-height: 320px; overflow-y: auto; } .tables.on { display: block; }
+  .about p { margin: 0 0 10px; max-width: 760px; } #gstory { margin: 0 0 12px; } #gswap { margin: 10px 0 6px; } #gpick { margin: 8px 0 10px; min-height: 40px; } .arrows { display: inline-flex; gap: 6px; } .arrows button { min-width: 38px; padding: 5px 0; } #ghow { color: var(--text-secondary); font-size: 13px; }
+  #tnums { display: none; } #tnums.on { display: block; }
+  .nums { font-variant-numeric: tabular-nums; color: var(--text-secondary); overflow-wrap: anywhere; } .nums b { color: var(--text-primary); font-weight: 600; }
+  .nums b::before { content: ''; display: inline-block; width: 7px; height: 7px; background: var(--fam); border-radius: 1px; margin-right: 3px; }
+  sup { font-size: 0.72em; line-height: 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>A gasket with numbers missing</h1>
+  <p class="sub" id="lead">Each circle is marked with a whole number: the smaller the circle, the bigger its number. Squares are lit in orange.</p>
+
+  <div class="viz-root">
+    <figure id="gfig">
+      <canvas id="g" width="1000" height="620" tabindex="0" role="img" aria-label="An Apollonian gasket with the curvature written in each circle. Arrow keys move, plus and minus magnify, Home shows the whole."></canvas>
+      <div class="tip" id="gtip"></div>
+      <p class="say" id="gpick" aria-live="polite"></p>
+      <div class="controls" id="gmove"><button id="zin">Magnify ×2</button><button id="zout">Draw back ÷2</button><button id="home">The whole gasket</button><span class="arrows"><button id="mleft" aria-label="Look further left">←</button><button id="mup" aria-label="Look further up">↑</button><button id="mdown" aria-label="Look further down">↓</button><button id="mright" aria-label="Look further right">→</button></span></div>
+      <ul class="legend"><li><i style="background:var(--fam)"></i><b id="hiName">a square</b></li><li><i style="border:1px solid var(--muted);box-sizing:border-box"></i>any other number</li></ul>
+      <div class="controls" id="gswap"><button id="swap" data-to="0">Show a gasket with no square in it</button></div>
+      <p class="say" id="gstory"></p>
+      <div class="controls">
+        <label>The gasket begun from <select id="pack"></select></label>
+        <label>Light up the numbers that are <select id="hi">
+          <option value="none">nothing</option><option value="1" selected>squares, n²</option><option value="2">twice a square, 2n²</option><option value="3">three times a square, 3n²</option><option value="6">six times a square, 6n²</option><option value="q">fourth powers: n⁴, 4n⁴, 9n⁴, 36n⁴</option><option value="five">multiples of 5</option>
+        </select></label>
+        <button id="gtab" aria-pressed="false">Show the table</button>
+      </div>
+      <p class="say" id="gsay" aria-live="polite"></p>
+      <p class="say" id="ghow">With fingers: pinch to magnify; drag sideways, or press the arrows, to move. With a mouse: scroll to magnify, drag to move. The numbers are worked out exactly, however far you magnify, as far as the page goes.</p>
+      <div class="tables" id="gtable"></div>
+    </figure>
+
+    <h2>What is going on</h2>
+    <div class="about" id="about">
+      <p>Three circles that touch one another leave a gap, and exactly one circle fits the gap touching all three. Fill every gap, then every new gap, and so on for ever: that is an Apollonian gasket. A circle's number here is one over its radius, so small circles have big numbers; mathematicians call it the curvature. If the first four numbers are whole, every number in the gasket is.</p>
+      <p>A gasket is named here by its four largest circles, as <b>(&minus;4, 5, 20, 21)</b>. The number with the minus is the circle round all the rest.</p>
+      <p>Not every whole number can turn up. Divide a number by 24 and look at what is left over. In <b>(&minus;4, 5, 20, 21)</b> and in <b>(&minus;3, 5, 8, 8)</b>, the two gaskets of the picture's button, only numbers that leave 0, 5, 8, 12, 20 or 21 are ever a circle's number. 36 leaves 12, so it passes that test. In <b>(&minus;4, 5, 20, 21)</b> it is there; in <b>(&minus;3, 5, 8, 8)</b> it never comes.</p>
+      <p>For twenty years the guess was that every number that passes the test turns up, once the numbers are large enough. In 2023 four mathematicians (Haag, Kertzer, Rickards and Stange; their paper is named at the foot of the page) showed that the guess is false: in many gaskets a whole family of numbers that pass the test never appears. Below, such a family is called barred. In <b>(&minus;3, 5, 8, 8)</b> it is the squares, and the numbers six times a square; in <b>(&minus;4, 5, 20, 21)</b> it is the numbers twice a square and three times a square.</p>
+    </div>
+
+    <h2>The numbers that never come</h2>
+    <figure id="cfig">
+      <figcaption>For six gaskets I went through every circle with a number up to a hundred million, and listed the numbers that pass the test and are not there. They are of two kinds. Some belong to a family that is proved never to appear (<b>orange</b>). The rest (<b>blue</b>) come to an end: after the last of them, every number that passes the test and is in no such family is there, as far as I looked. Each mark is one missing number. The line runs from 1 to a hundred million, and each step along it is ten times the one before.</figcaption>
+      <div class="controls"><label>Gasket <select id="cpack"></select></label><button id="ctab" aria-pressed="false">Show the list</button></div>
+      <svg id="chart" viewBox="0 0 960 190" role="img" aria-label="Missing curvatures on a logarithmic scale" tabindex="0"></svg>
+      <div class="tip" id="ctip"></div>
+      <ul class="legend"><li><i class="tick" style="background:var(--spor)"></i><b>missing, in no family</b> (the paper calls these sporadic)</li><li><i class="tick" style="background:var(--fam)"></i><b>missing, in a family that never appears</b></li></ul>
+      <p class="say" id="csay" aria-live="polite"></p>
+      <div class="tables" id="ctable"></div>
+    </figure>
+
+    <h2>Any gasket</h2>
+    <figure>
+      <figcaption>Type the numbers of four circles that all touch one another. They must satisfy Descartes's equation, (a + b + c + d)² = 2(a² + b² + c² + d²); a number with a minus is the circle round the rest.</figcaption>
+      <div class="controls">
+        <label>Four curvatures <input id="quad" type="text" value="-11, 21, 24, 28" size="22" autocomplete="off"></label>
+        <label>Look as far as <select id="upto"><option value="10000">10,000</option><option value="100000" selected>100,000</option><option value="1000000">1,000,000</option></select></label>
+        <button id="try">Look</button><button id="show" disabled>Draw it above</button>
+      </div>
+      <p class="say" id="tsay" aria-live="polite"></p>
+      <button id="tlist" aria-pressed="false" hidden>Show the list of the missing numbers</button>
+      <p class="nums" id="tnums"></p>
+    </figure>
+  </div>
+
+  <p class="note">The theorem and the table of families are from S. Haag, C. Kertzer, J. Rickards and K. E. Stange, <i>The local-global conjecture for Apollonian circle packings is false</i> (Annals of Mathematics 200, 2024). The conjecture they overturned was made by Graham, Lagarias, Mallows, Wilks and Yan (2003) and by Fuchs and Sanden (2011). The six lists in the second picture were computed here, and are the same, number for number, as the lists the paper's authors have published. Nothing on this page is new mathematics.</p>
+  <p class="note">What is certain and what is not: that a family never appears is the paper's theorem. That the blue numbers come to an end is not known; the paper conjectures it, and the lists only show that nothing else is missing up to a hundred million (the authors looked at least a hundred times further). In the third panel, the kind of gasket and its families are worked out from the four numbers by the paper's rules, and the list of missing numbers by going through the circles.</p>
+</main>
+<script>
+/*CORE*/
+</script>
+<script>
+(function () {
+  'use strict';
+  var G = Gasket, DATA = /*DATA*/[];
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function group(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function qname(q) { return '(' + q.map(function (x) { return x < 0 ? '−' + (-x) : x; }).join(', ') + ')'; }
+  function famName(u) { return u === 1 ? 'n²' : u + 'n²'; }
+  var PRESETS = [[-3, 5, 8, 8], [-4, 5, 20, 21], [-1, 2, 2, 3], [0, 0, 1, 1], [-3, 4, 12, 13], [-2, 3, 6, 7], [-23, 48, 49, 52]];
+  var NOTE = { '-3,5,8,8': 'never a square, nor 6 × a square', '-4,5,20,21': 'never 2 × a square, nor 3 × a square', '-1,2,2,3': 'the bug-eye: nothing barred', '0,0,1,1': 'the strip: nothing barred', '-3,4,12,13': 'never 2 × a square, nor 6 × a square', '-2,3,6,7': 'never 2 × a square', '-23,48,49,52': 'the paper’s first figure: by its caption, no n⁴, 4n⁴, 9n⁴, 36n⁴' };
+
+  // ---------------------------------------------------------------- the gasket
+  var cv = $('g'), g = cv.getContext('2d'), W = 1000, H = 620, DPR = 1, NARROW = false, pack = null, view = null, drawn = [], hover = -1, sel = null, custom = null, lastRes = null, leftOutMost = 0;
+  // The picture's size.  Where the page has room it is 1000 by 620, as it always was.  On a narrower screen it is drawn at the screen's own
+  // width, square (less on a short screen), and at the screen's own sharpness, so that a number in a circle is as large as its circle allows.
+  function R0() { return Math.min(W, H) / 2 - 15; }                 /* the outer circle's radius in pixels when the whole gasket is shown: 295 in the picture of 1000 by 620 */
+  function base() { return pack.place.strip ? R0() * 150 / 295 : R0() * Math.abs(pack.root[0]); }      /* pixels to a unit of length at "the whole gasket" */
+  function fit() {
+    var box = cv.parentNode, cs = getComputedStyle(box), avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), narrow = avail < 700;
+    var w = narrow ? Math.max(240, Math.round(avail)) : 1000, h = narrow ? Math.round(Math.min(w, Math.max(240, window.innerHeight * 0.62))) : 620, dpr = narrow ? Math.min(3, window.devicePixelRatio || 1) : 1;
+    if (w === W && h === H && dpr === DPR && narrow === NARROW && cv.width === Math.round(W * DPR)) return false;
+    var old = R0(); W = w; H = h; DPR = dpr; NARROW = narrow; cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR); cv.style.width = narrow ? W + 'px' : ''; cv.style.height = narrow ? H + 'px' : '';
+    if (view) view.s *= R0() / old;
+    return true;
+  }
+  function setPack(q) { var pl = G.place(q), t = G.type(q); pack = { root: q, place: pl, type: t }; home(); }
+  function home() { var c = pack.place.circles[0]; fit(); sel = null; if (pack.place.strip) view = { cx: 1, cy: 0, s: R0() * 150 / 295 }; else view = { cx: c[1] / c[0], cy: c[2] / c[0], s: R0() * Math.abs(c[0]) }; draw(); }
+  function fourth(b) { var k, u = [1, 4, 9, 36], r; for (k = 0; k < 4; k++) if (b % u[k] === 0) { r = Math.round(Math.sqrt(Math.sqrt(b / u[k]))); if (r * r * r * r === b / u[k]) return true; } return false; }
+  function hiTest() { var h = $('hi').value; if (h === 'none') return null; if (h === 'five') return function (b) { return b % 5 === 0; }; if (h === 'q') return function (b) { return b > 0 && fourth(b); }; var u = +h; return function (b) { return b > 0 && b % u === 0 && G.isSquare(b / u); }; }
+  function hiWords() { var h = $('hi').value; return h === 'none' ? 'nothing lit' : h === 'five' ? 'a multiple of 5' : h === 'q' ? 'a fourth power, or 4, 9 or 36 times one' : h === '1' ? 'a square' : (h === '2' ? 'twice' : h === '3' ? 'three times' : 'six times') + ' a square'; }
+  function draw() {
+    var test = hiTest(), lit = 0, i, c, b, r, px, py, digits, fs;                       // each circle drawn is [b, X, Y, wx, wy]: (wx / b, wy / b) is its centre measured from the view's centre
+    drawn = []; var res = lastRes = G.inView(pack.place, { cx: view.cx, cy: view.cy, hw: W / 2 / view.s, hh: H / 2 / view.s }, 0.7 / view.s, function (b, X, Y, wx, wy, k) { drawn.push([b, X, Y, wx, wy, k]); }, 600000); if (res.leftOut > leftOutMost) leftOutMost = res.leftOut;
+    g.setTransform(DPR, 0, 0, DPR, 0, 0); g.fillStyle = '#1a1a19'; g.fillRect(0, 0, W, H); g.lineWidth = 1; g.textAlign = 'center'; g.textBaseline = 'middle';
+    for (i = 0; i < drawn.length; i++) { c = drawn[i]; b = c[0];
+      if (b === 0) { py = H / 2 - (c[2] - view.cy) * view.s; g.strokeStyle = '#898781'; g.beginPath(); g.moveTo(0, py); g.lineTo(W, py); g.stroke(); continue; }       // the strip's two lines, y = -1 and y = 1
+      r = view.s / Math.abs(b); px = W / 2 + c[3] / b * view.s; py = H / 2 - c[4] / b * view.s;
+      if (r > 3e6) { var at2 = drawBig(px, py, r, b > 0 && test && test(b)); if (b > 0 && test && test(b)) lit++; if (b > 0 && at2 && at2[0] > 30 && at2[0] < W - 30 && at2[1] > 12 && at2[1] < H - 12) { g.font = '15px system-ui, -apple-system, "Segoe UI", sans-serif'; g.fillStyle = '#f0efec'; g.fillText(String(b), at2[0], at2[1]); } continue; }                 /* too large for the canvas's arc: drawn as its tangent line across the view */
+      g.beginPath(); g.arc(px, py, Math.max(0.5, r - (b > 0 ? 0.5 : 0)), 0, 6.2832);
+      if (b > 0 && test && test(b)) { lit++; g.fillStyle = '#d95926'; g.fill(); g.strokeStyle = '#1a1a19'; g.stroke(); } else { g.strokeStyle = b < 0 ? '#c3c2b7' : '#898781'; g.stroke(); }
+      if (b > 0 && r >= 9) { digits = String(b).length; fs = Math.min(26, r * 1.55 / Math.max(2, digits * 0.62)); if (fs >= 8) { g.font = Math.round(fs) + 'px system-ui, -apple-system, "Segoe UI", sans-serif'; g.fillStyle = '#f0efec'; g.fillText(String(b), px, py); } } }
+    if (hover >= 0 && drawn[hover] && drawn[hover][0] && view.s / Math.abs(drawn[hover][0]) <= 3e6) { c = drawn[hover]; b = c[0]; g.strokeStyle = '#f0efec'; g.lineWidth = 2; g.beginPath(); g.arc(W / 2 + c[3] / b * view.s, H / 2 - c[4] / b * view.s, view.s / Math.abs(b), 0, 6.2832); g.stroke(); g.lineWidth = 1; }
+    var si = selIndex(); if (si >= 0 && view.s / Math.abs(drawn[si][0]) <= 3e6) { c = drawn[si]; b = c[0]; g.strokeStyle = '#f0efec'; g.lineWidth = 2.5; g.beginPath(); g.arc(W / 2 + c[3] / b * view.s, H / 2 - c[4] / b * view.s, Math.max(3, view.s / Math.abs(b)), 0, 6.2832); g.stroke(); g.lineWidth = 1; }
+    $('gpick').innerHTML = pickWords(si);
+    var t = pack.type, fams = t.quad || [], words = hiWords();
+    $('hiName').textContent = words; var mag = view.s / base();
+    var ncirc = drawn.filter(function (c) { return c[0] !== 0; }).length;
+    var insideOf = 0; for (i = 0; i < drawn.length && !insideOf; i++) { c = drawn[i]; if (c[0] > 0 && (1 - Math.sqrt(c[3] * c[3] + c[4] * c[4])) * view.s / c[0] >= Math.ceil(Math.sqrt(W * W + H * H) / 2)) insideOf = c[0]; }                 /* the whole view (half a diagonal, 589 px in the picture of 1000 by 620) lies inside this circle */
+    $('gsay').innerHTML = '<b>' + qname(pack.root) + '</b>: ' + group(ncirc) + (ncirc === 1 ? ' circle drawn' : ' circles drawn') + ($('hi').value === 'none' ? '' : ', <b>' + group(lit) + '</b> of them ' + words) + (res.visits > 600000 ? ' (the page stopped looking; magnify to see the rest)' : '') + (res.leftOut ? ' (some circles may be missing here: their numbers are too large to hold exactly)' : '') + '. ' + (Math.abs(mag - 1) < 0.0005 ? 'Not magnified.' : mag > 1 ? 'Magnified ' + (mag >= 100 ? group(Math.round(mag)) : +mag.toPrecision(3)) + ' times.' : 'Drawn back ' + (+(1 / mag).toPrecision(3)) + ' times.') + (ncirc === 0 ? ' Nothing of the gasket is in view: \u201cThe whole gasket\u201d brings it back.' : '') + (insideOf ? ' The whole view lies inside the circle of curvature ' + group(insideOf) + '.' : '') + ' Its numbers all leave ' + t.res.join(', ').replace(/, (\d+)$/, ' or $1') + ' on division by 24 (the test told of below)' + (t.quad === null ? '; the page could not work out its sign, and so not its families' : fams.length ? '; it is proved (Haag, Kertzer, Rickards and Stange, 2023) that it has no number of the form ' + fams.map(famName).join(' or ') : '; the theorem of 2023 names no family of squares barred from it') + (t.quartic ? ' (for this kind there may be a family of fourth powers as well: see the third panel)' : '') + '.';
+    story();
+    if ($('gtable').classList.contains('on')) gtable();
+  }
+  // The sentence under the picture that goes with the two gaskets the page compares: one in which squares turn up, one in which none ever does.
+  function story() { var key = pack.root.join(','), sq = $('hi').value === '1', h = '', label = 'Back to the gasket with squares', to = '1', btn = $('swap');
+    if (key === '-4,5,20,21' && sq) { h = 'In this gasket squares turn up: the two largest orange circles are marked 36, which is 6 \u00d7 6.'; label = 'Show a gasket with no square in it'; to = '0'; }
+    else if (key === '-3,5,8,8' && sq) h = 'In this gasket nothing is lit, and nothing will be, however far you magnify: no square is the number of any of its circles. That was proved in 2023, against what had been believed for twenty years.';
+    else if (key === '-4,5,20,21') label = 'Light the squares again';
+    if ($('gstory').textContent !== h) $('gstory').textContent = h; if (btn.textContent !== label) btn.textContent = label; btn.setAttribute('data-to', to); }
+  $('swap').addEventListener('click', function () { var to = this.getAttribute('data-to'); $('hi').value = '1'; $('pack').value = to; setPack(PRESETS[+to]); });
+  // a circle far larger than the view: near the view its edge is all but straight.  The point of the edge nearest the view's
+  // centre and the direction of the edge there are found from the centre (px, py) and radius r, in pixels.
+  function drawBig(px, py, r, lit) { var dx = W / 2 - px, dy = H / 2 - py, d = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / d, uy = dy / d, ex = px + ux * r, ey = py + uy * r, L = 2000, inside = d < r;
+    if (lit) { g.fillStyle = '#d95926'; if (inside && r - d > 1200) { g.fillRect(0, 0, W, H); return null; }                                 /* the view is deep inside a lit circle: all orange, and no place for its number */ g.beginPath(); g.moveTo(ex - uy * L, ey + ux * L); g.lineTo(ex + uy * L, ey - ux * L); g.lineTo(ex + uy * L - ux * 2 * L, ey - ux * L - uy * 2 * L); g.lineTo(ex - uy * L - ux * 2 * L, ey + ux * L - uy * 2 * L); g.closePath(); g.fill(); }
+    if (Math.abs(r - d) < 1200) { g.strokeStyle = '#898781'; g.beginPath(); g.moveTo(ex - uy * L, ey + ux * L); g.lineTo(ex + uy * L, ey - ux * L); g.stroke(); }
+    return [ex - ux * 18, ey - uy * 18]; }                                            /* a place for its number, just inside its edge */
+  // the circle that was chosen by a tap or a click: kept by what it is, not by its place in the list, which changes with every drawing
+  function selIndex() { var i, c; if (!sel) return -1; for (i = 0; i < drawn.length; i++) { c = drawn[i]; if (c[0] === sel[0] && c[1] === sel[1] && c[2] === sel[2] && (c[5] || 0) === sel[3]) return i; } return -1; }
+  function pickWords(i) { var b, facts = [];
+    if (i < 0) return sel ? 'The circle marked <b>' + group(sel[0]) + '</b> is out of the picture now. \u201cThe whole gasket\u201d shows everything again.' : (NARROW ? 'Tap' : 'Click') + ' a circle, and this line says what its number is.';
+    b = drawn[i][0]; [1, 2, 3, 6].forEach(function (u) { var n; if (b % u === 0 && G.isSquare(b / u)) { n = Math.round(Math.sqrt(b / u)); facts.push(group(b) + ' = ' + (u === 1 ? '' : u + ' \u00d7 ') + group(n) + ' \u00d7 ' + group(n) + (u === 1 ? ', a square' : u === 2 ? ', twice a square' : u === 3 ? ', three times a square' : ', six times a square')); } });
+    return 'The circle marked <b>' + group(b) + '</b>: ' + (facts.length ? facts.join('; ') : 'not a square, nor 2, 3 or 6 times one') + '. ' + (small(i) ? '\u201cMagnify\u201d closes in on it.' : 'It fills the picture: choose one of the small circles round it to go further.'); }
+  function small(i) { return view.s / Math.abs(drawn[i][0]) < 0.3 * Math.min(W, H) / 2; }             /* a circle that still has room to grow in the picture; magnifying about the middle of a large one shows only its inside */
+  function ident(c) { return [c[0], c[1], c[2], c[5] || 0]; }
+  // with nothing chosen, "Magnify" chooses: the largest lit circle that has room to grow and whose middle is in the picture, or, with none lit, the largest such circle
+  function autoPick() { var test = hiTest(), best = -1, bestLit = -1, i, c, b, x, y;
+    for (i = 0; i < drawn.length; i++) { c = drawn[i]; b = c[0]; if (b <= 0 || !small(i) || view.s / b < 2) continue; x = W / 2 + c[3] / b * view.s; y = H / 2 - c[4] / b * view.s; if (x < 0 || x > W || y < 0 || y > H) continue;
+      if (best < 0 || b < drawn[best][0]) best = i; if (test && test(b) && (bestLit < 0 || b < drawn[bestLit][0])) bestLit = i; }
+    return bestLit >= 0 ? bestLit : best; }
+  function magnify() { var i = selIndex(), c; if (i < 0 && !sel) { i = autoPick(); if (i >= 0) sel = ident(drawn[i]); }
+    if (i >= 0 && small(i)) { c = drawn[i]; view.cx += c[3] / c[0]; view.cy += c[4] / c[0]; }                    /* the chosen circle comes to the middle, and stays there while the picture doubles */
+    zoomAt(2, W / 2, H / 2); }
+  function move(dx, dy) { var d = Math.min(W, H) / 3 / view.s; view.cx += dx * d; view.cy += dy * d; hover = -1; $('gtip').style.display = 'none'; draw(); }
+  function zoomAt(f, px, py) { var wx = view.cx + (px - W / 2) / view.s, wy = view.cy - (py - H / 2) / view.s, s = view.s * f, lim = base(); if (s < lim / 8) s = lim / 8; if (s > lim * 1e11) s = lim * 1e11; if (s > 1.4e15) s = 1.4e15; /* past this the curvatures would outrun exact floating numbers */ view.s = s; view.cx = wx - (px - W / 2) / s; view.cy = wy + (py - H / 2) / s; hover = -1; $('gtip').style.display = 'none'; draw(); }
+  function at(ev) { var r = cv.getBoundingClientRect(); return [(ev.clientX - r.left) * W / r.width, (ev.clientY - r.top) * H / r.height]; }
+  function pick(px, py) { var wx = (px - W / 2) / view.s, wy = -(py - H / 2) / view.s, best = -1, bb = -1, i, c, b, dx, dy; for (i = 0; i < drawn.length; i++) { c = drawn[i]; b = c[0]; if (b <= 0) continue; dx = wx - c[3] / b; dy = wy - c[4] / b; if (dx * dx + dy * dy <= 1 / (b * b) && b > bb) { bb = b; best = i; } } return best; }
+  function frac(n, d) { n = BigInt(n); d = BigInt(d); var a = n < 0n ? -n : n, b = d < 0n ? -d : d, t; while (b) { t = a % b; a = b; b = t; } if (a > 1n) { n /= a; d /= a; } if (d < 0n) { n = -n; d = -d; } return d === 1n ? String(n) : (n < 0n ? '−' : '') + String(n < 0n ? -n : n) + '/' + d; }
+  function trueX(c) { return BigInt(c[1]) + 2n * BigInt(c[5] || 0) * BigInt(c[0]); }                    /* in the strip the circle drawn is one of the first period moved along by c[5] periods */
+  function tipFor(i) { var c = drawn[i], b = c[0], h = '<b>curvature ' + group(b) + '</b><br><span>radius 1/' + group(b) + ', centre (' + frac(trueX(c), b) + ', ' + frac(c[2], b) + ')</span><br><span>remainder ' + (b % 24) + ' on division by 24</span>', u;
+    [1, 2, 3, 6].forEach(function (u) { if (b % u === 0 && G.isSquare(b / u)) h += '<br>' + (u === 1 ? '' : u + ' × ') + group(Math.round(Math.sqrt(b / u))) + '²'; }); return h; }
+  var drag = null, pts = {}, pinch = null;
+  function fingers() { return Object.keys(pts); }
+  cv.addEventListener('pointerdown', function (e) { var p = at(e), f; pts[e.pointerId] = p; f = fingers();
+    if (f.length === 2) { if (drag && drag.moved) { view.cx = drag.cx; view.cy = drag.cy; } drag = null; pinch = { d: Math.max(1, Math.hypot(pts[f[0]][0] - pts[f[1]][0], pts[f[0]][1] - pts[f[1]][1])) }; return; }
+    if (f.length > 2) return;
+    drag = { x: p[0], y: p[1], cx: view.cx, cy: view.cy, moved: false, id: e.pointerId }; try { cv.setPointerCapture(e.pointerId); } catch (x) {} });
+  cv.addEventListener('pointermove', function (e) { var p = at(e), t = $('gtip'), r, cr, f, d;
+    if (pts[e.pointerId]) pts[e.pointerId] = p;
+    if (pinch) { f = fingers(); if (f.length === 2) { d = Math.max(1, Math.hypot(pts[f[0]][0] - pts[f[1]][0], pts[f[0]][1] - pts[f[1]][1])); if (Math.abs(d - pinch.d) > 1) { zoomAt(d / pinch.d, (pts[f[0]][0] + pts[f[1]][0]) / 2, (pts[f[0]][1] + pts[f[1]][1]) / 2); pinch.d = d; } } return; }
+    if (drag) { if (Math.abs(p[0] - drag.x) + Math.abs(p[1] - drag.y) > 3) drag.moved = true; if (drag.moved) { view.cx = drag.cx - (p[0] - drag.x) / view.s; view.cy = drag.cy + (p[1] - drag.y) / view.s; hover = -1; t.style.display = 'none'; draw(); } return; }
+    if (e.pointerType === 'touch') return;                       /* a finger has no hovering: what it taps is said under the picture */
+    var i = pick(p[0], p[1]); if (i !== hover) { hover = i; draw(); } if (i < 0) { t.style.display = 'none'; return; } t.innerHTML = tipFor(i); t.style.display = 'block'; r = $('gfig').getBoundingClientRect(); cr = cv.getBoundingClientRect(); var x = e.clientX - r.left + 14; if (x + 280 > r.width) x -= 300; t.style.left = Math.max(4, x) + 'px'; t.style.top = (e.clientY - r.top + 12) + 'px'; });
+  cv.addEventListener('pointerup', function (e) { var p = at(e), i, c; delete pts[e.pointerId]; if (fingers().length < 2) pinch = null;
+    if (drag && drag.id === e.pointerId && !drag.moved) { i = pick(p[0], p[1]); if (i >= 0) sel = ident(drawn[i]); else sel = null; drag = null; draw(); return; }      /* a tap or a click: the circle under it is chosen */
+    if (drag && drag.id === e.pointerId) drag = null; });
+  cv.addEventListener('pointercancel', function (e) { delete pts[e.pointerId]; if (fingers().length < 2) pinch = null;                                      /* the browser took the touch for its own, to scroll the page: the picture goes back where it was */
+    if (drag && drag.id === e.pointerId) { if (drag.moved) { view.cx = drag.cx; view.cy = drag.cy; draw(); } drag = null; } });
+  cv.addEventListener('pointerleave', function () { if (!drag) { hover = -1; $('gtip').style.display = 'none'; draw(); } });
+  cv.addEventListener('wheel', function (e) { e.preventDefault(); var p = at(e); zoomAt(e.deltaY < 0 ? 1.5 : 1 / 1.5, p[0], p[1]); }, { passive: false });
+  cv.addEventListener('dblclick', function (e) { var p = at(e); zoomAt(2, p[0], p[1]); });
+  cv.addEventListener('keydown', function (e) { var k = e.key, d = 60 / view.s; if (k === 'ArrowLeft') view.cx -= d; else if (k === 'ArrowRight') view.cx += d; else if (k === 'ArrowUp') view.cy += d; else if (k === 'ArrowDown') view.cy -= d; else if (k === '+' || k === '=') { zoomAt(2, W / 2, H / 2); e.preventDefault(); return; } else if (k === '-' || k === '_') { zoomAt(0.5, W / 2, H / 2); e.preventDefault(); return; } else if (k === 'Home') { home(); e.preventDefault(); return; } else return; e.preventDefault(); draw(); });
+  $('zin').addEventListener('click', magnify); $('zout').addEventListener('click', function () { zoomAt(0.5, W / 2, H / 2); }); $('home').addEventListener('click', home);
+  $('mleft').addEventListener('click', function () { move(-1, 0); }); $('mright').addEventListener('click', function () { move(1, 0); }); $('mup').addEventListener('click', function () { move(0, 1); }); $('mdown').addEventListener('click', function () { move(0, -1); });
+  window.addEventListener('resize', function () { if (fit()) draw(); });
+  $('hi').addEventListener('change', draw);
+  function gtable() { var rows = drawn.filter(function (c) { return c[0] > 0; }).sort(function (a, b) { return a[0] - b[0]; }).slice(0, 40), test = hiTest();
+    $('gtable').innerHTML = '<table><tr><th>number</th><th>left over on division by 24</th><th class="l">' + esc(hiWords()) + '?</th></tr>' + rows.map(function (c) { return '<tr><td>' + group(c[0]) + '</td><td>' + (c[0] % 24) + '</td><td class="l">' + (test ? (test(c[0]) ? 'yes' : 'no') : '') + '</td></tr>'; }).join('') + '</table><p class="say">The forty largest circles in view.</p>'; }
+  $('gtab').addEventListener('click', function () { var on = $('gtable').classList.toggle('on'); this.setAttribute('aria-pressed', on); this.textContent = on ? 'Hide the table' : 'Show the table'; if (on) gtable(); });
+  function fillPacks() { var h = ''; PRESETS.forEach(function (q, i) { h += '<option value="' + i + '">' + qname(q) + ' — ' + NOTE[q.join(',')] + '</option>'; }); if (custom) h += '<option value="c">' + qname(custom) + ' — from the third panel</option>'; $('pack').innerHTML = h; }
+  $('pack').addEventListener('change', function () { setPack(this.value === 'c' ? custom : PRESETS[+this.value]); });
+
+  // ---------------------------------------------------------------- the chart of missing numbers
+  var cur = null, marks = [];
+  var CW = 960, CL = 60, CR = 20, CNARROW = false;                 /* the strip's width and its margins: 960, 60 and 20 where there is room; on a narrow screen the screen's own width, 6 and 14 */
+  function X(v) { return CL + (CW - CL - CR) * Math.log10(v) / 8; }
+  function cfit() { var box = $('chart').parentNode, cs = getComputedStyle(box), avail = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight), narrow = avail < 700, w = narrow ? Math.max(240, Math.round(avail)) : 960;
+    if (w === CW && narrow === CNARROW) return false; CW = w; CNARROW = narrow; CL = narrow ? 6 : 60; CR = narrow ? 14 : 20; return true; }
+  function chart() {
+    var d = DATA[+$('cpack').value], svg = '', i, e, u, n, v, rows = [{ name: 'in no family', col: 'var(--spor)', list: d.sporadic }], t = G.type(d.root), res = t.res, y;
+    d.families.forEach(function (u) { var list = []; for (n = 1; u * n * n <= d.N; n++) { v = u * n * n; if (res.indexOf(v % 24) >= 0) list.push(v); } rows.push({ name: famName(u), col: 'var(--fam)', list: list, u: u }); });
+    cur = { d: d, rows: rows }; marks = []; cfit();
+    var ROW = CNARROW ? 60 : 44, TOP = CNARROW ? 46 : 28, END = TOP + (rows.length - 1) * ROW + 32 + (CNARROW ? 6 : 14), xl;        /* a row's marks are 32 high; on a narrow screen its name stands above it */
+    for (e = 0; e <= 8; e++) { svg += '<line x1="' + X(Math.pow(10, e)) + '" y1="' + (CNARROW ? 30 : 20) + '" x2="' + X(Math.pow(10, e)) + '" y2="' + END + '" stroke="#2c2c2a"/>';
+      if (!CNARROW || e % 2 === 0) svg += '<text x="' + X(Math.pow(10, e)) + '" y="' + (END + 18) + '" text-anchor="' + (CNARROW && e === 0 ? 'start' : CNARROW && e === 8 ? 'end' : 'middle') + '">' + (e < 4 ? group(Math.pow(10, e)) : '10' + '<tspan dy="-5" font-size="9">' + e + '</tspan>') + '</text>'; }
+    rows.forEach(function (r, k) { y = TOP + k * ROW; svg += CNARROW ? '<text x="' + CL + '" y="' + (y - 6) + '" fill="#f0efec">' + esc(r.name) + '</text>' : '<text x="54" y="' + (y + 20) + '" text-anchor="end" fill="#f0efec">' + esc(r.name) + '</text>';
+      var path = ''; r.list.forEach(function (v) { var x = X(v); path += 'M' + x.toFixed(2) + ' ' + y + 'v32'; marks.push([x, k, v]); }); svg += '<path d="' + path + '" stroke="' + r.col + '" stroke-width="1" fill="none"/>'; });
+    var last = d.sporadic[d.sporadic.length - 1]; xl = X(last);
+    svg += '<line x1="' + xl + '" y1="' + (CNARROW ? 18 : 16) + '" x2="' + xl + '" y2="' + (TOP + 34) + '" stroke="#f0efec" stroke-dasharray="2 2"/><text x="' + (CNARROW && xl > CW * 0.5 ? xl - 5 : xl + 5) + '" y="14"' + (CNARROW && xl > CW * 0.5 ? ' text-anchor="end"' : '') + '>the last, ' + group(last) + '</text>';
+    svg += '<line id="cx" x1="0" y1="' + (CNARROW ? 30 : 20) + '" x2="0" y2="' + END + '" stroke="#f0efec" visibility="hidden"/>';
+    $('chart').setAttribute('viewBox', '0 0 ' + CW + ' ' + (END + 30)); $('chart').innerHTML = svg;
+    $('csay').innerHTML = '<b>' + qname(d.root) + '</b>, every circle with a number up to ' + group(d.N) + ': <b>' + group(d.sporadic.length) + '</b> numbers are missing that are in no family, the last of them ' + group(last) + (d.families.length ? '; and <b>' + group(d.inFamilies) + '</b> that are in the famil' + (d.families.length > 1 ? 'ies ' : 'y ') + d.families.map(famName).join(' and ') + ', none of which is ever there' : '; the paper finds no family barred from this gasket') + '.';
+    if ($('ctable').classList.contains('on')) ctable();
+  }
+  function ctable() { var d = cur.d; $('ctable').innerHTML = '<p class="nums">' + (d.families.length ? 'In a family: every ' + d.families.map(famName).join(' and every ') + ' that leaves one of the remainders ' + G.type(d.root).res.join(', ') + ' on division by 24. ' : '') + 'In no family (' + group(d.sporadic.length) + '): ' + d.sporadic.map(group).join(' · ') + '</p>'; }
+  function cmove(px) { var r = $('chart').getBoundingClientRect(), x = (px - r.left) * CW / r.width, best = null, bd = 1e9, i, m; for (i = 0; i < marks.length; i++) { m = marks[i]; if (Math.abs(m[0] - x) < bd) { bd = Math.abs(m[0] - x); best = m; } }
+    var t = $('ctip'), line = document.getElementById('cx'); if (!best || bd > 12) { t.style.display = 'none'; line.setAttribute('visibility', 'hidden'); return null; }
+    line.setAttribute('x1', best[0]); line.setAttribute('x2', best[0]); line.setAttribute('visibility', 'visible'); var row = cur.rows[best[1]], v = best[2];
+    t.innerHTML = '<b>' + group(v) + '</b><br><span>' + (row.u ? 'never a curvature here: ' + (row.u === 1 ? '' : row.u + ' × ') + group(Math.round(Math.sqrt(v / row.u))) + '²' : 'missing, in no family') + '</span><br><span>remainder ' + (v % 24) + ' on division by 24</span>'; t.style.display = 'block';
+    var fr = $('cfig').getBoundingClientRect(), xx = r.left - fr.left + best[0] * r.width / CW + 10; if (xx + 280 > fr.width) xx -= 300; t.style.left = Math.max(4, xx) + 'px'; t.style.top = (r.top - fr.top + 6) + 'px'; return best; }
+  $('chart').addEventListener('pointermove', function (e) { cmove(e.clientX); }); $('chart').addEventListener('pointerdown', function (e) { cmove(e.clientX); });        /* a tap answers as a moving pointer does */
+  window.addEventListener('resize', function () { if (cfit()) chart(); }); $('chart').addEventListener('pointerleave', function (e) { if (e.pointerType === 'touch') return;        /* a finger that lifts leaves its answer standing */ $('ctip').style.display = 'none'; var l = document.getElementById('cx'); if (l) l.setAttribute('visibility', 'hidden'); });
+  var kpos = 0; $('chart').addEventListener('keydown', function (e) { if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return; e.preventDefault(); var list = cur.rows[0].list; kpos = Math.max(0, Math.min(list.length - 1, kpos + (e.key === 'ArrowRight' ? 1 : -1) * (e.shiftKey ? 20 : 1))); var r = $('chart').getBoundingClientRect(); cmove(r.left + X(list[kpos]) * r.width / 960); });
+  $('cpack').addEventListener('change', function () { kpos = 0; chart(); });
+  $('ctab').addEventListener('click', function () { var on = $('ctable').classList.toggle('on'); this.setAttribute('aria-pressed', on); this.textContent = on ? 'Hide the list' : 'Show the list'; if (on) ctable(); });
+
+  // ---------------------------------------------------------------- any gasket
+  function look() { var m = $('quad').value.replace(/−/g, '-').match(/-?\d+/g), q, rootq, t, N = +$('upto').value, h, en, miss, fam, spor, list, i, v, wit, u, n, may = [], no = []; $('show').disabled = true; $('tnums').innerHTML = ''; $('tlist').hidden = true;
+    if (!m || m.length !== 4) { $('tsay').innerHTML = 'Four whole numbers, please.'; return; } q = m.map(Number);
+    if (q.some(function (x) { return Math.abs(x) > 1e6; }) || !G.isDescartes(q)) { $('tsay').innerHTML = 'Those four do not satisfy Descartes’s equation' + (q.some(function (x) { return Math.abs(x) > 1e6; }) ? ' (or are too large for this page)' : '') + ', so they are not the curvatures of four circles that all touch. Try −11, 21, 24, 28 or −6, 11, 14, 15.'; return; }
+    if (!G.isPrimitive(q)) { $('tsay').innerHTML = 'Those four have a common divisor; divide it out first.'; return; }
+    rootq = G.reduce(q); t = G.type(rootq); fam = t.quad || []; en = G.enumerate(rootq, N); miss = G.missing(rootq, N, en); spor = miss.filter(function (v) { return !G.inFamily(v, fam); });
+    h = (rootq.join() === q.slice().sort(function (a, b) { return a - b; }).join() ? '<b>' + qname(rootq) + '</b> is the root of its gasket (its four largest circles). ' : 'These circles belong to the gasket whose four largest circles are <b>' + qname(rootq) + '</b>. ');
+    h += 'Its numbers leave <b>' + t.res.join(', ') + '</b> on division by 24. ';
+    h += t.quad === null ? 'The page could not work out which families are barred from it. ' : fam.length ? 'By the paper’s theorem no curvature in it is of the form <b>' + fam.map(famName).join('</b> or <b>') + '</b>. ' : 'The paper’s theorem names no family of squares barred from it. ';
+    if (t.quartic) { [1, 4, 9, 36].forEach(function (u) { for (n = 1; u * Math.pow(n, 4) <= N; n++) { v = u * Math.pow(n, 4); if (en.has(v)) { (u === 1 || u === 4 ? may : no).push(v); } } });
+      h += 'For a gasket of this kind the paper has a second sign, which decides whether a family of fourth powers is barred; the page does not work that sign out, but looks for a witness: ';
+      if (t.k === 1) h += may.length + no.length ? 'the curvature ' + group((may.concat(no))[0]) + ' is of the form n⁴, 4n⁴, 9n⁴ or 36n⁴, so no such family is barred here. ' : 'no curvature up to ' + group(N) + ' is of the form n⁴, 4n⁴, 9n⁴ or 36n⁴, which is what the paper proves for one of the two kinds; the page cannot tell which kind this is. ';
+      else h += may.length ? 'the curvature ' + group(may[0]) + ' is of the form n⁴ or 4n⁴, so the barred family is 9n⁴ and 36n⁴. ' : no.length ? 'the curvature ' + group(no[0]) + ' is of the form 9n⁴ or 36n⁴, so the barred family is n⁴ and 4n⁴. ' : 'no witness up to ' + group(N) + '. '; }
+    h += '<br>Going through its ' + group(en.circles) + ' circles with curvature up to ' + group(N) + ': <b>' + group(miss.length) + '</b> numbers that pass the test of remainders are missing' + (fam.length ? ', ' + group(miss.length - spor.length) + ' of them in the barred famil' + (fam.length > 1 ? 'ies' : 'y') + ' (marked with an orange square) and ' + group(spor.length) + ' not' : '') + '.';
+    $('tsay').innerHTML = h; list = miss.slice(0, 600).map(function (v) { return G.inFamily(v, fam) ? '<b>' + group(v) + '</b>' : group(v); }).join(' · '); $('tnums').innerHTML = miss.length ? 'Missing: ' + list + (miss.length > 600 ? ' … (' + group(miss.length - 600) + ' more)' : '') : ''; $('tlist').hidden = !miss.length; $('tlist').textContent = ($('tnums').classList.contains('on') ? 'Hide' : 'Show') + ' the list of the missing numbers' + (miss.length > 600 ? ' (the first 600)' : '');
+    custom = rootq; $('show').disabled = false; return true; }
+  $('tlist').addEventListener('click', function () { var on = $('tnums').classList.toggle('on'); this.setAttribute('aria-pressed', on); this.textContent = this.textContent.replace(on ? 'Show' : 'Hide', on ? 'Hide' : 'Show'); });
+  $('try').addEventListener('click', look); $('quad').addEventListener('keydown', function (e) { if (e.key === 'Enter') look(); });
+  $('show').addEventListener('click', function () { if (look() !== true || !custom) return; fillPacks();        /* the box is read again: the button used to draw the gasket last looked at, whatever had been typed since */ $('pack').value = 'c'; setPack(custom); $('gfig').scrollIntoView({ behavior: 'smooth' }); });
+
+  fillPacks(); $('cpack').innerHTML = DATA.map(function (d, i) { return '<option value="' + i + '">' + qname(d.root) + (d.nick ? ' — ' + d.nick : '') + '</option>'; }).join(''); $('cpack').value = '2';
+  $('pack').value = '1'; setPack(PRESETS[1]); chart(); look();
+  window.GasketPage = { view: function () { return view; }, strip: function () { return { W: CW, left: CL, right: CR, narrow: CNARROW }; }, size: function () { return { W: W, H: H, dpr: DPR, narrow: NARROW }; }, chosen: function () { return sel; }, leftOut: function () { return [lastRes ? lastRes.leftOut : -1, leftOutMost]; }, pack: function () { return pack; }, drawn: function () { return drawn.map(function (c) { return [c[0], c[1], c[2], c[5] || 0]; }); }, setView: function (cx, cy, s) { view = { cx: cx, cy: cy, s: s }; draw(); }, setPack: setPack, marks: function () { return marks; } };
+})();
+</script>
+</body>
+</html>

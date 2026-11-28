@@ -1,0 +1,193 @@
+9c9
+< for m = 12 (§7).
+---
+> for m = 12 (§7); for m = 12 the referee's search met more still, 539/2048 (§7).
+20c20,35
+< the same model as the author, not a referee's report in the sense of the earlier texts. The proof is computer
+---
+> the same model as the author, not a referee's report in the sense of the earlier texts. Since then a fresh
+> referee, briefed by the author of the brief, has read the text and recomputed its tables (report:
+> `../report-referee-two.md`): by its report it found no gap and no wrong number, reproduced every table exactly with
+> programs of its own written from the definitions (the recursion V_G of Proposition 7 it took from `lo_union2.py`,
+> the text then not stating it; the text now defines it as implemented), tested the theorem on 4,388,707 multisets and the lemmas on
+> 39,934 with no failure, and asked for six changes, none to a result, all made here (last section). Not checked, in
+> its words: "An exact U_3(m) for m ≥ 17 (U_3(18) would exceed my memory cap)"; "The reduction to depth
+> ⌊(m−1)/(p−1)⌋ against the definition beyond Z_9 (m ≤ 9), Z_27 (m ≤ 7), Z_25 (m ≤ 7) exhaustively; my tree program
+> and the author's share that model"; "The author's test programs (`test_cells.py`, `test_bf.py`, `test_dp.py`,
+> `test_removal.py`): not read and not rerun at the first reading (two of their outputs were read); of its counts
+> the referee confirmed only the family counts. At the second look it read `test_removal.py` whole, reran it, and
+> reproduced its counts 2,301 and 39 with its own program" (this item in the wording of its second look,
+> `../report-referee-two-2.md`, which corrects its first report here); "The proofs of
+> Corollary U, Lemma W and the contraction lemma beyond the parts used; the Lean statements"; "The status
+> paragraph's account of the earlier reader"; "Anything in print: no network, so the attributions to Sperner, Erdős
+> and Kleitman are checked from memory only". The proof is computer
+119c134
+<   a class of two elements never has σ = ±(a root of unity).
+---
+>   a class of two elements never has σ equal to a root of unity, of any order.
+128,129c143,146
+< y_1 = −y_2 or y_1 = y_2); so each value other than 0 has share at most 1/4. And ±y_1 ± y_2 = ±y_3 is a sum of three terms
+< equal to 0, a triangle, impossible if 3 ∤ g″. ∎
+---
+> y_1 = −y_2 or y_1 = y_2); so each value other than 0 has share at most 1/4. And ±y_1 ± y_2 = ρ, ρ a root of unity
+> of any order, is a sum of three terms of absolute value 1 equal to 0, a triangle; this is impossible if 3 ∤ g″,
+> because the quotient of the two elements of the class, ±y_1 and ±y_2, would itself have to be a primitive cube
+> root of unity, and its order divides 2g″. ∎
+195c212,214
+< at a level allowed (which includes every smaller depth).
+---
+> at a level allowed (which includes every smaller depth). (The referee's tree program and `ptree.py` enumerate
+> the same class of trees, so their agreement does not test the depth bound: that rests on the contraction argument
+> alone.)
+216,220c235,259
+< **Proposition 7 (m ≥ 17; a bound, not exact).** For integer class sums let, for a group with R elements:
+< enf(R) = c_R for even R ≥ 2 and 0 otherwise (not full: every class sum is 0, so every class is even, and
+< ∏ c ≤ c_R); ef_p(R) the largest ∏_(t ≠ t_0) c_(r_t) over p classes of sizes of one parity (full, flat: equal sums
+< have one parity); df_p(R) the same with c′ in place of c, where c′_r = c_r for odd r and C(r, r/2 + 1)/2^r for even
+< r (flat with a common value other than 0). A signing that is bad at some power of p and not at 1 is bad at a live level: take the least i ≥ 1 with ε bad at
+---
+> **Proposition 7 (m ≥ 17; a bound, not exact).** U_p(m) ≤ PP_p(m), where PP_p(m) is the following number (it is
+> what `lo_union2.py` computes, by dynamic programming over the groups).
+> 
+> *One group* with R elements, integer class sums: enf(R) := c_R for even R ≥ 2 and 0 otherwise; ef_p(R) := the
+> largest ∏_(t ≠ t_0) c_(r_t) over p classes of sizes r_t ≥ 1 of one parity with R elements in all, t_0 a class of
+> least size (0 if there is no such choice); df_p(R) := the same with c′ in place of c, where c′_r = c_r for odd r
+> and C(r, r/2 + 1)/2^r for even r.
+> 
+> *G groups* with R elements in all (r runs over the numbers of elements of the first group):
+> - P_1 = max(enf, ef_p), P_G(R) = max_r P_1(r)·P_(G−1)(R − r);
+> - E_1 = ef_p, E_G(R) = max_r max(ef_p(r)·P_(G−1)(R − r), P_1(r)·E_(G−1)(R − r)), the largest product of the
+>   values of G groups one of which is full;
+> - V_1 = df_p, V_G(R) = max_r [df_p(r)·P_(G−1)(R − r) + P_1(r)·V_(G−1)(R − r)].
+> 
+> *Ranks.* last_p(j, m) := the least of the largest E_(G′)(m) and the largest V_(G′)(m) over
+> G′ ≥ 1 + (j − 1)(p − 1); it is 0 for a rank needing more groups than m elements allow. nonlast_p(j, m) := the same
+> with ef_p and df_p taken over classes of at least two elements. And
+> 
+>   **PP_p(m)** := max over l ≥ 1 of (Σ_(j < l) nonlast_p(j, m) + last_p(l, m)).
+> 
+> *Proof.* A group that is not full is flat iff every class sum is 0; then every class is even, and the share is
+> ∏ c ≤ c_R: at most enf(R). A full group is flat with share at most ∏_(t ≠ t_0) c_(r_t), and equal sums have one
+> parity: at most ef_p(R); it is flat with a common value other than 0 with share at most df_p(R) (c′_r is the
+> largest share of a value other than 0). A signing that is bad at some power of p and not at 1 is bad at a live
+> level: take the least i ≥ 1 with ε bad at
+225,229c264,270
+< ∏ e(D_k) and Σ_k δ(D_k) ∏_(l ≠ k) e(D_l), where e = enf or ef_p and δ = df_p; at the level of rank j there are at
+< least 1 + (j − 1)(p − 1) groups, one of them full. Let last_p(j, m) be the least of the two maxima of these
+< expressions over all ways of distributing m elements (for the second the program takes an upper bound, by a
+< recursion over the groups with the largest e and the largest δ for each number of elements), and nonlast_p(j, m)
+< the same when every class has at least two elements. If a class at depth i is a single element, no signing is bad at p^(i′) for any i′ > i (the element is
+---
+> ∏ e(D_k) and Σ_k δ(D_k) ∏_(l ≠ k) e(D_l), where e = enf or ef_p and δ = df_p (δ = 0 for a group that is not full).
+> The first is at most E_G(m), one group being full. The second is at most V_G(m): it is an upper bound for
+> Σ_k δ(D_k) ∏_(l ≠ k) e(D_l), as one sees by splitting off the first group,
+> Σ_k δ(D_k) ∏_(l ≠ k) e(D_l) = δ(D_1)·∏_(l ≥ 2) e(D_l) + e(D_1)·Σ_(k ≥ 2) δ(D_k) ∏_(l ≥ 2, l ≠ k) e(D_l), and by
+> induction on G. At the level of rank j there are at least 1 + (j − 1)(p − 1) groups, one of them full; so the
+> share of that level is at most last_p(j, m). If a class at depth i is a single element, no signing is bad at
+> p^(i′) for any i′ > i (the element is
+231,233c272,273
+< all classes at the levels of rank j < l have at least two elements, and
+< 
+<   U_p(m) ≤ **PP_p(m)** := max over l ≥ 1 of (Σ_(j < l) nonlast_p(j, m) + last_p(l, m)).
+---
+> all classes at the levels of rank j < l have at least two elements, the shares of those levels are at most
+> nonlast_p(j, m), and U_p(m) ≤ PP_p(m). ∎
+235,236c275,276
+< `lo_union2.py` computes PP_p(m) by dynamic programming over the groups. Run for m ≤ 16 without the exact values
+< it gives numbers at least as large as the table above in every case (`lo2_noexact_16.out`).
+---
+> Run for m ≤ 16 without the exact values, `lo_union2.py` gives numbers at least as large as the table above in
+> every case (`lo2_noexact_16.out`).
+249c289,291
+< level), or bad at a fully live composite d (shares add up to at most COMP(m), §3). The values are computed by
+---
+> level; the events at p^i depend only on B mod p^(v_p(n)), so U_p(m), defined on moduli that are powers of p,
+> applies; and T_p(m) = [m even]·c_m + U_p(m), the share of level 0 being the same for every multiset), or bad at a
+> fully live composite d (shares add up to at most COMP(m), §3). The values are computed by
+284c326,328
+< sign, the two others the opposite sign: Lemma 4 (c) and its proof), so 3/128 can be replaced by 1/128 and
+---
+> sign, the two others the opposite sign: Lemma 4 (c) and its proof). With eight elements 7 has at most one live
+> level, so the six singles and the pair are the same for every fully live d divisible by 7. Such a d has a single
+> cell, since 7 + 2 > 8 and a lone eighth element kills the event. So 3/128 can be replaced by 1/128 and
+319c363,366
+< W_30 exact, the cited 3.4·10^(−6) as a fraction): Univ(43, 30) ≤ 0.363191 < 3/8. ∎
+---
+> W_30 exact, the cited 3.4·10^(−6) as a fraction): Univ(43, 30) ≤ 0.363191 < 3/8. Certified after the referee's
+> report, as it did: the same in fractions with 2^(−1/2) replaced by the larger 70710678119/10^11
+> (`test_removal.py 31 60 43 30 cert`, `test_removal_cert.out`) gives Univ(43, 30) < 0.3624131 (0.362413084 to nine
+> places), so the number in the statement, and "β(m) < 0.3625" in the head, do not rest on floating point. ∎
+342a390,393
+>   The referee's search met a larger share for m = 12: {5, 5, 22, 22, 26, 26, 27, 27, 29, 29, 38, 38} on Z_45 has
+>   1078 of 4096 bad signings, 539/2048 (its report, 2 (v)); recounted from the definition by `verify_examples.py`:
+>   1078 of 4096, bad at d = 1, 3, 5, 9, 15, 45 for 924, 392, 104, 128, 66, 64 signings, as in its report. Also
+>   below 3/8.
+370,371c421,422
+<    β(9) ∈ [3/16, 71/256], β(10) ∈ [73/256, 47/128], β(12) ∈ [269/1024, 707/2048] (lower ends: the brief's data, and
+<    for m = 10, 12 the two multisets above). **Not proved:** the exact value
+---
+>    β(9) ∈ [3/16, 71/256], β(10) ∈ [73/256, 47/128], β(12) ∈ [539/2048, 707/2048] (lower ends: the brief's data,
+>    for m = 10 the multiset above, for m = 12 the referee's multiset above). **Not proved:** the exact value
+398a450,511
+> 
+> ## 9. Changes after the referee's report
+> 
+> The report is `../report-referee-two.md` (a fresh referee, briefed by the author of the brief; it read this file as
+> it stood before this section, kept as `../two-result.as-sent-to-referee.md`). Its part 2 asks for six changes, none
+> to a result. Made, item by item:
+> 
+> - **(i) Proposition 7.** Rewritten as statement, then proof (the report's first suggestion). last_p and nonlast_p
+>   are now defined as the program computes them, by the recursions P_G, E_G, V_G (P_G and V_G in the referee's
+>   wording; E_G is the largest product with one full group, as before), with its sentences that V_G is an upper
+>   bound "split off the first group" and that the bound is 0 for a rank needing more groups than m elements allow.
+>   No number changes. Checked by a new program, `check_prop7.py` (`check_prop7.out`): PP_p(m) recomputed from the
+>   definitions as now worded, without `lo_union2.py`, equals the value printed in `lo2_exact_46.out` in all 86
+>   cases compared (p = 3 and 7 for m = 17 to 46, p = 5 for m = 21 to 46; that output prints the primes up to 7 only,
+>   so the primes from 11 on were not compared by me; by its reports the referee compared every printed number,
+>   302 of them, at its first reading, the primes from 11 on then only through the column sum, and at its second
+>   look prime by prime, 332 pairs (p, m), no difference).
+> - **(ii) Theorem B.** Certified, not weakened: `test_removal.py` has a new option `cert`, which replaces 2^(−1/2)
+>   by the larger 70710678119/10^11, as the referee did; in exact fractions Univ(43, 30) < 36242/100000, and the value
+>   is 0.362413084 to nine places (`test_removal_cert.out`). The proof of Theorem B says so; its statement and the
+>   head ("β(m) < 0.3625 for every m ≥ 43") are unchanged. I write "< 0.3624131" where the report has
+>   "≤ 0.362413084": the exact fraction is a little above 362413084/10^9. Without the option the program gives its
+>   old output.
+> - **(iii) Remark on eight elements (§5).** The referee's two sentences added (one live level of 7, so the same six
+>   singles and pair for every such d; a single cell).
+> - **(iv) Lemma 4 (c).** The statement now reads "never has σ equal to a root of unity, of any order", and the
+>   proof gives the referee's reason (the quotient of the two elements of the class would itself have to be a
+>   primitive cube root of unity).
+> - **(v) Lower end for m = 12.** The referee's multiset {5, 5, 22, 22, 26, 26, 27, 27, 29, 29, 38, 38} on Z_45,
+>   recounted by me from the definition before writing it (`verify_examples.py`, to which it was added;
+>   `verify_examples.out`, whose first two lines are as before): 1078 of 4096 bad signings, 539/2048, with the
+>   referee's counts at each d. Changed accordingly: the interval for β(12) in §7 (now [539/2048, 707/2048]), the item
+>   on `verify_examples.py` in §7, and one clause in the paragraph on data at the head.
+> - **(vi) Theorem A, proof.** The clause added: the events at p^i depend only on B mod p^(v_p(n)), and
+>   T_p(m) = [m even]·c_m + U_p(m).
+> - **Status paragraph.** Two sentences added: what the referee did, by its report, and what it did not check, in
+>   its words.
+> - **From its suggestions (part 6).** The first (Proposition 7 as statement then proof) is done with (i). The third
+>   is done by one sentence in §4: the two tree programs enumerate the same class of trees, so the depth bound rests
+>   on the contraction argument alone.
+> 
+> Not changed:
+> 
+> - **Its second suggestion** (to replace PP_3(m) for m ≥ 17 by the bound of the text "one" for powers of 3, which
+>   would widen the margin at m = 18): that would be a new result resting on a text I have not read, and I was asked
+>   to change nothing else.
+> - **The count in the test of Lemma 8** (§7: 2,301 cases, 39 in which φ grows). The report has 1,927 and 27 from
+>   its own program; the two programs count different sets of (p, j, m) (the referee's: ranks up to 30/(p − 1) and
+>   m from p on; mine: ranks up to what sixty elements allow and m from 1 on). Neither has a failure.
+> - **Everything else:** no statement of a lemma, proposition or theorem other than the wording of Lemma 4 (c) and
+>   the definitions inside Proposition 7; no number of any table; §8, whose list of files does not name the three
+>   new ones (`check_prop7.py`, `check_prop7.out`, `test_removal_cert.out`). While making the changes I found nothing
+>   that is wrong after all.
+> 
+> **After the referee's second look** (`../report-referee-two-2.md`; by it all six changes are made and right, and
+> it corrects two sentences of its own first report): in the status paragraph the quotation on my test programs is
+> replaced by its corrected wording and its parenthesis on the recursion V_G is added; in item (i) above the sentence
+> on what the referee compared is replaced by what its second report says; `test_removal.py cert` now also prints
+> the exact comparison Univ(43, 30) < 3624131/10^7 (true), the bound written in the proof of Theorem B, and
+> `test_removal_cert.out` is refreshed (its first three lines are as before). For the record: while refreshing it a
+> copy of that output was written to /dev/shm by mistake and deleted at once. These last changes were made after the
+> referee's second look and have been read by nobody.

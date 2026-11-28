@@ -1,0 +1,17 @@
+const { chromium } = require('playwright'); const fs = require('fs');
+(async () => {
+  const b = await chromium.launch(); const R = 'file:///home/agent2/referee-gasket-27/read4/'; const out = { snaps: [], third: [] };
+  const c = await b.newContext({ viewport: { width: 1600, height: 1100 } }); const p = await c.newPage(); await p.goto(R + 'built.html'); await p.waitForTimeout(500);
+  const snap = async (kind) => { const s = Object.assign(await p.evaluate(() => { const GP = window.GasketPage, t = id => document.getElementById(id).textContent, pk = GP.pack(); return { gsay: t('gsay'), gkind: t('gkind'), gstory: t('gstory'), gpick: t('gpick'), lead: t('lead'), swap: t('swap'), view: GP.view(), size: GP.size(), root: pk.root, place: pk.place.circles, strip: !!pk.place.strip, drawn: GP.drawn(), hi: document.getElementById('hi').value }; }), { kind, mode: 'desk', pack: 1 }); out.snaps.push(s); console.log(kind, '->', s.gsay, '| held:', s.drawn.length); };
+  await p.evaluate(() => window.scrollTo(0, 0)); const r = await p.evaluate(() => { const r = document.getElementById('g').getBoundingClientRect(); return [r.left, r.top]; });
+  await p.mouse.move(r[0] + 500, r[1] + 310); await p.mouse.down(); for (let i = 1; i <= 15; i++) await p.mouse.move(r[0] + 500 + 750 * i / 15, r[1] + 310 + 560 * i / 15); await p.mouse.up(); await p.waitForTimeout(100);
+  await snap('corner: dragged past the bottom right corner');
+  await p.click('#home'); const s0 = (await p.evaluate(() => window.GasketPage.view())).s, ox = 0, oy = -0.25, Rr = 0.25, hw = 500 / s0, hh = 310 / s0;
+  for (const k of [0.9, 0.998, 1.002, 1.13, 1.5]) { const d = k * Rr / Math.SQRT2; await p.evaluate(([cx, cy, s]) => window.GasketPage.setView(cx, cy, s), [ox + d + hw, oy + d + hh, s0]); await snap('corner: nearest corner of the picture at ' + k + ' radii from the outer centre'); }
+  for (const k of [0.998, 1.002, 0.5]) { const s = Math.hypot(500, 310) / (Rr * k); await p.evaluate(([cx, cy, s]) => window.GasketPage.setView(cx, cy, s), [ox, oy, s]); await snap('inside: farthest corner of the picture at ' + k + ' radii from the outer centre'); }
+  await p.click('#home');
+  for (const [q, N] of [['-9, 14, 26, 27', '100000'], ['-10, 18, 23, 27', '100000'], ['-39, 57, 128, 128', '10000'], ['-60, 113, 128, 177', '10000'], ['-39, 57, 128, 128', '100000'], ['0, 0, 1, 1', '10000'], ['-23, 48, 49, 52', '10000']]) { await p.fill('#quad', q); await p.selectOption('#upto', N); await p.click('#try'); await p.waitForTimeout(500);
+    out.third.push({ q, N: +N, tsay: await p.textContent('#tsay'), nums: await p.textContent('#tnums'), bold: await p.evaluate(() => [...document.querySelectorAll('#tnums b')].map(b => b.textContent)) }); console.log(q, N, '->', out.third[out.third.length - 1].tsay.slice(0, 760)); }
+  for (const f of ['built.html', 'mJ-enter-does-nothing.html']) { const p2 = await c.newPage(); await p2.goto(R + f); await p2.waitForTimeout(400); const before = await p2.textContent('#tsay'); await p2.fill('#quad', '-6, 11, 14, 15'); await p2.press('#quad', 'Enter'); await p2.waitForTimeout(500); const after = await p2.textContent('#tsay'); console.log(f, '| Enter in the box after typing -6, 11, 14, 15:', after === before ? 'NOTHING CHANGES; still: ' + after.slice(0, 60) : after.slice(0, 60)); await p2.close(); }
+  await b.close(); fs.writeFileSync('/home/agent2/referee-gasket-27/read4/extra.json', JSON.stringify(out));
+})().catch(e => { console.error('FAILED', e); process.exit(1); });

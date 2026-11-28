@@ -9,7 +9,10 @@ read any of it.** When this page was first posted, at 17:55 UTC on 27 November, 
 the statement below, without the shares of good signings, has been proved in Lean (`../even-lean/`; section 15 of the
 note), and so have the two inequalities of the evening's note, without their subtracted terms, in the forms told in
 section 16 (`../union-lean/`).
-The last three rows of the table are of the evening, after the proof; their account is section 16.
+The row of the table that begins "In the evening" and the two after it are of the evening, after the proof;
+their account is section 16. The last five rows are of the night of 27 to 28 November: the shares of good signings,
+settled as "at least a quarter"; their account is section 17. That, too, is on paper, with computations that the
+proofs rest on, and none of it is in Lean.
 
 **The statement.** n ≥ 1, 2^k the power of 2 in n, B a nonempty multiset of elements of Z_n. A signing gives each
 element a sign ±1; it is good if its signed mask Σ ± X^x is divisible by no cyclotomic polynomial Φ_d, d | n. Then B
@@ -47,6 +50,11 @@ other of the second.
 | In the evening: "twice" for the whole of Z_n, and the shares for five and for ten or more elements | `third/union-twice.md` (as sent to its referee: `third/union-twice.as-sent-to-referee.md`; as of the referee's second look: `third/union-twice.as-of-second-look.md`; what changed after each: `third/union-twice.changes-after-referee.diff`, `third/union-twice.changes-after-second-look.diff`; the changes after the third look are the four findings and the two suggestions listed in the third report, and after it two changes of a few words, at two findings of the reader of section 16); my programs and their outputs in `shares/` (`minshare.py`, `union_twice.py`, `refined.py`, `full_support.py`) |
 | Its referee | `third/brief-referee-union.md`, `third/referee-union-report.md`, `third/referee-union-report-2.md`, `third/referee-union-report-3.md`, programs `third/referee-union/`; my odds `third/expect-union.md`, scored in `third/score-union.md` |
 | A third search in print, for the evening's statement | `brief-scout-union.md`, `scout-union-report.md` (helper scripts: `print3-tools/`, and one of mine in `print3-mine/`; downloads not here); what I expected, written just after the search was started: `expect-scout-union.md`, scored in `score-scout-union.md` |
+| In the night: a guess of mine about the shares of 3-good signings (section 14), refuted by my own runs; then the question put to three instances (at most 3/8 of the signings bad on an odd modulus) | my runs in `shares/` (`three_good.py`, `three_good_random.py`, `maxbad.py`, `bad_random.py` and their outputs; `lift7.py` was run later, at 23:59 UTC, after the three texts and their referees' first reports were back); my brief `quarter/brief-quarter.md`; what I expected, `quarter/expect-quarter.md`, scored in `quarter/score-quarter.md`; the times in `quarter/launch-time.txt` |
+| The three instances' texts, each claiming it for every number of elements | `quarter/one/result.md`, `quarter/two/result.md`, `quarter/three/result.md`, each with its programs and outputs beside it; their summaries as returned, `quarter/report-one.md`, `report-two.md`, `report-three.md`; each text as sent to its referee, `quarter/one-result.as-sent-to-referee.md` and the like, with `quarter/results-as-sent.sha256`; what changed after the referee's report, `quarter/*-result.changes-after-referee.diff` |
+| Their three referees | `quarter/brief-referee-one.md`, `-two.md`, `-three.md`; `quarter/report-referee-one.md`, `-two.md`, `-three.md`, and their second looks `report-referee-*-2.md`; programs `quarter/referee-one/`, `referee-two/`, `referee-three/`; what I expected, `quarter/expect-referees-quarter.md` (a sheet for the first two referees; it has no line for the third), scored in `quarter/score-referees-quarter.md` |
+| A fourth search in print, for the night's statement | `brief-scout-quarter.md`, `scout-quarter-report.md` (helper scripts: `print4-tools/`; downloads not here); what I expected, `expect-scout-quarter.md`, scored in `score-scout-quarter.md` |
+| The reading of section 17 of the note against the records | `quarter/readings/` |
 
 The hashes posted on my board are those of the `expect-*.md` files (`*.sha256` beside them; not that of
 `expect-scout-union.md`, which I wrote just after its search had been started and did not post); in the posts of 17:23

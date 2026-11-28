@@ -1,0 +1,15 @@
+const { chromium } = require('playwright');
+(async () => {
+  const b = await chromium.launch(); const R = '/home/agent2/referee-gasket-27/read/';
+  const open = async (f, opt) => { const c = await b.newContext(Object.assign({ viewport: { width: 1100, height: 800 } }, opt || {})); const p = await c.newPage(); await p.goto('file://' + R + f); await p.waitForTimeout(500); return p; };
+  for (const f of ['built.html', 'mA-key-up-goes-down.html']) { const p = await open(f); await p.focus('#g'); const v0 = await p.evaluate(() => Object.assign({}, window.GasketPage.view())); await p.keyboard.press('ArrowUp'); const v1 = await p.evaluate(() => Object.assign({}, window.GasketPage.view())); await p.click('#home'); await p.click('#mup'); const v2 = await p.evaluate(() => Object.assign({}, window.GasketPage.view()));
+    console.log(f, 'ArrowUp key: cy', v0.cy, '->', v1.cy, '| the page\'s own up button: cy', v0.cy, '->', v2.cy); }
+  for (const f of ['built.html', 'mC-colours-swapped.html']) { const p = await open(f); const r = await p.evaluate(() => { const ps = [...document.querySelectorAll('#chart path')].map(e => getComputedStyle(e).stroke); const sw = [...document.querySelectorAll('.legend i')].map(e => getComputedStyle(e).backgroundColor); return { rows: window.GasketPage.strip().rows, strokes: ps, swatches: sw, caption: document.querySelector('#cfig figcaption').textContent.slice(95, 215) }; }); console.log(f, JSON.stringify(r)); }
+  for (const f of ['built.html', 'mD-list-of-another-gasket.html']) { const p = await open(f); await p.click('#ctab'); console.log(f, '| sentence:', (await p.textContent('#csay')).slice(0, 110), '| list:', (await p.textContent('#ctable')).slice(0, 170)); }
+  { const p = await open('mB-descartes-three.html'); console.log('mB caption:', await p.textContent('figure:nth-of-type(3) figcaption')); await p.fill('#quad', '-11, 21, 24, 28'); await p.click('#try'); await p.waitForTimeout(200); console.log('  and the panel on the default four:', (await p.textContent('#tsay')).slice(0, 80)); }
+  { const p = await open('built.html', { javaScriptEnabled: false, viewport: { width: 390, height: 844 } }); const t = await p.evaluate ? null : null; console.log('script off (phone): text of the figure area:', JSON.stringify((await p.locator('.viz-root').innerText()).slice(0, 700))); }
+  { const p = await open('built.html'); await p.fill('#quad', '4, -5, -20, -21'); await p.click('#try'); console.log('negated four:', await p.textContent('#tsay'));
+    await p.selectOption('#pack', '3'); await p.selectOption('#hi', '1'); for (let i = 0; i < 4; i++) await p.click('#zin'); console.log('strip x16:', await p.textContent('#gsay'), '|', await p.textContent('#gpick'));
+    await p.selectOption('#pack', '0'); await p.click('#home'); for (let i = 0; i < 4; i++) await p.click('#zin'); console.log('(-3,5,8,8) x16:', await p.textContent('#gsay'), '|', await p.textContent('#gpick'), '| drawn:', JSON.stringify(await p.evaluate(() => window.GasketPage.drawn().map(c => c[0])))); }
+  await b.close();
+})().catch(e => { console.error('FAILED', e); process.exit(1); });

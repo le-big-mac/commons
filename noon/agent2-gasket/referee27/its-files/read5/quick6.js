@@ -1,0 +1,17 @@
+const { chromium } = require('playwright'); const fs = require('fs');
+(async () => {
+  const b = await chromium.launch(); const R = 'file:///home/agent2/referee-gasket-27/read5/'; const out = { snaps: [], third: [] };
+  const c = await b.newContext({ viewport: { width: 1600, height: 1100 } }); const p = await c.newPage(); await p.goto(R + 'built.html'); await p.waitForTimeout(500);
+  const snap = async (kind) => { const s = Object.assign(await p.evaluate(() => { const GP = window.GasketPage, t = id => document.getElementById(id).textContent, pk = GP.pack(); return { gsay: t('gsay'), gkind: t('gkind'), gstory: t('gstory'), gpick: t('gpick'), lead: t('lead'), swap: t('swap'), view: GP.view(), size: GP.size(), root: pk.root, place: pk.place.circles, strip: !!pk.place.strip, drawn: GP.drawn(), hi: document.getElementById('hi').value }; }), { kind, mode: 'desk', pack: 1 }); out.snaps.push(s); console.log(kind, '\n     count line:', s.gsay, '\n     line under the picture:', s.gpick); };
+  const drag = async () => { await p.evaluate(() => window.scrollTo(0, 0)); const r = await p.evaluate(() => { const r = document.getElementById('g').getBoundingClientRect(); return [r.left, r.top]; }); await p.mouse.move(r[0] + 520, r[1] + 20); await p.mouse.down(); for (let i = 1; i <= 15; i++) await p.mouse.move(r[0] + 520 + 750 * i / 15, r[1] + 20 + 560 * i / 15); await p.mouse.up(); await p.waitForTimeout(100); return r; };
+  await drag(); await snap('corner: dragged past the bottom right corner, nothing chosen');
+  await p.selectOption('#hi', 'none'); await snap('the same with nothing lit'); await p.selectOption('#hi', 'five'); await snap('the same with fives lit'); await p.selectOption('#hi', '1');
+  await p.click('#home'); const r = await p.evaluate(() => { const r = document.getElementById('g').getBoundingClientRect(); return [r.left, r.top]; }); await p.mouse.click(r[0] + 500, r[1] + 310 - 266); await p.waitForTimeout(80); console.log('chosen:', await p.textContent('#gpick'));
+  await drag(); await snap('corner: dragged past the corner with a circle chosen');
+  await p.click('#home'); const s0 = (await p.evaluate(() => window.GasketPage.view())).s, hw = 500 / s0, hh = 310 / s0;
+  for (const k of [0.998, 1.002]) { const d = k * 0.25 / Math.SQRT2; await p.evaluate(([cx, cy, s]) => window.GasketPage.setView(cx, cy, s), [0 + d + hw, -0.25 + d + hh, s0]); await snap('corner: nearest corner of the picture at ' + k + ' radii from the outer centre'); }
+  await p.click('#home');
+  for (const [q, N] of [['-39, 57, 128, 128', '10000'], ['-60, 113, 128, 177', '10000'], ['-39, 57, 128, 128', '100000'], ['-60, 113, 128, 177', '100000'], ['0, 0, 1, 1', '10000'], ['-12, 16, 49, 49', '100000'], ['-4, 8, 9, 9', '10000']]) { await p.fill('#quad', q); await p.selectOption('#upto', N); await p.click('#try'); await p.waitForTimeout(500);
+    const t = { q, N: +N, tsay: await p.textContent('#tsay'), nums: await p.textContent('#tnums'), bold: await p.evaluate(() => [...document.querySelectorAll('#tnums b')].map(b => b.textContent)) }; out.third.push(t); const i = t.tsay.indexOf('In '); console.log(q, N, '->', t.tsay.slice(t.tsay.indexOf('. ', 60) + 2).slice(0, 900), '| marked among the fourth-power forms:', t.bold.filter(x => [9, 36, 81, 144, 324, 576, 729, 1296, 2304, 2916, 5184, 5625, 6561, 9216].includes(+x.replace(/,/g, ''))).join(' ')); }
+  await b.close(); fs.writeFileSync('/home/agent2/referee-gasket-27/read5/extra.json', JSON.stringify(out));
+})().catch(e => { console.error('FAILED', e); process.exit(1); });
