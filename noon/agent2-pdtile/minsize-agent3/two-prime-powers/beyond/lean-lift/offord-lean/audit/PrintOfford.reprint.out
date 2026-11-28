@@ -1,0 +1,79 @@
+@card_signedSum_eq_le_real : ∀ {ι : Type u_1} [inst : Fintype ι] (a : ι → Real),
+  (∀ (i : ι), @Ne Real (a i) (@OfNat.ofNat Real (nat_lit 0) (@Zero.toOfNat0 Real Real.instZero))) →
+    ∀ (v : Real),
+      @LE.le Nat instLENat
+        (@Finset.card (ι → Bool)
+          {ε |
+            @Eq Real
+              (∑ i,
+                @HMul.hMul Real Real Real (@instHMul Real Real.instMul) (@Int.cast Real Real.instIntCast (sg (ε i)))
+                  (a i))
+              v})
+        ((@Fintype.card ι inst).choose
+          (@HDiv.hDiv Nat Nat Nat (@instHDiv Nat Nat.instDiv) (@Fintype.card ι inst)
+            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+@card_signedSum_eq_le_complex : ∀ {ι : Type u_1} [inst : Fintype ι] (a : ι → Complex),
+  (∀ (i : ι), @Ne Complex (a i) (@OfNat.ofNat Complex (nat_lit 0) (@Zero.toOfNat0 Complex Complex.instZero))) →
+    ∀ (v : Complex),
+      @LE.le Nat instLENat
+        (@Finset.card (ι → Bool)
+          {ε |
+            @Eq Complex
+              (∑ i,
+                @HMul.hMul Complex Complex Complex (@instHMul Complex Complex.instMul)
+                  (@Int.cast Complex Complex.instIntCast (sg (ε i))) (a i))
+              v})
+        ((@Fintype.card ι inst).choose
+          (@HDiv.hDiv Nat Nat Nat (@instHDiv Nat Nat.instDiv) (@Fintype.card ι inst)
+            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+@card_badAt_le_choose : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) {d : Nat},
+  @Ne Nat d (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
+    @LE.le Nat instLENat (@Finset.card (ι → Bool) {ε | @BadAt ι inst e ε d})
+      ((@Fintype.card ι inst).choose
+        (@HDiv.hDiv Nat Nat Nat (@instHDiv Nat Nat.instDiv) (@Fintype.card ι inst)
+          (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+@not_badAt_one_of_odd : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat),
+  @Odd Nat Nat.instSemiring (@Fintype.card ι inst) →
+    ∀ (ε : ι → Bool), Not (@BadAt ι inst e ε (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+@card_exists_badAt_two_pow_le : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) (k : Nat),
+  @LE.le Nat instLENat
+    (@Finset.card (ι → Bool)
+      {ε |
+        ∃ d,
+          And
+            (@Dvd.dvd Nat Nat.instDvd d
+              (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) k))
+            (@BadAt ι inst e ε d)})
+    (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+      ((@Fintype.card ι inst).choose
+        (@HDiv.hDiv Nat Nat Nat (@instHDiv Nat Nat.instDiv) (@Fintype.card ι inst)
+          (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))))))
+@not_exists_badAt_two_pow_of_odd : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) (k : Nat),
+  @Odd Nat Nat.instSemiring (@Fintype.card ι inst) →
+    ∀ (ε : ι → Bool),
+      Not
+        (∃ d,
+          And
+            (@Dvd.dvd Nat Nat.instDvd d
+              (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) k))
+            (@BadAt ι inst e ε d))
+@card_exists_badAt_le_divisors : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) (k : Nat) {n' : Nat},
+  Not (@Dvd.dvd Nat Nat.instDvd (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) n') →
+    @LE.le Nat instLENat
+      (@Finset.card (ι → Bool)
+        {ε |
+          ∃ d,
+            And
+              (@Dvd.dvd Nat Nat.instDvd d
+                (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat)
+                  (@HPow.hPow Nat Nat Nat (@instHPow Nat Nat (@NPow.toPow Nat (@Monoid.toNPow Nat Nat.instMonoid)))
+                    (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2))) k)
+                  n'))
+              (@BadAt ι inst e ε d)})
+      (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))
+        (@HMul.hMul Nat Nat Nat (@instHMul Nat instMulNat) (@Finset.card Nat n'.divisors)
+          ((@Fintype.card ι inst).choose
+            (@HDiv.hDiv Nat Nat Nat (@instHDiv Nat Nat.instDiv) (@Fintype.card ι inst)
+              (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))))

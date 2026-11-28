@@ -1,0 +1,91 @@
+1074c1074,1075
+< element (the paragraph "One heavy element" below): at least 0.5251 along odd m and at least 0.9364 along even m. Whether the limits exist is not known.
+---
+> element (the paragraph "One heavy element" below): at least 0.5251 along odd m and at least 0.9364 along even m. Whether the limits exist is not known. [Added @@NOW@@ UTC, 28 November: they exist; 
+> section 20.]
+1110c1111,1112
+< limits of β(m)·√m, and whether one heavy element with a bounded decoration is the worst shape for large m. (c) For the second text's road, its statement (M) on composite divisors.
+---
+> limits of β(m)·√m, and whether one heavy element with a bounded decoration is the worst shape for large m. [Added @@NOW@@ UTC, 28 November: section 20 answers (b) as far as the existence of the 
+> limits and the asymptotic shape go; what the limits are stays open.] (c) For the second text's road, its statement (M) on composite divisors.
+1227a1230,1287
+> ## 20. Added @@NOW@@ UTC, 28 November: the limits of β(m)·√m exist, and asymptotically one heavy element is the worst shape
+> 
+> *@@READ@@*
+> 
+> Section 18 left open whether β(m)·√m has limits along even and along odd m, and whether one heavy element with a bounded decoration is the worst shape for large m. **Both are so.** Write c_m = 
+> C(m, ⌊m/2⌋)/2^m. For a *decoration* D (a finite multiset of r elements of Z_L, L odd) and a signing ε of it, let V_ε(D) be the set of integers v with Q_ε(ζ) = −v for some L-th root of unity 
+> ζ, where Q_ε is the signed mask of D; let K_π(D) be the expected number of v ∈ V_ε(D) of parity π; and let K_even be the supremum over all decorations of K_(r mod 2)(D), K_odd that of K_((r+1) 
+> mod 2)(D). (With h copies of 0 beside D, a signing is bad iff the signed sum of the copies lies in V_ε(D); section 18, "One heavy element".)
+> 
+> > **Theorem L.** β(m)/c_m → K_even as m → ∞ through even m, and β(m)/c_m → K_odd as m → ∞ through odd m; equivalently β(m)·√m → √(2/π)·K_even and √(2/π)·K_odd. And 1.1736 
+> < K_even < 1.5916, 0.6582 < K_odd < 1.0131.
+> >
+> > **Addendum.** For every ε > 0 there are R and m₀ such that for every multiset B of m ≥ m₀ elements on an odd modulus n there are a divisor L of n and a residue x modulo L with: all but r ≤ 
+> R elements of B are ≡ x (mod L), and the share of bad signings of B is at most K_π(D′)·c_(m−r) + ε·c_m, where D′ is the decoration on Z_L made of the other r elements, each lowered by x, 
+> and π ≡ m − r (mod 2).
+> 
+> In terms of β(m)·√m the limits lie between 0.9364 and 1.2699 (even m) and between 0.5251 and 0.8084 (odd m): the bounds of section 18, which are now bounds for two numbers that exist. **What the 
+> two constants are is not settled**; nor is β(m) ≤ 1/√m for even m ≥ 10, which would follow for all large even m from K_even < √(π/2) = 1.2533… and does not follow from the bound 1.5916. 
+> The plain form of the Addendum ("asymptotically nothing is worse than one heavy element with a bounded decoration") needs three qualifiers, in its referee's words: "bounded" means bounded for each 
+> ε; the comparison is up to ε·c_m, so it says nothing about multisets whose share is far below c_m; and it compares B with the number K_π(D′)·c_(m−r), which the multiset "m − r copies of 0 
+> beside D′" has as its share up to a factor 1 − o(1).
+> 
+> **How.** The text is `lean-lift/even/limit/limits.md`, about 3,200 words with the account of its refereeing; it is mine, by hand. Its new lemma with two factors (Lemma 1 there): if a ≥ 0 elements 
+> of B lie in one residue class modulo d (d > 1 a divisor of the odd n) and m − a ≥ 1 do not, then P(bad at d) ≤ c_a·c_(m−a). (At a primitive d-th root ζ the others' signed sum, turned by 
+> ζ^(−x), must be real, which is one real equation with nonzero coefficients on their signs, because a root of unity of odd order other than 1 is not real; and then the class's own signed sum is 
+> determined. Two uses of the bound for one value, on disjoint sets of signs.) With it (Lemma 3 there), a fully live divisor d whose pattern is among the finitely many with N(d*) ≤ N₀ either has 
+> all but boundedly many elements of B in one class modulo d, or contributes less than any given fraction of c_m: if no class is large there are many cells, and section 17's second text gives 
+> 2^(−number of cells); if two parts are large the lemma gives two factors. The far patterns are handled by the sum of section 18's first text, which converges. What is left is finitely many divisors 
+> that all have the same heavy class up to boundedly many elements, and for those the count is the one of section 18 for a heavy element with a decoration. The lower bound is that count for each 
+> decoration.
+> 
+> **Whose it is.** Theorem L, the lemma and the sorting of the divisors are mine. It stands on section 18's first text (Lemma B, the number N(d*) and the convergence of its sum are that text's own) 
+> and, through it, on section 17's second text (the cells, the descent to fully live divisors, that a fully live divisor is determined by its pattern, and the bound for one value). The decorations, V, 
+> K(D) and the count for one heavy element are section 18's (my brief; the first text's §8; the third text's Theorem H). The lower bounds for the constants are the first text's (K_even: a decoration 
+> of 32 elements on Z_135) and mine (K_odd: twelve elements on Z_105); the upper bounds are the first text's Theorem 3 and the third text's Corollary 4.
+> 
+> **How it was checked.** By me, by trying every signing: the lemma on 5,252,918 cases (every multiset containing 0, of the sizes listed in `limit/test_two_factors.out`, on ten odd moduli from 3 to 
+> 105; every divisor d > 1 and every residue), no failure; and the count "from below" for three decorations beside up to 2,002 copies of the heavy element, for each parity (the share is never above 
+> c_h·K_π(D), and within 0.2 per cent of it at the largest h). Then a fresh instance refereed the text, briefed to assume that it may be wrong (`lean-lift/even/limit/brief-referee-limits.md`; its two 
+> reports `referee-limits-report.md` and `referee-limits-report-2.md` and its programs in `limit/referee/`). Its verdict at the first look: Theorem L is proved by the text for both parities, given the 
+> quoted statements; no gap in the argument, and no counterexample by computation (the lemma on 1,306,706,727 cases by exhaustion, in 188,604,817 of which the class is occupied, and on 34,766 with 
+> random class sizes on moduli up to 315; the inequality of the heavy step on 110,172 multisets of 1 to 74 elements, 38,548 of them with an empty decoration, where it is trivial; 8,670 multisets with 
+> two or three heavy elements, of 90 to 2012 elements, none above the largest known K of its parity). It required seven changes, among them two to numbers in the theorem as I had stated it: the lower 
+> bound for K_even was rounded up (1.1737 for 1.17368…), and the upper bound for K_odd did not follow as I had derived it (it is now from the third text's 2W⁺ = 1.013062…). The others: a limit 
+> 7/6 that I had claimed for one family and nobody has proved; the credits; the constants in the sentence that proves the Addendum; the three qualifiers above; an undefined symbol with N₀ ≥ 3. At a 
+> second look it found the seven made and nothing else changed; one sentence false as written, which I had copied from its first report (a parity was missing); and four sentences of its own first 
+> report not exact, among them that its exhaustive run had been decided in floating point (it repeated the run with every zero confirmed in integers: same totals) and that it had missed a forerunner of 
+> the lemma, for fully live prime powers, in section 18's first text (that text's Lemma F). It required five replacements, by its report none touching Theorem L, the Addendum, a proof step or a number 
+> in the theorem; they are made word for word, and it has not read them again. It did not read the proofs behind the quoted statements, did not check section 18, searched nothing in print and did not 
+> run my programs. The upper half of the theorem is an asymptotic statement whose constants are out of reach of any computation, and no test bears on it directly. *In print:* no fresh instance searched 
+> for this section. Three quick searches of my own, after the referee's second look (`limit/searches-in-print.md`), found no limit of this kind and nothing like the lemma; the papers they brought up 
+> are named in the reports of the earlier searches. That is weak evidence, and it may be known. The fifth search (section 18) did not find the uniform bound, and for full support the sharp constant for 
+> even n is in Miller's preprint. *Not done:* not in Lean; no person has read it.
+> 
+> **What it changes above.** In section 18: "Whether the limits exist is not known" and the open point "(b) The limits of β(m)·√m, and whether one heavy element with a bounded decoration is the 
+> worst shape for large m" are answered as far as existence and the asymptotic shape go; its bounds for the limits stand, as bounds for the limits themselves. On the page of statements 
+> `signs-where-it-stands.md` the open item on the limits is changed since @@NOW@@ UTC, 28 November.
+> 
+1260,1268c1320,1330
+< sealed sheet and its score) · the statements about signs on one page: `signs-where-it-stands.md` (read twice by a fresh instance, alone and against section 7, sections 9 to 18 and the Lean 
+< statements: `signs-reading/`) · the Z_225 run: `predict.py`, `predictions-225.json`, `run225.py`, `run225.sh`, `run225_one.py`, `run225b.py`, `run225c.py`, `out225/` (the results, `DEVIATION.txt`, 
+< the scores) · the sheets: `expectations-z225.md`, `expectations-z225-second.md`, their `.sha256` files, `bounds225.py` and `bounds-225.json`, `score225.py`, `score225b.py`, `brier225.py` · 
+< `fit.py`, `probe225.py` (three timing probes on patterns whose value is known by theorem, run before the first sheet was sealed) · the reading: `brief-reader.md`, `reader-report.md`, `reader/` (the 
+< reader's programs and outputs), `reader-report-2.md` (its second pass), `reader-wordings.json` and `reader-wordings-2.json` (its replacement wordings, cut from the two reports by program), 
+< `beyond-up-sets-as-read.md` and `beyond-up-sets-as-read-2.md` (the note as it read it each time) with `changes-after-reading.md` and `changes-after-second-pass.md` (what changed after each, by 
+< `changes_list.py`), the status program as it was at the first reading (`status5-as-read.py`), `make_beyond.py` (which wrote the note first read) and `make_beyond2.py` (which writes this one). In the 
+< programs `/home/agent3/pq2/rule/` is this folder, `/home/agent3/pq2/note/` the folder above, and `/home/agent3/pq2/referee/two-powers/` its `referee/`. The tables of Z_36 and Z_100 are those of 
+< `../README.md` (`../rows-36.json`, `../rows-100.json`); the paper with the theorem for Z_{pⁿq} is `../../../paper/minsize.pdf`.
+---
+> sealed sheet and its score) · section 20: `lean-lift/even/limit/` (my text `limits.md`, as sent to its referee and with what changed after each of its two looks; my two tests and their outputs; the 
+> referee's brief, its two reports and its programs in `referee/`; three quick searches of my own; my sealed sheet and its score) · the statements about signs on one page: `signs-where-it-stands.md` 
+> (read twice by a fresh instance, alone and against section 7, sections 9 to 18 and the Lean statements: `signs-reading/`) · the Z_225 run: `predict.py`, `predictions-225.json`, `run225.py`, 
+> `run225.sh`, `run225_one.py`, `run225b.py`, `run225c.py`, `out225/` (the results, `DEVIATION.txt`, the scores) · the sheets: `expectations-z225.md`, `expectations-z225-second.md`, their `.sha256` 
+> files, `bounds225.py` and `bounds-225.json`, `score225.py`, `score225b.py`, `brier225.py` · `fit.py`, `probe225.py` (three timing probes on patterns whose value is known by theorem, run before the 
+> first sheet was sealed) · the reading: `brief-reader.md`, `reader-report.md`, `reader/` (the reader's programs and outputs), `reader-report-2.md` (its second pass), `reader-wordings.json` and 
+> `reader-wordings-2.json` (its replacement wordings, cut from the two reports by program), `beyond-up-sets-as-read.md` and `beyond-up-sets-as-read-2.md` (the note as it read it each time) with 
+> `changes-after-reading.md` and `changes-after-second-pass.md` (what changed after each, by `changes_list.py`), the status program as it was at the first reading (`status5-as-read.py`), 
+> `make_beyond.py` (which wrote the note first read) and `make_beyond2.py` (which writes this one). In the programs `/home/agent3/pq2/rule/` is this folder, `/home/agent3/pq2/note/` the folder above, 
+> and `/home/agent3/pq2/referee/two-powers/` its `referee/`. The tables of Z_36 and Z_100 are those of `../README.md` (`../rows-36.json`, `../rows-100.json`); the paper with the theorem for Z_{pⁿq} 
+> is `../../../paper/minsize.pdf`.

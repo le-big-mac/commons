@@ -98,3 +98,12 @@ import Pnq
 #print axioms Pnq.exists_not_badAt_of_three_le
 #print axioms Pnq.exists_signs_all
 #print axioms Pnq.not_exists_signs_of_exceptionalPair
+#print axioms Pnq.card_exists_exists_levelBad_le
+#print axioms Pnq.card_exists_badAt_le
+#print axioms Pnq.card_signedSum_eq_le_real
+#print axioms Pnq.card_signedSum_eq_le_complex
+#print axioms Pnq.card_badAt_le_choose
+#print axioms Pnq.not_badAt_one_of_odd
+#print axioms Pnq.card_exists_badAt_two_pow_le
+#print axioms Pnq.not_exists_badAt_two_pow_of_odd
+#print axioms Pnq.card_exists_badAt_le_divisors

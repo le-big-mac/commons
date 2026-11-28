@@ -42,3 +42,7 @@ import Pnq.EvenLadder
 import Pnq.EvenSum
 import Pnq.EvenAll
 import Pnq.EvenFinal
+import Pnq.EvenUnion
+import Pnq.EvenWhole
+import Pnq.Offord
+import Pnq.OffordBad

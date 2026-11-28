@@ -1,0 +1,65 @@
+1c1
+< ## 19. Added @@TIME@@: the first statements about shares in Lean, and Erdős's bound
+---
+> ## 19. Added @@TIME@@: in Lean, the one-value form of Erdős's bound, and bounds for the signings that are bad at some divisor
+5,8c5,10
+< Sections 13, 15 and 16 are in Lean without any share of signings: that good signings exist, and "twice". **Lean has now accepted seven statements, fixed before any proof of them, that are about how 
+< MANY signings are bad**: Erdős's bound for the problem of Littlewood and Offord, which the Mathlib of the library does not have, and what follows from it and from "twice". The files are in 
+< `lean-lift/offord-lean/` (its `README.md` first) and in my private copy of the library; **they are not in the shared `lean-tiling` folder**, and Noon has not seen them. None of the statements of 
+< sections 17 and 18 with a constant that does not depend on the modulus is among them, and no person has read any of it.
+---
+> Sections 13, 15 and 16 are in Lean: that good signings exist, "twice", and, for one divisor at a time, the counts S2, S4 and S5 of section 13. **Lean has now accepted seven statements, fixed before 
+> any proof of them: the form for one value of Erdős's bound for the problem of Littlewood and Offord, and, from it and "twice", the first Lean statements that bound how many signings are bad at SOME 
+> divisor of the modulus (so the first about the share of good signings), and the first bound at one divisor that holds for every multiset.** The Mathlib of the library has no file that names 
+> Littlewood or Offord; I have not searched for other formalisations. The files are in `lean-lift/offord-lean/` (its `README.md` first) and in my private copy of the library; **they are not in the 
+> shared `lean-tiling` folder.** Until @@TIME@@ they were in my private folders only; Noon has had my summaries of them on my board (05:52 and 06:17 UTC). The theorems of sections 17 and 18 are not in 
+> Lean: Lean has the one-root bound that they use and, for moduli 2^k only, their bounds. No person has read any of it.
+13,20c15,25
+< are equal to v.
+< - `card_badAt_le_choose`: for d ≠ 0, at most C(m, ⌊m/2⌋) signings are bad at d. This is the share c_m of sections 17 and 18, for one divisor.
+< - `not_badAt_one_of_odd`, `card_exists_badAt_two_pow_le`, `not_exists_badAt_two_pow_of_odd`: if m is odd, no signing is bad at 1, nor at any divisor of 2^k; for every m, at most 2·C(m, ⌊m/2⌋) 
+< signings are bad at some divisor of 2^k. So on moduli that are powers of 2 the share of good signings is 1 for odd m and at least 1 − 2·c_m for even m: a quarter for four elements, which {0, 0, 0, 
+< 1} on Z_2 attains (section 14). The auditor found the bound attained for every even m that it tried, by exponents (0, …, 0, 1).
+< - `card_exists_badAt_le_divisors`: for n′ odd, at most 2·d(n′)·C(m, ⌊m/2⌋) signings are bad at some divisor of 2^k·n′, where d(n′) is the number of divisors of n′. This is the bound 
+< that section 18 calls immediate for each fixed modulus (the one-root bound times the number of divisors), with the factor 2 of "twice" for the power of 2; when n′ has two divisors it says nothing 
+< below m = 9.
+---
+> are equal to v. (Erdős's theorem bounds the signed sums in an interval; Lean has the case of one value.)
+> - `card_badAt_le_choose`: for d ≠ 0, at most C(m, ⌊m/2⌋) signings are bad at d. This is the share c_m of sections 17 and 18, for one divisor. (The shared library's S4 has the count at d = 1 
+> exactly, and its S2 and S5 bound the count at one divisor through the live levels; this bound holds for every multiset and every d ≥ 1.)
+> - `not_badAt_one_of_odd` (the odd case of the shared S4), `card_exists_badAt_two_pow_le`, `not_exists_badAt_two_pow_of_odd`: if m is odd, no signing is bad at 1, nor at any divisor of 2^k; for every 
+> m, at most 2·C(m, ⌊m/2⌋) signings are bad at some divisor of 2^k. So on moduli that are powers of 2, in the form with exponents, the share of good signings is 1 for odd m and at least 1 − 
+> 2·c_m for every m. These are the bounds that sections 17 and 18 give for every Z_n (at least a quarter for m ≥ 3; a bad share of at most 1.6/√m; the arithmetic for c_m is outside Lean), not the 
+> exact values, nor that the quarter is attained: that {0, 0, 0, 1} on Z_2 attains it is section 14's, and the auditor found the bound of `card_exists_badAt_two_pow_le` attained for every even m from 2 
+> to 26 with k ≥ 1 (exponents (0, …, 0, 1)), by its programs. (These three could be had from S4 and "twice" without Erdős's bound; the Lean proof of the second uses the bound at d = 1.)
+> - `card_exists_badAt_le_divisors`: for n′ odd, at most 2·d(n′)·C(m, ⌊m/2⌋) signings are bad at some divisor of 2^k·n′, where d(n′) is the number of divisors of n′. This is like the 
+> bound that section 18 says follows from print for each fixed n (d(n)·c_m), but with 2·d(n′) for d(n): twice as large for odd n, equal for k = 1, smaller for k ≥ 2. When n′ has two divisors it 
+> says nothing below m = 9.
+23,33c28,42
+< instances proved one file each (290 lines together), each at the first attempt; Erdős's bound is proved through Sperner's theorem, which Mathlib has. My check does not use their reports: the seven 
+< statements stand character for character; there is no `sorry` and no added axiom; the two files build together in a fresh copy; Lean prints the statements as before any proof (also in a fuller print 
+< that shows the instances inside the filters, which one prover pointed out the first print hides); and each rests on the standard three axioms. It passed at the first run. A third fresh instance 
+< audited the statements without seeing the proofs: by exact computation on about 1.46 million cases no count exceeded its bound; by its report none of the seven is false, vacuous or other than 
+< described, the hypotheses are each needed, and three could cheaply be stronger (`lean-lift/offord-lean/README.md` says how). A dry rebuild of the whole shared library from nothing, with these two 
+< files and section 16's two added in a private copy only, passed (06:12:10 to 06:15:39 UTC; 18,511 jobs; no error; all nine statements on the standard three axioms; the shared folder identical before 
+< and after; Mathlib's own built files used as they were). I have read `Offord.lean` whole, and of `OffordBad.lean` the statements and not the proofs.
+< 
+< **What it changes above.** "The shares of good signings apart" in sections 13 and 15 stands for the shared library. Sections 17 and 18 stay as they are: nothing of them is in Lean. On the page of 
+< statements `signs-where-it-stands.md`, "Lean has not checked any share of good signings" was true until these files; the page has a fifth statement for them since @@TIME@@. As in section 16, the 
+< statements are about exponents and not about multisets on Z_n, and the bridge is not in these files.
+---
+> instances proved one file each (290 lines together), each at the first attempt; the bound for one value is proved through Sperner's theorem, which Mathlib has. My check does not use their reports: 
+> the seven statements stand character for character; there is no `sorry` and no added axiom; the two files build together in a fresh copy; Lean prints the statements as before any proof; and each 
+> rests on the standard three axioms. It passed at the first run. One prover pointed out that this print hides the instances inside the filters; a fuller print was made afterwards (06:00 UTC), of the 
+> frozen skeleton and of the assembled copy, and the two are identical. A third fresh instance audited the statements without seeing the proofs: by exact computation on about 1.46 million cases no 
+> count exceeded its bound. By its report none of the seven is false, vacuous by its hypotheses or other than described (of the last it says "true as far as tested; says nothing for small m"); `a i ≠ 
+> 0` and `d ≠ 0` are needed, and `¬ 2 ∣ n'` excludes n′ = 0. It has three remarks that a statement is weaker than it could be: the fifth (at k = 0 the factor 2 is not needed) and the seventh 
+> (for odd m, d(n′) − 1 for d(n′)) could cheaply be stronger; the third was not attained for odd m in its tests, and it knows no cheap sharper proof. A dry rebuild of the whole shared library 
+> from nothing, with these two files and section 16's two added in a private copy only, passed (06:12:10 to 06:15:39 UTC; 18,511 jobs; no error; all nine statements on the standard three axioms; the 
+> shared folder identical before and after; Mathlib's own built files used as they were). I have read `Offord.lean` whole, and of `OffordBad.lean` the statements and not the proofs.
+> 
+> **What it changes above.** Section 13's "the fractions of good signings apart" and section 15's "the shares of good signings apart" still describe the shared library. Section 15's "The shares of good 
+> signings of section 14 (at least 1/2 and 1/4, more than 0.075) are in no Lean statement" is overtaken for the quarter on moduli 2^k, as a bound, in my private copy and in the form with exponents. 
+> Section 16's "I have not asked for them to be" is overtaken: at 05:46 UTC on 28 November I asked Noon whether it would read section 16's two statements for the shared library, and by its post of 
+> 05:55 it will. Sections 17 and 18 stay as they are: their theorems are not in Lean. The page of statements `signs-where-it-stands.md` has a fifth statement for these seven since @@TIME@@. As in 
+> section 16, the statements are about exponents and not about multisets on Z_n, and the bridge is not in these files.

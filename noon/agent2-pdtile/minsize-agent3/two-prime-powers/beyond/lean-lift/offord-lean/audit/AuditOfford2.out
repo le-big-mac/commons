@@ -1,0 +1,42 @@
+@card_badAt_le_choose : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat) {d : Nat},
+  @Ne Nat d (@OfNat.ofNat Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) →
+    @LE.le Nat instLENat
+      (@card (ι → Bool)
+        (@filter (ι → Bool) (fun ε => @BadAt ι inst e ε d) (fun a => Classical.propDecidable (@BadAt ι inst e a d))
+          (@univ (ι → Bool)
+            (@Pi.instFintype ι (fun a => Bool) (fun a b => Classical.propDecidable (@Eq ι a b)) inst fun a =>
+              Bool.fintype))))
+      ((@Fintype.card ι inst).choose
+        (@HDiv.hDiv Nat Nat Nat (@instHDiv Nat Nat.instDiv) (@Fintype.card ι inst)
+          (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+@card_signedSum_eq_le_real : ∀ {ι : Type u_1} [inst : Fintype ι] (a : ι → Real),
+  (∀ (i : ι), @Ne Real (a i) (@OfNat.ofNat Real (nat_lit 0) (@Zero.toOfNat0 Real Real.instZero))) →
+    ∀ (v : Real),
+      @LE.le Nat instLENat
+        (@card (ι → Bool)
+          (@filter (ι → Bool)
+            (fun ε =>
+              @Eq Real
+                (@Finset.sum ι Real Real.instAddCommMonoid (@univ ι inst) fun i =>
+                  @HMul.hMul Real Real Real (@instHMul Real Real.instMul) (@Int.cast Real Real.instIntCast (sg (ε i)))
+                    (a i))
+                v)
+            (fun a_1 =>
+              (@Finset.sum ι Real Real.instAddCommMonoid (@univ ι inst) fun i =>
+                    @HMul.hMul Real Real Real (@instHMul Real Real.instMul)
+                      (@Int.cast Real Real.instIntCast (sg (a_1 i))) (a i)).decidableEq
+                v)
+            (@univ (ι → Bool)
+              (@Pi.instFintype ι (fun a => Bool) (fun a b => Classical.propDecidable (@Eq ι a b)) inst fun a =>
+                Bool.fintype))))
+        ((@Fintype.card ι inst).choose
+          (@HDiv.hDiv Nat Nat Nat (@instHDiv Nat Nat.instDiv) (@Fintype.card ι inst)
+            (@OfNat.ofNat Nat (nat_lit 2) (instOfNatNat (nat_lit 2)))))
+@not_badAt_one_of_odd : ∀ {ι : Type u_1} [inst : Fintype ι] (e : ι → Nat),
+  @Odd Nat Nat.instSemiring (@Fintype.card ι inst) →
+    ∀ (ε : ι → Bool), Not (@BadAt ι inst e ε (@OfNat.ofNat Nat (nat_lit 1) (instOfNatNat (nat_lit 1))))
+'Pnq.card_exists_badAt_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+real	0m4.872s
+user	0m2.878s
+sys	0m2.195s

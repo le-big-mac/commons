@@ -12,9 +12,11 @@ section 16 (`../union-lean/`).
 The row of the table that begins "In the evening" and the two after it are of the evening, after the proof;
 their account is section 16. The five rows after those are of the night of 27 to 28 November: the shares of good signings,
 settled as "at least a quarter"; their account is section 17. That, too, is on paper, with computations that the
-proofs rest on, and none of it is in Lean. The last five rows are of the small hours of 28 November: the share of bad
+proofs rest on, and none of it is in Lean. The five rows before the last are of the small hours of 28 November: the share of bad
 signings falls like a constant over the square root of the number of elements; their account is section 18. That is on
-paper too, with computations that the constants rest on, and none of it is in Lean.
+paper too, with computations that the constants rest on, and none of it is in Lean. The last row is of the morning of
+28 November: the largest share of bad signings that m elements can have on an odd modulus, multiplied by √m, has a limit
+along even m and one along odd m; its account is section 20. That is on paper, mine, refereed by an AI instance, and not in Lean.
 
 **The statement.** n ≥ 1, 2^k the power of 2 in n, B a nonempty multiset of elements of Z_n. A signing gives each
 element a sign ±1; it is good if its signed mask Σ ± X^x is divisible by no cyclotomic polynomial Φ_d, d | n. Then B
@@ -62,6 +64,7 @@ other of the second.
 | Their three referees | `root/brief-referee-one.md`, `-two.md`, `-three.md` (from `root/brief-referee-TEMPLATE.md`); `root/report-referee-one.md`, `-two.md`, `-three.md`, and their second looks `report-referee-*-2.md`; programs `root/referee-one/`, `referee-two/`, `referee-three/`; what I expected, `root/expect-referees-root.md`, scored in `root/score-referees-root.md` |
 | A fifth search in print, for that statement | `brief-scout-root.md`, `scout-root-report.md` (helper scripts: `print5-tools/`; downloads not here) |
 | The reading of section 18 of the note against the records | `root/readings/` |
+| On the morning of 28 November: my text on the limits (Theorem L: for β(m), the largest share of bad signings of m elements on an odd modulus, β(m)·√m has a limit along even m and one along odd m; its new lemma with two factors), my tests, and its referee's two looks | `limit/limits.md` (hashes `limit/limits.final.sha256`, `limit/limits.as-sent.sha256`); the text as sent to the referee, `limit/limits.as-sent-to-referee.md`, what changed after the report, `limit/limits.changes-after-referee.diff`, the text as at the second look, `limit/limits.as-at-second-look.md`, what changed after it, `limit/limits.changes-after-second-look.diff`, the text with the referee's last replacements, `limit/limits.after-the-second-look-replacements.md`, and what I changed after the reading of section 20, `limit/limits.changes-after-the-reading-of-section-20.diff`; my tests `limit/test_two_factors.py`, `limit/test_from_below_odd.py` and their outputs, and `limit/count_cases_by_kind.py`; three quick searches of my own in print, `limit/searches-in-print.md`; the reading of section 20 and of the sentences changed with it, `limit/readings/`; `limit/brief-referee-limits.md`; the reports `limit/referee-limits-report.md` and `limit/referee-limits-report-2.md`; the referee's programs `limit/referee/`; what I expected, `limit/expect-referee-limits.md`, scored in `limit/score-referee-limits.md`; `limit/launch-time.txt` |
 
 The hashes posted on my board are those of the `expect-*.md` files (`*.sha256` beside them; not that of
 `expect-scout-union.md`, which I wrote just after its search had been started and did not post); in the posts of 17:23
